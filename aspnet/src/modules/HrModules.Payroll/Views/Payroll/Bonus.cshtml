@@ -1,0 +1,197 @@
+@{
+    ViewData["Title"] = HrT.T("عیدی و تسویه سالانه");
+    var companies = (List<Company>)ViewBag.Companies;
+    var rows = (List<PayrollBonusRow>)ViewBag.Rows;
+    var settlements = (List<PayrollSettlement>)ViewBag.Settlements;
+    // فاز ۱۲۱ — لیست کامل پرسنل حذف شد (انتخابگر جستجومحور /Ui/EmpSearch)
+    var companyId = (string?)ViewBag.CompanyId;
+    var year = (int)ViewBag.Year;
+    var years = (int[])ViewBag.Years;
+    var canManage = Me.Get()!.Has("payroll.bonus.compute");
+    var canExport = Me.Get()!.Has("reports.export") || Me.Get()!.Has("payroll.bonus.export");
+    var drafts = rows.Where(r => r.Status != "نهایی").ToList();
+    var finals = rows.Where(r => r.Status == "نهایی").ToList();
+}
+<div data-refresh-host>
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("🎁 عیدی و پایه سنوات از") <b>@HrT.T("فرمول‌ساز")</b> @HrT.T("هر شرکت محاسبه می‌شود (اقلام سیستمی «عیدی_سالانه» و «سنوات_سالانه» با متغیر کارکرد_از_سال_روز) —")
+    @HrT.T("فرمول هر شرکت قابل ویرایش است. مبالغ همگی") <b>@Money.CurTitle()</b> @HrT.T("است.")
+</div>
+
+<div class="card" style="margin-bottom:16px">
+    <div class="card-h"><h2>@HrT.T("عیدی و پایه سنوات سالانه")</h2></div>
+    <div class="card-b">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end">
+            <form method="get" action="/Payroll/Bonus" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end">
+                <div class="fld" style="min-width:220px"><label>@HrT.T("شرکت")</label>
+                    <select name="companyId" onchange="this.form.submit()">
+                        @foreach (var c in companies)
+                        {
+                            <option value="@c.Id" selected="@(c.Id == companyId)">@c.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld" style="min-width:110px"><label>@HrT.T("سال جلالی")</label>
+                    <select name="year" onchange="this.form.submit()">
+                        @foreach (var y in years)
+                        {
+                            <option value="@y" selected="@(y == year)">@Jalali.ToPersianDigits(y)</option>
+                        }
+                    </select>
+                </div>
+            </form>
+            <form method="post" action="/Payroll/BonusCompute" class="inline-form" data-ajax data-refresh
+                  data-confirm="@(HrT.F("محاسبه عیدی/سنوات برای سال {0} انجام شود؟ پیش‌نویس‌های قبلی بازنویسی می‌شوند.", Jalali.ToPersianDigits(year)))">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="companyId" value="@companyId" />
+                <input type="hidden" name="jYear" value="@year" />
+                @if (canManage)
+                {
+                    <button class="btn btn-primary">@HrT.T("🧮 محاسبه عیدی و سنوات")</button>
+                }
+            </form>
+            @if (canExport)
+            {
+                <a class="btn" href="/Payroll/BonusExport?companyId=@companyId&jYear=@year">@HrT.T("📊 خروجی اکسل")</a>
+            }
+            @if (canManage && drafts.Count > 0)
+            {
+                <form method="post" action="/Payroll/BonusFinalize" class="inline-form" data-ajax data-refresh
+                      data-confirm="@(HrT.F("{0} ردیف پیش‌نویس نهایی شود؟ پس از نهایی‌سازی قفل است.", Jalali.Num(drafts.Count)))">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="companyId" value="@companyId" />
+                    <input type="hidden" name="jYear" value="@year" />
+                    <button class="btn btn-ok">@HrT.F("✔ نهایی‌سازی ({0} ردیف)", Jalali.Num(drafts.Count))</button>
+                </form>
+                <form method="post" action="/Payroll/BonusDeleteDraft" class="inline-form" data-ajax data-refresh
+                      data-confirm="@(HrT.T("پیش‌نویس‌ها حذف شوند؟ ردیف‌های نهایی حفظ می‌شوند."))">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="companyId" value="@companyId" />
+                    <input type="hidden" name="jYear" value="@year" />
+                    <button class="btn btn-err">@HrT.T("حذف پیش‌نویس‌ها")</button>
+                </form>
+            }
+        </div>
+
+        <div style="overflow-x:auto;margin-top:12px">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th class="num">@HrT.T("کد پرسنلی")</th><th>@HrT.T("نام و نام خانوادگی")</th>
+                        <th class="num">@HrT.T("روزهای خدمت سال")</th><th class="num">@HrT.F("پایه مبنا ({0})", Money.CurTitle())</th>
+                        <th class="num">@HrT.F("عیدی ({0})", Money.CurTitle())</th><th class="num">@HrT.F("پایه سنوات ({0})", Money.CurTitle())</th>
+                        <th class="num">@HrT.F("جمع ({0})", Money.CurTitle())</th><th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (rows.Count == 0)
+                    {
+                        <tr><td colspan="8" style="text-align:center;color:#9ca3af;padding:18px">
+                            @HrT.T("برای این شرکت/سال هنوز محاسبه‌ای انجام نشده — دکمه «محاسبه» را بزنید")
+                        </td></tr>
+                    }
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td class="num">@r.Employee!.PersonnelCode</td>
+                            <td>@r.Employee.FullName</td>
+                            <td class="num">@Jalali.Num(r.Days)</td>
+                            <td class="num">@Money.Fmt(r.Base)</td>
+                            <td class="num">@Money.Fmt(r.Eid)</td>
+                            <td class="num">@Money.Fmt(r.Seniority)</td>
+                            <td class="num" style="font-weight:700">@Money.Fmt(r.Total)</td>
+                            <td><span class="badge @(r.Status == "نهایی" ? "badge-ok" : "badge-info")">@HrT.T(r.Status)</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (finals.Count > 0)
+        {
+            <div class="hint" style="margin-top:8px">@HrT.F("🔒 {0} ردیف نهایی‌شده در بازمحاسبه‌ها حفظ می‌شود.", Jalali.Num(finals.Count))</div>
+        }
+    </div>
+</div>
+
+<div class="card" id="settlement">
+    <div class="card-h"><h2>@HrT.T("تسویه‌حساب پایان همکاری")</h2></div>
+    <div class="card-b">
+        @if (canManage)
+        {
+            <form method="post" action="/Payroll/SettlementCompute" data-ajax data-refresh
+                  data-confirm="@(HrT.T("محاسبه تسویه‌حساب انجام شود؟ پیش‌نویس قبلی همین پرسنل جایگزین می‌شود."))"
+                  style="display:flex;gap:10px;flex-wrap:wrap;align-items:end">
+                @Html.AntiForgeryToken()
+                <div class="fld" style="min-width:320px;flex:1"><label>@HrT.T("پرسنل *")</label>
+                    @* فاز ۱۲۱ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل *@
+                    <div class="emp-picker" data-name="employeeId" data-min="1"
+                         data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+                </div>
+                <div class="fld" style="min-width:150px"><label>@HrT.T("تاریخ پایان همکاری *")</label>
+                    <input name="endDate" placeholder="@(HrT.T("۱۴۰۵/۰۷/۲۸"))" required dir="ltr" />
+                </div>
+                <button class="btn btn-primary">@HrT.T("🧮 محاسبه تسویه‌حساب")</button>
+            </form>
+            <div class="hint" style="margin-top:6px">
+                @HrT.T("تسویه = بهای مانده مرخصی استحقاقی × روزانه + عیدی نسبتی سال + سنوات نسبتی.")
+                @HrT.T("پس از ثبت نهایی، وضعیت پرسنل «تسویه‌شده» می‌شود.")
+            </div>
+        }
+
+        <div style="overflow-x:auto;margin-top:12px">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th class="num">@HrT.T("کد")</th><th>@HrT.T("نام")</th><th>@HrT.T("شرکت")</th>
+                        <th>@HrT.T("پایان همکاری")</th><th class="num">@HrT.T("مانده مرخصی")</th>
+                        <th class="num">@HrT.T("بهای مرخصی")</th><th class="num">@HrT.T("عیدی نسبتی")</th>
+                        <th class="num">@HrT.T("سنوات")</th><th class="num">@HrT.F("جمع تسویه ({0})", Money.CurTitle())</th>
+                        <th>@HrT.T("وضعیت")</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (settlements.Count == 0)
+                    {
+                        <tr><td colspan="11" style="text-align:center;color:#9ca3af;padding:18px">@HrT.T("تسویه‌حسابی ثبت نشده است")</td></tr>
+                    }
+                    @foreach (var s in settlements)
+                    {
+                        <tr>
+                            <td class="num">@s.Employee!.PersonnelCode</td>
+                            <td>@s.Employee.FullName</td>
+                            <td>@s.Company?.Name</td>
+                            <td>@Jalali.Fmt(s.EndDate)</td>
+                            <td class="num">@Jalali.Num(s.LeaveBalance) @HrT.T("روز")</td>
+                            <td class="num">@Jalali.Num(s.LeavePay)</td>
+                            <td class="num">@Jalali.Num(s.Eid)</td>
+                            <td class="num">@Jalali.Num(s.Seniority)</td>
+                            <td class="num" style="font-weight:700">@Jalali.Num(s.Total)</td>
+                            <td><span class="badge @(s.Status == "نهایی" ? "badge-ok" : "badge-info")">@HrT.T(s.Status)</span></td>
+                            <td>
+                                <div class="btn-row">
+                                    <a class="btn btn-sm" href="/Payroll/SettlementPdf?id=@s.Id" target="_blank">📄 PDF</a>
+                                    @if (canManage && s.Status != "نهایی")
+                                    {
+                                        <form method="post" action="/Payroll/SettlementFinalize" class="inline-form" data-ajax data-refresh
+                                              data-confirm="@(HrT.F("تسویه‌حساب «{0}» نهایی شود؟ وضعیت پرسنل به «تسویه‌شده» تغییر می‌کند.", s.Employee.FullName))">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@s.Id" />
+                                            <button class="btn btn-sm btn-ok">@HrT.T("ثبت نهایی")</button>
+                                        </form>
+                                        <form method="post" action="/Payroll/SettlementDelete" class="inline-form" data-ajax data-refresh
+                                              data-confirm="@(HrT.T("پیش‌نویس حذف شود؟"))">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@s.Id" />
+                                            <button class="btn btn-sm btn-err">@HrT.T("حذف")</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,66 @@
+@{
+    var p = (Payslip)Model;
+    var lines = p.Lines?.OrderBy(l => l.Order).ToList() ?? new List<PayslipLine>();
+    var earn = lines.Where(l => l.Kind == "مزیت").ToList();
+    var ded = lines.Where(l => l.Kind == "کسور").ToList();
+    var gross = earn.Sum(l => l.Amount);
+    var dedSum = ded.Sum(l => l.Amount);
+}
+<div data-modal-title="@(HrT.F("فیش حقوقی — {0} ({1})", p.Employee?.FullName, p.Run?.Company?.Name ?? ""))" hidden></div>
+<div style="max-height:60vh;overflow:auto">
+    <div class="chips" style="margin-bottom:10px">
+        <span class="chip">@HrT.T("کد:") <b dir="ltr">@Jalali.ToPersianDigits(p.Employee?.PersonnelCode ?? "")</b></span>
+        <span class="chip">@HrT.T("کارکرد:") <b>@Jalali.MinutesToHm(p.WorkedMin)</b></span>
+        <span class="chip">@HrT.T("اضافه‌کاری:") <b>@Jalali.MinutesToHm(p.OvertimeMin)</b></span>
+        <span class="chip">@HrT.T("غیبت:") <b>@Jalali.ToPersianDigits(p.AbsentDays.ToString()) @HrT.T("روز")</b></span>
+        <span class="chip">@HrT.T("ناخالص:") <b>@Money.Fmt(gross)</b></span>
+    </div>
+    <table class="tbl">
+        <thead><tr><th>@HrT.T("کد")</th><th>@HrT.T("عنوان قلم")</th><th class="num">@HrT.F("مبلغ ({0})", Money.CurTitle())</th><th>@HrT.T("مشمولیت")</th></tr></thead>
+        <tbody>
+            @foreach (var l in earn)
+            {
+                <tr>
+                    <td dir="ltr" style="text-align:right">@l.Code</td>
+                    <td><b>@l.Title</b></td>
+                    <td class="num">@Money.Fmt(l.Amount)</td>
+                    <td>
+                        @if (l.Taxable)
+                        {
+                            <span class="badge badge-warn">@HrT.T("مالیات")</span>
+                        }
+                        @if (l.Insurable)
+                        {
+                            <span class="badge badge-info">@HrT.T("بیمه")</span>
+                        }
+                        @if (!l.Taxable && !l.Insurable)
+                        {
+                            <span class="badge badge-mute">@HrT.T("معاف")</span>
+                        }
+                    </td>
+                </tr>
+            }
+            <tr style="background:var(--info-bg);font-weight:bold">
+                <td></td><td>@HrT.T("جمع مزایا")</td><td class="num">@Jalali.Num((long)gross)</td><td></td>
+            </tr>
+            @foreach (var l in ded)
+            {
+                <tr>
+                    <td dir="ltr" style="text-align:right">@l.Code</td>
+                    <td><b>@l.Title</b></td>
+                    <td class="num" style="color:var(--err)">−@Money.Fmt(l.Amount)</td>
+                    <td><span class="badge badge-mute">@HrT.T("کسور")</span></td>
+                </tr>
+            }
+            <tr style="background:var(--info-bg);font-weight:bold">
+                <td></td><td>@HrT.T("جمع کسور")</td><td class="num">−@Jalali.Num((long)dedSum)</td><td></td>
+            </tr>
+            <tr style="font-weight:bold;font-size:14px">
+                <td></td><td>@HrT.T("خالص پرداختی")</td>
+                <td class="num">@Jalali.Num((long)p.NetPay)</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="hint" style="margin-top:8px">@HrT.F("مبالغ به {0} — جزئیات خطی از موتور فرمول‌محور حقوق (هر شرکت اقلام فرمول خودش را دارد).", Money.CurTitle())</div>
+</div>

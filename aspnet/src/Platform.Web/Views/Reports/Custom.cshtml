@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = HrT.T("گزارش سفارشی");
+    var rows = (List<AttCustomRow>)ViewBag.Rows;
+    var deptId = ViewBag.DeptId as string;
+    var employeeId = ViewBag.EmployeeId as string;
+    var status = ViewBag.Status as string;
+    var qs = $"deptId={Uri.EscapeDataString(deptId ?? "")}&employeeId={Uri.EscapeDataString(employeeId ?? "")}&from={ViewBag.From}&to={ViewBag.To}&status={Uri.EscapeDataString(status ?? "")}";
+}
+<div class="card">
+    <div class="card-h"><h2>🧮 @HrT.T("گزارش سفارشی تردد")</h2><span class="hint">@HrT.T("فیلتر چندبعدی + خروجی اکسل")</span></div>
+    <div class="card-b">
+        <form method="get" action="/Reports/Custom" class="toolbar">
+            <div class="fld">
+                <label>@HrT.T("واحد سازمانی")</label>
+                <select name="deptId">
+                    <option value="">@HrT.T("همه واحدها")</option>
+                    @foreach (var d in (List<Platform.Contracts.HrDeptOption>)ViewBag.Departments)
+                    {
+                        <option value="@d.Id" selected="@(deptId == d.Id)">@d.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld">
+                <label>@HrT.T("پرسنل")</label>
+                @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل؛ خالی = همهٔ پرسنل *@
+                @{ var selEmp = (Platform.Contracts.HrPersonBrief?)ViewBag.SelectedPerson; }
+                <div class="emp-picker" data-name="employeeId" data-min="1"
+                     data-selected="@System.Text.Json.JsonSerializer.Serialize(selEmp is null
+                         ? Array.Empty<object>()
+                         : new[] { new { id = selEmp.Id, label = selEmp.FullName } })"
+                     data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+            </div>
+            <div class="fld"><label>@HrT.T("از تاریخ")</label><input type="date" name="from" value="@ViewBag.From" /></div>
+            <div class="fld"><label>@HrT.T("تا تاریخ")</label><input type="date" name="to" value="@ViewBag.To" /></div>
+            <div class="fld">
+                <label>@HrT.T("وضعیت")</label>
+                <select name="status">
+                    <option value="">@HrT.T("همه")</option>
+                    @foreach (var s in new[] { "حاضر", "تأخیر", "غایب", "مرخصی", "مأموریت", "تعطیل" })
+                    {
+                        <option value="@s" selected="@(status == s)">@HrT.T(s)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-primary">@HrT.T("اعمال فیلتر")</button>
+            <a class="btn" href="/Reports/CustomXlsx?@Html.Raw(qs)">@HrT.T("دانلود اکسل")</a>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@(HrT.F("نتایج ({0} رکورد — حداکثر ۱۰۰۰)", Jalali.Num(rows.Count)))</h2>
+        <span class="hint">@(HrT.F("بازه: {0} تا {1}", Jalali.FmtFa(Jalali.ParseDateKey((string)ViewBag.From)), Jalali.FmtFa(Jalali.ParseDateKey((string)ViewBag.To))))</span>
+    </div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("کد")</th><th>@HrT.T("نام")</th><th>@HrT.T("واحد")</th><th>@HrT.T("تاریخ")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("ورود")</th><th>@HrT.T("خروج")</th><th>@HrT.T("کارکرد")</th><th>@HrT.T("تأخیر")</th><th>@HrT.T("اضافه‌کاری")</th></tr></thead>
+            <tbody>
+                @foreach (var r in rows)
+                {
+                    <tr>
+                        <td class="num">@Jalali.ToPersianDigits(r.PersonnelCode)</td>
+                        <td>@r.FullName</td>
+                        <td>@r.Dept</td>
+                        <td>@Jalali.FmtFa(Jalali.ParseDateKey(r.Date))</td>
+                        <td><span class="badge @(r.Status == "حاضر" ? "badge-ok" : r.Status == "تأخیر" ? "badge-warn" : r.Status == "غایب" ? "badge-err" : "badge-info")">@HrT.T(r.Status)</span></td>
+                        <td class="num">@(r.CheckIn is null ? "—" : Jalali.FmtTime(r.CheckIn.Value))</td>
+                        <td class="num">@(r.CheckOut is null ? "—" : Jalali.FmtTime(r.CheckOut.Value))</td>
+                        <td class="num">@Jalali.MinutesToHm(r.WorkMinutes)</td>
+                        <td class="num">@(r.LateMinutes > 0 ? HrT.F("{0} دقیقه", Jalali.ToPersianDigits(r.LateMinutes)) : "—")</td>
+                        <td class="num">@(r.OvertimeMinutes > 0 ? HrT.F("{0} دقیقه", Jalali.ToPersianDigits(r.OvertimeMinutes)) : "—")</td>
+                    </tr>
+                }
+                @if (rows.Count == 0)
+                {
+                    <tr><td colspan="10"><div class="empty">@HrT.T("رکوردی با این فیلترها یافت نشد.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

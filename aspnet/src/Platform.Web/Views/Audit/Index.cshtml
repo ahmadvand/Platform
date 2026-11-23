@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = HrT.T("ممیزی");
+    var logs = (List<AuditLog>)ViewBag.Logs;
+    var actions = (List<string>)ViewBag.Actions;
+    var entities = (List<string>)ViewBag.Entities;
+    string DetailShort(string? d)
+    {
+        if (string.IsNullOrEmpty(d)) return "—";
+        return d.Length > 90 ? d[..90] + "…" : d;
+    }
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("ممیزی")</h1>
+        <div class="page-sub">@HrT.F("{0} رویداد ثبت‌شده · زنجیرهٔ ممیزی همهٔ کنش‌های حساس سامانه", Jalali.Num(logs.Count))</div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-h">
+        <h2>@(HrT.F("گزارش ممیزی — {0} رویداد اخیر", Jalali.Num(logs.Count)))</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("عملیات")</label>
+                <select name="action"><option value="">@HrT.T("همه")</option>
+                    @foreach (var a in actions)
+                    {
+                        <option value="@a" selected="@(ViewBag.Action == a)">@HrT.T(a)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("موجودیت")</label>
+                <select name="entity"><option value="">@HrT.T("همه")</option>
+                    @foreach (var e in entities)
+                    {
+                        <option value="@e" selected="@(ViewBag.Entity == e)">@HrT.T(e)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("جستجو")</label><input name="q" value="@ViewBag.Q" placeholder="@HrT.T("کاربر یا شناسه...")" /></div>
+            <button class="btn btn-dark">@HrT.T("اعمال")</button>
+            <a href="/Audit" class="btn">@HrT.T("پاک‌سازی")</a>
+            <span style="flex:1"></span>
+            @* فاز ۱۱۷ — راستی‌آزمایی زنجیرهٔ ضد دستکاری (AuditChain) *@
+            <button type="button" class="btn btn-sm" id="chainBtn">🛡 @HrT.T("راستی‌آزمایی زنجیره")</button>
+            <span id="chainOut" class="hint" style="max-width:340px;white-space:normal"></span>
+        </form>
+    </div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("کاربر")</th><th>@HrT.T("عملیات")</th><th>@HrT.T("موجودیت")</th><th>@HrT.T("شناسه")</th><th>@HrT.T("جزئیات")</th><th>IP</th></tr></thead>
+            <tbody>
+                @foreach (var a in logs)
+                {
+                    <tr>
+                        <td class="num">@Jalali.FmtLong(a.At)</td>
+                        <td><strong>@(a.ActorName ?? HrT.T("سیستم"))</strong></td>
+                        <td><span class="badge @(a.Action.Contains("fail") || a.Action.Contains("locked") ? "badge-err" : a.Action == "login" ? "badge-ok" : "badge-info")">@a.Action</span></td>
+                        <td>@a.Entity</td>
+                        <td class="num">@a.EntityId</td>
+                        <td style="white-space:normal;min-width:200px;color:var(--ink-2);font-size:11px" dir="ltr">@DetailShort(a.Detail)</td>
+                        <td class="num">@Jalali.ToPersianDigits(a.Ip ?? "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!logs.Any())
+        {
+            <div class="empty">@HrT.T("رویدادی یافت نشد")</div>
+        }
+    </div>
+</div>
+<script>
+    // فاز ۱۱۷ — راستی‌آزمایی زنجیرهٔ ممیزی (GET /Audit/VerifyChain — فقط‌خواندنی)
+    (function () {
+        var b = document.getElementById('chainBtn'), o = document.getElementById('chainOut');
+        if (!b || !o) return;
+        b.addEventListener('click', function () {
+            b.disabled = true;
+            o.textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("در حال بررسی…")))';
+            o.style.color = '';
+            fetch('/Audit/VerifyChain', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function (r) { return r.json(); })
+                .then(function (j) {
+                    o.textContent = j.message || '';
+                    o.style.color = j.ok ? 'var(--ok, #16a34a)' : 'var(--err, #dc2626)';
+                })
+                .catch(function () {
+                    o.textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("بررسی ناموفق بود")))';
+                    o.style.color = 'var(--err, #dc2626)';
+                })
+                .finally(function () { b.disabled = false; });
+        });
+    })();
+</script>

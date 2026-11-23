@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = HrT.T("ویرایش پرسنل");
+    var e = (Employee)Model;
+}
+<div class="card" style="max-width:980px;margin-inline:auto">
+    <div class="card-h">
+        <h2>@HrT.F("ویرایش پرسنل — {0} ({1})", e.FullName, Jalali.ToPersianDigits(e.PersonnelCode))</h2>
+        <a class="btn" href="/Employees">@HrT.T("← بازگشت به فهرست")</a>
+    </div>
+    <div class="card-b">
+        <partial name="_EditForm" model="Model" />
+    </div>
+</div>

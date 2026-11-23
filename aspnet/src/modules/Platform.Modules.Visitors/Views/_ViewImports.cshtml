@@ -1,0 +1,13 @@
+@* فاز ۶۱ — usingهای سازگار با لایه‌بندی جدید ماژول:
+   انواع پلتفرم (Jalali/SessionUser/Company و …) از Platform.Core با همان فضانام‌های
+   قدیمی (Platform.Web.*) تأمین می‌شوند؛ entityهای ماژول از Platform.Modules.Visitors.Domain.
+   تزریق AppDbContext هاست حذف شد — ماژول‌ها به composite context دسترسی ندارند.
+   Layout در زمان اجرا از هاست پیدا می‌شود (_Layout) — همان پوستهٔ سراسری. *@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using Platform.Modules.Visitors.Domain
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

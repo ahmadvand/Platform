@@ -1,0 +1,54 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "lush green summer orchard fruit trees blue sky sunshine landscape"
+✅ Got 6 images
+{
+  "success": true,
+  "query": "lush green summer orchard fruit trees blue sky sunshine landscape",
+  "count": 6,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fe410f55f120.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3b8bb8d0b41d.jpg",
+      "caption": "",
+      "source": "Gardening Know How",
+      "original_width": "3200px",
+      "original_height": "1800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ddaf66d28a02.jpg",
+      "caption": "",
+      "source": "Fast Growing Trees",
+      "original_width": "1056px",
+      "original_height": "1056px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cbc51d957256.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1231px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0cf32daad79d.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1117px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b08253acea0f.jpg",
+      "caption": "",
+      "source": "Backyard Boss",
+      "original_width": "1600px",
+      "original_height": "900px"
+    }
+  ]
+}

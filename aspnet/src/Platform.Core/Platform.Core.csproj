@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    Platform.Core (فاز ۵۷) — پلتفرم مشترک ماژول‌ها
+    ============
+    «کتابخانهٔ اشتراک» بین هاست (Platform.Web) و پروژه‌های ماژول
+    (modules/HrModules.*). شامل: موجودیت‌ها، DbContext، هستهٔ احراز،
+    فیلتر مجوز، تقویم جلالی، پارسر پلاک، سرویس تنظیمات ظاهر و
+    کنترلر پایهٔ MvcBase.
+
+    قاعدهٔ طلایی: فضانام‌ها عمداً همان Platform.Web.* قبلی‌اند —
+    جابه‌جایی صرفاً فیزیکی است تا صفر ریسک رگرسیون داشته باشد و
+    مهاجرت‌ها/اسنپ‌شات‌ها و رشته‌های EF بدون تغییر بمانند.
+
+    وابستگی مجاز: ماژول ← پلتفرم مشترک ← (هیچ). هاست به همه ارجاع می‌دهد.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- انواع ASP.NET Core (MVC/JWT/Http) از فریم‌ورک اشتراکی -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- فاز ۶۱ — قراردادهای بین‌ماژولی (سرویس‌های پلتفرم دادهٔ ماژول‌ها را از این مسیر می‌خوانند) -->
+    <ProjectReference Include="..\Platform.Contracts\Platform.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Relational: نوع‌های Migrations/IMigrator در سرویس‌های مشترک؛ JwtBearer:
+         زنجیرهٔ System.IdentityModel.Tokens.Jwt برای JwtService (همان خانوادهٔ هاست) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <!-- PdfReport (تولید PDF راست‌به‌چپ) در پلتفرم مشترک زندگی می‌کند — SettingsService.ApplyPdfThemeAsync به آن وابسته است -->
+    <PackageReference Include="QuestPDF" Version="2024.12.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- کتابخانهٔ کلاس usingهای ضمنی Web SDK را ندارد؛ نوع‌های HTTP/Logging که کدهای
+         منتقل‌شده به آن عادت داشتند سراسری تعریف می‌شوند (فضانام‌ها بدون تغییر) -->
+    <Using Include="Microsoft.AspNetCore.Http" />
+    <Using Include="Microsoft.AspNetCore.Hosting" />
+    <Using Include="Microsoft.AspNetCore.Mvc" />
+    <Using Include="Microsoft.Extensions.Logging" />
+    <Using Include="Microsoft.Extensions.Hosting" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <!-- HrLang.FromConfig (زبان پیش‌فرض نصب) — در Web SDK using ضمنی بود؛ با انتقال HrLang به Core اینجا -->
+    <Using Include="Microsoft.Extensions.Configuration" />
+  </ItemGroup>
+
+</Project>

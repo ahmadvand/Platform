@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    هارنس تست لینوکس برای موتور مشترک استودیو مجوز — صدور/بررسی round-trip
+    اجرا با:  dotnet run + پارامتر project = scripts/LicenseCoreTest
+    فایل‌های LicenseCore.cs و EmbeddedKeys.cs با لینک از پروژهٔ GUI کامپایل می‌شوند
+    تا دقیقاً همان کدی که در ویندوز اجرا می‌شود، اینجا راستی‌آزمایی شود.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>LicenseCoreTest</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../tools/LicenseStudio/LicenseCore.cs" Link="LicenseCore.cs" />
+    <Compile Include="../../tools/LicenseStudio/EmbeddedKeys.cs" Link="EmbeddedKeys.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,79 @@
+@model Role?
+@{
+    // فاز ۷۴ — فرم ایجاد/ویرایش نقش (مودال AJAX) — شامل دامنهٔ رکوردی (Row-Level)
+    var isEdit = Model is not null;
+    var action = isEdit ? "/Users/RoleEdit" : "/Users/RoleCreate";
+    var companies = (List<Company>)ViewBag.Companies;
+    var depts = (List<HrDeptOption>)ViewBag.Depts;
+    var rows = (List<RoleScope>)ViewBag.ScopeRows;
+    // نوع دامنه فعلی: هیچ ردیفی = all | تک‌ردیف = kind خودش
+    var kind = rows.Count == 0 ? "all" : rows[0].Kind;
+    var refs = rows.Where(r => r.RefId is not null).Select(r => r.RefId!).ToHashSet();
+    string[] kindOptions = { "all", "company", "dept", "self" };
+    string KindFa(string k) => k switch
+    {
+        "company" => HrT.T("شرکت‌های انتخابی"),
+        "dept" => HrT.T("واحد سازمانی انتخابی (با زیرشاخه‌ها)"),
+        "self" => HrT.T("فقط رکوردهای خودم (پرسنل متصل)"),
+        _ => HrT.T("همه داده‌ها — بدون محدودیت"),
+    };
+}
+<form method="post" action="@action" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" name="id" value="@Model!.Id" />
+    }
+    <div class="fld"><label>@HrT.T("نام سیستمی (لاتین)") @if (isEdit && Model!.IsBuiltIn){<span style="color:var(--ink-3);font-weight:400">@HrT.T("— نقش داخلی، تغییر نمی‌کند")</span>}</label>
+        <input name="name" value="@Model?.Name" placeholder="@HrT.T("مثلاً dept_supervisor")" @(isEdit && Model!.IsBuiltIn ? "readonly" : "") required />
+    </div>
+    <div class="fld"><label>@HrT.T("عنوان نمایشی")</label>
+        <input name="title" value="@Model?.Title" placeholder="@HrT.T("مثلاً سرپرست واحد")" required />
+    </div>
+    <div class="fld"><label>@HrT.T("نقش والد (اختیاری — ارث‌بری دسترسی‌ها)")</label>
+        <select name="parentRoleId">
+            <option value="">@HrT.T("— بدون والد (نقش ریشه)")</option>
+            @foreach (var p in (IEnumerable<dynamic>)ViewBag.ParentOptions)
+            {
+                <option value="@p.Id" selected="@(Model?.ParentRoleId == p.Id)">@p.Title</option>
+            }
+        </select>
+        <small style="color:var(--ink-3);font-size:10.5px">@HrT.T("نقش فرزند همهٔ دسترسی‌های والد را به ارث می‌برد و فقط دسترسی‌های اضافه‌اش در همین فرم تنظیم می‌شود. خودِ نقش و نسل‌های پایین‌ترش گزینه نیستند (ضدچرخه).")</small>
+    </div>
+    <div class="fld"><label>@HrT.T("توضیح (اختیاری)")</label>
+        <input name="description" value="@Model?.Description" placeholder="@HrT.T("شرح مأموریت نقش")" />
+    </div>
+    <div class="fld"><label>@HrT.T("دامنهٔ رکوردی (محدودیت داده) — کاربران این نقش فقط داده‌های این محدوده را می‌بینند")</label>
+        <select name="scopeKind" id="scope-kind" onchange="var v=this.value;document.getElementById('refs-company').style.display=v==='company'?'':'none';document.getElementById('refs-dept').style.display=v==='dept'?'':'none';">
+            @foreach (var k in kindOptions)
+            {
+                <option value="@k" selected="@(kind == k)">@KindFa(k)</option>
+            }
+        </select>
+    </div>
+    <div class="fld" id="refs-company" style="display:@(kind == "company" ? "" : "none")">
+        <label>@HrT.T("شرکت‌های مجاز (چند انتخابی — خالی = شرکتِ کاربر)")</label>
+        <select name="scopeRefs" multiple size="4" style="height:auto">
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@refs.Contains(c.Id)">@c.Code — @c.Name</option>
+            }
+        </select>
+    </div>
+    <div class="fld" id="refs-dept" style="display:@(kind == "dept" ? "" : "none")">
+        <label>@HrT.T("واحدهای سازمانی مجاز (چند انتخابی — زیرشاخه‌ها خودکار شامل می‌شوند)")</label>
+        <select name="scopeRefs" multiple size="5" style="height:auto">
+            @foreach (var d in depts)
+            {
+                <option value="@d.Id" selected="@refs.Contains(d.Id)">@d.Name</option>
+            }
+        </select>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-start">
+        <button class="btn btn-primary">@(isEdit ? HrT.T("ذخیره تغییرات") : HrT.T("ایجاد نقش"))</button>
+        <button type="button" class="btn" onclick="this.closest('.modal-overlay')._close()">@HrT.T("انصراف")</button>
+    </div>
+    <p style="color:var(--ink-3);font-size:11px;margin-top:10px">
+        @HrT.T("دامنهٔ رکوردی بلافاصله اعمال می‌شود؛ لیست‌ها و گزارش‌ها فقط ردیف‌های محدودهٔ مجاز را نشان می‌دهند.")
+    </p>
+</form>

@@ -1,0 +1,518 @@
+@{
+    ViewData["Title"] = HrT.T("داده‌های هویتی دستگاه‌ها");
+    var deviceUsers = (List<DeviceUser>)Model;
+    var devices = (List<Device>)ViewBag.Devices;
+    var bioCountMap = (Dictionary<(string DeviceId, string Pin), Dictionary<string, int>>)ViewBag.BioCountMap;
+    var employees = (List<Employee>)ViewBag.Employees;
+    // فاز ۶۹ — navigationهای بین‌خانواده‌ای حذف شدند؛ نگاشت‌های قراردادی از کنترلر می‌آیند
+    var bioByEmp = (Dictionary<string, List<EmployeeBiometric>>)ViewBag.BioByEmp;
+    var empBriefById = (Dictionary<string, (string FullName, string PersonnelCode)>)ViewBag.EmpBriefById;
+    List<EmployeeBiometric> BiosOf(Employee e) => bioByEmp.GetValueOrDefault(e.Id) ?? new List<EmployeeBiometric>();
+    var commands = (List<DeviceCommand>)ViewBag.Commands;
+    var canManage = (bool)ViewBag.CanManage;
+
+    var totalTemplates = 0;
+    var totalFace = 0;
+    var totalCard = 0;
+    foreach (var kv in bioCountMap)
+    {
+        totalTemplates += kv.Value.Values.Sum();
+        if (kv.Value.TryGetValue("face", out var f)) totalFace += f;
+        if (kv.Value.TryGetValue("card", out var c)) totalCard += c;
+    }
+    var empsWithBio = employees.Count(e => BiosOf(e).Count > 0);
+    var empsWithoutBio = employees.Count - empsWithBio;
+
+    // خلاصه هر دستگاه برای نمای کلی
+    var perDevice = devices.Select(d =>
+    {
+        var users = deviceUsers.Count(du => du.DeviceId == d.Id);
+        var bios = new Dictionary<string, int>();
+        foreach (var kv in bioCountMap.Where(x => x.Key.DeviceId == d.Id))
+            foreach (var t in kv.Value)
+                bios[t.Key] = bios.GetValueOrDefault(t.Key) + t.Value;
+        var lastFetch = deviceUsers.Where(du => du.DeviceId == d.Id && du.LastFetchedAt != null)
+            .Select(du => du.LastFetchedAt!.Value).DefaultIfEmpty().Max();
+        return new { Device = d, Users = users, Bios = bios, LastFetch = lastFetch == default ? null : (DateTime?)lastFetch };
+    }).ToList();
+
+    var kindIcon = (string k) => DeviceDefaults.Kinds.TryGetValue(k, out var p) ? p.Icon : "🖥️";
+}
+
+<div class="btabbar" id="bioTabs">
+    <button type="button" class="btab on" data-tab="overview">📊 @HrT.T("نمای کلی")</button>
+    <button type="button" class="btab" data-tab="users">👥 @HrT.T("پرسنل دستگاه‌ها") <span class="cnt">@Jalali.Num(deviceUsers.Count)</span></button>
+    <button type="button" class="btab" data-tab="transfer">⇄ @HrT.T("انتقال پرسنل")</button>
+    <button type="button" class="btab" data-tab="templates">🧬 @HrT.T("قالب‌های مرجع") <span class="cnt">@Jalali.Num(empsWithBio)</span></button>
+    <button type="button" class="btab" data-tab="log">📜 @HrT.T("لاگ دستورها")</button>
+</div>
+
+@* ============ تب ۱: نمای کلی ============ *@
+<section class="bpanel on" data-panel="overview">
+    <div class="stat-grid">
+        <div class="stat"><span class="ic">👥</span><div><div class="v">@Jalali.Num(deviceUsers.Count)</div><div class="l">@HrT.T("پرسنل روی دستگاه‌ها")</div></div></div>
+        <div class="stat c-ok"><span class="ic">🧬</span><div><div class="v">@Jalali.Num(totalTemplates)</div><div class="l">@HrT.T("قالب هویتی ذخیره‌شده")</div></div></div>
+        <div class="stat"><span class="ic">🙂</span><div><div class="v">@Jalali.Num(totalFace)</div><div class="l">@HrT.T("قالب چهره")</div></div></div>
+        <div class="stat c-warn"><span class="ic">💳</span><div><div class="v">@Jalali.Num(totalCard)</div><div class="l">@HrT.T("کارت ثبت‌شده")</div></div></div>
+        <div class="stat c-ok"><span class="ic">✓</span><div><div class="v">@Jalali.Num(empsWithBio)</div><div class="l">@HrT.T("پرسنل دارای قالب")</div></div></div>
+        <div class="stat c-err"><span class="ic">✗</span><div><div class="v">@Jalali.Num(empsWithoutBio)</div><div class="l">@HrT.T("پرسنل بدون قالب")</div></div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("وضعیت هویتی هر دستگاه")</h2><span class="hint">@HrT.T("شمار پرسنل و قالب‌های هر دستگاه — دریافت سریع با دکمه‌های هر کارت")</span></div>
+        <div class="card-b">
+            <div class="ov-grid">
+                @foreach (var x in perDevice)
+                {
+                    var d = x.Device;
+                    <div class="ov-card">
+                        <div class="head">
+                            <div>
+                                <h3>@kindIcon(d.Kind) @d.Name</h3>
+                                <div class="sub">@HrT.T(d.Kind) · @d.Brand @(d.Location is null ? "" : $"— {d.Location}")</div>
+                            </div>
+                            <span class="badge @(DeviceOps.IsOnline(d) ? "badge-ok" : "badge-mute")">@(DeviceOps.IsOnline(d) ? HrT.T("آنلاین") : HrT.T("آفلاین"))</span>
+                        </div>
+                        <div class="ov-num"><b>@Jalali.Num(x.Users)</b><span>@HrT.T("پرسنل روی دستگاه")</span></div>
+                        <div class="ov-bios">
+                            @if (x.Bios.Count == 0)
+                            {
+                                <span class="badge badge-mute">@HrT.T("قالبی ذخیره نشده")</span>
+                            }
+                            else
+                            {
+                                foreach (var t in x.Bios.OrderByDescending(b => b.Value))
+                                {
+                                    <span class="badge badge-info">@BioTypes.Label(t.Key): @Jalali.Num(t.Value)</span>
+                                }
+                            }
+                        </div>
+                        <div class="ov-foot">
+                            <span class="when">@HrT.T("آخرین دریافت:") @(x.LastFetch is null ? "—" : Jalali.FmtLong(x.LastFetch.Value))</span>
+                            @if (canManage)
+                            {
+                                <div class="btn-row" style="gap:4px">
+                                    <form method="post" action="/Biometrics/FetchUsers" class="inline-form" data-ajax>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="deviceId" value="@d.Id" />
+                                        <button class="btn btn-sm">👥 @HrT.T("پرسنل")</button>
+                                    </form>
+                                    <form method="post" action="/Biometrics/FetchBios" class="inline-form" data-ajax data-confirm="@HrT.F("دریافت هویتی همه پرسنل «{0}»؟", d.Name)">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="deviceId" value="@d.Id" />
+                                        <button class="btn btn-sm">🧬 @HrT.T("هویتی")</button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (canManage)
+            {
+                <div class="hint" style="margin-top:10px">@HrT.T("دریافت از دستگاه واقعی با سرویس گیت‌وی C# اجرا می‌شود؛ برای محیط نمایشی (بدون سخت‌افزار) از «شبیه‌ساز» در تب پرسنل دستگاه‌ها استفاده کنید.")</div>
+            }
+        </div>
+    </div>
+</section>
+
+@* ============ تب ۲: پرسنل دستگاه‌ها ============ *@
+<section class="bpanel" data-panel="users">
+    @if (canManage)
+    {
+        <div class="card" style="margin-bottom:14px">
+            <div class="card-h"><h2>@HrT.T("دریافت از دستگاه")</h2><span class="hint">@HrT.T("پرسنل و قالب‌های هویتی از حافظه دستگاه خوانده و در دیتابیس ذخیره می‌شود — پرسنلِ جدیدِ دستگاه خودکار ساخته می‌شود")</span></div>
+            <form method="post" class="card-b" data-ajax>
+                @Html.AntiForgeryToken()
+                <div class="btn-row" style="align-items:center;gap:10px;flex-wrap:wrap">
+                    <select id="fetchDevice" name="deviceId" required style="max-width:320px">
+                        @foreach (var d in devices)
+                        {
+                            <option value="@d.Id">@d.Name (@d.Serial) — @HrT.T("پرسنل:") @Jalali.Num(d.Users.Count)</option>
+                        }
+                    </select>
+                    <button class="btn btn-primary" formaction="/Biometrics/FetchUsers">👥 @HrT.T("دریافت پرسنل از دستگاه")</button>
+                    <button class="btn" formaction="/Biometrics/FetchBios">🧬 @HrT.T("دریافت اطلاعات هویتی (همه)")</button>
+                    <span style="opacity:.5">|</span>
+                    <button class="btn btn-ok" formaction="/Biometrics/SimulateFetch" name="mode" value="users">▶ @HrT.T("شبیه‌ساز: دریافت پرسنل")</button>
+                    <button class="btn btn-ok" formaction="/Biometrics/SimulateFetch" name="mode" value="bios">▶ @HrT.T("شبیه‌ساز: دریافت هویتی")</button>
+                </div>
+                <div class="hint" style="margin-top:8px">@HrT.T("دو دکمه «شبیه‌ساز» برای محیط نمایشی (بدون سخت‌افزار واقعی) است — با دستگاه‌های واقعی، سرویس گیت‌وی C# دستورها را از مسیر TCP/ADMS اجرا می‌کند.")</div>
+            </form>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("پرسنل ثبت‌شده روی دستگاه‌ها")</h2>
+            <span class="hint">
+                @HrT.T("فیلتر دستگاه:")
+                <select id="devFilter" style="max-width:260px;margin-inline-start:6px">
+                    <option value="">@HrT.T("همه دستگاه‌ها")</option>
+                    @foreach (var d in devices)
+                    {
+                        <option value="@d.Id">@d.Name</option>
+                    }
+                </select>
+            </span>
+        </div>
+        <div class="table-wrap" style="max-height:560px">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("دستگاه")</th><th>@HrT.T("پین")</th><th>@HrT.T("نام روی دستگاه")</th><th>@HrT.T("سطح دسترسی")</th>
+                        <th>@HrT.T("کارت")</th><th>@HrT.T("پیوند پرسنل")</th><th>@HrT.T("قالب‌ها")</th><th>@HrT.T("آخرین دریافت")</th>
+                        @if (canManage)
+                        {
+                            <th>@HrT.T("عملیات")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var du in deviceUsers)
+                    {
+                        var counts = bioCountMap.TryGetValue((du.DeviceId, du.Pin), out var m) ? m : new Dictionary<string, int>();
+                        <tr data-dev="@du.DeviceId">
+                            <td>@du.Device?.Name</td>
+                            <td class="num">@Jalali.ToPersianDigits(du.Pin)</td>
+                            <td>@du.Name</td>
+                            <td><span class="badge @(du.Privilege switch { 14 => "badge-err", 6 => "badge-warn", 2 => "badge-info", _ => "badge-mute" })">@BioTypes.PrivilegeLabel(du.Privilege)</span></td>
+                            <td class="num">@(du.CardNumber is null ? "—" : Jalali.ToPersianDigits(du.CardNumber))</td>
+                            <td>
+                                @if (du.EmployeeId is not null && empBriefById.TryGetValue(du.EmployeeId, out var eb))
+                                {
+                                    <span class="badge badge-ok">@eb.FullName (@Jalali.ToPersianDigits(eb.PersonnelCode))</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-err">@HrT.T("بیرون از سامانه")</span>
+                                }
+                            </td>
+                            <td>
+                                @if (counts.Count == 0)
+                                {
+                                    <span class="badge badge-mute">@HrT.T("دریافت نشده")</span>
+                                }
+                                else
+                                {
+                                    foreach (var kv in counts)
+                                    {
+                                        <span class="badge badge-info">@BioTypes.Label(kv.Key): @Jalali.Num(kv.Value)</span>
+                                    }
+                                }
+                            </td>
+                            <td class="num">@(du.LastFetchedAt is null ? "—" : Jalali.FmtLong(du.LastFetchedAt.Value))</td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    <div class="btn-row" style="gap:4px">
+                                        <form method="post" action="/Biometrics/FetchBios" class="inline-form" data-ajax>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="deviceId" value="@du.DeviceId" />
+                                            <input type="hidden" name="pin" value="@du.Pin" />
+                                            <button class="btn btn-sm">🧬 @HrT.T("دریافت هویتی")</button>
+                                        </form>
+                                        <form method="post" action="/Biometrics/DeleteDeviceUser" class="inline-form" data-ajax data-confirm="@HrT.F("کاربر «{0}» از دستگاه «{1}» حذف شود؟", du.Name, du.Device?.Name)" data-danger="1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="deviceUserId" value="@du.Id" />
+                                            <button class="btn btn-sm btn-err">🗑️</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (!deviceUsers.Any())
+            {
+                <div class="empty">@HrT.T("هنوز پرسنلی از دستگاه‌ها دریافت نشده — از دکمه «دریافت پرسنل از دستگاه» (یا شبیه‌ساز) استفاده کنید")</div>
+            }
+        </div>
+    </div>
+</section>
+
+@* ============ تب ۳: انتقال پرسنل ============ *@
+<section class="bpanel" data-panel="transfer">
+    @if (canManage)
+    {
+        <div class="card" style="margin-bottom:14px;border-inline-start:3px solid var(--accent)">
+            <div class="card-h"><h2>@HrT.T("۱) از دیتابیس به دستگاه‌ها")</h2><span class="hint">@HrT.T("قالب مرجع هر پرسنل در سامانه به دستگاه‌های مقصد ارسال می‌شود (دستور push_user_bios)")</span></div>
+            <form method="post" action="/Biometrics/PushToDevices" class="card-b" data-ajax>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld fld-full"><label>@HrT.T("پرسنل (جستجوی چندتایی) *")</label>
+                        @* فاز ۱۱۴ — انتخابگر جستجومحور به‌جای لیست کامل پرسنل؛ زیرنویس هر نتیجه
+                           خلاصهٔ قالب‌های هویتی همان شخص است (endpoint با bio=1)؛
+                           «انتخاب همهٔ پرسنل» فقط پرچم allEmployees را به سرور می‌فرستد *@
+                        <div class="emp-picker" data-name="employeeIds" data-multiple="1" data-min="1"
+                             data-url="/Ui/EmpSearch?bio=1" data-all="1" data-all-field="allEmployees"
+                             data-all-label="@HrT.T("انتخاب همهٔ پرسنل")"
+                             data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+                    </div>
+                    <div class="fld"><label>@HrT.T("دستگاه‌های مقصد") *</label>
+                        <select name="toDeviceIds" multiple size="7" required>
+                            @foreach (var d in devices)
+                            {
+                                <option value="@d.Id">@d.Name — @(d.Users.Count > 0 ? $"{Jalali.Num(d.Users.Count)} " + HrT.T("کاربر") : HrT.T("خالی"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld">
+                        <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                            <input type="checkbox" name="includeBios" value="true" checked /> @HrT.T("شامل قالب‌های هویتی (اثر انگشت و چهره)")
+                        </label>
+                        <div class="hint" style="margin-top:6px">@HrT.T("کارت و رمز همیشه همراه رکورد کاربر ارسال می‌شود. اگر پرسنلی قالب نداشته باشد فقط رکورد کاربر او ساخته می‌شود.")</div>
+                        <button class="btn btn-primary" style="margin-top:12px">⇄ @HrT.T("ثبت دستورات انتقال (دیتابیس ← دستگاه)")</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" style="border-inline-start:3px solid var(--ok)">
+            <div class="card-h"><h2>@HrT.T("۲) از دستگاه به دستگاه‌ها (کپی مستقیم)")</h2><span class="hint">@HrT.T("کاربرانِ انتخابیِ دستگاه مبدأ با اثر انگشت/چهره/کارت/رمزِ همان دستگاه کپی می‌شوند — قالب ناقص از نسخه مرجع تکمیل می‌شود")</span></div>
+            <form method="post" action="/Biometrics/TransferDeviceUsers" class="card-b" data-ajax>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("دستگاه مبدأ *")</label>
+                        <select id="srcDevice" name="sourceDeviceId" required>
+                            <option value="">@HrT.T("— انتخاب دستگاه مبدأ —")</option>
+                            @foreach (var d in devices)
+                            {
+                                var uc = deviceUsers.Count(du => du.DeviceId == d.Id);
+                                <option value="@d.Id">@d.Name — @Jalali.Num(uc) @HrT.T("کاربر")</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("دستگاه‌های مقصد * (با Ctrl چندتایی)")</label>
+                        <select name="toDeviceIds" multiple size="6" required>
+                            @foreach (var d in devices)
+                            {
+                                <option value="@d.Id">@d.Name — @(d.Users.Count > 0 ? $"{Jalali.Num(d.Users.Count)} " + HrT.T("کاربر") : HrT.T("خالی"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld fld-full"><label>@HrT.T("کاربران دستگاه مبدأ * (با Ctrl چندتایی)")</label>
+                        <select id="srcUsers" name="pins" multiple size="8" required disabled>
+                            <option value="">@HrT.T("ابتدا دستگاه مبدأ را انتخاب کنید")</option>
+                        </select>
+                        <div class="btn-row" style="gap:6px;margin-top:6px">
+                            <button type="button" class="btn btn-sm" onclick="toggleAll('srcUsers')">@HrT.T("انتخاب/حذف همه کاربران")</button>
+                            <span class="hint" id="srcUserHint"></span>
+                        </div>
+                    </div>
+                    <div class="fld">
+                        <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                            <input type="checkbox" name="includeBios" value="true" checked /> @HrT.T("شامل داده‌های هویتی (اثر انگشت، چهره + کارت/رمز روی رکورد)")
+                        </label>
+                        <button class="btn btn-primary" style="margin-top:12px">⇒ @HrT.T("انتقال به دستگاه‌های مقصد")</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</section>
+
+@* ============ تب ۴: قالب‌های مرجع ============ *@
+<section class="bpanel" data-panel="templates">
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("قالب‌های هویتی مرجع پرسنل (مرکز انتقال)")</h2><span class="hint">@HrT.T("«منبع» آخرین دستگاهی است که قالب از آن دریافت شده")</span></div>
+        <div class="table-wrap" style="max-height:600px">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("کد")</th><th>@HrT.T("پرسنل")</th><th>@HrT.T("اثر انگشت")</th><th>@HrT.T("چهره")</th><th>@HrT.T("کارت")</th><th>@HrT.T("رمز")</th><th>@HrT.T("منبع")</th></tr></thead>
+                <tbody>
+                    @foreach (var e in employees.Where(e => BiosOf(e).Count > 0))
+                    {
+                        var biosE = BiosOf(e);
+                        var fps = biosE.Where(b => b.Type == "fp").OrderBy(b => b.BioIndex).ToList();
+                        var faces = biosE.Where(b => b.Type == "face").ToList();
+                        var cards = biosE.Where(b => b.Type == "card").ToList();
+                        var pinsB = biosE.Where(b => b.Type == "pin").ToList();
+                        <tr>
+                            <td class="num">@Jalali.ToPersianDigits(e.PersonnelCode)</td>
+                            <td>@e.FullName</td>
+                            <td>
+                                @foreach (var b in fps)
+                                {
+                                    <span class="badge badge-ok">@BioTypes.IndexLabel("fp", b.BioIndex)@(b.Quality is null ? "" : $" — کیفیت {Jalali.Num(b.Quality.Value)}٪")</span>
+                                }
+                                @if (fps.Count == 0)
+                                {
+                                    <span class="badge badge-mute">—</span>
+                                }
+                            </td>
+                            <td>
+                                @if (faces.Count > 0)
+                                {
+                                    <span class="badge badge-ok">@HrT.T("قالب چهره")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-mute">—</span>
+                                }
+                            </td>
+                            <td>
+                                @foreach (var b in cards)
+                                {
+                                    <span class="badge badge-info">@Jalali.ToPersianDigits(b.CardNumber ?? "—")</span>
+                                }
+                                @if (cards.Count == 0)
+                                {
+                                    <span class="badge badge-mute">—</span>
+                                }
+                            </td>
+                            <td>
+                                @if (pinsB.Count > 0)
+                                {
+                                    <span class="badge badge-warn">@HrT.T("ثبت‌شده")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-mute">—</span>
+                                }
+                            </td>
+                            <td>@(biosE.FirstOrDefault()?.SourceDevice?.Name ?? "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (empsWithBio == 0)
+            {
+                <div class="empty">@HrT.T("هنوز قالب هویتی برای هیچ پرسنلی ثبت نشده است")</div>
+            }
+        </div>
+    </div>
+</section>
+
+@* ============ تب ۵: لاگ دستورها ============ *@
+<section class="bpanel" data-panel="log">
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("لاگ دستورهای هویتی (۴۰ مورد اخیر)")</h2><span class="hint">@HrT.T("صف: pending → delivered → acked/failed — به‌روزرسانی زنده هر ۱۲ ثانیه")</span></div>
+        <div class="table-wrap" style="max-height:600px">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("دستگاه")</th><th>@HrT.T("دستور")</th><th>@HrT.T("ثبت‌کننده")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("نتیجه")</th></tr></thead>
+                <tbody id="biolog">
+                    @foreach (var c in commands)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtLong(c.CreatedAt)</td>
+                            <td>@c.Device?.Name</td>
+                            <td><span class="badge badge-info">@HrT.T(DeviceOps.CommandLabels.GetValueOrDefault(c.Type, c.Type))</span></td>
+                            <td>@(c.CreatedBy ?? "—")</td>
+                            <td>
+                                <span class="badge @(c.Status switch { "acked" => "badge-ok", "failed" => "badge-err", "delivered" => "badge-warn", _ => "badge-mute" })">
+                                    @(c.Status switch { "acked" => HrT.T("اجرا شد"), "failed" => HrT.T("ناموفق"), "delivered" => HrT.T("تحویل شد"), _ => HrT.T("در صف") })
+                                </span>
+                            </td>
+                            <td>@(c.Result ?? "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (!commands.Any())
+            {
+                <div class="empty" id="biolog-empty">@HrT.T("هنوز دستوری صادر نشده است")</div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // ===== تب‌بندی پنل (با پشتیبانی از #hash برای لینک مستقیم) =====
+        var tabs = document.querySelectorAll('#bioTabs .btab');
+        var panels = document.querySelectorAll('.bpanel');
+        function activateTab(name) {
+            tabs.forEach(function (t) { t.classList.toggle('on', t.dataset.tab === name); });
+            panels.forEach(function (p) { p.classList.toggle('on', p.dataset.panel === name); });
+        }
+        tabs.forEach(function (t) {
+            t.addEventListener('click', function () {
+                activateTab(t.dataset.tab);
+                history.replaceState(null, '', '#' + t.dataset.tab);
+            });
+        });
+        if (location.hash && document.querySelector('.bpanel[data-panel="' + location.hash.substring(1) + '"]'))
+            activateTab(location.hash.substring(1));
+
+        // فیلتر جدول پرسنل بر اساس دستگاه
+        document.getElementById('devFilter')?.addEventListener('change', function () {
+            var v = this.value;
+            document.querySelectorAll('tr[data-dev]').forEach(function (tr) {
+                tr.style.display = (!v || tr.dataset.dev === v) ? '' : 'none';
+            });
+        });
+
+        // انتخاب/حذف همه گزینه‌های یک select چندتایی
+        function toggleAll(id) {
+            var sel = document.getElementById(id);
+            if (!sel) return;
+            var opts = Array.prototype.slice.call(sel.options);
+            var allSel = opts.length > 0 && opts.every(function (o) { return o.selected; });
+            opts.forEach(function (o) { o.selected = !allSel; });
+        }
+
+        // پرکردن فهرست کاربران دستگاه مبدأ (انتقال دستگاه ← دستگاه)
+        var usersByDevice = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            deviceUsers.GroupBy(du => du.DeviceId).ToDictionary(
+                g => g.Key,
+                g => g.OrderBy(du => du.Pin).Select(du => new {
+                    p = du.Pin,
+                    n = du.Name,
+                    e = du.EmployeeId is not null && empBriefById.TryGetValue(du.EmployeeId, out var ebj) ? ebj.FullName : (string?)null,
+                    c = bioCountMap.TryGetValue((du.DeviceId, du.Pin), out var m)
+                        ? m.GetValueOrDefault("fp", 0) + m.GetValueOrDefault("face", 0)
+                        : 0,
+                }).ToList())));
+        document.getElementById('srcDevice')?.addEventListener('change', function () {
+            var sel = document.getElementById('srcUsers');
+            var hint = document.getElementById('srcUserHint');
+            sel.innerHTML = '';
+            var list = usersByDevice[this.value] || [];
+            if (list.length === 0) {
+                sel.disabled = true;
+                sel.add(new Option('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کاربری روی این دستگاه ثبت نشده — ابتدا «دریافت پرسنل از دستگاه» را اجرا کنید")))', ''));
+                hint.textContent = '';
+                return;
+            }
+            sel.disabled = false;
+            list.forEach(function (u) {
+                var label = '\u200E' + u.p + ' — ' + u.n + (u.e && u.e !== u.n ? ' (' + u.e + ')' : '')
+                    + (u.c > 0 ? ' • ' + u.c + ' ' + '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("قالب")))' : '');
+                var opt = new Option(label, u.p);
+                sel.add(opt);
+            });
+            hint.textContent = list.length + ' ' + '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کاربر روی دستگاه مبدأ")))';
+        });
+
+        // ===== رصد زنده دستورهای هویتی (فیلتر بر اساس نوع) — اطلاع‌رسانی تا رسیدن نتیجه =====
+        function paintBioLog(j) {
+            var tb = document.getElementById('biolog');
+            if (!tb) return;
+            tb.textContent = '';
+            (j.commands || []).forEach(function (c) {
+                var tr = document.createElement('tr');
+                function td(v, cls) { var el = document.createElement('td'); if (cls) el.className = cls; el.textContent = v == null ? '—' : v; return el; }
+                tr.appendChild(td(c.createdText, 'num'));
+                tr.appendChild(td(c.device));
+                var tdType = document.createElement('td');
+                var bType = document.createElement('span'); bType.className = 'badge badge-info'; bType.textContent = c.typeLabel || c.type;
+                tdType.appendChild(bType); tr.appendChild(tdType);
+                tr.appendChild(td(c.createdBy));
+                var tdSt = document.createElement('td');
+                var bSt = document.createElement('span');
+                bSt.className = 'badge ' + (c.status === 'acked' ? 'badge-ok' : c.status === 'failed' ? 'badge-err' : c.status === 'delivered' ? 'badge-warn' : 'badge-mute');
+                bSt.textContent = c.statusText;
+                tdSt.appendChild(bSt); tr.appendChild(tdSt);
+                tr.appendChild(td(c.result));
+                tb.appendChild(tr);
+            });
+            var empty = document.getElementById('biolog-empty');
+            if (empty) empty.style.display = (j.commands || []).length ? 'none' : '';
+        }
+        liveCommands({
+            url: '/Devices/Live', intervalSec: 12,
+            types: ['get_users', 'get_user_bios', 'push_user_bios', 'push_user', 'delete_user'],
+            apply: paintBioLog,
+        });
+    </script>
+}

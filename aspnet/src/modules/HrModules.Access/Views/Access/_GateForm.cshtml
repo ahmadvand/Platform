@@ -1,0 +1,46 @@
+@{
+    var zones = (List<Zone>)ViewBag.Zones;
+    var devices = (List<Device>)ViewBag.Devices;
+}
+<div data-modal-title="@HrT.T("گیت جدید")" hidden></div>
+<form method="post" action="/Access/CreateGate" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام گیت *")</label><input name="name" required /></div>
+        <div class="fld"><label>@HrT.T("کد *")</label><input name="code" required placeholder="G-XX" /></div>
+        <div class="fld"><label>@HrT.T("منطقه * (تعیین‌کننده شرکت گیت)")</label>
+            <select name="zoneId" required>
+                @foreach (var z in zones)
+                {
+                    <option value="@z.Id">@z.Name @(z.Company != null ? "— " + z.Company.Code : "")</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("دستگاه متصل")</label>
+            <select name="deviceId"><option value="">@HrT.T("— بدون دستگاه —")</option>
+                @foreach (var d in devices)
+                {
+                    <option value="@d.Id">@d.Name @(d.Company != null ? "(" + d.Company.Code + ")" : "")</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type"><option value="درب برقی">@HrT.T("درب برقی")</option><option value="گیت میله‌ای">@HrT.T("گیت میله‌ای")</option><option value="راهبند">@HrT.T("راهبند")</option><option value="ورودی‌گردان">@HrT.T("ورودی‌گردان")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("جهت")</label>
+            <select name="direction"><option value="دوطرفه">@HrT.T("دوطرفه")</option><option value="ورودی">@HrT.T("ورودی")</option><option value="خروجی">@HrT.T("خروجی")</option></select>
+        </div>
+        @* فاز ۱۳۱ (مورد ۱۲ ROADMAP-ADDITIONS) — گیت «حضورشمار»: اسکن مجاز به کارت تردد هم می‌رود *@
+        <div class="fld" style="grid-column:1/-1">
+            <label>@HrT.T("حضور و غیاب")</label>
+            <label style="display:flex;align-items:flex-start;gap:8px;font-weight:400;line-height:1.8">
+                <input type="checkbox" name="feedsAttendance" value="true" style="margin-top:6px" />
+                <span>@HrT.T("اسکن مجاز این گیت در کارت حضور و غیاب هم ثبت شود — اولین اسکن روز = ورود، آخرین اسکن = خروج (برای پرسنلی که فقط از گیت رد می‌شوند)")</span>
+            </label>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ایجاد گیت")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

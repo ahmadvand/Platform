@@ -1,0 +1,63 @@
+@{
+    // فاز ۱۳۱ (مورد ۲ ROADMAP-ADDITIONS) — گزارش «پانچ جامانده»
+    ViewData["Title"] = HrT.T("پانچ جامانده");
+    var rows = (List<AttendanceRecord>)Model;
+    var f = (string)ViewBag.From;
+    var t = (string)ViewBag.To;
+    var empCount = (int)ViewBag.EmpCount;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("گزارش پانچ جامانده")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("از تاریخ")</label><input type="date" name="from" value="@f" /></div>
+            <div class="fld"><label>@HrT.T("تا تاریخ")</label><input type="date" name="to" value="@t" /></div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("رکوردها:") <b>@Jalali.Num(rows.Count)</b></span>
+            <span class="chip">@HrT.T("پرسنل درگیر:") <b>@Jalali.Num(empCount)</b></span>
+            <span class="chip">@HrT.T("بازه:") <b>@Jalali.FmtFaLong(Jalali.ParseDateKey(f)) — @Jalali.FmtFaLong(Jalali.ParseDateKey(t))</b></span>
+        </div>
+        <p class="hint">@HrT.T("روزهایی که ورود ثبت شده ولی خروجی ثبت نشده و وضعیت مرخصی/مأموریت/تعطیل هم نیستند؛ برای محاسبهٔ درست کارکرد باید خروج یا اصلاحیهٔ تردد ثبت شود.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("تاریخ")</th>
+                        <th>@HrT.T("کد")</th>
+                        <th>@HrT.T("نام")</th>
+                        <th>@HrT.T("واحد")</th>
+                        <th>@HrT.T("ورود")</th>
+                        <th>@HrT.T("خروج")</th>
+                        <th>@HrT.T("دستگاه")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtFaLong(Jalali.ParseDateKey(r.Date))</td>
+                            <td class="num">@Jalali.ToPersianDigits(r.Employee!.PersonnelCode)</td>
+                            <td><strong>@r.Employee.FullName</strong></td>
+                            <td>@r.Employee.Department?.Name</td>
+                            <td class="num">@(r.CheckIn is null ? "—" : Jalali.FmtTime(r.CheckIn.Value))</td>
+                            <td class="num"><b>—</b></td>
+                            <td>@(r.Device?.Name ?? "—")</td>
+                            <td>
+                                <span class="badge badge-warn">@HrT.T(r.Status)</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("در این بازه رکورد جامانده‌ای یافت نشد ✅")</p>
+        }
+    </div>
+</div>

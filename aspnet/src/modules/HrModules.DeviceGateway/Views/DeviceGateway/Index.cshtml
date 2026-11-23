@@ -1,0 +1,291 @@
+@{
+    ViewBag.Title = HrT.T("دروازهٔ دستگاه‌ها");
+    var settings = (GatewaySettingsDto?)ViewBag.Settings;
+    var cfg = (GatewayRuntimeConfig)ViewBag.Cfg;
+    var devices = (List<Platform.Web.Controllers.GatewayDeviceRow>)ViewBag.Devices;
+    var cams = (List<Platform.Web.Controllers.GatewayCameraRow>)ViewBag.Cameras;
+    var log = (List<GatewayActivity>)ViewBag.Log;
+    var parkingOk = (bool)ViewBag.ParkingOk;
+    var parkingMsg = (string?)ViewBag.ParkingMsg;
+    var pendingAdms = (int)ViewBag.PendingAdms;
+    var canEdit = (bool)ViewBag.CanEdit;
+    var extConfigured = (bool)ViewBag.ExtConfigured;
+    var extUrl = (string)ViewBag.ExtUrl;
+    // فاز ۶۴ — وضعیت relay پورت اختصاصی ADMS (از کنترلر)
+    var relayRunning = (bool)ViewBag.RelayRunning;
+    var relayPort = (int)ViewBag.RelayPort;
+    var relayUpstream = (int)ViewBag.RelayUpstream;
+    var relayActive = (int)ViewBag.RelayActive;
+    var relayError = (string?)ViewBag.RelayError;
+
+    var tcpDevices = devices.Where(d => d.Transport == "tcp").ToList();
+    var admsDevices = devices.Where(d => d.Transport == "adms").ToList();
+    var onlineCount = devices.Count(d => d.Recent);
+    var moduleOn = cfg.ModuleOn;
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("دروازهٔ دستگاه‌ها")</h1>
+        <div class="page-sub">@HrT.F("{0} دستگاه و {1} دوربین تحت دروازه", Jalali.Num(devices.Count), Jalali.Num(cams.Count))</div>
+    </div>
+</div>
+<div data-refresh-host>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("🖧 دروازهٔ دستگاه‌ها")</h2>
+        <span class="badge @(moduleOn && cfg.Enabled ? "badge-ok" : "badge-mute")">
+            @(moduleOn ? (cfg.Enabled ? HrT.T("● فعال") : HrT.T("○ پایش متوقف (از تنظیمات گیت‌وی)")) : HrT.T("○ ماژول خاموش"))
+        </span>
+    </div>
+    <div class="card-b">
+        <p style="color:var(--ink-2);font-size:12.5px;line-height:2;margin-bottom:14px">
+            @HrT.T("این ماژول همان کارکرد سرویس ویندوزی") <b>HrDeviceGateway</b> @HrT.T("را «درون» سامانه اجرا می‌کند:")
+            @HrT.T("poll مستقیم دستگاه‌های TCP، پل PUSH/ADMS دستگاه‌های ZKTeco و پل دوربین‌های پلاک‌خوان —")
+            @HrT.T("بدون نیاز به نصب سرویس جداگانه و بدون حساب سرویس پل.")
+            @HrT.T("دستگاه‌های") ADMS @HrT.T("را به") <code>http://&lt;آدرس‌سرور&gt;:@(Context.Request.Host.Value.Contains("localhost") ? Context.Request.Host.Value : Context.Request.Host.Host)/iclock/cdata</code> @HrT.T("اشاره دهید و")
+            @HrT.T("دوربین‌های پلاک‌خوان را به") <code>/anpr/plate?SN=…</code>.
+            @HrT.T("تنظیمات از") <a href="/Gateway">@HrT.T("تنظیمات گیت‌وی")</a> @HrT.T("خوانده می‌شود (همان منبع سرویس خارجی)؛")
+            @HrT.T("در استقرارهای شبکه‌بندی‌شده همچنان می‌توانید سرویس ویندوزی جداگانه را به همین سامانه وصل کنید — دو حالت با هم تداخل ندارند.")
+        </p>
+
+        <div class="stat-grid">
+            <div class="stat @(moduleOn && cfg.Enabled ? "c-ok" : "c-err")"><div class="ic">⚡</div><div><div class="v">@(moduleOn ? (cfg.Enabled ? HrT.T("فعال") : HrT.T("متوقف")) : HrT.T("خاموش"))</div><div class="l">@HrT.T("وضعیت ماژول")</div></div></div>
+            <div class="stat"><div class="ic">🔄</div><div><div class="v">@Jalali.Num(cfg.PollerCount)</div><div class="l">@HrT.T("پولر TCP در حال اجرا")</div></div></div>
+            <div class="stat"><div class="ic">📡</div><div><div class="v">@Jalali.Num(tcpDevices.Count)</div><div class="l">@HrT.T("دستگاه TCP")</div></div></div>
+            <div class="stat"><div class="ic">🛰</div><div><div class="v">@Jalali.Num(admsDevices.Count)</div><div class="l">@HrT.T("دستگاه ADMS (PUSH)")</div></div></div>
+            <div class="stat"><div class="ic">📷</div><div><div class="v">@Jalali.Num(cfg.CameraCount)</div><div class="l">@HrT.T("حلقهٔ دوربین پلاک‌خوان")</div></div></div>
+            <div class="stat"><div class="ic">⏳</div><div><div class="v">@Jalali.Num(pendingAdms)</div><div class="l">@HrT.T("دستور در انتظار ACK (ADMS)")</div></div></div>
+            <div class="stat @(relayRunning ? "c-ok" : "")"><div class="ic">🔌</div><div><div class="v">@(relayRunning ? Jalali.Num(relayPort) : "خاموش")</div><div class="l">پورت اختصاصی ADMS@(relayRunning ? HrT.F(" — {0} اتصال", Jalali.Num(relayActive)) : "")</div></div></div>
+        </div>
+        @if (!parkingOk)
+        {
+            <div class="toast toast-err" style="margin-top:10px">@parkingMsg</div>
+        }
+        @if (!string.IsNullOrEmpty(relayError))
+        {
+            <div class="toast toast-err" style="margin-top:10px">@HrT.T("⚠ relay پورت اختصاصی:") @relayError</div>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("🛠 سرویس گیت‌وی خارجی")</h2>
+        <span class="hint">appsettings → Gateway:ExternalService:Url</span>
+    </div>
+    <div class="card-b">
+        <p style="color:var(--ink-2);font-size:12.5px;line-height:2;margin-bottom:12px">
+            @HrT.T("در استقرارهای ترکیبی، علاوه بر این ماژول درون‌اپی، سرویس ویندوزی")
+            <b>HrDeviceGateway</b> @HrT.T("جداگانه هم می‌تواند به همین بانک وصل باشد (مثلاً برای دستگاه‌های")
+            @HrT.T("شبکهٔ دیگر یا در بسته‌های بدون ماژول دروازه). آدرس سرویس را در")
+            <code>appsettings.json</code> @HrT.T("وارد کنید تا سلامت آن از همین‌جا پایش شود")
+            (@HrT.T("خواندن") <code>/health</code> @HrT.T("همان سرویس + وضعیت runtime")).
+            @(relayRunning
+                ? HrT.F("پورت اختصاصی ADMS ({0}) توسط ماژول درون‌اپی سرویس می‌دهد — اتصال‌ها به پورت اپ ({1}) حواله می‌شوند؛ اگر سرویس خارجی هم روی همان پورت باشد، تداخل پورت خواهید داشت.", relayPort, relayUpstream)
+                : HrT.T("پورت اختصاصی ADMS در تنظیمات، همان پورت خود اپ است — دستگاه‌ها مستقیم به اپ وصل می‌شوند و relay لازم نیست."))
+        </p>
+        <div id="extStatus" style="font-size:12.5px;line-height:2.1">
+            <span class="badge badge-mute">@HrT.T("در حال بررسی…")</span>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("🖥️ ماتریس اتصال دستگاه‌ها")</h2><span class="hint">@HrT.T("حالت زنده — آخرین poll و نتیجهٔ دستورها")</span></div>
+    <div class="card-b" style="overflow-x:auto">
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th>@HrT.T("دستگاه")</th><th>@HrT.T("سریال")</th><th>@HrT.T("اتصال")</th><th>@HrT.T("آدرس")</th><th>@HrT.T("وضعیت")</th>
+                    <th>@HrT.T("آخرین poll")</th><th>@HrT.T("دستور OK/خطا")</th><th>@HrT.T("پانچ ورودی")</th><th>@HrT.T("خطای آخر")</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var d in devices)
+            {
+                <tr>
+                    <td><b>@d.Name</b></td>
+                    <td style="font-family:monospace;direction:ltr">@d.Serial</td>
+                    <td><span class="badge @(d.Transport == "tcp" ? "badge-info" : "badge-mute")">@(d.Transport == "tcp" ? HrT.T("TCP مستقیم") : "ADMS PUSH")</span></td>
+                    <td style="direction:ltr;text-align:left">@(d.Ip != null ? d.Ip + ":" + (d.Port ?? cfg.DefaultDevicePort) : "—")</td>
+                    <td>
+                        @if (d.Online && d.Recent)
+                        {
+                            <span class="badge badge-ok">@HrT.T("● آنلاین")</span>
+                        }
+                        else if (d.LastPoll != null)
+                        {
+                            <span class="badge badge-err">@HrT.T("○ آفلاین")</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-mute">@HrT.T("○ بدون گزارش")</span>
+                        }
+                        @if (d.Transport == "tcp")
+                        {
+                            <span class="badge @(d.Polling ? "badge-info" : "badge-mute")" style="margin-inline-start:4px">@(d.Polling ? HrT.T("poller فعال") : HrT.T("poller خاموش"))</span>
+                        }
+                    </td>
+                    <td>@(d.LastPoll.HasValue ? Jalali.Fmt(d.LastPoll.Value) : "—")</td>
+                    <td>@Jalali.Num(d.OkCmds) / <span style="color:var(--err, #c0392b)">@Jalali.Num(d.FailedCmds)</span> @(d.Pending > 0 ? HrT.F(" (در صف: {0})", d.Pending) : "")</td>
+                    <td>@Jalali.Num(d.Punches)</td>
+                    <td style="color:var(--err, #c0392b);font-size:11px">@d.LastError</td>
+                </tr>
+            }
+            @if (!devices.Any())
+            {
+                <tr><td colspan="9" style="text-align:center;color:var(--ink-3)">@HrT.T("دستگاه فعالی ثبت نشده است — از صفحهٔ دستگاه‌های تردد اضافه کنید")</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("📷 دوربین‌های پلاک‌خوان (حلقه‌های راهبند)")</h2>
+        <span class="hint">@HrT.T("قالب HTTP راهبند:") appsettings → Gateway:Anpr:Cameras</span></div>
+    <div class="card-b" style="overflow-x:auto">
+        <table class="tbl">
+            <thead>
+                <tr><th>@HrT.T("دوربین")</th><th>@HrT.T("سریال")</th><th>@HrT.T("برند")</th><th>IP</th><th>@HrT.T("گیت")</th><th>@HrT.T("حلقهٔ ضربان")</th><th>@HrT.T("راهبند")</th><th>@HrT.T("آخرین ضربان")</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var c in cams)
+            {
+                <tr>
+                    <td><b>@c.Name</b></td>
+                    <td style="font-family:monospace;direction:ltr">@c.Serial</td>
+                    <td>@c.Brand</td>
+                    <td style="direction:ltr;text-align:left">@c.Ip</td>
+                    <td>@c.GateId</td>
+                    <td><span class="badge @(c.Loop ? "badge-ok" : "badge-mute")">@(c.Loop ? HrT.T("● در حال اجرا") : HrT.T("○ متوقف"))</span></td>
+                    <td>@(c.Barrier ? HrT.T("پیکربندی شده") : "—")</td>
+                    <td>@(c.LastSeen.HasValue ? Jalali.Fmt(c.LastSeen.Value) : "—")</td>
+                </tr>
+            }
+            @if (!cams.Any())
+            {
+                <tr><td colspan="8" style="text-align:center;color:var(--ink-3)">@HrT.T("دوربینی برای پایش وجود ندارد — دوربین‌ها از ماژول پارکینگ خوانده می‌شوند")</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("📜 لاگ فعالیت زنده")</h2>
+        <span style="display:inline-flex;gap:6px;align-items:center">
+            <span class="hint" id="dgLogTime"></span>
+            @if (canEdit)
+            {
+                <form method="post" action="/DeviceGateway/ClearLog" data-ajax style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-sm">@HrT.T("🧹 پاک‌سازی")</button>
+                </form>
+                <form method="post" action="/DeviceGateway/RestartPollers" data-ajax style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-sm">@HrT.T("🔄 راه‌اندازی مجدد pollerها")</button>
+                </form>
+            }
+        </span>
+    </div>
+    <div class="card-b">
+        <div id="dgLog" style="background:var(--bg-2, #14161c);border-radius:10px;padding:10px 14px;max-height:340px;overflow-y:auto;font-family:monospace;font-size:11.5px;line-height:1.9;direction:rtl">
+            @foreach (var a in log)
+            {
+                <div><span style="color:var(--ink-3)">[@a.Time.ToString("HH:mm:ss")]</span>
+                    <span style='color:@(a.Level == "ERROR" ? "#e74c3c" : a.Level == "WARN" ? "#f39c12" : "#7fc45f")'>[@a.Level]</span>
+                    <b style="color:#8ab4f8">[@a.Source]</b>
+                    <span>@a.Message</span></div>
+            }
+            @if (!log.Any())
+            {
+                <div style="color:var(--ink-3)">@HrT.T("هنوز رویدادی ثبت نشده است…")</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    var MSG_NO_LOG = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("هنوز رویدادی ثبت نشده است…")))';
+    var MSG_UPDATED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("به‌روزرسانی:")))';
+    var MSG_EXT_ERR = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا در بررسی سرویس خارجی")))';
+    var MSG_NOT_CONFIGURED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پیکربندی نشده")))';
+    var MSG_NOT_CONFIGURED_NOTE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("— بدون آن، این کارت فقط یادداشت است و پایشی انجام نمی‌شود.")))';
+    var MSG_EXT_UP = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("● در دسترس")))';
+    var MSG_EXT_DOWN = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("○ خارج از دسترس")))';
+    var MSG_STATUS = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("وضعیت:")))';
+    var MSG_WATCH_ON = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پایش فعال")))';
+    var MSG_WATCH_OFF = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پایش متوقف")))';
+    var MSG_CFG_VER = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("نسخهٔ کانفیگ:")))';
+    var MSG_POLLERS = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پولر:")))';
+    var MSG_RESTART = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ری‌استارت لازم دارد")))';
+    var MSG_CHECK_FAILED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("بررسی ممکن نشد")))';
+    var box = document.getElementById('dgLog');
+    if (!box) return;
+    var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+    var color = function (lv) { return lv === 'ERROR' ? '#e74c3c' : (lv === 'WARN' ? '#f39c12' : '#7fc45f'); };
+    async function tick() {
+        try {
+            var r = await fetch('/DeviceGateway/Log?take=150', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!r.ok) return;
+            var j = await r.json();
+            if (!j || !j.items) return;
+            var html = '';
+            for (var i = 0; i < j.items.length; i++) {
+                var a = j.items[i];
+                html += '<div><span style="color:var(--ink-3)">[' + esc(a.time) + ']</span>' +
+                    '<span style="color:' + color(a.level) + '">[' + esc(a.level) + ']</span>' +
+                    '<b style="color:#8ab4f8">[' + esc(a.source) + ']</b> <span>' + esc(a.message) + '</span></div>';
+            }
+            box.innerHTML = html || '<div style="color:var(--ink-3)">' + MSG_NO_LOG + '</div>';
+            box.scrollTop = box.scrollHeight;
+            var t = document.getElementById('dgLogTime');
+            if (t) t.textContent = MSG_UPDATED + ' ' + esc(j.time);
+        } catch (e) { /* چرخهٔ بعدی */ }
+    }
+    tick();
+    setInterval(tick, 5000);
+})();
+
+// ---- فاز ۶۴ — وضعیت سرویس گیت‌وی خارجی (استقرار ترکیبی) ----
+(function () {
+    var box = document.getElementById('extStatus');
+    if (!box) return;
+    var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+    async function load() {
+        try {
+            var r = await fetch('/DeviceGateway/ExternalStatus', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!r.ok) { box.innerHTML = '<span class="badge badge-err">' + MSG_EXT_ERR + '</span>'; return; }
+            var j = await r.json();
+            if (!j.configured) {
+                box.innerHTML = '<span class="badge badge-mute">' + MSG_NOT_CONFIGURED + '</span> ' + esc(j.message || '') + ' ' + MSG_NOT_CONFIGURED_NOTE;
+                return;
+            }
+            var html = j.reachable
+                ? '<span class="badge badge-ok">' + MSG_EXT_UP + '</span> <b>' + esc(j.url) + '</b>'
+                : '<span class="badge badge-err">' + MSG_EXT_DOWN + '</span> <b>' + esc(j.url) + '</b>';
+            if (j.status) html += ' — ' + MSG_STATUS + ' <b>' + esc(j.status) + '</b>';
+            if (j.enabled === true) html += ' <span class="badge badge-ok">' + MSG_WATCH_ON + '</span>';
+            else if (j.enabled === false) html += ' <span class="badge badge-mute">' + MSG_WATCH_OFF + '</span>';
+            if (j.configVersion != null) html += ' — ' + MSG_CFG_VER + ' ' + esc(j.configVersion);
+            if (j.pollers != null) html += ' — ' + MSG_POLLERS + ' ' + esc(j.pollers);
+            if (j.restartRequired) html += ' <span class="badge badge-err">' + MSG_RESTART + '</span>';
+            if (j.elapsedMs != null) html += ' (' + esc(j.elapsedMs) + 'ms)';
+            html += '<div style="color:var(--ink-3);font-size:11.5px;margin-top:4px">' + esc(j.message || '') + '</div>';
+            box.innerHTML = html;
+        } catch (e) {
+            box.innerHTML = '<span class="badge badge-err">' + MSG_CHECK_FAILED + '</span>';
+        }
+    }
+    load();
+    setInterval(load, 20000);
+})();
+</script>
+}
+</div>

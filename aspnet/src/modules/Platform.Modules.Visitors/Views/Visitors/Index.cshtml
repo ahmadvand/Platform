@@ -1,0 +1,171 @@
+@{
+    ViewData["Title"] = HrT.T("ارباب رجوع");
+    var tab = (string)ViewBag.Tab;
+    var visitors = (List<Visitor>)ViewBag.Visitors;
+    var contractors = (List<Contractor>)ViewBag.Contractors;
+    var inside = (int)ViewBag.TodayInside;
+    var canManage = Me.Get()!.Has("visitors.register") || Me.Get()!.Has("visitors.flow");
+
+    string VBadge(string s) => s switch
+    {
+        "داخل سازمان" => "badge-ok",
+        "خارج شده" => "badge-mute",
+        "تأیید شده" => "badge-info",
+        "رد شده" => "badge-err",
+        _ => "badge-warn",
+    };
+    var companies = (List<Company>)(ViewBag.Companies ?? new List<Company>());
+    var curCo = (string?)ViewBag.Co;
+}
+<div class="tabs">
+    <a href="/Visitors?tab=visitors" class="@(tab == "visitors" ? "on" : "")">@HrT.T("بازدیدکنندگان") (@Jalali.Num(visitors.Count))</a>
+    <a href="/Visitors?tab=contractors" class="@(tab == "contractors" ? "on" : "")">@HrT.T("پیمانکاران") (@Jalali.Num(contractors.Count))</a>
+</div>
+<div class="chips">
+    <form method="get" style="display:inline-flex;gap:6px;align-items:center">
+        <input type="hidden" name="tab" value="@tab" />
+        <select name="co" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه شرکت‌ها")</option>
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+            }
+        </select>
+    </form>
+    <span class="chip">@HrT.T("هم‌اکنون داخل سازمان:") <b>@Jalali.Num(inside)</b> @HrT.T("نفر")</span>
+    <span class="chip">@HrT.T("در انتظار تأیید:") <b>@Jalali.Num(visitors.Count(v => v.Status == "در انتظار تأیید"))</b></span>
+</div>
+
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("ارباب رجوع")</h1>
+        <div class="page-sub">@HrT.F("{0} نفر داخل سایت · {1} رکورد مراجعه · {2} پیمانکار", Jalali.Num(inside), Jalali.Num(visitors.Count), Jalali.Num(contractors.Count))</div>
+    </div>
+</div>
+<div data-refresh-host>
+@if (tab == "visitors")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("مدیریت بازدیدکنندگان")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Visitors/Create" data-modal-title="@HrT.T("درخواست بازدید جدید")">@HrT.T("+ درخواست بازدید")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("شخص")</th><th>@HrT.T("شرکت میزبان")</th><th>@HrT.T("نوع")</th><th>@HrT.T("میزبان")</th><th>@HrT.T("هدف")</th><th>@HrT.T("پیمانکار")</th>
+                        <th>@HrT.T("کارت")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("تاریخ درخواست")</th><th>@HrT.T("تردد")</th>
+                        @if (canManage)
+                        {
+                            <th>@HrT.T("عملیات")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in visitors)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@v.FullName</strong><br />
+                                <span style="color:var(--ink-3);font-size:10.5px">@HrT.T(v.IdDocType) · @Jalali.ToPersianDigits(v.NationalId)</span>
+                            </td>
+                            <td style="font-size:11px">@(v.Company?.Name ?? "—")</td>
+                            <td><span class="badge badge-mute">@HrT.T(v.Type)</span></td>
+                            <td>@(v.HostName + (v.HostDept is null ? "" : " · " + v.HostDept))</td>
+                            <td style="white-space:normal;min-width:160px">@HrT.T(v.Purpose)</td>
+                            <td>@(v.Contractor?.Name ?? "—")</td>
+                            <td>@(v.Card is null ? "—" : v.Card.CardNo + " (" + v.Card.Type + ")" + (v.Card.Returned ? " ✓" : ""))</td>
+                            <td><span class="badge @VBadge(v.Status)">@HrT.T(v.Status)</span></td>
+                            <td class="num">@Jalali.FmtLong(v.RequestedAt)</td>
+                            <td class="num">@Jalali.ToPersianDigits(v.Logs.Count(l => l.Direction == "ورود")) @HrT.T("ورود") / @Jalali.ToPersianDigits(v.Logs.Count(l => l.Direction == "خروج")) @HrT.T("خروج")</td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    <div class="btn-row">
+                                        @if (v.Status == "در انتظار تأیید")
+                                        {
+                                            <form method="post" action="/Visitors/Decide" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@v.Id" /><input type="hidden" name="approve" value="true" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("تأیید")</button>
+                                            </form>
+                                            <form method="post" action="/Visitors/Decide" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@v.Id" /><input type="hidden" name="approve" value="false" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("رد")</button>
+                                            </form>
+                                        }
+                                        @if (v.Status == "تأیید شده" && v.Card is null)
+                                        {
+                                            <form method="post" action="/Visitors/IssueCard" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@v.Id" /><input type="hidden" name="type" value="QR" />
+                                                <button class="btn btn-sm">@HrT.T("صدور کارت QR")</button>
+                                            </form>
+                                        }
+                                        @if (v.Card is not null && v.Status == "تأیید شده" && !v.Card.Returned)
+                                        {
+                                            <form method="post" action="/Visitors/Enter" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@v.Id" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("ثبت ورود")</button>
+                                            </form>
+                                        }
+                                        @if (v.Status == "داخل سازمان")
+                                        {
+                                            <form method="post" action="/Visitors/Exit" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@v.Id" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("ثبت خروج")</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("شرکت‌های پیمانکار")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Visitors/CreateContractor" data-modal-title="@HrT.T("شرکت پیمانکار جدید")">@HrT.T("+ پیمانکار جدید")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("نام پیمانکار")</th><th>@HrT.T("شرکت کارفرما")</th><th>@HrT.T("کد")</th><th>@HrT.T("رابط")</th><th>@HrT.T("تلفن")</th><th>@HrT.T("قرارداد")</th><th>@HrT.T("اعتبار")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("بازدیدکنندگان")</th></tr></thead>
+                <tbody>
+                    @foreach (var c in contractors)
+                    {
+                        var expired = c.ValidUntil is not null && c.ValidUntil < DateTime.Now;
+                        <tr>
+                            <td><strong>@c.Name</strong></td>
+                            <td style="font-size:11px">@(c.Company?.Name ?? "—")</td>
+                            <td class="num">@c.Code</td>
+                            <td>@(c.ContactName ?? "—")</td>
+                            <td class="num">@Jalali.ToPersianDigits(c.Phone ?? "—")</td>
+                            <td>@(c.ContractNo ?? "—")</td>
+                            <td class="num">@(c.ValidUntil is null ? "—" : Jalali.Fmt(c.ValidUntil.Value))</td>
+                            <td><span class="badge @(expired ? "badge-err" : "badge-ok")">@(expired ? HrT.T("منقضی") : HrT.T("معتبر"))</span></td>
+                            <td class="num">@Jalali.Num(c.Visitors.Count)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+</div>

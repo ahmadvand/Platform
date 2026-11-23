@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-lang="fa" data-cal="jalali">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>به‌روزرسانی سامانه | شرکت پتروشیمی پارس آسیا</title>
+    <link rel="icon" href="data:image/svg&#x2B;xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 100 100&#x27;%3E%3Ctext y=&#x27;0.9em&#x27; font-size=&#x27;88&#x27;%3E%E2%97%88%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/css/site.css?v=HGxveOt5F3VSf5UJ8bSFkl5W5O3OY409JkHbX7DRBBE" />
+    <style id="palCss">:root{--accent:#14b8a6;--accent-2:#3ac3b4;--accent-deep:#119e8f;--accent-ink:#119e8f;--accent-soft:#e8f8f6;--accent-border:#bdebe6;--accent-3:#5acdc1;--accent-4:#109081;--accent-soft-text:#cbefeb;--accent-rgb:20,184,166;--grad-brand:linear-gradient(135deg, #3ac3b4 0%, #14b8a6 45%, #109081 100%);--grad-btn:linear-gradient(135deg, #14b8a6 0%, #119e8f 100%);--link:#0d9488;--sidebar:#17293a;--sidebar-2:#2e3e4e;--sidebar-rgb:23,41,58;--sidebar-line:127,137,147;--sidebar-text:#a9bccb;--sidebar-muted:#6f8191;--sidebar-title:#eaeef2;--bg:#eef2f6;--card:#ffffff;--card-rgb:255,255,255;--line:#e1e8ee;--line-soft:#eef2f6;--ink:#1b2833;--ink-rgb:27,40,51;--ink-2:#5e7181;--ink-3:#96a3ad;--ink-soft:#195053;--th-bg:#eff4f7;--row-alt:#f9fbfc;--row-hover:#eef6f5;--btn-hover-bg:#f1fbfa;--btn-hover-border:#cbefeb;--ok:#10b981;--ok-bg:#e2f7f0;--ok-border:#b7ead9;--warn:#f59e0b;--warn-bg:#fef3e2;--warn-border:#fce2b6;--err:#ef4444;--err-bg:#fde9e9;--err-border:#fac7c7;--info:#3b82f6;--info-bg:#e7f0fe;--info-border:#c4dafc;--scroll-thumb:#a6b2bd;--scroll-thumb-hover:#bac4cd;--overlay:rgba(23,41,58, .46);}</style>
+</head>
+<body>
+        <button type="button" class="sb-toggle" id="sbToggle" title="نمایش/پنهان‌سازی منو" aria-label="نمایش یا پنهان‌سازی منو" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M9 5.5 15.5 12 9 18.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <aside class="sidebar">
+            <div class="brand">
+                    <div class="brand-logo">◈</div>
+                <div>
+                    <div class="brand-name">شرکت پتروشیمی پارس آسیا</div>
+                    <div class="brand-sub">سامانه یکپارچه منابع انسانی</div>
+                </div>
+            </div>
+            <nav class="nav">
+                    <div class="nav-group">عمومی</div>
+                        <a href="/" class="nav-item ">
+                            <span class="nav-ico">▦</span>
+                            <span>داشبورد</span>
+                        </a>
+                    <div class="nav-group">منابع انسانی</div>
+                        <a href="/Employees" class="nav-item ">
+                            <span class="nav-ico">👤</span>
+                            <span>پرسنل</span>
+                        </a>
+                        <a href="/Org" class="nav-item ">
+                            <span class="nav-ico">🏢</span>
+                            <span>چارت سازمانی</span>
+                        </a>
+                        <a href="/Shifts" class="nav-item ">
+                            <span class="nav-ico">🔁</span>
+                            <span>شیفت‌ها و نوبت‌کاری</span>
+                        </a>
+                        <a href="/Holidays" class="nav-item ">
+                            <span class="nav-ico">📅</span>
+                            <span>تعطیلات رسمی</span>
+                        </a>
+                    <div class="nav-group">حضور و غیاب</div>
+                        <a href="/Attendance" class="nav-item ">
+                            <span class="nav-ico">🕒</span>
+                            <span>تردد روزانه</span>
+                        </a>
+                        <a href="/Requests" class="nav-item ">
+                            <span class="nav-ico">📋</span>
+                            <span>درخواست‌ها</span>
+                        </a>
+                    <div class="nav-group">کنترل تردد و حراست</div>
+                        <a href="/Devices" class="nav-item ">
+                            <span class="nav-ico">🖥️</span>
+                            <span>دستگاه‌های تردد</span>
+                        </a>
+                        <a href="/DeviceGateway" class="nav-item ">
+                            <span class="nav-ico">🖧</span>
+                            <span>دروازهٔ دستگاه‌ها</span>
+                        </a>
+                        <a href="/Devices/LiveView" class="nav-item ">
+                            <span class="nav-ico">📡</span>
+                            <span>نمای زنده حراست</span>
+                        </a>
+                        <a href="/Access" class="nav-item ">
+                            <span class="nav-ico">🚪</span>
+                            <span>مناطق و گیت‌ها</span>
+                        </a>
+                        <a href="/Cards" class="nav-item ">
+                            <span class="nav-ico">💳</span>
+                            <span>کارت‌های شناسایی</span>
+                        </a>
+                        <a href="/Visitors" class="nav-item ">
+                            <span class="nav-ico">🎟</span>
+                            <span>ارباب رجوع</span>
+                        </a>
+                        <a href="/Biometrics" class="nav-item ">
+                            <span class="nav-ico">🧬</span>
+                            <span>داده‌های هویتی</span>
+                        </a>
+                    <div class="nav-group">پارکینگ</div>
+                        <a href="/Parking" class="nav-item ">
+                            <span class="nav-ico">🅿️</span>
+                            <span>کنترل پارکینگ</span>
+                        </a>
+                    <div class="nav-group">حقوق و دستمزد</div>
+                        <a href="/Payroll" class="nav-item ">
+                            <span class="nav-ico">💰</span>
+                            <span>لیست حقوق</span>
+                        </a>
+                        <a href="/Payroll/Items" class="nav-item ">
+                            <span class="nav-ico">🧮</span>
+                            <span>فرمول‌ساز اقلام</span>
+                        </a>
+                        <a href="/Payroll/Params" class="nav-item ">
+                            <span class="nav-ico">📐</span>
+                            <span>پارامترهای سالانه</span>
+                        </a>
+                        <a href="/Payroll/Bonus" class="nav-item ">
+                            <span class="nav-ico">🎁</span>
+                            <span>عیدی و تسویه</span>
+                        </a>
+                        <a href="/Payroll/Settings" class="nav-item ">
+                            <span class="nav-ico">⚙️</span>
+                            <span>تنظیمات محاسبه</span>
+                        </a>
+                    <div class="nav-group">تحلیل و گزارش</div>
+                        <a href="/Reports" class="nav-item ">
+                            <span class="nav-ico">📊</span>
+                            <span>گزارش‌ساز تحلیلی</span>
+                        </a>
+                    <div class="nav-group">پرتال من</div>
+                        <a href="/Self" class="nav-item ">
+                            <span class="nav-ico">🏠</span>
+                            <span>خانه من</span>
+                        </a>
+                        <a href="/Self/Requests" class="nav-item ">
+                            <span class="nav-ico">📨</span>
+                            <span>درخواست‌های من</span>
+                        </a>
+                        <a href="/Self/Attendance" class="nav-item ">
+                            <span class="nav-ico">🕒</span>
+                            <span>کارکرد من</span>
+                        </a>
+                        <a href="/Self/Payslips" class="nav-item ">
+                            <span class="nav-ico">💰</span>
+                            <span>فیش حقوقی من</span>
+                        </a>
+                    <div class="nav-group">مدیریت سیستم</div>
+                        <a href="/Companies" class="nav-item ">
+                            <span class="nav-ico">🏛</span>
+                            <span>شرکت‌ها</span>
+                        </a>
+                        <a href="/License" class="nav-item ">
+                            <span class="nav-ico">🧾</span>
+                            <span>مجوز نصب</span>
+                        </a>
+                        <a href="/Users" class="nav-item ">
+                            <span class="nav-ico">🛡️</span>
+                            <span>کاربران و نقش‌ها</span>
+                        </a>
+                        <a href="/Notifications" class="nav-item ">
+                            <span class="nav-ico">🔔</span>
+                            <span>اعلان‌ها</span>
+                        </a>
+                        <a href="/Gateway" class="nav-item ">
+                            <span class="nav-ico">🖧</span>
+                            <span>تنظیمات گیت‌وی</span>
+                        </a>
+                        <a href="/Settings" class="nav-item ">
+                            <span class="nav-ico">🎛️</span>
+                            <span>تنظیمات سامانه</span>
+                        </a>
+                        <a href="/Langs" class="nav-item ">
+                            <span class="nav-ico">🌐</span>
+                            <span>زبان‌ها و ترجمه</span>
+                        </a>
+                        <a href="/Updates" class="nav-item active">
+                            <span class="nav-ico">⬆️</span>
+                            <span>به‌روزرسانی سامانه</span>
+                        </a>
+                        <a href="/Audit" class="nav-item ">
+                            <span class="nav-ico">📜</span>
+                            <span>حسابرسی</span>
+                        </a>
+            </nav>
+            <div class="sidebar-foot">
+                <div class="ver-chip">نسخه ۲.۷.۷</div>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div class="tb-search-wrap">
+                    <input type="text" class="tb-search" id="tbSearch" placeholder="جستجو در اطلاعات و یا …" autocomplete="off"
+                           role="combobox" aria-expanded="false" aria-controls="tbSearchMenu" aria-autocomplete="list" />
+                    <span class="tb-search-ico">🔍</span>
+                    <div class="tb-search-menu" id="tbSearchMenu" role="listbox" hidden></div>
+                </div>
+
+                    <div class="topbar-title" id="tbCrumb">
+                            <span class="crumb-group">مدیریت سیستم</span>
+                                <span class="crumb-sep">/</span>
+                        <span class="crumb-page">به‌روزرسانی سامانه</span>
+                    </div>
+
+                <div class="tb-datetime">
+                    <span class="tb-cal">📅</span>
+                    <strong>۱۵ آبان ۱۴۰۵</strong>
+                    <span class="tb-wd">جمعه</span>
+                    <span class="clock" data-clock>18:09:57</span>
+                </div>
+
+                <div class="tb-actions">
+                        <a class="tb-ico-btn" href="/Settings" title="تنظیمات سامانه" aria-label="تنظیمات">⚙️</a>
+                    <div class="tb-bell-wrap tb-lang-wrap">
+                        <button type="button" class="tb-ico-btn" id="tbLangBtn" title="زبان رابط کاربری" aria-label="زبان رابط کاربری" aria-haspopup="true" aria-expanded="false" aria-controls="tbLangMenu" style="display:inline-flex;align-items:center"><img class='hr-flag' src='/img/flags/ir.svg' alt='' height='16' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /></button>
+                        <div class="tb-lang-menu" id="tbLangMenu" hidden>
+                                <a class="tb-lang-item on" href="/Ui/Lang?l=fa&r=%2FUpdates"><img class='hr-flag' src='/img/flags/ir.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> فارسی</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=en&r=%2FUpdates"><img class='hr-flag' src='/img/flags/gb.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> English</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ar&r=%2FUpdates"><img class='hr-flag' src='/img/flags/sa.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> العربية</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ka&r=%2FUpdates"><img class='hr-flag' src='/img/flags/ge.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x10E5;&#x10D0;&#x10E0;&#x10D7;&#x10E3;&#x10DA;&#x10D8;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ky&r=%2FUpdates"><img class='hr-flag' src='/img/flags/kg.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x41A;&#x44B;&#x440;&#x433;&#x44B;&#x437;&#x447;&#x430;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=prs&r=%2FUpdates"><img class='hr-flag' src='/img/flags/af.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> دری</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ps&r=%2FUpdates"><img class='hr-flag' src='/img/flags/af.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> پښتو</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=tg&r=%2FUpdates"><img class='hr-flag' src='/img/flags/tj.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x422;&#x43E;&#x4B7;&#x438;&#x43A;&#x4E3;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=tk&r=%2FUpdates"><img class='hr-flag' src='/img/flags/tm.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> Türkmençe</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=uz&r=%2FUpdates"><img class='hr-flag' src='/img/flags/uz.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> O&#x2BB;zbekcha</a>
+                                <a class="tb-lang-item" href="/Langs" style="border-top:1px dashed var(--line);color:var(--ink-2)">⚙️ مدیریت زبان‌ها &#x2190;</a>
+                        </div>
+                    </div>
+                    <div class="tb-bell-wrap">
+                        <button type="button" class="tb-ico-btn tb-bell" id="tbBellBtn" title="هشدارهای باز" aria-label="هشدارها">
+                            🔔
+                                <span class="tb-badge">۶</span>
+                        </button>
+                        <div class="tb-bell-menu" id="tbBellMenu" hidden>
+                            <div class="tb-bell-h">🔔 هشدارهای باز (۶)</div>
+                                    <a class="tb-bell-item tb-bell-link" href="/Cards" data-alert-id="2b3a29e0da6d466bb11ee6f073359f8c" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot "></span>
+                                        <div>
+                                            <div class="tb-bell-t">کارت گمشده · 15:58</div>
+                                            <div class="tb-bell-m">کارت شماره VC-48213 به‌عنوان مفقود اعلام شد — ابطال گردید</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Visitors" data-alert-id="020fda6da0684af08fe2717ff6673b6f" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">مجوز منقضی · 15:58</div>
+                                            <div class="tb-bell-m">اعتبار قرارداد شرکت نگین تعمیرات صنعتی منقضی شده است (CTR-103)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Visitors" data-alert-id="a2aa30060f7d42959a6ff84481455960" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot "></span>
+                                        <div>
+                                            <div class="tb-bell-t">تأخیر خروج · 15:58</div>
+                                            <div class="tb-bell-m">مهمان «کوروش جهانگیری» بیش از ۸ ساعت داخل سایت است — بررسی خروج لازم است</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="33f40d808eee48febda76fea454c1132" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">ورود غیرمجاز · 15:58</div>
+                                            <div class="tb-bell-m">تلاش ورود غیرمجاز توسط هومن مرادی در گیت اصلی ورودی (خارج از ساعات مجاز)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="55a8b8cce5674e8caf399bf0c443b33f" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">ورود غیرمجاز · 15:58</div>
+                                            <div class="tb-bell-m">تلاش ورود غیرمجاز توسط سارا موسوی در درب واحد پلی‌اتیلن (خارج از ساعات مجاز)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="e4996ed9baa7411897eac642d1f0a751" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot crit"></span>
+                                        <div>
+                                            <div class="tb-bell-t">ورود غیرمجاز · 15:58</div>
+                                            <div class="tb-bell-m">تلاش خروج غیرمجاز توسط سعید قاسمی در درب واحد پلی‌اتیلن (فاقد مجوز دسترسی به این منطقه)</div>
+                                        </div>
+                                    </a>
+                            <a class="tb-bell-foot" href="/Notifications">مشاهده همه اعلان‌ها &#x2190;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tb-user-wrap">
+                    <button type="button" class="tb-profile" id="tbProfileBtn" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="tbUserMenu" title="منوی کاربر" aria-label="منوی کاربر">
+                            <div class="tb-av tb-av-txt">م</div>
+                        <div class="tb-pinfo">
+                            <div class="tb-pname">مدیر ارشد سیستم</div>
+                            <div class="tb-prole">مدیر ارشد سیستم</div>
+                        </div>
+                        <span class="tb-caret">▾</span>
+                    </button>
+                    <div class="tb-user-menu" id="tbUserMenu" hidden>
+                        <div class="tb-user-h">
+                                <div class="tb-av tb-av-txt">م</div>
+                            <div>
+                                <div class="tb-user-name">مدیر ارشد سیستم</div>
+                                <div class="tb-user-role">مدیر ارشد سیستم</div>
+                            </div>
+                        </div>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Photo" data-modal-title="پروفایل من">
+                            <span class="tb-uico">🖼</span> عکس پروفایل من
+                        </button>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Password" data-modal-title="تغییر رمز عبور">
+                            <span class="tb-uico">🔑</span> تغییر رمز عبور
+                        </button>
+                        <div class="tb-user-sep"></div>
+                        <form method="post" action="/Auth/Logout" class="tb-user-logout">
+                            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l_lPT2AZyF9UWsB5beyLtgF5eaRfYzGcUqkjk694XfcAgh3OB9-RfHSp5-5_87aSNndDI8jsgWwey-Y0Vc2Z1FleTEYaLTucCQk4QqulFfuBh7KzQeqvbT87pIP4Lug128ujNGBKq_ahOUoXKaYmbI7MzJwV-2Wocssg75KM9ZzVA" />
+                            <button type="submit" class="tb-user-item danger"><span class="tb-uico">🚪</span> خروج از حساب</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <script type="application/json" id="tbNavIndex">[{"t":"\u0639\u0645\u0648\u0645\u06CC","items":[{"h":"/","ic":"\u25A6","l":"\u062F\u0627\u0634\u0628\u0648\u0631\u062F"}]},{"t":"\u0645\u0646\u0627\u0628\u0639 \u0627\u0646\u0633\u0627\u0646\u06CC","items":[{"h":"/Employees","ic":"\uD83D\uDC64","l":"\u067E\u0631\u0633\u0646\u0644"},{"h":"/Org","ic":"\uD83C\uDFE2","l":"\u0686\u0627\u0631\u062A \u0633\u0627\u0632\u0645\u0627\u0646\u06CC"},{"h":"/Shifts","ic":"\uD83D\uDD01","l":"\u0634\u06CC\u0641\u062A\u200C\u0647\u0627 \u0648 \u0646\u0648\u0628\u062A\u200C\u06A9\u0627\u0631\u06CC"},{"h":"/Holidays","ic":"\uD83D\uDCC5","l":"\u062A\u0639\u0637\u06CC\u0644\u0627\u062A \u0631\u0633\u0645\u06CC"}]},{"t":"\u062D\u0636\u0648\u0631 \u0648 \u063A\u06CC\u0627\u0628","items":[{"h":"/Attendance","ic":"\uD83D\uDD52","l":"\u062A\u0631\u062F\u062F \u0631\u0648\u0632\u0627\u0646\u0647"},{"h":"/Requests","ic":"\uD83D\uDCCB","l":"\u062F\u0631\u062E\u0648\u0627\u0633\u062A\u200C\u0647\u0627"}]},{"t":"\u06A9\u0646\u062A\u0631\u0644 \u062A\u0631\u062F\u062F \u0648 \u062D\u0631\u0627\u0633\u062A","items":[{"h":"/Devices","ic":"\uD83D\uDDA5\uFE0F","l":"\u062F\u0633\u062A\u06AF\u0627\u0647\u200C\u0647\u0627\u06CC \u062A\u0631\u062F\u062F"},{"h":"/DeviceGateway","ic":"\uD83D\uDDA7","l":"\u062F\u0631\u0648\u0627\u0632\u0647\u0654 \u062F\u0633\u062A\u06AF\u0627\u0647\u200C\u0647\u0627"},{"h":"/Devices/LiveView","ic":"\uD83D\uDCE1","l":"\u0646\u0645\u0627\u06CC \u0632\u0646\u062F\u0647 \u062D\u0631\u0627\u0633\u062A"},{"h":"/Access","ic":"\uD83D\uDEAA","l":"\u0645\u0646\u0627\u0637\u0642 \u0648 \u06AF\u06CC\u062A\u200C\u0647\u0627"},{"h":"/Cards","ic":"\uD83D\uDCB3","l":"\u06A9\u0627\u0631\u062A\u200C\u0647\u0627\u06CC \u0634\u0646\u0627\u0633\u0627\u06CC\u06CC"},{"h":"/Visitors","ic":"\uD83C\uDF9F","l":"\u0627\u0631\u0628\u0627\u0628 \u0631\u062C\u0648\u0639"},{"h":"/Biometrics","ic":"\uD83E\uDDEC","l":"\u062F\u0627\u062F\u0647\u200C\u0647\u0627\u06CC \u0647\u0648\u06CC\u062A\u06CC"}]},{"t":"\u067E\u0627\u0631\u06A9\u06CC\u0646\u06AF","items":[{"h":"/Parking","ic":"\uD83C\uDD7F\uFE0F","l":"\u06A9\u0646\u062A\u0631\u0644 \u067E\u0627\u0631\u06A9\u06CC\u0646\u06AF"}]},{"t":"\u062D\u0642\u0648\u0642 \u0648 \u062F\u0633\u062A\u0645\u0632\u062F","items":[{"h":"/Payroll","ic":"\uD83D\uDCB0","l":"\u0644\u06CC\u0633\u062A \u062D\u0642\u0648\u0642"},{"h":"/Payroll/Items","ic":"\uD83E\uDDEE","l":"\u0641\u0631\u0645\u0648\u0644\u200C\u0633\u0627\u0632 \u0627\u0642\u0644\u0627\u0645"},{"h":"/Payroll/Params","ic":"\uD83D\uDCD0","l":"\u067E\u0627\u0631\u0627\u0645\u062A\u0631\u0647\u0627\u06CC \u0633\u0627\u0644\u0627\u0646\u0647"},{"h":"/Payroll/Bonus","ic":"\uD83C\uDF81","l":"\u0639\u06CC\u062F\u06CC \u0648 \u062A\u0633\u0648\u06CC\u0647"},{"h":"/Payroll/Settings","ic":"\u2699\uFE0F","l":"\u062A\u0646\u0638\u06CC\u0645\u0627\u062A \u0645\u062D\u0627\u0633\u0628\u0647"}]},{"t":"\u062A\u062D\u0644\u06CC\u0644 \u0648 \u06AF\u0632\u0627\u0631\u0634","items":[{"h":"/Reports","ic":"\uD83D\uDCCA","l":"\u06AF\u0632\u0627\u0631\u0634\u200C\u0633\u0627\u0632 \u062A\u062D\u0644\u06CC\u0644\u06CC"}]},{"t":"\u067E\u0631\u062A\u0627\u0644 \u0645\u0646","items":[{"h":"/Self","ic":"\uD83C\uDFE0","l":"\u062E\u0627\u0646\u0647 \u0645\u0646"},{"h":"/Self/Requests","ic":"\uD83D\uDCE8","l":"\u062F\u0631\u062E\u0648\u0627\u0633\u062A\u200C\u0647\u0627\u06CC \u0645\u0646"},{"h":"/Self/Attendance","ic":"\uD83D\uDD52","l":"\u06A9\u0627\u0631\u06A9\u0631\u062F \u0645\u0646"},{"h":"/Self/Payslips","ic":"\uD83D\uDCB0","l":"\u0641\u06CC\u0634 \u062D\u0642\u0648\u0642\u06CC \u0645\u0646"}]},{"t":"\u0645\u062F\u06CC\u0631\u06CC\u062A \u0633\u06CC\u0633\u062A\u0645","items":[{"h":"/Companies","ic":"\uD83C\uDFDB","l":"\u0634\u0631\u06A9\u062A\u200C\u0647\u0627"},{"h":"/License","ic":"\uD83E\uDDFE","l":"\u0645\u062C\u0648\u0632 \u0646\u0635\u0628"},{"h":"/Users","ic":"\uD83D\uDEE1\uFE0F","l":"\u06A9\u0627\u0631\u0628\u0631\u0627\u0646 \u0648 \u0646\u0642\u0634\u200C\u0647\u0627"},{"h":"/Notifications","ic":"\uD83D\uDD14","l":"\u0627\u0639\u0644\u0627\u0646\u200C\u0647\u0627"},{"h":"/Gateway","ic":"\uD83D\uDDA7","l":"\u062A\u0646\u0638\u06CC\u0645\u0627\u062A \u06AF\u06CC\u062A\u200C\u0648\u06CC"},{"h":"/Settings","ic":"\uD83C\uDF9B\uFE0F","l":"\u062A\u0646\u0638\u06CC\u0645\u0627\u062A \u0633\u0627\u0645\u0627\u0646\u0647"},{"h":"/Langs","ic":"\uD83C\uDF10","l":"\u0632\u0628\u0627\u0646\u200C\u0647\u0627 \u0648 \u062A\u0631\u062C\u0645\u0647"},{"h":"/Updates","ic":"\u2B06\uFE0F","l":"\u0628\u0647\u200C\u0631\u0648\u0632\u0631\u0633\u0627\u0646\u06CC \u0633\u0627\u0645\u0627\u0646\u0647"},{"h":"/Audit","ic":"\uD83D\uDCDC","l":"\u062D\u0633\u0627\u0628\u0631\u0633\u06CC"}]}]</script>
+            </header>
+                <div class="lic-banner">&#x1F512; مجوز نصب ثبت نشده است — سامانه فقط با مجوز اجرا می‌شود <a href="/License">مدیریت مجوز نصب &#x2190;</a></div>
+            <div class="content">
+                <div data-refresh-host>
+
+<div class="card">
+    <div class="card-h">
+        <h2>⬆️ به‌روزرسانی سامانه</h2>
+        <div class="btn-row">
+            <span class="badge badge-ok">نسخهٔ فعلی ۲.۷.۷</span>
+                <span class="hint">تولیدکننده: گروه توسعه سامانه‌های سازمانی</span>
+        </div>
+    </div>
+    <div class="card-b">
+        <div class="hint" style="margin-bottom:10px">
+            به‌روزرسانی بسته‌ای: ماژول‌ها یا کل سامانه با یک فایل zip از این صفحه ارتقا می‌یابند — پشتیبان‌گیری خودکار، نصب با اجرای بعدی، و بازگردانی با یک کلیک.
+        </div>
+        <form method="post" enctype="multipart/form-data" style="margin-top:6px" action="/Updates/Upload">
+            
+            <div class="btn-row" style="align-items:center">
+                <input type="file" name="package" accept=".zip" required
+                       style="font-size:12.5px;padding:8px 10px;border:1px dashed var(--line);border-radius:8px;max-width:420px" />
+                <button class="btn btn-primary">📦 بارگذاری و اعتبارسنجی بسته</button>
+            </div>
+            <div class="hint" style="margin-top:8px">
+                فایل zip حاوی manifest.json &#x2B; پوشه‌های نصب (bin و wwwroot و …). حداکثر ۳۰۰ مگابایت. قالب دقیق در راهنمای پایین همین صفحه.
+            </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l_lPT2AZyF9UWsB5beyLtgF5eaRfYzGcUqkjk694XfcAgh3OB9-RfHSp5-5_87aSNndDI8jsgWwey-Y0Vc2Z1FleTEYaLTucCQk4QqulFfuBh7KzQeqvbT87pIP4Lug128ujNGBKq_ahOUoXKaYmbI7MzJwV-2Wocssg75KM9ZzVA" /></form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>💾 پشتیبان‌های نصب</h2>
+        <div class="btn-row">
+            <form method="post" action="/Updates/BackupNow">
+                
+                <button class="btn btn-sm">💾 پشتیبان‌گیری الان</button>
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l_lPT2AZyF9UWsB5beyLtgF5eaRfYzGcUqkjk694XfcAgh3OB9-RfHSp5-5_87aSNndDI8jsgWwey-Y0Vc2Z1FleTEYaLTucCQk4QqulFfuBh7KzQeqvbT87pIP4Lug128ujNGBKq_ahOUoXKaYmbI7MzJwV-2Wocssg75KM9ZzVA" /></form>
+        </div>
+    </div>
+    <div class="card-b">
+            <div class="empty">هنوز پشتیبانی ساخته نشده — هنگام نصب هر به‌روزرسانی، پشتیبان خودکار گرفته می‌شود</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>؟ راهنمای به‌روزرسانی — گام‌به‌گام</h2></div>
+    <div class="card-b">
+        <ol style="line-height:2;font-size:13px;padding-inline-start:20px">
+            <li><b>ساخت بسته:</b> روی دستگاه توسعه، اسکریپت ساخت بسته را با شمارهٔ نسخهٔ جدید اجرا کنید — لینوکس:<br />
+                <code style="direction:ltr;display:inline-block;margin:4px 0">./scripts/make-update-package.sh 2.7.6 --notes-fa "رفع اشکال دستگاه‌ها" --notes-en "Device fixes"</code><br />
+                ویندوز (فاز ۹۴):<br />
+                <code style="direction:ltr;display:inline-block;margin:4px 0">powershell -ExecutionPolicy Bypass -File scripts\make-update-package.ps1 -Version 2.7.6 -NotesFa "رفع اشکال دستگاه‌ها"</code><br />
+                خروجی: dist/hr-update-2.7.6.zip (شامل bin و wwwroot و web.config و manifest.json). اگر فقط یک ماژول عوض شده، در راهنمای زیر فقط DLL همان ماژول را در بسته بگذارید.
+            </li>
+            <li><b>بارگذاری در پنل ادمین:</b> همین صفحه &#x2190; بارگذاری zip &#x2190; اعتبارسنجی خودکار (نسخه، قالب، امنیت مسیرها).</li>
+            <li><b>نصب:</b> دکمهٔ «نصب به‌روزرسانی» — پیش از نصب، از کد فعلی پشتیبان خودکار گرفته می‌شود؛ سپس فایل‌ها استقرار می‌یابند. پس از ری‌استارت سرویس، نسخهٔ جدید فعال است و مهاجرت‌های بانک داده خودکار اجرا می‌شوند.</li>
+            <li><b>بازگردانی در صورت نیاز:</b> از جدول «پشتیبان‌های نصب» &#x2190; بازگردانی &#x2190; ری‌استارت. هیچ داده‌ای (بانک، تنظیمات، آپلودها) از بین نمی‌رود.</li>
+        </ol>
+
+        <div style="margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>به‌روزرسانی فقط یک ماژول:</b>
+            <div class="hint" style="margin-top:6px">
+                هر ماژول یک DLL است (مثل HrModules.Payroll.dll) که نماهای کامپایل‌شده را هم درون خود دارد. برای ارتقای همان ماژول، بستهٔ zip را فقط با همان DLL (و در صورت لزوم DLLهای وابسته) بسازید؛ بقیهٔ فایل‌ها دست‌نخورده می‌مانند. ماژول‌های نصب‌شده در این نصب:
+            </div>
+            <div class="chips" style="margin-top:8px">
+                    <span class="chip">کنترل تردد <code dir="ltr" style="font-size:10px">access</code></span>
+                    <span class="chip">حضور و غیاب <code dir="ltr" style="font-size:10px">attendance</code></span>
+                    <span class="chip">هستهٔ پلتفرم <code dir="ltr" style="font-size:10px">core</code></span>
+                    <span class="chip">تجهیزات و گیت‌وی <code dir="ltr" style="font-size:10px">devices</code></span>
+                    <span class="chip">دروازهٔ دستگاه‌ها <code dir="ltr" style="font-size:10px">gateway</code></span>
+                    <span class="chip">سازمان و پرسنل <code dir="ltr" style="font-size:10px">org</code></span>
+                    <span class="chip">پارکینگ (پلاک‌خوان) <code dir="ltr" style="font-size:10px">parking</code></span>
+                    <span class="chip">حقوق و دستمزد <code dir="ltr" style="font-size:10px">payroll</code></span>
+                    <span class="chip">بازدیدکنندگان <code dir="ltr" style="font-size:10px">visitors</code></span>
+            </div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>نصب روی ویندوز (IIS):</b>
+            <div class="hint" style="margin-top:6px">
+                وقتی اپ روی IIS اجراست، DLLهای در حال استفاده قفل‌اند؛ نصب‌کنندهٔ شما (installer/Install-HRPlatform.ps1) وظیفهٔ زمان‌بندی‌شدهٔ «HR Platform Updater» را می‌سازد که در هر توقف/ری‌استارتِ اپ، بستهٔ آماده را خودکار جای‌گذاری می‌کند. کافی است در همین صفحه «نصب به‌روزرسانی» را بزنید و سرویس را ری‌استارت کنید (Stop-Website / Start-Website یا از IIS Manager).
+            </div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>قالب manifest.json:</b>
+            <pre style="direction:ltr;text-align:left;font-size:11.5px;background:var(--line-soft);padding:10px;border-radius:8px;overflow:auto">{
+  "format": "hr-update-pack",
+  "version": "2.7.6",
+  "minVersion": "2.7.5",
+  "includeAppSettings": false,
+  "notes": { "fa": "…", "en": "…" }
+}</pre>
+            <div class="hint">پوشهٔ App_Data از هر بسته‌ای نادیده گرفته می‌شود — دادهٔ نصب (بانک، تنظیمات رمز، آپلودها) هرگز با به‌روزرسانی بازنویسی نمی‌شود.</div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+            </div>
+            <footer class="foot">
+                شرکت پتروشیمی پارس آسیا — نسخه ۲.۷.۷ · تولیدکننده: گروه توسعه سامانه‌های سازمانی
+            </footer>
+        </main>
+    <script>window.__hrL10n = {" \u0627\u0632 \u062A\u0628\u200C\u0647\u0627\u06CC \u0633\u0645\u062A \u0631\u0627\u0633\u062A (\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u060C \u062A\u0648\u0627\u0628\u0639\u060C \u0627\u0642\u0644\u0627\u0645\u060C \u0639\u0645\u0644\u06AF\u0631\u0647\u0627\u060C \u0639\u062F\u062F/\u0645\u062A\u0646\u060C \u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627) \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u0627 \u0645\u0648\u0633 \u0631\u0648\u06CC \u0628\u0648\u0645 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0641\u0642\u0637 \u0631\u0648\u06CC \u0622\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0628\u0647 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0627\u0636\u0627\u0641\u0647 \u0634\u0648\u062F.":" \u0627\u0632 \u062A\u0628\u200C\u0647\u0627\u06CC \u0633\u0645\u062A \u0631\u0627\u0633\u062A (\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u060C \u062A\u0648\u0627\u0628\u0639\u060C \u0627\u0642\u0644\u0627\u0645\u060C \u0639\u0645\u0644\u06AF\u0631\u0647\u0627\u060C \u0639\u062F\u062F/\u0645\u062A\u0646\u060C \u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627) \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u0627 \u0645\u0648\u0633 \u0631\u0648\u06CC \u0628\u0648\u0645 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0641\u0642\u0637 \u0631\u0648\u06CC \u0622\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0628\u0647 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0627\u0636\u0627\u0641\u0647 \u0634\u0648\u062F."," \u0628\u0632\u0631\u06AF\u062A\u0631 \u0627\u0632 ":" \u0628\u0632\u0631\u06AF\u062A\u0631 \u0627\u0632 "," \u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC ":" \u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC "," \u0628\u0647\u200C\u062A\u0648\u0627\u0646 ":" \u0628\u0647\u200C\u062A\u0648\u0627\u0646 "," \u0628\u0647\u200C\u0639\u0644\u0627\u0648\u0647 ":" \u0628\u0647\u200C\u0639\u0644\u0627\u0648\u0647 "," \u062A\u0631\u062A\u06CC\u0628 \u0645\u062D\u0627\u0633\u0628\u0647 \u0645\u062B\u0644 \u0631\u06CC\u0627\u0636\u06CC \u0627\u0633\u062A\u061B \u0628\u0631\u0627\u06CC \u0627\u0648\u0644\u0648\u06CC\u062A \u0627\u0632 \u00AB( \u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632\u00BB \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u06A9\u0646\u06CC\u062F. \u0628\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u062C\u0627\u0628\u0647\u200C\u062C\u0627 \u0648 \u0628\u0627 \u2715 \u062D\u0630\u0641 \u06A9\u0646\u06CC\u062F (\u0627\u0646\u062F\u0627\u062E\u062A\u0646 \u0628\u0644\u0648\u06A9 \u0631\u0648\u06CC \u067E\u0627\u0644\u062A \u0647\u0645 \u062D\u0630\u0641 \u0645\u06CC\u200C\u06A9\u0646\u062F).":" \u062A\u0631\u062A\u06CC\u0628 \u0645\u062D\u0627\u0633\u0628\u0647 \u0645\u062B\u0644 \u0631\u06CC\u0627\u0636\u06CC \u0627\u0633\u062A\u061B \u0628\u0631\u0627\u06CC \u0627\u0648\u0644\u0648\u06CC\u062A \u0627\u0632 \u00AB( \u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632\u00BB \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u06A9\u0646\u06CC\u062F. \u0628\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u062C\u0627\u0628\u0647\u200C\u062C\u0627 \u0648 \u0628\u0627 \u2715 \u062D\u0630\u0641 \u06A9\u0646\u06CC\u062F (\u0627\u0646\u062F\u0627\u062E\u062A\u0646 \u0628\u0644\u0648\u06A9 \u0631\u0648\u06CC \u067E\u0627\u0644\u062A \u0647\u0645 \u062D\u0630\u0641 \u0645\u06CC\u200C\u06A9\u0646\u062F)."," \u062A\u0642\u0633\u06CC\u0645 \u0628\u0631 ":" \u062A\u0642\u0633\u06CC\u0645 \u0628\u0631 "," \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9\u200C\u0647\u0627\u06CC \u0639\u062F\u062F/\u0645\u062A\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0642\u062F\u0627\u0631\u0634\u0627\u0646 \u0648\u06CC\u0631\u0627\u06CC\u0634 \u0634\u0648\u062F\u061B \u062F\u06A9\u0645\u0647\u0654 \u00AB\uFF0B\u00BB \u062F\u0627\u062E\u0644 \u0647\u0631 \u062A\u0627\u0628\u0639 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062C\u062F\u06CC\u062F \u0645\u06CC\u200C\u0622\u0648\u0631\u062F.":" \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9\u200C\u0647\u0627\u06CC \u0639\u062F\u062F/\u0645\u062A\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0642\u062F\u0627\u0631\u0634\u0627\u0646 \u0648\u06CC\u0631\u0627\u06CC\u0634 \u0634\u0648\u062F\u061B \u062F\u06A9\u0645\u0647\u0654 \u00AB\uFF0B\u00BB \u062F\u0627\u062E\u0644 \u0647\u0631 \u062A\u0627\u0628\u0639 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062C\u062F\u06CC\u062F \u0645\u06CC\u200C\u0622\u0648\u0631\u062F."," \u0636\u0631\u0628\u062F\u0631 ":" \u0636\u0631\u0628\u062F\u0631 "," \u0641\u0631\u0645\u0648\u0644 \u0645\u062A\u0646\u06CC \u0632\u0646\u062F\u0647 \u0633\u0627\u062E\u062A\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u062E\u0637 \u00AB\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC\u00BB \u0645\u0639\u0646\u06CC \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0646\u0634\u0627\u0646 \u0645\u06CC\u200C\u062F\u0647\u062F \u0648 \u0627\u06AF\u0631 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0628\u0627\u0634\u062F \u062E\u0637\u0627\u06CC \u062F\u0642\u06CC\u0642 \u0647\u0645\u0627\u0646\u200C\u062C\u0627 \u0645\u06CC\u200C\u0622\u06CC\u062F. \u0627\u0634\u062A\u0628\u0627\u0647 \u06A9\u0631\u062F\u06CC\u062F\u061F \u00AB\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A\u00BB \u2014 \u062D\u062A\u06CC \u00AB\u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646\u00BB \u0647\u0645 \u0628\u0631\u06AF\u0634\u062A\u200C\u067E\u0630\u06CC\u0631 \u0627\u0633\u062A.":" \u0641\u0631\u0645\u0648\u0644 \u0645\u062A\u0646\u06CC \u0632\u0646\u062F\u0647 \u0633\u0627\u062E\u062A\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u062E\u0637 \u00AB\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC\u00BB \u0645\u0639\u0646\u06CC \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0646\u0634\u0627\u0646 \u0645\u06CC\u200C\u062F\u0647\u062F \u0648 \u0627\u06AF\u0631 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0628\u0627\u0634\u062F \u062E\u0637\u0627\u06CC \u062F\u0642\u06CC\u0642 \u0647\u0645\u0627\u0646\u200C\u062C\u0627 \u0645\u06CC\u200C\u0622\u06CC\u062F. \u0627\u0634\u062A\u0628\u0627\u0647 \u06A9\u0631\u062F\u06CC\u062F\u061F \u00AB\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A\u00BB \u2014 \u062D\u062A\u06CC \u00AB\u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646\u00BB \u0647\u0645 \u0628\u0631\u06AF\u0634\u062A\u200C\u067E\u0630\u06CC\u0631 \u0627\u0633\u062A."," \u0645\u062E\u0627\u0644\u0641 ":" \u0645\u062E\u0627\u0644\u0641 "," \u0645\u0633\u0627\u0648\u06CC ":" \u0645\u0633\u0627\u0648\u06CC "," \u0645\u0646\u0647\u0627 ":" \u0645\u0646\u0647\u0627 "," \u06A9\u0648\u0686\u06A9\u062A\u0631 \u0627\u0632 ":" \u06A9\u0648\u0686\u06A9\u062A\u0631 \u0627\u0632 "," \u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC ":" \u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC ","\u0027\u06A9\u062F\u0027":"\u0027\u06A9\u062F\u0027","( {0} ) \u0648 ( {1} )":"( {0} ) \u0648 ( {1} )","( {0} ) \u06CC\u0627 ( {1} )":"( {0} ) \u06CC\u0627 ( {1} )","\u002B \u0639\u062F\u062F":"\u002B \u0639\u062F\u062F","\u002B \u0645\u062A\u0646 \u0027\u2026\u0027":"\u002B \u0645\u062A\u0646 \u0027\u2026\u0027","{0} \u06AF\u0631\u062F \u0634\u062F\u0647":"{0} \u06AF\u0631\u062F \u0634\u062F\u0647","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0627 {1} \u0631\u0642\u0645 \u0627\u0639\u0634\u0627\u0631":"{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0627 {1} \u0631\u0642\u0645 \u0627\u0639\u0634\u0627\u0631","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u0628\u0627\u0644\u0627":"{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u0628\u0627\u0644\u0627","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u067E\u0627\u06CC\u06CC\u0646":"{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u067E\u0627\u06CC\u06CC\u0646","\u060C ":"\u060C ","\u061F \u0631\u0627\u0647\u0646\u0645\u0627":"\u061F \u0631\u0627\u0647\u0646\u0645\u0627","\u061F \u0631\u0627\u0647\u0646\u0645\u0627\u06CC \u0633\u0631\u06CC\u0639 \u0641\u0631\u0645\u0648\u0644\u200C\u0633\u0627\u0632":"\u061F \u0631\u0627\u0647\u0646\u0645\u0627\u06CC \u0633\u0631\u06CC\u0639 \u0641\u0631\u0645\u0648\u0644\u200C\u0633\u0627\u0632","\u0622\u0631\u06AF\u0648\u0645\u0627\u0646":"\u0622\u0631\u06AF\u0648\u0645\u0627\u0646","\u0627\u0631\u0633\u0627\u0644 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F: ":"\u0627\u0631\u0633\u0627\u0644 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F: ","\u0627\u0632 \u067E\u0627\u0631\u0627\u0645\u062A\u0631 \u00AB\u067E\u0644\u06A9\u0627\u0646_\u0645\u0627\u0644\u06CC\u0627\u062A\u00BB \u0634\u0631\u06A9\u062A":"\u0627\u0632 \u067E\u0627\u0631\u0627\u0645\u062A\u0631 \u00AB\u067E\u0644\u06A9\u0627\u0646_\u0645\u0627\u0644\u06CC\u0627\u062A\u00BB \u0634\u0631\u06A9\u062A","\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u0627\u0632 \u0645\u062C\u0648\u0632 \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647":"\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u0627\u0632 \u0645\u062C\u0648\u0632 \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647","\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u06F1\u066B\u06F4 \u0628\u0631\u0627\u0628\u0631":"\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u06F1\u066B\u06F4 \u0628\u0631\u0627\u0628\u0631","\u0627\u0641\u0632\u0648\u062F\u0646 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646":"\u0627\u0641\u0632\u0648\u062F\u0646 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646","\u0627\u0642\u0644\u0627\u0645":"\u0627\u0642\u0644\u0627\u0645","\u0627\u0646\u062C\u0627\u0645 \u0634\u062F":"\u0627\u0646\u062C\u0627\u0645 \u0634\u062F","\u0627\u0646\u0635\u0631\u0627\u0641":"\u0627\u0646\u0635\u0631\u0627\u0641","\u0627\u06AF\u0631 ( {0} ) \u0622\u0646\u06AF\u0627\u0647 {1} \u0648\u06AF\u0631\u0646\u0647 {2}":"\u0627\u06AF\u0631 ( {0} ) \u0622\u0646\u06AF\u0627\u0647 {1} \u0648\u06AF\u0631\u0646\u0647 {2}","\u0627\u06CC\u0631\u0627\u0646":"\u0627\u06CC\u0631\u0627\u0646","\u0627\u06CC\u0646 \u0639\u0645\u0644\u06CC\u0627\u062A \u062D\u0633\u0627\u0633 \u0627\u0633\u062A":"\u0627\u06CC\u0646 \u0639\u0645\u0644\u06CC\u0627\u062A \u062D\u0633\u0627\u0633 \u0627\u0633\u062A","\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F":"\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F","\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F \u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645\u06CC \u0646\u062F\u0627\u0631\u062F\u061B \u0632\u06CC\u0631\u0645\u062C\u0645\u0648\u0639\u0647\u200C\u0647\u0627 \u0648 \u067E\u0631\u0633\u0646\u0644 \u0622\u0646\u200C\u0647\u0627 \u0647\u0645\u0631\u0627\u0647 \u0648\u0627\u062D\u062F \u0645\u06CC\u200C\u0622\u06CC\u0646\u062F.":"\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F \u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645\u06CC \u0646\u062F\u0627\u0631\u062F\u061B \u0632\u06CC\u0631\u0645\u062C\u0645\u0648\u0639\u0647\u200C\u0647\u0627 \u0648 \u067E\u0631\u0633\u0646\u0644 \u0622\u0646\u200C\u0647\u0627 \u0647\u0645\u0631\u0627\u0647 \u0648\u0627\u062D\u062F \u0645\u06CC\u200C\u0622\u06CC\u0646\u062F.","\u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC \u0641\u0631\u0645 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F \u2014 ":"\u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC \u0641\u0631\u0645 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F \u2014 ","\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647 \u062A\u0642\u0633\u06CC\u0645":"\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647 \u062A\u0642\u0633\u06CC\u0645","\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647\u0654 {0} \u0628\u0631 {1}":"\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647\u0654 {0} \u0628\u0631 {1}","\u0628\u0631\u0627\u06CC \u0627\u06CC\u0646 \u0634\u0631\u06A9\u062A \u0647\u0646\u0648\u0632 \u0642\u0644\u0645\u06CC \u062A\u0639\u0631\u06CC\u0641 \u0646\u0634\u062F\u0647 \u2014 \u0628\u0627 \u00AB\u0642\u0644\u0645 \u062C\u062F\u06CC\u062F\u00BB \u0627\u0648\u0644\u06CC\u0646 \u0642\u0644\u0645 \u0631\u0627 \u0628\u0633\u0627\u0632\u06CC\u062F.":"\u0628\u0631\u0627\u06CC \u0627\u06CC\u0646 \u0634\u0631\u06A9\u062A \u0647\u0646\u0648\u0632 \u0642\u0644\u0645\u06CC \u062A\u0639\u0631\u06CC\u0641 \u0646\u0634\u062F\u0647 \u2014 \u0628\u0627 \u00AB\u0642\u0644\u0645 \u062C\u062F\u06CC\u062F\u00BB \u0627\u0648\u0644\u06CC\u0646 \u0642\u0644\u0645 \u0631\u0627 \u0628\u0633\u0627\u0632\u06CC\u062F.","\u0628\u0631\u0627\u06CC \u0642\u0644\u0645\u200C\u0647\u0627\u06CC \u062C\u0645\u0639\u200C\u0628\u0646\u062F\u06CC":"\u0628\u0631\u0627\u06CC \u0642\u0644\u0645\u200C\u0647\u0627\u06CC \u062C\u0645\u0639\u200C\u0628\u0646\u062F\u06CC","\u0628\u0632\u0631\u06AF\u062A\u0631":"\u0628\u0632\u0631\u06AF\u062A\u0631","\u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC":"\u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC","\u0628\u0633\u062A\u0646":"\u0628\u0633\u062A\u0646","\u0628\u0644\u0647\u060C \u0627\u0646\u062C\u0627\u0645 \u0628\u062F\u0647":"\u0628\u0644\u0647\u060C \u0627\u0646\u062C\u0627\u0645 \u0628\u062F\u0647","\u0628\u0644\u0648\u06A9":"\u0628\u0644\u0648\u06A9","\u0628\u0644\u0648\u06A9 \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F:":"\u0628\u0644\u0648\u06A9 \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F:","\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0631\u0627 \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u06CC\u0646\u062C\u0627 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u067E\u0627\u0644\u062A \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F":"\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0631\u0627 \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u06CC\u0646\u062C\u0627 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u067E\u0627\u0644\u062A \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F","\u0628\u06CC\u0634\u06CC\u0646\u0647\u0654 {0}":"\u0628\u06CC\u0634\u06CC\u0646\u0647\u0654 {0}","\u0628\u06CC\u0645\u0647 \u0633\u0647\u0645 \u067E\u0631\u0633\u0646\u0644 (\u06F7\u066A)":"\u0628\u06CC\u0645\u0647 \u0633\u0647\u0645 \u067E\u0631\u0633\u0646\u0644 (\u06F7\u066A)","\u062A\u0623\u06CC\u06CC\u062F":"\u062A\u0623\u06CC\u06CC\u062F","\u062A\u0623\u06CC\u06CC\u062F \u0639\u0645\u0644\u06CC\u0627\u062A":"\u062A\u0623\u06CC\u06CC\u062F \u0639\u0645\u0644\u06CC\u0627\u062A","\u062A\u0642\u0633\u06CC\u0645":"\u062A\u0642\u0633\u06CC\u0645","\u062A\u0648\u0627\u0628\u0639":"\u062A\u0648\u0627\u0628\u0639","\u062A\u0648\u0627\u0646":"\u062A\u0648\u0627\u0646","\u062A\u06A9\u0645\u06CC\u0644 \u0627\u06CC\u0646 \u0641\u06CC\u0644\u062F \u0627\u0644\u0632\u0627\u0645\u06CC \u0627\u0633\u062A":"\u062A\u06A9\u0645\u06CC\u0644 \u0627\u06CC\u0646 \u0641\u06CC\u0644\u062F \u0627\u0644\u0632\u0627\u0645\u06CC \u0627\u0633\u062A","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644":"\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0647\u0645\u0631\u0627\u0647 \u067E\u0631\u0633\u0646\u0644":"\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0647\u0645\u0631\u0627\u0647 \u067E\u0631\u0633\u0646\u0644","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0648\u0627\u062D\u062F \u0633\u0627\u0632\u0645\u0627\u0646\u06CC":"\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0648\u0627\u062D\u062F \u0633\u0627\u0632\u0645\u0627\u0646\u06CC","\u062C\u0633\u062A\u062C\u0648\u2026":"\u062C\u0633\u062A\u062C\u0648\u2026","\u062C\u0645\u0639":"\u062C\u0645\u0639","\u062D\u0630\u0641 \u0628\u0644\u0648\u06A9":"\u062D\u0630\u0641 \u0628\u0644\u0648\u06A9","\u062D\u0642 \u0627\u0648\u0644\u0627\u062F":"\u062D\u0642 \u0627\u0648\u0644\u0627\u062F","\u062D\u0642 \u0634\u0628\u200C\u06A9\u0627\u0631\u06CC (\u06F2\u06F5\u066A)":"\u062D\u0642 \u0634\u0628\u200C\u06A9\u0627\u0631\u06CC (\u06F2\u06F5\u066A)","\u062E\u0627\u0644\u0635 \u067E\u0631\u062F\u0627\u062E\u062A\u06CC \u062A\u0627 \u0627\u06CC\u0646 \u0642\u0644\u0645":"\u062E\u0627\u0644\u0635 \u067E\u0631\u062F\u0627\u062E\u062A\u06CC \u062A\u0627 \u0627\u06CC\u0646 \u0642\u0644\u0645","\u062E\u0637\u0627":"\u062E\u0637\u0627","\u062F\u0631 \u062D\u0627\u0644 \u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC\u2026":"\u062F\u0631 \u062D\u0627\u0644 \u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC\u2026","\u062F\u0631 \u062D\u0627\u0644 \u062C\u0633\u062A\u062C\u0648\u2026":"\u062F\u0631 \u062D\u0627\u0644 \u062C\u0633\u062A\u062C\u0648\u2026","\u062F\u0631 \u062D\u0627\u0644\u062A \u00AB\u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644\u00BB\u060C \u0627\u06CC\u0646 {0} \u0646\u0641\u0631 \u062F\u0631 \u00AB{1}\u00BB \u0628\u0627\u0642\u06CC \u0645\u06CC\u200C\u0645\u0627\u0646\u0646\u062F.":"\u062F\u0631 \u062D\u0627\u0644\u062A \u00AB\u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644\u00BB\u060C \u0627\u06CC\u0646 {0} \u0646\u0641\u0631 \u062F\u0631 \u00AB{1}\u00BB \u0628\u0627\u0642\u06CC \u0645\u06CC\u200C\u0645\u0627\u0646\u0646\u062F.","\u062F\u0648\u0627\u0632\u062F\u0647\u0645 \u067E\u0627\u06CC\u0647 \u00D7 \u0646\u0633\u0628\u062A \u0631\u0648\u0632\u0647\u0627\u06CC \u062E\u062F\u0645\u062A \u0633\u0627\u0644":"\u062F\u0648\u0627\u0632\u062F\u0647\u0645 \u067E\u0627\u06CC\u0647 \u00D7 \u0646\u0633\u0628\u062A \u0631\u0648\u0632\u0647\u0627\u06CC \u062E\u062F\u0645\u062A \u0633\u0627\u0644","\u0631\u0634\u062A\u0647 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A \u2014 \u0639\u0644\u0627\u0645\u062A \u0027 \u062C\u0627 \u0627\u0641\u062A\u0627\u062F\u0647":"\u0631\u0634\u062A\u0647 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A \u2014 \u0639\u0644\u0627\u0645\u062A \u0027 \u062C\u0627 \u0627\u0641\u062A\u0627\u062F\u0647","\u0631\u0648\u06CC \u062F\u0631\u0622\u0645\u062F \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647\u0654 \u0647\u0645\u06CC\u0646 \u0645\u0627\u0647":"\u0631\u0648\u06CC \u062F\u0631\u0622\u0645\u062F \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647\u0654 \u0647\u0645\u06CC\u0646 \u0645\u0627\u0647","\u0636\u0631\u0628":"\u0636\u0631\u0628","\u0639\u0628\u0627\u0631\u062A \u0627\u0636\u0627\u0641\u0647 \u067E\u0633 \u0627\u0632 \u067E\u0627\u06CC\u0627\u0646 \u0641\u0631\u0645\u0648\u0644: \u00AB{0}\u00BB":"\u0639\u0628\u0627\u0631\u062A \u0627\u0636\u0627\u0641\u0647 \u067E\u0633 \u0627\u0632 \u067E\u0627\u06CC\u0627\u0646 \u0641\u0631\u0645\u0648\u0644: \u00AB{0}\u00BB","\u0639\u0628\u0627\u0631\u062A \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u00AB{0}\u00BB":"\u0639\u0628\u0627\u0631\u062A \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u00AB{0}\u00BB","\u0639\u062F\u062F \u00AB{0}\u00BB \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A":"\u0639\u062F\u062F \u00AB{0}\u00BB \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A","\u0639\u062F\u062F \u0628\u0631\u0627\u06CC \u0636\u0631\u0627\u06CC\u0628 (\u0645\u062B\u0644 \u0646\u0631\u062E \u06F1\u066B\u06F4) \u0648 \u0645\u062A\u0646 \u0628\u0631\u0627\u06CC \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062A\u0627\u0628\u0639 \u0642\u0644\u0645(\u0027\u06A9\u062F\u0027) \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F.":"\u0639\u062F\u062F \u0628\u0631\u0627\u06CC \u0636\u0631\u0627\u06CC\u0628 (\u0645\u062B\u0644 \u0646\u0631\u062E \u06F1\u066B\u06F4) \u0648 \u0645\u062A\u0646 \u0628\u0631\u0627\u06CC \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062A\u0627\u0628\u0639 \u0642\u0644\u0645(\u0027\u06A9\u062F\u0027) \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F.","\u0639\u062F\u062F \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u2014 \u0641\u0642\u0637 \u0631\u0642\u0645 \u0648 \u0646\u0642\u0637\u0647":"\u0639\u062F\u062F \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u2014 \u0641\u0642\u0637 \u0631\u0642\u0645 \u0648 \u0646\u0642\u0637\u0647","\u0639\u062F\u062F/\u0645\u062A\u0646":"\u0639\u062F\u062F/\u0645\u062A\u0646","\u0639\u0645\u0644\u06AF\u0631\u0647\u0627":"\u0639\u0645\u0644\u06AF\u0631\u0647\u0627","\u0639\u06CC\u062F\u06CC \u0628\u0647\u200C\u0646\u0633\u0628\u062A \u06A9\u0627\u0631\u06A9\u0631\u062F":"\u0639\u06CC\u062F\u06CC \u0628\u0647\u200C\u0646\u0633\u0628\u062A \u06A9\u0627\u0631\u06A9\u0631\u062F","\u0641\u0631\u0627\u062E\u0648\u0627\u0646\u06CC {0}({1})":"\u0641\u0631\u0627\u062E\u0648\u0627\u0646\u06CC {0}({1})","\u0641\u0631\u0645":"\u0641\u0631\u0645","\u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0627\u0633\u062A \u2014 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0645\u0646\u062A\u0638\u0631\u0647":"\u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0627\u0633\u062A \u2014 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0645\u0646\u062A\u0638\u0631\u0647","\u0641\u0631\u0645\u0648\u0644: ":"\u0641\u0631\u0645\u0648\u0644: ","\u0641\u0647\u0645\u06CC\u062F\u0645\u060C \u0634\u0631\u0648\u0639 \u0645\u06CC\u200C\u06A9\u0646\u0645":"\u0641\u0647\u0645\u06CC\u062F\u0645\u060C \u0634\u0631\u0648\u0639 \u0645\u06CC\u200C\u06A9\u0646\u0645","\u0642\u0627\u0644\u0628 \u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"\u0642\u0627\u0644\u0628 \u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A","\u0642\u062F\u0631\u0645\u0637\u0644\u0642 {0}":"\u0642\u062F\u0631\u0645\u0637\u0644\u0642 {0}","\u0645\u0623\u0645\u0648\u0631\u06CC\u062A \u0631\u0648\u0632\u0627\u0646\u0647":"\u0645\u0623\u0645\u0648\u0631\u06CC\u062A \u0631\u0648\u0632\u0627\u0646\u0647","\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC":"\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC","\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC {0}":"\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC {0}","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 {0}":"\u0645\u0628\u0644\u063A \u0642\u0644\u0645 {0}","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB":"\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644\u200C\u0647\u0627\u06CC \u0642\u0628\u0644\u06CC":"\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644\u200C\u0647\u0627\u06CC \u0642\u0628\u0644\u06CC","\u0645\u062A\u063A\u06CC\u0631 \u0632\u0645\u06CC\u0646\u0647 \u2014 \u0634\u0631\u062D \u062F\u0631 \u06A9\u0627\u0631\u062A \u00AB\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u00BB":"\u0645\u062A\u063A\u06CC\u0631 \u0632\u0645\u06CC\u0646\u0647 \u2014 \u0634\u0631\u062D \u062F\u0631 \u06A9\u0627\u0631\u062A \u00AB\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u00BB","\u0645\u062A\u063A\u06CC\u0631\u0647\u0627":"\u0645\u062A\u063A\u06CC\u0631\u0647\u0627","\u0645\u062A\u0646 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A":"\u0645\u062A\u0646 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A","\u0645\u062B\u0644\u0627\u064B 1.4":"\u0645\u062B\u0644\u0627\u064B 1.4","\u0645\u062D\u0644 \u0642\u0628\u0644\u06CC":"\u0645\u062D\u0644 \u0642\u0628\u0644\u06CC","\u0645\u0633\u0627\u0648\u06CC":"\u0645\u0633\u0627\u0648\u06CC","\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u0642\u0644 \u0645\u062C\u0627\u0632 \u06A9\u0645\u062A\u0631 \u0627\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u0642\u0644 \u0645\u062C\u0627\u0632 \u06A9\u0645\u062A\u0631 \u0627\u0633\u062A","\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u06A9\u062B\u0631 \u0645\u062C\u0627\u0632 \u0628\u06CC\u0634\u062A\u0631 \u0627\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u06A9\u062B\u0631 \u0645\u062C\u0627\u0632 \u0628\u06CC\u0634\u062A\u0631 \u0627\u0633\u062A","\u0645\u0642\u062F\u0627\u0631 \u062E\u0627\u0631\u062C \u0627\u0632 \u06AF\u0627\u0645 \u0645\u062C\u0627\u0632 \u0627\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u062E\u0627\u0631\u062C \u0627\u0632 \u06AF\u0627\u0645 \u0645\u062C\u0627\u0632 \u0627\u0633\u062A","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u0628\u0644\u0646\u062F \u0627\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u0628\u0644\u0646\u062F \u0627\u0633\u062A","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u06A9\u0648\u062A\u0627\u0647 \u0627\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u06A9\u0648\u062A\u0627\u0647 \u0627\u0633\u062A","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A","\u0645\u0642\u062F\u0627\u0631\u0647\u0627 \u0631\u0627 \u0628\u062F\u0647\u06CC\u062F:":"\u0645\u0642\u062F\u0627\u0631\u0647\u0627 \u0631\u0627 \u0628\u062F\u0647\u06CC\u062F:","\u0645\u0642\u0635\u062F":"\u0645\u0642\u0635\u062F","\u0645\u0646\u0641\u06CC ({0})":"\u0645\u0646\u0641\u06CC ({0})","\u0645\u0646\u0647\u0627":"\u0645\u0646\u0647\u0627","\u0646\u0627\u0645\u0633\u0627\u0648\u06CC":"\u0646\u0627\u0645\u0633\u0627\u0648\u06CC","\u0646\u062A\u06CC\u062C\u0647\u200C\u0627\u06CC \u06CC\u0627\u0641\u062A \u0646\u0634\u062F":"\u0646\u062A\u06CC\u062C\u0647\u200C\u0627\u06CC \u06CC\u0627\u0641\u062A \u0646\u0634\u062F","\u0646\u0631\u062E \u0631\u0627 \u0628\u0627 \u06A9\u0644\u06CC\u06A9 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u0639\u062F\u062F \u0645\u06CC\u200C\u062A\u0648\u0627\u0646\u06CC\u062F \u0639\u0648\u0636 \u06A9\u0646\u06CC\u062F":"\u0646\u0631\u062E \u0631\u0627 \u0628\u0627 \u06A9\u0644\u06CC\u06A9 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u0639\u062F\u062F \u0645\u06CC\u200C\u062A\u0648\u0627\u0646\u06CC\u062F \u0639\u0648\u0636 \u06A9\u0646\u06CC\u062F","\u0646\u0631\u062E \u0631\u0648\u0632\u0627\u0646\u0647 \u00D7 \u0631\u0648\u0632\u0647\u0627\u06CC \u0645\u0623\u0645\u0648\u0631\u06CC\u062A":"\u0646\u0631\u062E \u0631\u0648\u0632\u0627\u0646\u0647 \u00D7 \u0631\u0648\u0632\u0647\u0627\u06CC \u0645\u0623\u0645\u0648\u0631\u06CC\u062A","\u0646\u0634\u0627\u0646\u06CC \u0627\u06CC\u0645\u06CC\u0644 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"\u0646\u0634\u0627\u0646\u06CC \u0627\u06CC\u0645\u06CC\u0644 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A","\u0646\u0634\u0627\u0646\u06CC \u0648\u0628 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"\u0646\u0634\u0627\u0646\u06CC \u0648\u0628 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A","\u0646\u0642\u06CC\u0636":"\u0646\u0642\u06CC\u0636","\u0646\u0642\u06CC\u0636 ({0})":"\u0646\u0642\u06CC\u0636 ({0})","\u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627":"\u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627","\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u0645\u0632\u0627\u06CC\u0627 \u2014 \u063A\u06CC\u0631\u0645\u0633\u062A\u0645\u0631 \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647":"\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u0645\u0632\u0627\u06CC\u0627 \u2014 \u063A\u06CC\u0631\u0645\u0633\u062A\u0645\u0631 \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647","\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u06A9\u0633\u0648\u0631":"\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u06A9\u0633\u0648\u0631","\u0647\u0631 \u062F\u0642\u06CC\u0642\u0647 \u062A\u0623\u062E\u06CC\u0631 = \u0646\u0631\u062E \u0633\u0627\u0639\u062A\u06CC \u00F7 \u06F6\u06F0":"\u0647\u0631 \u062F\u0642\u06CC\u0642\u0647 \u062A\u0623\u062E\u06CC\u0631 = \u0646\u0631\u062E \u0633\u0627\u0639\u062A\u06CC \u00F7 \u06F6\u06F0","\u0648 \u0645\u0646\u0637\u0642\u06CC \u2014 \u0647\u0631 \u062F\u0648 \u0634\u0631\u0637":"\u0648 \u0645\u0646\u0637\u0642\u06CC \u2014 \u0647\u0631 \u062F\u0648 \u0634\u0631\u0637","\u0648\u0627\u062D\u062F \u00AB{0}\u00BB \u0628\u0647 \u00AB{1}\u00BB \u0645\u0646\u062A\u0642\u0644 \u0634\u0648\u062F\u061F\\n\u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645 \u0627\u06CC\u0646 \u0648\u0627\u062D\u062F: {2} \u0646\u0641\u0631\\n":"\u0648\u0627\u062D\u062F \u00AB{0}\u00BB \u0628\u0647 \u00AB{1}\u00BB \u0645\u0646\u062A\u0642\u0644 \u0634\u0648\u062F\u061F\\n\u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645 \u0627\u06CC\u0646 \u0648\u0627\u062D\u062F: {2} \u0646\u0641\u0631\\n","\u0648\u0642\u062A\u06CC \u0645\u0628\u0646\u0627\u06CC \u0634\u0631\u06A9\u062A \u00AB\u0645\u062C\u0648\u0632\u0647\u0627\u06CC \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647\u00BB \u0627\u0633\u062A":"\u0648\u0642\u062A\u06CC \u0645\u0628\u0646\u0627\u06CC \u0634\u0631\u06A9\u062A \u00AB\u0645\u062C\u0648\u0632\u0647\u0627\u06CC \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647\u00BB \u0627\u0633\u062A","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632":"\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647":"\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A":"\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A","\u067E\u0631\u0627\u0646\u062A\u0632 \u062A\u0627\u0628\u0639 \u00AB{0}\u00BB \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A":"\u067E\u0631\u0627\u0646\u062A\u0632 \u062A\u0627\u0628\u0639 \u00AB{0}\u00BB \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A","\u0686\u06CC\u062F\u0645\u0627\u0646 \u0631\u0627 \u062A\u0646\u0638\u06CC\u0645 \u06A9\u0646\u06CC\u062F:":"\u0686\u06CC\u062F\u0645\u0627\u0646 \u0631\u0627 \u062A\u0646\u0638\u06CC\u0645 \u06A9\u0646\u06CC\u062F:","\u0686\u06CC\u0632\u06CC \u0628\u0631\u0627\u06CC \u0628\u0631\u06AF\u0634\u062A \u0646\u06CC\u0633\u062A \u2014 \u0647\u0645\u06CC\u0646 \u062D\u0627\u0644\u0627 \u0686\u06CC\u0632\u06CC \u062D\u0630\u0641 \u06CC\u0627 \u0627\u0636\u0627\u0641\u0647 \u0646\u06A9\u0631\u062F\u0647\u200C\u0627\u06CC\u062F":"\u0686\u06CC\u0632\u06CC \u0628\u0631\u0627\u06CC \u0628\u0631\u06AF\u0634\u062A \u0646\u06CC\u0633\u062A \u2014 \u0647\u0645\u06CC\u0646 \u062D\u0627\u0644\u0627 \u0686\u06CC\u0632\u06CC \u062D\u0630\u0641 \u06CC\u0627 \u0627\u0636\u0627\u0641\u0647 \u0646\u06A9\u0631\u062F\u0647\u200C\u0627\u06CC\u062F","\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631 \u063A\u06CC\u0631\u0645\u062C\u0627\u0632 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644":"\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631 \u063A\u06CC\u0631\u0645\u062C\u0627\u0632 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644","\u06A9\u062F \u0642\u0644\u0645 \u2014 \u0645\u062B\u0644\u0627\u064B masken":"\u06A9\u062F \u0642\u0644\u0645 \u2014 \u0645\u062B\u0644\u0627\u064B masken","\u06A9\u0633\u0631 \u062A\u0623\u062E\u06CC\u0631 (\u062F\u0642\u06CC\u0642\u0647\u200C\u0627\u06CC)":"\u06A9\u0633\u0631 \u062A\u0623\u062E\u06CC\u0631 (\u062F\u0642\u06CC\u0642\u0647\u200C\u0627\u06CC)","\u06A9\u0633\u0631 \u063A\u06CC\u0628\u062A":"\u06A9\u0633\u0631 \u063A\u06CC\u0628\u062A","\u06A9\u0633\u0631 \u0645\u0631\u062E\u0635\u06CC \u0628\u062F\u0648\u0646 \u062D\u0642\u0648\u0642":"\u06A9\u0633\u0631 \u0645\u0631\u062E\u0635\u06CC \u0628\u062F\u0648\u0646 \u062D\u0642\u0648\u0642","\u06A9\u0644\u06CC\u06A9 \u06CC\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u0631\u0648\u06CC \u0628\u0648\u0645 = \u0627\u0641\u0632\u0648\u062F\u0646 \u0642\u0627\u0644\u0628 (\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0628\u0639\u062F \u0627\u0632 \u0622\u0646 \u0642\u0627\u0628\u0644 \u0648\u06CC\u0631\u0627\u06CC\u0634\u200C\u0627\u0646\u062F)":"\u06A9\u0644\u06CC\u06A9 \u06CC\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u0631\u0648\u06CC \u0628\u0648\u0645 = \u0627\u0641\u0632\u0648\u062F\u0646 \u0642\u0627\u0644\u0628 (\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0628\u0639\u062F \u0627\u0632 \u0622\u0646 \u0642\u0627\u0628\u0644 \u0648\u06CC\u0631\u0627\u06CC\u0634\u200C\u0627\u0646\u062F)","\u06A9\u0645\u06CC\u0646\u0647\u0654 {0}":"\u06A9\u0645\u06CC\u0646\u0647\u0654 {0}","\u06A9\u0646\u062A\u0631\u0644 \u0648 \u0630\u062E\u06CC\u0631\u0647:":"\u06A9\u0646\u062A\u0631\u0644 \u0648 \u0630\u062E\u06CC\u0631\u0647:","\u06A9\u0648\u0686\u06A9\u062A\u0631":"\u06A9\u0648\u0686\u06A9\u062A\u0631","\u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC":"\u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC","\u06AF\u0631\u0648\u0647\u200C\u0628\u0646\u062F\u06CC":"\u06AF\u0631\u0648\u0647\u200C\u0628\u0646\u062F\u06CC","\u06CC\u0627 \u0645\u0646\u0637\u0642\u06CC \u2014 \u06CC\u06A9\u06CC \u0627\u0632 \u0634\u0631\u0637\u200C\u0647\u0627":"\u06CC\u0627 \u0645\u0646\u0637\u0642\u06CC \u2014 \u06CC\u06A9\u06CC \u0627\u0632 \u0634\u0631\u0637\u200C\u0647\u0627","\u06F3\u066A \u062D\u0642\u0648\u0642 \u067E\u0627\u06CC\u0647 \u0628\u0647\u200C\u0627\u0632\u0627\u06CC \u0647\u0631 \u0641\u0631\u0632\u0646\u062F":"\u06F3\u066A \u062D\u0642\u0648\u0642 \u067E\u0627\u06CC\u0647 \u0628\u0647\u200C\u0627\u0632\u0627\u06CC \u0647\u0631 \u0641\u0631\u0632\u0646\u062F","\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A":"\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A","\u23F3 \u062F\u0633\u062A\u0648\u0631 \u00AB{0}\u00BB \u0628\u0647 \u062F\u0633\u062A\u06AF\u0627\u0647 \u00AB{1}\u00BB \u062A\u062D\u0648\u06CC\u0644 \u0634\u062F \u2014 \u062F\u0631 \u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u062C\u0631\u0627\u2026":"\u23F3 \u062F\u0633\u062A\u0648\u0631 \u00AB{0}\u00BB \u0628\u0647 \u062F\u0633\u062A\u06AF\u0627\u0647 \u00AB{1}\u00BB \u062A\u062D\u0648\u06CC\u0644 \u0634\u062F \u2014 \u062F\u0631 \u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u062C\u0631\u0627\u2026","\u26A0 {0} \u062A\u0627\u0628\u0639\u060C \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062E\u0627\u0644\u06CC \u062F\u0627\u0631\u062F \u2014 \u062C\u0627\u06CC \u062E\u0627\u0644\u06CC \u0641\u0639\u0644\u0627\u064B \u06F0 \u062D\u0633\u0627\u0628 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u0622\u0646 \u0631\u0627 \u067E\u0631 \u06A9\u0646\u06CC\u062F":"\u26A0 {0} \u062A\u0627\u0628\u0639\u060C \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062E\u0627\u0644\u06CC \u062F\u0627\u0631\u062F \u2014 \u062C\u0627\u06CC \u062E\u0627\u0644\u06CC \u0641\u0639\u0644\u0627\u064B \u06F0 \u062D\u0633\u0627\u0628 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u0622\u0646 \u0631\u0627 \u067E\u0631 \u06A9\u0646\u06CC\u062F","\u26A0\uFE0F \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F":"\u26A0\uFE0F \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F","\u2705 \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0627\u062C\u0631\u0627 \u0634\u062F":"\u2705 \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0627\u062C\u0631\u0627 \u0634\u062F","\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC":"\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC","\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0631\u0627\u06CC \u0628\u0627\u0632\u06AF\u0634\u062A \u0628\u0647 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u060C \u062F\u06A9\u0645\u0647\u0654 \u00AB\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u00BB \u0631\u0627 \u0628\u0632\u0646\u06CC\u062F":"\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0631\u0627\u06CC \u0628\u0627\u0632\u06AF\u0634\u062A \u0628\u0647 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u060C \u062F\u06A9\u0645\u0647\u0654 \u00AB\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u00BB \u0631\u0627 \u0628\u0632\u0646\u06CC\u062F","\u2714 \u0641\u0631\u0645\u0648\u0644 \u0622\u0645\u0627\u062F\u0647 \u0627\u0633\u062A \u2014 \u0628\u0627 \u0630\u062E\u06CC\u0631\u0647\u0654 \u0642\u0644\u0645\u060C \u0627\u0639\u062A\u0628\u0627\u0631\u0633\u0646\u062C\u06CC \u0646\u0647\u0627\u06CC\u06CC \u062E\u0648\u062F\u06A9\u0627\u0631 \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u0634\u0648\u062F":"\u2714 \u0641\u0631\u0645\u0648\u0644 \u0622\u0645\u0627\u062F\u0647 \u0627\u0633\u062A \u2014 \u0628\u0627 \u0630\u062E\u06CC\u0631\u0647\u0654 \u0642\u0644\u0645\u060C \u0627\u0639\u062A\u0628\u0627\u0631\u0633\u0646\u062C\u06CC \u0646\u0647\u0627\u06CC\u06CC \u062E\u0648\u062F\u06A9\u0627\u0631 \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u0634\u0648\u062F","\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0627\u062F\u0627\u0645\u0647 \u062F\u0647\u06CC\u062F":"\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0627\u062F\u0627\u0645\u0647 \u062F\u0647\u06CC\u062F","\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0628\u0645\u0627\u0646\u06CC\u062F \u06CC\u0627 \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0627\u0635\u0644\u0627\u062D \u06A9\u0646\u06CC\u062F":"\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0628\u0645\u0627\u0646\u06CC\u062F \u06CC\u0627 \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0627\u0635\u0644\u0627\u062D \u06A9\u0646\u06CC\u062F","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: ":"\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: ","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u0641\u0631\u0645\u0648\u0644 \u0647\u0646\u0648\u0632 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A \u2014 \u0628\u0644\u0648\u06A9\u06CC \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0639\u0646\u06CC\u200C\u0627\u0634 \u0631\u0627 \u0647\u0645\u06CC\u0646\u200C\u062C\u0627 \u0628\u0628\u06CC\u0646\u06CC\u062F.":"\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u0641\u0631\u0645\u0648\u0644 \u0647\u0646\u0648\u0632 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A \u2014 \u0628\u0644\u0648\u06A9\u06CC \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0639\u0646\u06CC\u200C\u0627\u0634 \u0631\u0627 \u0647\u0645\u06CC\u0646\u200C\u062C\u0627 \u0628\u0628\u06CC\u0646\u06CC\u062F.","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u2716 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635/\u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A \u2014 ":"\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u2716 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635/\u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A \u2014 ","\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC":"\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC","\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u06A9\u0634\u06CC\u062F \u0648 \u062F\u0631 \u0628\u0648\u0645 \u0631\u0647\u0627 \u06A9\u0646\u06CC\u062F (\u06CC\u0627 \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F)":"\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u06A9\u0634\u06CC\u062F \u0648 \u062F\u0631 \u0628\u0648\u0645 \u0631\u0647\u0627 \u06A9\u0646\u06CC\u062F (\u06CC\u0627 \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F)","\uD83E\uDDF9 \u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646":"\uD83E\uDDF9 \u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646"}</script>
+    <script src="/js/site.js?v=L7dAHykS80ScclaF8BC1AD4aL4x-iDIYq8eO1K6XHZA"></script>
+    <script src="/js/formula-builder.js?v=br1JN-rgMTjHSmq5k8CKqCdayQyExGOj0hTYNAlnVXc"></script> 
+    <div id="pageScripts">
+        
+    </div>
+</body>
+</html>

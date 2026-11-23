@@ -1,0 +1,23 @@
+@inject Platform.Web.Services.ICurrentUser Me
+@{
+    ViewData["Title"] = HrT.T("پرتال من");
+    var mySess = Me.Get();
+}
+<div class="card" style="max-width:640px;margin-inline:auto">
+    <div class="card-h"><h2>🔗 @HrT.T("حساب شما به پرسنلی متصل نیست")</h2></div>
+    <div class="card-b">
+        <div class="toast toast-info">@HrT.T("برای استفاده از «پرتال من» (کارکرد، درخواست‌ها و فیش حقوقی) حساب کاربری شما باید به یک ردیف پرسنل متصل باشد.")</div>
+        <p class="hint">
+            @HrT.T("دو راه حل دارید:")
+            <br />• @HrT.T("اگر مدیر سامانه هستید، از صفحه «کاربران و نقش‌ها» حساب خود را به پرسنل موردنظر متصل کنید.")
+            <br />• @HrT.T("در غیر این صورت از مدیر منابع انسانی بخواهید اتصال را انجام دهد.")
+        </p>
+        <div style="margin-top:14px">
+            @if (mySess?.Has("users.view") == true)
+            {
+                <a class="btn btn-primary" href="/Users">@HrT.T("رفتن به کاربران و نقش‌ها")</a>
+            }
+            <a class="btn" href="/">@HrT.T("بازگشت")</a>
+        </div>
+    </div>
+</div>

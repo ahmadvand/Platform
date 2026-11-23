@@ -1,0 +1,65 @@
+@{
+    // فاز ۱۳۲ (مورد ۶ ROADMAP-ADDITIONS) — گزارش کارت‌های نیازمند رسیدگی
+    ViewData["Title"] = HrT.T("کارت‌های نیازمند رسیدگی");
+    var rows = (List<CardIssueRow>)Model;
+    var expired = (int)ViewBag.Expired;
+    var lost = (int)ViewBag.Lost;
+    var notReturned = (int)ViewBag.NotReturned;
+    var soon = (int)ViewBag.Soon;
+
+    string BadgeOf(string cat) => cat switch
+    {
+        "منقضی و در گردش" => "badge-err",
+        "گمشدهٔ باز" => "badge-warn",
+        "باطلِ جمع‌نشده" => "badge-mute",
+        _ => "badge-info",
+    };
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("گزارش کارت‌های نیازمند رسیدگی")</h2>
+        <span class="hint">@HrT.T("کارت‌هایی که چرخهٔ تخصیصشان نیمه‌کاره مانده است")</span>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("منقضی و در گردش:") <b class="text-danger">@Jalali.Num(expired)</b></span>
+            <span class="chip">@HrT.T("گمشدهٔ باز:") <b>@Jalali.Num(lost)</b></span>
+            <span class="chip">@HrT.T("باطلِ جمع‌نشده:") <b>@Jalali.Num(notReturned)</b></span>
+            <span class="chip">@HrT.T("منقضی تا ۷ روز آینده:") <b>@Jalali.Num(soon)</b></span>
+        </div>
+        <p class="hint">@HrT.T("«منقضی و در گردش» یعنی انقضای کارت گذشته ولی هنوز فعال/موقت است و باید جمع یا ابطال شود؛ «گمشدهٔ باز» کارت اعلام‌مفقودی بدون عودت است؛ «باطلِ جمع‌نشده» ابطال شده ولی از پرسنل برنگشته؛ بخش آبی هم انقضاهای نزدیک برای اقدام پیشگیرانه.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("دسته")</th>
+                        <th>@HrT.T("شماره کارت")</th>
+                        <th>@HrT.T("نوع")</th>
+                        <th>@HrT.T("دارنده")</th>
+                        <th>@HrT.T("واحد")</th>
+                        <th>@HrT.T("انقضا")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td><span class="badge @BadgeOf(r.Category)">@HrT.T(r.Category)</span></td>
+                            <td><strong>@r.CardNo</strong></td>
+                            <td>@r.Type</td>
+                            <td>@r.Holder</td>
+                            <td>@r.Dept</td>
+                            <td class="num">@(r.ExpiresAt is null ? "—" : Jalali.FmtFaLong(r.ExpiresAt.Value))</td>
+                            <td>@HrT.T(r.Status)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("کارتِ نیازمند رسیدگی وجود ندارد ✅")</p>
+        }
+    </div>
+</div>

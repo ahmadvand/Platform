@@ -1,0 +1,138 @@
+@{
+    ViewData["Title"] = HrT.T("تعطیلات رسمی");
+    // فاز ۹۷ — ماه‌شمار از «تقویم نمایشی» سامانه پیروی می‌کند (شمسی/میلادی/قمری)
+    var cal = (HrCalendarMode)ViewBag.Cal;
+    var jy = (int)ViewBag.Y;
+    var jm = (int)ViewBag.M;
+    var monthLen = (int)ViewBag.MonthLen;
+    var grid = (List<(DateTime? Date, int? Day)>)ViewBag.Grid;
+    var holidayMap = (Dictionary<string, Holiday>)ViewBag.HolidayMap;
+    var upcoming = (List<Holiday>)ViewBag.Upcoming;
+    var canManage = Me.Get()!.Has("holidays.create") || Me.Get()!.Has("holidays.delete");
+    var todayKey = Jalali.DateKey(DateTime.Now);
+    var weekdays = new[] { "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه" };
+    var calName = HrT.T(cal == HrCalendarMode.Hijri ? "قمری (هجری قمری)"
+                      : cal == HrCalendarMode.Gregorian ? "میلادی (گرگوری)" : "شمسی (جلالی)");
+    string MonthName(int m) => HrT.T(Jalali.DisplayMonthName(cal, m));
+}
+<div data-refresh-host>
+<div class="grid two-col" style="grid-template-columns:1.7fr 1fr">
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.F("تقویم {0} {1}", MonthName(jm), Jalali.ToPersianDigits(jy))</h2>
+            <form method="get" class="toolbar">
+                <div class="fld"><label>@HrT.T("ماه")</label>
+                    <select name="m">
+                        @for (int m = 1; m <= 12; m++)
+                        {
+                            <option value="@m" selected="@(m == jm)">@MonthName(m)</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("سال")</label><input name="y" type="number" value="@jy" style="width:90px" /></div>
+                <button class="btn btn-dark">@HrT.T("نمایش")</button>
+            </form>
+        </div>
+        <div class="card-b">
+            <div style="margin:-4px 0 10px;font-size:11.5px;color:var(--ink-3)">
+                @HrT.T("تقویم نمایشی سامانه"): <strong style="color:var(--ink-2)">@calName</strong>@if (cal == HrCalendarMode.Hijri && Jalali.HijriAdjustDays != 0)
+                {
+                    <span> · @HrT.F("جبران قمری: {0} روز", Jalali.ToPersianDigits(Jalali.HijriAdjustDays))</span>
+                }
+            </div>
+            <table class="cal">
+                <thead>
+                    <tr>
+                        @foreach (var w in weekdays)
+                        {
+                            <th>@HrT.T(w)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int r = 0; r < grid.Count / 7; r++)
+                    {
+                        <tr>
+                            @for (int c = 0; c < 7; c++)
+                            {
+                                var cell = grid[r * 7 + c];
+                                if (cell.Date is null)
+                                {
+                                    <td class="off"></td>
+                                }
+                                else
+                                {
+                                    var key = Jalali.DateKey(cell.Date.Value);
+                                    var isHoliday = holidayMap.ContainsKey(key);
+                                    var isFri = cell.Date.Value.DayOfWeek == DayOfWeek.Friday;
+                                    <td class="@(cell.Date == DateTime.Now.Date ? "today " : "")@(isHoliday || isFri ? "holiday" : "")">
+                                        @Jalali.ToPersianDigits(cell.Day!.Value)
+                                        @if (isHoliday)
+                                        {
+                                            <span class="h-title">@holidayMap[key].Title</span>
+                                        }
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        @if (canManage)
+        {
+            <div class="card">
+                <div class="card-h"><h2>@HrT.T("افزودن تعطیلی")</h2></div>
+                <form method="post" action="/Holidays/Add" class="card-b" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="jy" value="@jy" />
+                    <div class="form-grid">
+                        <div class="fld"><label>@HrT.T("سال")</label><input value="@Jalali.ToPersianDigits(jy)" disabled style="background:#f8fafc" /></div>
+                        <div class="fld"><label>@HrT.T("ماه")</label>
+                            <select name="jm">
+                                @for (int m = 1; m <= 12; m++)
+                                {
+                                    <option value="@m" selected="@(m == jm)">@MonthName(m)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="fld"><label>@HrT.T("روز")</label><input name="jd" type="number" min="1" max="@monthLen" required /></div>
+                        <div class="fld fld-full"><label>@HrT.T("عنوان *")</label><input name="title" required placeholder="@(HrT.T("عید نوروز"))" /></div>
+                    </div>
+                    <div style="margin-top:12px"><button class="btn btn-primary btn-block">@HrT.T("ثبت تعطیلی")</button></div>
+                </form>
+            </div>
+        }
+        <div class="card">
+            <div class="card-h"><h2>@HrT.F("تعطیلات پیش‌رو ({0})", Jalali.Num(upcoming.Count))</h2></div>
+            <div class="card-b" style="padding:8px">
+                @foreach (var h in upcoming)
+                {
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-bottom:1px solid var(--line)">
+                        <div>
+                            <strong style="font-size:12.5px">@h.Title</strong>
+                            <div style="color:var(--ink-3);font-size:10.5px">@Jalali.FmtFa(Jalali.ParseDateKey(h.Date))</div>
+                        </div>
+                        @if (canManage)
+                        {
+                            <form method="post" action="/Holidays/Delete" class="inline-form" data-confirm="@(HrT.F("حذف «{0}»؟", h.Title))" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@h.Id" /><input type="hidden" name="y" value="@jy" /><input type="hidden" name="m" value="@jm" />
+                                <button class="btn btn-sm btn-err">@HrT.T("حذف")</button>
+                            </form>
+                        }
+                    </div>
+                }
+                @if (!upcoming.Any())
+                {
+                    <div class="empty">@HrT.T("تعطیلی پیش‌رویی ثبت نشده است")</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,34 @@
+@model Platform.Web.Domain.User
+<div data-modal-title="@HrT.F("عکس پروفایل — {0} ({1})", Model.FullName, Model.Username)" hidden></div>
+<form method="post" action="/Users/SetPhoto" data-ajax data-refresh enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        @if (string.IsNullOrEmpty(Model.PhotoPath))
+        {
+            <div style="width:72px;height:72px;border-radius:18px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--accent-deep)">@Jalali.ToPersianDigits(Model.FullName.Trim()[..1])</div>
+        }
+        else
+        {
+            <img id="phPrev" src="@Model.PhotoPath" alt="@HrT.T("عکس فعلی")" style="width:72px;height:72px;border-radius:18px;object-fit:cover;border:1px solid var(--line)" />
+        }
+        <div style="flex:1;min-width:220px">
+            <div class="fld">
+                <label>@HrT.T("انتخاب عکس جدید")</label>
+                <input type="file" name="photoFile" accept=".png,.jpg,.jpeg,.webp"
+                       onchange="var p=document.getElementById('phPrev');if(this.files&&this.files[0]){p.src=URL.createObjectURL(this.files[0]);p.style.display='block'}" />
+                <div class="hint">@HrT.T("PNG / JPG / WEBP — حداکثر ۲ مگابایت؛ در نوار بالایی، فهرست کاربران و پنل‌های زنده نمایش داده می‌شود")</div>
+            </div>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.PhotoPath))
+    {
+        <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;margin-bottom:12px;color:var(--err)">
+            <input type="checkbox" name="remove" value="true" /> @HrT.T("حذف عکس فعلی (بازگشت به آواتار حرفی)")
+        </label>
+    }
+    <div style="display:flex;gap:8px">
+        <button class="btn btn-primary">💾 @HrT.T("ذخیره عکس")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

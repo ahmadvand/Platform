@@ -1,0 +1,58 @@
+@{
+    var user = (User)Model;
+    var freeEmployees = (List<HrPersonOption>)ViewBag.FreeEmployees;
+    var current = (HrPersonBrief?)ViewBag.Current;
+    var linked = current is not null;
+    // «قطع اتصال» فقط وقتی معنا دارد که اتصال فعلی وجود داشته باشد
+    var canUnlink = linked;
+}
+<div data-modal-title="@HrT.F("اتصال پرسنل — {0}", user.Username)" hidden></div>
+<form method="post" action="/Users/LinkEmployee" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="userId" value="@user.Id" />
+    <div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+        💡 @HrT.T("با اتصال، اطلاعات پرسنل (کد پرسنلی، واحد، کارکرد و فیش حقوقی) به این حساب کاربری پیوند می‌خورد و کاربر می‌تواند «پرتال من» را ببیند. پس از اتصال، ورود با کد پرسنلی برای این شخص مسدود می‌شود و باید با نام کاربری و رمز عبور وارد شود.")
+    </div>
+
+    @if (linked)
+    {
+        <div style="border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12.5px">
+            @HrT.T("اتصال فعلی:") <span class="badge badge-info">@current!.PersonnelCode — @current.FullName</span>
+        </div>
+    }
+
+    <div class="fld" style="margin-bottom:12px">
+        <label>@HrT.T("پرسنل موردنظر")</label>
+        @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل بدون حساب؛
+           در حالت اتصال فعلی، شخص متصل از پیش انتخاب شده و خالی‌گذاشتن = قطع اتصال *@
+        <div class="emp-picker" data-name="employeeId" data-min="1" data-url="/Ui/EmpSearch?free=1"
+             data-selected="@System.Text.Json.JsonSerializer.Serialize(!linked
+                 ? Array.Empty<object>()
+                 : new[] { new { id = current!.Id, label = $"{current.PersonnelCode} — {current.FullName}" } })"
+             data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+        @if (linked)
+        {
+            <div class="hint">@HrT.T("برای قطع اتصال، شخص را از انتخاب حذف کنید (انتخاب خالی) و ذخیره بزنید")</div>
+        }
+        <div class="hint">@(HrT.F("{0} پرسنل بدون حساب کاربری متصل — هر پرسنل فقط می‌تواند به یک کاربر متصل باشد", Jalali.Num(freeEmployees.Count)))</div>
+    </div>
+
+    <div class="fld" style="margin-bottom:14px">
+        <label style="display:flex;gap:8px;align-items:center;font-size:12.5px">
+            <input type="checkbox" name="addEmployeeRole" value="true" checked />
+            @HrT.T("افزودن نقش «پرسنل» برای دسترسی به پرتال من (در صورت نداشتن)")
+        </label>
+    </div>
+
+    @if (!linked && freeEmployees.Count == 0)
+    {
+        <div class="empty" style="margin-bottom:10px">@HrT.T("همه پرسنل به حساب کاربری متصل‌اند — ابتدا پرسنل جدید ثبت کنید")</div>
+    }
+    else
+    {
+        <div style="display:flex;gap:8px">
+            <button class="btn btn-primary">💾 @HrT.T("ذخیره اتصال")</button>
+            <button type="button" class="btn" data-close-modal hidden>@HrT.T("انصراف")</button>
+        </div>
+    }
+</form>

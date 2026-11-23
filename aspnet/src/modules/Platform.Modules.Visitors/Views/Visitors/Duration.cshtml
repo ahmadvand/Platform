@@ -1,0 +1,92 @@
+@{
+    // فاز ۱۳۳ (مورد ۷ ROADMAP-ADDITIONS) — مدت ملاقات مهمان
+    ViewData["Title"] = HrT.T("مدت ملاقات مهمان");
+    var rows = (List<VisitDurationRow>)Model;
+    var ongoing = (int)ViewBag.Ongoing;
+    var avgMin = (int)ViewBag.AvgMin;
+    var maxMin = (int)ViewBag.MaxMin;
+
+    string Fmt(int min) => min >= 60
+        ? HrT.F("{0} ساعت و {1} دقیقه", Jalali.Num(min / 60), Jalali.Num(min % 60))
+        : HrT.F("{0} دقیقه", Jalali.Num(min));
+    string DBadge(int min, bool o) => o ? "badge-info" : min > 240 ? "badge-warn" : "badge-ok";
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("مدت ملاقات مهمان")</h2>
+        <span class="hint">@HrT.T("جفت ورود/خروج ۳۰ روز اخیر")</span>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("ملاقات در جریان:") <b class="text-danger">@Jalali.Num(ongoing)</b></span>
+            <span class="chip">@HrT.T("میانگین مدت:") <b>@Fmt(avgMin)</b></span>
+            <span class="chip">@HrT.T("طولانی‌ترین:") <b>@Fmt(maxMin)</b></span>
+            @if ((int)ViewBag.PeakHour >= 0)
+            {
+                <span class="chip">@HrT.T("پیک ورود ملاقات:") <b class="text-danger">@HrT.F("ساعت {0} — {1} ملاقات", Jalali.Num(ViewBag.PeakHour), Jalali.Num(ViewBag.PeakCount))</b></span>
+            }
+        </div>
+        <p class="hint">@HrT.T("«در جریان» یعنی ورود ثبت شده ولی خروجی هنوز ثبت نشده — اگر اعتبار کارت هم گذشته باشد در صفحهٔ «مهمان‌های تاریخ‌گذشته» پیگیری می‌شود. ملاقات‌های بیش از ۴ ساعت با نشانگر زرد مشخص‌اند.")</p>
+        @if ((int)ViewBag.PeakHour >= 0)
+        {
+            <h3>@HrT.T("توزیع ساعتی ورود ملاقات‌ها (۳۰ روز اخیر)")</h3>
+            <div class="table-wrap">
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>@HrT.T("ساعت")</th>
+                            <th>@HrT.T("تعداد ورود")</th>
+                            <th>@HrT.T("نمودار")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in (IEnumerable<dynamic>)ViewBag.HourHist)
+                        {
+                            @if (b.Count > 0)
+                            {
+                                <tr class="@(b.Hour == (int)ViewBag.PeakHour ? "row-peak" : "")">
+                                    <td><strong>@Jalali.ToPersianDigits(((int)b.Hour).ToString("00")):۰۰</strong></td>
+                                    <td class="num">@Jalali.Num(b.Count)</td>
+                                    <td>@string.Concat(Enumerable.Repeat("█", Math.Max(1, (int)b.Count)))</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("مهمان")</th>
+                        <th>@HrT.T("میزبان")</th>
+                        <th>@HrT.T("شرکت")</th>
+                        <th>@HrT.T("ورود")</th>
+                        <th>@HrT.T("خروج")</th>
+                        <th>@HrT.T("مدت")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td><strong>@r.Name</strong></td>
+                            <td>@r.HostName</td>
+                            <td>@r.Company</td>
+                            <td class="num">@Jalali.FmtFaLong(r.Entry) — @Jalali.FmtTime(r.Entry)</td>
+                            <td class="num">@(r.Exit is null ? "—" : Jalali.FmtTime(r.Exit.Value))</td>
+                            <td class="num">@Fmt(r.Minutes)</td>
+                            <td><span class="badge @DBadge(r.Minutes, r.Ongoing)">@(r.Ongoing ? HrT.T("در جریان") : HrT.T("پایان‌یافته"))</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("در ۳۰ روز اخیر ملاقاتی ثبت نشده")</p>
+        }
+    </div>
+</div>

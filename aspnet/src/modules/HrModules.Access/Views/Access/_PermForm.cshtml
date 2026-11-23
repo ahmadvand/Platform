@@ -1,0 +1,33 @@
+@{
+    // فاز ۱۱۴ — انتخاب پرسنل با جستجوی زندهٔ سرور (emp-picker) — مقیاس ده‌ها هزار نفر
+    var zones = (List<Zone>)ViewBag.Zones;
+}
+<div data-modal-title="@HrT.T("افزودن مجوز دسترسی")" hidden></div>
+<form method="post" action="/Access/CreatePerm" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("پرسنل *")</label>
+            <div class="emp-picker" data-name="employeeId" data-min="1"
+                 data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+        </div>
+        <div class="fld"><label>@HrT.T("منطقه *")</label>
+            <select name="zoneId" required>
+                @foreach (var z in zones)
+                {
+                    <option value="@z.Id">@z.Name (@z.RiskLevel)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type"><option value="دائم">@HrT.T("دائم")</option><option value="موقت">@HrT.T("موقت")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("اعتبار تا (برای موقت)")</label><input name="validUntil" type="date" /></div>
+        <div class="fld"><label>@HrT.T("روزهای مجاز")</label><input name="days" value="0,1,2,3,4" placeholder="@HrT.T("0=یکشنبه ... 5=جمعه")" /></div>
+        <div class="fld"><label>@HrT.T("از ساعت")</label><input name="timeFrom" type="time" /></div>
+        <div class="fld"><label>@HrT.T("تا ساعت")</label><input name="timeUntil" type="time" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت مجوز")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

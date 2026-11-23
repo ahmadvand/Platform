@@ -1,0 +1,784 @@
+@{
+    ViewData["Title"] = HrT.T("کنترل پارکینگ");
+    var tab = (string)ViewBag.Tab;
+    var lots = (List<ParkingLot>)ViewBag.Lots;
+    var vehicles = (List<Vehicle>)ViewBag.Vehicles;
+    var permits = (List<ParkingPermit>)ViewBag.Permits;
+    var events = (List<ParkingEvent>)ViewBag.Events;
+    var cameras = (List<AnprCamera>)(ViewBag.Cameras ?? new List<AnprCamera>());
+    var companies = (List<Company>)(ViewBag.Companies ?? new List<Company>());
+    var occ = (Dictionary<string, int>)ViewBag.Occupancy;
+    var insideTotal = (int)ViewBag.InsideTotal;
+    var todayEvents = (int)ViewBag.TodayEvents;
+    var todayAutoReads = (int)ViewBag.TodayAutoReads;
+    var resultFilter = (string?)ViewBag.ResultFilter;
+    var canManage = Me.Get()!.Has("parking.lots.manage") || Me.Get()!.Has("parking.vehicles.manage") || Me.Get()!.Has("parking.cameras.manage");
+    var canControl = Me.Get()!.Has("parking.barrier") || Me.Get()!.Has("parking.scan");
+    var curCo = (string?)ViewBag.Co;
+
+    // شمارنده‌های تابلوی زنده
+    var totalCap = lots.Where(l => l.Active).Sum(l => l.Capacity);
+    var activePermits = permits.Count(p => p.Status == "فعال" && (p.ValidUntil == null || p.ValidUntil >= DateTime.Now));
+    var insideNow = lots.Sum(l => occ.GetValueOrDefault(l.Id));
+    var onlineCams = cameras.Count(c => c.Active && ParkingOps.IsOnline(c));
+    var offlineCams = cameras.Count(c => c.Active) - onlineCams;
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("کنترل پارکینگ")</h1>
+        <div class="page-sub">@HrT.F("{0} خودرو · {1} مجوز · {2} پارکینگ ثبت‌شده", Jalali.Num(vehicles.Count), Jalali.Num(permits.Count), Jalali.Num(lots.Count))</div>
+    </div>
+</div>
+<div class="chips">
+    <form method="get" style="display:inline-flex;gap:6px;align-items:center">
+        <input type="hidden" name="tab" value="@tab" />
+        <select name="co" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه شرکت‌ها")</option>
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+            }
+        </select>
+    </form>
+</div>
+<div class="tabs">
+    <a href="/Parking?tab=live" class="@(tab == "live" ? "on" : "")">@HrT.T("📹 نمای زنده")</a>
+    <a href="/Parking?tab=board" class="@(tab == "board" ? "on" : "")">@HrT.T("🅿️ تابلوی پارکینگ")</a>
+    <a href="/Parking?tab=cameras" class="@(tab == "cameras" ? "on" : "")">@HrT.T("📷 دوربین‌های پلاک‌خوان") (@Jalali.Num(cameras.Count))</a>
+    <a href="/Parking?tab=lots" class="@(tab == "lots" ? "on" : "")">@HrT.T("پارکینگ‌ها و گیت‌ها") (@Jalali.Num(lots.Count))</a>
+    <a href="/Parking?tab=vehicles" class="@(tab == "vehicles" ? "on" : "")">@HrT.T("خودروها") (@Jalali.Num(vehicles.Count))</a>
+    <a href="/Parking?tab=permits" class="@(tab == "permits" ? "on" : "")">@HrT.T("مجوزها") (@Jalali.Num(permits.Count))</a>
+    <a href="/Parking?tab=events" class="@(tab == "events" ? "on" : "")">@HrT.T("رویدادها") (@Jalali.Num(events.Count))</a>
+</div>
+
+<div data-refresh-host>
+@if (tab == "live")
+{
+    <div class="kpis">
+        <div class="kpi"><div class="v" id="lv-inside">@Jalali.Num(insideNow)</div><div class="l">@HrT.T("خودرو داخل پارکینگ")</div></div>
+        <div class="kpi info"><div class="v" id="lv-cap">@Jalali.Num(totalCap)</div><div class="l">@HrT.T("ظرفیت کل")</div></div>
+        <div class="kpi warn"><div class="v" id="lv-today">@Jalali.Num(todayEvents)</div><div class="l">@HrT.T("رویداد امروز")</div></div>
+        <div class="kpi ok"><div class="v" id="lv-auto">@Jalali.Num(todayAutoReads)</div><div class="l">@HrT.T("خوانش خودکار امروز")</div></div>
+        <div class="kpi ok"><div class="v" id="lv-online">@Jalali.Num(onlineCams)<span style="font-size:12px;color:var(--ink-2)"> / @Jalali.Num(cameras.Count(c => c.Active))</span></div><div class="l">@HrT.T("دوربین آنلاین")</div></div>
+    </div>
+
+    <div class="live-grid">
+        <div class="live-main">
+            <div class="card">
+                <div class="card-h">
+                    <h2>@HrT.T("📹 دیوار دوربین‌های پلاک‌خوان")</h2>
+                    <span class="hint">@HrT.T("به‌روزرسانی خودکار هر ۶ ثانیه — خوانش پلاک روی تصویر نمایش داده می‌شود")</span>
+                </div>
+                <div class="card-b">
+                    @if (cameras.Count == 0)
+                    {
+                        <div class="empty">@HrT.T("هنوز دوربین پلاک‌خوانی ثبت نشده است — از تب «دوربین‌های پلاک‌خوان» اضافه کنید")</div>
+                    }
+                    <div class="cam-wall" id="camWall">
+                        @foreach (var c in cameras)
+                        {
+                            <div class="cam-tile" data-cam-id="@c.Id">
+                                <div class="cam-head">
+                                    <strong>@c.Name</strong>
+                                    <span class="badge badge-mute" data-role="cam-badge">…</span>
+                                </div>
+                                <div class="cam-feed" data-role="cam-feed">
+                                    <div class="cam-osd">
+                                        <span class="rec-dot"></span>
+                                        <span data-role="cam-osd">CAM · @c.Brand@(string.IsNullOrEmpty(c.Model) ? "" : " " + c.Model)@(string.IsNullOrEmpty(c.Ip) ? "" : " · " + c.Ip)</span>
+                                    </div>
+                                    <div class="cam-scan"></div>
+                                    <div class="cam-off" data-role="cam-off">@HrT.T("⛔ بدون سیگنال")</div>
+                                    <div class="cam-read" data-role="cam-read">
+                                        <span data-role="cam-plate">······</span>
+                                        <span class="cam-readmeta" data-role="cam-readmeta">@HrT.T("در انتظار اولین خوانش…")</span>
+                                    </div>
+                                </div>
+                                <div class="cam-foot">
+                                    <span title="@HrT.T("گیت")">🚧 @(c.Gate?.Name ?? "—")</span>
+                                    <span title="@HrT.T("پارکینگ")">🅿️ @(c.Gate?.Lot?.Name ?? "—")</span>
+                                    <span title="@HrT.T("جهت لاین")">@(c.Direction == "ورودی" ? HrT.T("⬅ ورودی") : c.Direction == "خروجی" ? HrT.T("خروجی ➡") : HrT.T("⬌ دوطرفه"))</span>
+                                    <span class="num" style="font-size:10px" data-role="cam-lastseen">@(c.LastSeenAt is null ? HrT.T("بدون سابقه") : Jalali.FmtLong(c.LastSeenAt.Value))</span>
+                                </div>
+                                @if (canControl)
+                                {
+                                    <div class="btn-row">
+                                        <form method="post" action="/Parking/SimCameraHeartbeat" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm" title="@HrT.T("شبیه‌سازی اتصال دوربین")">@HrT.T("♻️ اتصال")</button>
+                                        </form>
+                                        <form method="post" action="/Parking/PingCamera" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm" title="@HrT.T("صف‌کردن دستور ping")">@HrT.T("📶 ضربان")</button>
+                                        </form>
+                                        <form method="post" action="/Parking/OpenBarrier" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("دستور بازکردن راهبند «{0}» صف شود؟", c.Gate?.Name)">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm btn-ok" title="@HrT.T("بازکردن راهبند از راه دور")">@HrT.T("🔓 راهبند")</button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="live-side">
+            <div class="card">
+                <div class="card-h"><h2>@HrT.T("🔔 خوانش‌های زنده")</h2><span class="badge badge-ok"><span class="dot dot-on"></span> @HrT.T("زنده")</span></div>
+                <div class="ticker" id="ticker">
+                    <div class="empty">@HrT.T("در حال اتصال…")</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-h"><h2>@HrT.T("🚗 داخل پارکینگ")</h2><span class="hint" id="inside-count">@Jalali.Num(insideNow) @HrT.T("خودرو")</span></div>
+                <div class="ticker" id="insideList">
+                    <div class="empty">—</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+
+}
+else if (tab == "board")
+{
+    <div class="kpis">
+        <div class="kpi"><div class="v">@Jalali.Num(insideNow)</div><div class="l">@HrT.T("خودرو داخل پارکینگ")</div></div>
+        <div class="kpi info"><div class="v">@Jalali.Num(totalCap)</div><div class="l">@HrT.T("ظرفیت کل پارکینگ‌ها")</div></div>
+        <div class="kpi ok"><div class="v">@Jalali.Num(activePermits)</div><div class="l">@HrT.T("مجوز فعال")</div></div>
+        <div class="kpi warn"><div class="v">@Jalali.Num(todayEvents)</div><div class="l">@HrT.T("رویداد امروز")</div></div>
+        <div class="kpi ok"><div class="v">@Jalali.Num(onlineCams)<span style="font-size:12px;color:var(--ink-2)"> / @Jalali.Num(cameras.Count(c => c.Active))</span></div><div class="l">@HrT.T("📷 دوربین آنلاین")</div></div>
+        <div class="kpi @(offlineCams > 0 ? "warn" : "info")"><div class="v">@Jalali.Num(todayAutoReads)</div><div class="l">@HrT.T("خوانش خودکار پلاک امروز")</div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("اشغال پارکینگ‌ها")</h2>
+            @if (canControl)
+            {
+                <button class="btn btn-primary" data-modal="/Parking/ScanForm" data-modal-title="@HrT.T("شبیه‌ساز پلاک‌خوان — ثبت عبور خودرو")">@HrT.T("📷 ثبت عبور خودرو")</button>
+            }
+        </div>
+        <div class="card-b">
+            @if (lots.Count == 0)
+            {
+                <div style="color:var(--ink-2)">@HrT.T("هنوز پارکینگی ثبت نشده است.")</div>
+            }
+            @foreach (var lot in lots)
+            {
+                var used = occ.GetValueOrDefault(lot.Id);
+                var pct = lot.Capacity > 0 ? (int)Math.Round(used * 100.0 / lot.Capacity) : 0;
+                var tone = pct >= 90 ? "err" : pct >= 70 ? "warn" : "ok";
+                <div style="margin-bottom:16px">
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap">
+                        <strong style="font-size:13.5px">@lot.Name</strong>
+                        <span class="code" style="color:var(--ink-3);font-size:11px">@lot.Code</span>
+                        <span class="badge badge-mute" style="font-size:10.5px">🏢 @(lot.Company?.Name ?? "—")</span>
+                        @if (!lot.Active)
+                        {
+                            <span class="badge badge-err">@HrT.T("غیرفعال")</span>
+                        }
+                        <span class="badge @(tone == "err" ? "badge-err" : tone == "warn" ? "badge-warn" : "badge-ok")">
+                            @HrT.F("{0} از {1} جایگاه ({2}٪)", Jalali.Num(used), Jalali.Num(lot.Capacity), Jalali.Num(pct))
+                        </span>
+                        <span class="badge badge-mute">🚧 @Jalali.Num(lot.Gates.Count) @HrT.T("گیت")</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(lot.Location))
+                    {
+                        <div style="color:var(--ink-2);font-size:11.5px;margin-bottom:6px">📍 @lot.Location</div>
+                    }
+                    <div style="height:10px;border-radius:6px;background:var(--line);overflow:hidden;max-width:560px">
+                        <div style="height:100%;width:@(Math.Clamp(pct, 0, 100))%;border-radius:6px;background:@(tone == "err" ? "var(--err)" : tone == "warn" ? "var(--warn)" : "var(--ok)")"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("آخرین رویدادهای پارکینگ")</h2><a class="btn btn-sm" href="/Parking?tab=events">@HrT.T("همه رویدادها")</a></div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("پلاک")</th><th>@HrT.T("صاحب خودرو")</th><th>@HrT.T("گیت")</th><th>@HrT.T("پارکینگ")</th><th>@HrT.T("جهت")</th><th>@HrT.T("نتیجه")</th></tr></thead>
+                <tbody>
+                    @foreach (var e in events.Take(8))
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtLong(e.Timestamp)</td>
+                            <td>@PlateFmt.Render(e.PlateText)</td>
+                            <td>@(e.Vehicle?.Employee?.FullName ?? "—")</td>
+                            <td>@e.Gate?.Name</td>
+                            <td>@e.Gate?.Lot?.Name</td>
+                            <td>@HrT.T(e.Direction)</td>
+                            <td>
+                                <span class="badge @(e.Result == "مجاز" ? "badge-ok" : "badge-err")">@HrT.T(e.Result)</span>
+                                @(e.Reason == null ? "" : $" — {e.Reason}")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "cameras")
+{
+    var pendingCmds = (List<AnprCommand>)(ViewBag.PendingCmds ?? new List<AnprCommand>());
+    <div class="kpis">
+        <div class="kpi ok"><div class="v">@Jalali.Num(onlineCams)</div><div class="l">@HrT.T("دوربین آنلاین")</div></div>
+        <div class="kpi @(offlineCams > 0 ? "err" : "info")"><div class="v">@Jalali.Num(offlineCams)</div><div class="l">@HrT.T("آفلاین")</div></div>
+        <div class="kpi info"><div class="v">@Jalali.Num(cameras.Count(c => c.Active))</div><div class="l">@HrT.T("دوربین فعال")</div></div>
+        <div class="kpi warn"><div class="v">@Jalali.Num(cameras.Sum(c => c.Events.Count(e => e.Timestamp >= DateTime.Now.Date)))</div><div class="l">@HrT.T("خوانش امروز دوربین‌ها")</div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("دوربین‌های پلاک‌خوان") (ANPR)</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Parking/CreateCamera" data-modal-title="@HrT.T("دوربین پلاک‌خوان جدید")">@HrT.T("📷 + دوربین")</button>
+            }
+        </div>
+        <div class="hint" style="padding:0 14px">
+            @HrT.T("دوربین‌ها همانند دستگاه‌های تردد با") <b>SN</b> @HrT.T("و") <b>@HrT.T("توکن webhook")</b> @HrT.T("به پل وصل می‌شوند:")
+            @HrT.T("هر پلاک خوانده‌شده را به") <code dir="ltr">POST /api/anpr/webhook</code> (@HrT.T("رویداد") <code dir="ltr">plate</code>)
+            @HrT.T("بفرستند؛ موتور مجوز به‌طور") <b>@HrT.T("خودکار")</b> @HrT.T("ورود/خروج را ثبت و در صورت مجاز بودن راهبند را باز می‌کند.")
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("دوربین")</th><th>SN</th><th>@HrT.T("گیت / پارکینگ")</th><th>@HrT.T("جهت")</th><th>@HrT.T("آستانه اطمینان")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("آخرین اتصال")</th><th>@HrT.T("خوانش امروز")</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var c in cameras)
+                    {
+                        var online = ParkingOps.IsOnline(c);
+                        var todayCount = c.Events.Count(e => e.Timestamp >= DateTime.Now.Date);
+                        <tr>
+                            <td>
+                                <strong>@c.Name</strong>
+                                <div style="font-size:11px;color:var(--ink-2)">@c.Brand @(string.IsNullOrEmpty(c.Model) ? "" : c.Model) @(string.IsNullOrEmpty(c.Ip) ? "" : "· " + c.Ip)</div>
+                                @if (!string.IsNullOrEmpty(c.StreamUrl))
+                                {
+                                    <div style="font-size:10px;color:var(--ink-3)" dir="ltr">@c.StreamUrl</div>
+                                }
+                            </td>
+                            <td><code dir="ltr" style="font-size:10.5px">@c.Serial</code></td>
+                            <td>@(c.Gate?.Name ?? "—")<div style="font-size:11px;color:var(--ink-2)">@(c.Gate?.Lot?.Name ?? "—") @(c.Company != null ? "· " + c.Company.Code : "")</div></td>
+                            <td>@HrT.T(c.Direction)</td>
+                            <td>@Jalali.Num(c.ConfidenceThreshold)٪</td>
+                            <td>
+                                @if (!c.Active)
+                                {
+                                    <span class="badge badge-mute">@HrT.T("غیرفعال")</span>
+                                }
+                                else if (online)
+                                {
+                                    <span class="badge badge-ok">@HrT.T("🟢 آنلاین")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-err">@HrT.T("🔴 آفلاین")</span>
+                                }
+                            </td>
+                            <td class="num" style="font-size:11px">@(c.LastSeenAt is null ? HrT.T("بدون سابقه") : Jalali.FmtLong(c.LastSeenAt.Value))</td>
+                            <td class="num">@Jalali.Num(todayCount)</td>
+                            <td>
+                                <div class="btn-row">
+                                    @if (canControl)
+                                    {
+                                        <form method="post" action="/Parking/PingCamera" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm" title="@HrT.T("صف‌کردن دستور ping")">@HrT.T("📶 ضربان")</button>
+                                        </form>
+                                        <form method="post" action="/Parking/SimCameraHeartbeat" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm" title="@HrT.T("شبیه‌سازی اتصال (دمو)")">@HrT.T("♻️ آنلاین")</button>
+                                        </form>
+                                        <form method="post" action="/Parking/OpenBarrier" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("دستور بازکردن راهبند «{0}» برای این دوربین صف شود؟", c.Gate?.Name)">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm btn-ok" title="@HrT.T("دستور بازکردن راهبند از راه دور")">@HrT.T("🔓 راهبند")</button>
+                                        </form>
+                                    }
+                                    @if (canManage)
+                                    {
+                                        <form method="post" action="/Parking/ToggleCamera" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm">@(c.Active ? HrT.T("غیرفعال") : HrT.T("فعال"))</button>
+                                        </form>
+                                        <form method="post" action="/Parking/RotateCameraToken" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("توکن اتصال «{0}» چرخش شود؟ توکن قبلی باطل می‌شود.", c.Name)">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm" title="@HrT.T("چرخش توکن webhook")">🔑</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (cameras.Count == 0)
+            {
+                <div style="padding:14px;color:var(--ink-2)">@HrT.T("هنوز دوربین پلاک‌خوانی ثبت نشده است.")</div>
+            }
+        </div>
+    </div>
+
+    @if (pendingCmds.Count > 0)
+    {
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("دستورات صف‌شده دوربین‌ها")</h2><span class="hint">@HrT.T("در اولین اتصال دوربین") (GET api/anpr/webhook) @HrT.T("تحویل می‌گیرند")</span></div>
+            <div class="table-wrap">
+                <table class="tbl">
+                    <thead><tr><th>@HrT.T("دوربین")</th><th>@HrT.T("دستور")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("ثبت‌کننده")</th><th>@HrT.T("زمان")</th></tr></thead>
+                    <tbody>
+                        @foreach (var cmd in pendingCmds)
+                        {
+                            <tr>
+                                <td>@(cmd.Camera?.Name ?? "—")</td>
+                                <td>@(ParkingOps.CommandLabels.GetValueOrDefault(cmd.Type, cmd.Type))</td>
+                                <td><span class="badge @(cmd.Status == "pending" ? "badge-warn" : "badge-info")">@(cmd.Status == "pending" ? HrT.T("در انتظار") : HrT.T("تحویل‌شده"))</span></td>
+                                <td>@(cmd.CreatedBy ?? "—")</td>
+                                <td class="num" style="font-size:11px">@Jalali.FmtLong(cmd.CreatedAt)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+else if (tab == "lots")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("پارکینگ‌ها و گیت‌ها")</h2>
+            @if (canManage)
+            {
+                <div class="btn-row">
+                    <button class="btn btn-primary" data-modal="/Parking/CreateLot" data-modal-title="@HrT.T("پارکینگ جدید")">+ @HrT.T("پارکینگ")</button>
+                    <button class="btn btn-dark" data-modal="/Parking/CreateGate" data-modal-title="@HrT.T("گیت پارکینگ جدید")">+ @HrT.T("گیت")</button>
+                </div>
+            }
+        </div>
+        <div class="card-b">
+            @foreach (var lot in lots)
+            {
+                var used = occ.GetValueOrDefault(lot.Id);
+                <div style="margin-bottom:18px;padding-bottom:14px;border-bottom:1px dashed var(--line)">
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+                        <strong style="font-size:13.5px">@lot.Name</strong>
+                        <span class="code" style="color:var(--ink-3);font-size:11px">@lot.Code</span>
+                        <span class="badge badge-mute" style="font-size:10.5px">🏢 @(lot.Company?.Name ?? "—")</span>
+                        <span class="badge @(lot.Active ? "badge-ok" : "badge-err")">@(lot.Active ? HrT.T("فعال") : HrT.T("غیرفعال"))</span>
+                        <span class="badge badge-info">@HrT.T("ظرفیت") @Jalali.Num(lot.Capacity)</span>
+                        <span class="badge badge-mute">@HrT.T("داخل:") @Jalali.Num(used)</span>
+                        @if (lot.MonthlyFee > 0)
+                        {
+                            <span class="badge badge-warn">@HrT.T("حق پارکینگ:") @Money.Fmt(lot.MonthlyFee)/@HrT.T("ماه")</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-mute">@HrT.T("رایگان")</span>
+                        }
+                        @if (canManage)
+                        {
+                            <form method="post" action="/Parking/ToggleLot" class="inline-form" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@lot.Id" />
+                                <button class="btn btn-sm">@(lot.Active ? HrT.T("غیرفعال‌سازی") : HrT.T("فعال‌سازی"))</button>
+                            </form>
+                        }
+                    </div>
+                    @if (!string.IsNullOrEmpty(lot.Location))
+                    {
+                        <div style="color:var(--ink-2);font-size:11.5px;margin-bottom:6px">📍 @lot.Location</div>
+                    }
+                    <div class="btn-row">
+                        @foreach (var g in lot.Gates)
+                        {
+                            <span class="chip">
+                                <b>@g.Name</b> · @HrT.T(g.Type) · @HrT.T(g.Direction)
+                                <span class="badge @(g.Status == "فعال" ? "badge-ok" : g.Status == "خراب" ? "badge-err" : "badge-mute")">@HrT.T(g.Status)</span>
+                                <span class="badge @(g.OpenState switch { "باز دائم" => "badge-warn", "قفل دائم" => "badge-crit", _ => "badge-mute" })">🚧 @HrT.T(g.OpenState)</span>
+                                @(g.Device is null ? "" : " · " + g.Device.Name)
+                                @if (canManage)
+                                {
+                                    <form method="post" action="/Parking/ToggleGate" class="inline-form" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@g.Id" />
+                                        <button class="btn btn-sm">@(g.Status == "فعال" ? HrT.T("غیرفعال") : HrT.T("فعال"))</button>
+                                    </form>
+                                }
+                                @if (canControl)
+                                {
+                                    @if (g.OpenState == "نرمال")
+                                    {
+                                        <form method="post" action="/Parking/SetGateOpenState" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("راهبند «{0}» باز دائم شود؟ عبور آزاد ثبت می‌شود و هشدار امنیتی ایجاد می‌گردد.", g.Name)" data-danger="1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@g.Id" />
+                                            <input type="hidden" name="state" value="باز دائم" />
+                                            <button class="btn btn-sm btn-err">@HrT.T("🔓 باز دائم")</button>
+                                        </form>
+                                        <form method="post" action="/Parking/SetGateOpenState" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@g.Id" />
+                                            <input type="hidden" name="state" value="قفل دائم" />
+                                            <button class="btn btn-sm">@HrT.T("🔒 قفل دائم")</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" action="/Parking/SetGateOpenState" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@g.Id" />
+                                            <input type="hidden" name="state" value="نرمال" />
+                                            <button class="btn btn-sm btn-ok">@HrT.T("↩ بازگشت به نرمال")</button>
+                                        </form>
+                                    }
+                                }
+                            </span>
+                        }
+                        @if (lot.Gates.Count == 0)
+                        {
+                            <span style="color:var(--ink-2);font-size:12px">@HrT.T("هنوز گیتی برای این پارکینگ ثبت نشده است.")</span>
+                        }
+                    </div>
+                </div>
+            }
+            @if (lots.Count == 0)
+            {
+                <div style="color:var(--ink-2)">@HrT.T("هنوز پارکینگی ثبت نشده است.")</div>
+            }
+        </div>
+    </div>
+}
+else if (tab == "vehicles")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("خودروهای پرسنل")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Parking/CreateVehicle" data-modal-title="@HrT.T("خودروی جدید")">+ @HrT.T("خودرو")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پلاک")</th><th>@HrT.T("صاحب خودرو")</th><th>@HrT.T("شرکت")</th><th>@HrT.T("نوع")</th><th>@HrT.T("برند")</th><th>@HrT.T("رنگ")</th><th>@HrT.T("مجوزها")</th><th>@HrT.T("وضعیت")</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var v in vehicles)
+                    {
+                        <tr>
+                            <td>@PlateFmt.Render(v.PlateNo)</td>
+                            <td>@(v.Employee?.FullName ?? "—")</td>
+                            <td>@(v.Company?.Name ?? "—")</td>
+                            <td>@HrT.T(v.Type)</td>
+                            <td>@(v.Brand ?? "—") @(string.IsNullOrEmpty(v.Model) ? "" : v.Model)</td>
+                            <td>@(v.Color ?? "—")</td>
+                            <td>
+                                @foreach (var p in v.Permits)
+                                {
+                                    <span class="badge @(p.Status == "فعال" ? "badge-ok" : "badge-mute")" style="margin-inline-end:4px">
+                                        @(p.Lot?.Name ?? "—") · @HrT.T(p.Status)
+                                    </span>
+                                }
+                                @if (v.Permits.Count == 0)
+                                {
+                                    <span style="color:var(--ink-2)">—</span>
+                                }
+                            </td>
+                            <td><span class="badge @(v.Active ? "badge-ok" : "badge-err")">@(v.Active ? HrT.T("فعال") : HrT.T("غیرفعال"))</span></td>
+                            <td>
+                                @if (canManage)
+                                {
+                                    <form method="post" action="/Parking/ToggleVehicle" class="inline-form" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@v.Id" />
+                                        <button class="btn btn-sm">@(v.Active ? HrT.T("غیرفعال") : HrT.T("فعال"))</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "permits")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("مجوزهای پارکینگ")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Parking/CreatePermit" data-modal-title="@HrT.T("صدور مجوز پارکینگ")">+ @HrT.T("مجوز")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پلاک")</th><th>@HrT.T("صاحب خودرو")</th><th>@HrT.T("پارکینگ")</th><th>@HrT.T("نوع")</th><th>@HrT.T("از تاریخ")</th><th>@HrT.T("تا تاریخ")</th><th>@HrT.T("جایگاه")</th><th>@HrT.T("وضعیت")</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var p in permits)
+                    {
+                        var expired = p.ValidUntil is not null && p.ValidUntil < DateTime.Now;
+                        <tr>
+                            <td>@PlateFmt.Render(p.Vehicle?.PlateNo)</td>
+                            <td>@(p.Vehicle?.Employee?.FullName ?? "—")</td>
+                            <td>@(p.Lot?.Name ?? "—")</td>
+                            <td>@HrT.T(p.Type)</td>
+                            <td class="num">@Jalali.Fmt(p.ValidFrom)</td>
+                            <td class="num">@(p.ValidUntil is null ? HrT.T("بدون انقضا") : Jalali.Fmt(p.ValidUntil.Value))</td>
+                            <td>@(p.SpotNo ?? HrT.T("پارک آزاد"))</td>
+                            <td>
+                                <span class="badge @((p.Status == "فعال" && !expired) ? "badge-ok" : p.Status == "لغوشده" ? "badge-err" : "badge-mute")">
+                                    @(expired && p.Status == "فعال" ? HrT.T("منقضی") : p.Status)
+                                </span>
+                            </td>
+                            <td>
+                                @if (canManage)
+                                {
+                                    <form method="post" action="/Parking/TogglePermit" class="inline-form" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button class="btn btn-sm">@(p.Status == "فعال" ? HrT.T("لغو مجوز") : HrT.T("فعال‌سازی"))</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "events")
+{
+    @if (canControl)
+    {
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("شبیه‌ساز پلاک‌خوان")</h2><span class="hint">@HrT.T("ارزیابی کامل: گیت، مجوز، آنتی‌پس‌بک و ظرفیت — با انتخاب دوربین همان مسیر ثبت خودکار طی می‌شود") (PK-41)</span></div>
+            <form method="post" action="/Parking/Scan" class="card-b" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("پلاک خودرو *")</label><input name="plate" required placeholder="@HrT.T("12ع471 ایران 36")" /></div>
+                    <div class="fld"><label>@HrT.T("گیت پارکینگ *")</label>
+                        <select name="gateId" required>
+                            @foreach (var g in (List<ParkingGate>)ViewBag.ScanGates)
+                            {
+                                <option value="@g.Id">@g.Name (@(g.Lot?.Name ?? "—"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("دوربین پلاک‌خوان")</label>
+                        <select name="cameraId">
+                            <option value="">@HrT.T("— بدون دوربین (دستی) —")</option>
+                            @foreach (var c in (List<AnprCamera>)ViewBag.ScanCameras)
+                            {
+                                <option value="@c.Id">@c.Name (@(c.Gate?.Name ?? "—"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("جهت")</label>
+                        <select name="direction"><option value="ورود">@HrT.T("ورود")</option><option value="خروج">@HrT.T("خروج")</option></select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("روش")</label>
+                        <select name="method"><option value="پلاک‌خوان">@HrT.T("پلاک‌خوان")</option><option value="کارت">@HrT.T("کارت")</option><option value="دستی">@HrT.T("دستی")</option></select>
+                    </div>
+                </div>
+                <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت عبور")</button></div>
+            </form>
+        </div>
+    }
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("رویدادهای پارکینگ (۱۰۰ مورد اخیر)")</h2>
+            <div class="btn-row">
+                <a class="btn btn-sm @(string.IsNullOrEmpty(resultFilter) ? "btn-dark" : "")" href="/Parking?tab=events">@HrT.T("همه")</a>
+                <a class="btn btn-sm @(resultFilter == "مجاز" ? "btn-dark" : "")" href="/Parking?tab=events&result=مجاز">@HrT.T("مجاز")</a>
+                <a class="btn btn-sm @(resultFilter == "غیرمجاز" ? "btn-dark" : "")" href="/Parking?tab=events&result=غیرمجاز">@HrT.T("غیرمجاز")</a>
+                @if (Me.Get()!.Has("reports.export"))
+                {
+                    var eqs = $"co={Uri.EscapeDataString(curCo ?? "")}&result={Uri.EscapeDataString(resultFilter ?? "")}";
+                    <a class="btn btn-sm" href="/Reports/Parking?@Html.Raw(eqs)" title="@HrT.T("صفحه کامل گزارش با بازه دلخواه")">@HrT.T("📊 گزارش کامل")</a>
+                    <a class="btn btn-sm" href="/Reports/ParkingXlsx?@Html.Raw(eqs)">@HrT.T("⬇ اکسل")</a>
+                    <a class="btn btn-sm" href="/Reports/ParkingPdf?@Html.Raw(eqs)">⬇ PDF</a>
+                }
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("پلاک")</th><th>@HrT.T("صاحب خودرو")</th><th>@HrT.T("گیت")</th><th>@HrT.T("پارکینگ")</th><th>@HrT.T("جهت")</th><th>@HrT.T("روش")</th><th>@HrT.T("اطمینان")</th><th>@HrT.T("نتیجه")</th><th>@HrT.T("دلیل")</th></tr></thead>
+                <tbody>
+                    @foreach (var e in events)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtLong(e.Timestamp)</td>
+                            <td>@PlateFmt.Render(e.PlateText)</td>
+                            <td>@(e.Vehicle?.Employee?.FullName ?? "—")</td>
+                            <td>@e.Gate?.Name</td>
+                            <td>@e.Gate?.Lot?.Name</td>
+                            <td>@HrT.T(e.Direction)</td>
+                            <td>@HrT.T(e.Method) @(e.Camera is null ? "" : $"({e.Camera.Name})")</td>
+                            <td class="num">@(e.Confidence is null ? "—" : Jalali.Num(e.Confidence.Value) + "٪")</td>
+                            <td><span class="badge @(e.Result == "مجاز" ? "badge-ok" : "badge-err")">@HrT.T(e.Result)</span></td>
+                            <td>@(e.Reason ?? "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+</div>
+
+@section Scripts {
+<script>
+(function () {
+        // برچسب‌های چندزبانه — ترجمه سمت سرور در زمان رندر
+        var MSG_CONF = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("اطمینان")))';
+        var MSG_INACTIVE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("غیرفعال")))';
+        var MSG_ONLINE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("🟢 آنلاین")))';
+        var MSG_OFFLINE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("🔴 آفلاین")))';
+        var MSG_DIR_IN = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("⬅ ورود")))';
+        var MSG_DIR_OUT = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("➡ خروج")))';
+        var MSG_ENTER = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ورود")))';
+        var MSG_NO_EVENTS = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("هنوز رویدادی ثبت نشده است")))';
+        var MSG_NO_INSIDE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خودرویی داخل پارکینگ نیست")))';
+        var MSG_VEHICLES = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خودرو")))';
+        // فقط در تب «نمای زنده» — این section در همه تب‌های پارکینگ رندر می‌شود
+        if (!document.getElementById('ticker')) return;
+        function faNum(n) { return Number(n).toLocaleString('fa-IR'); }
+        var knownEv = null;   // شناسه‌های رویداد دیده‌شده — اولین poll مبناست (بدون فلش)
+        var knownCam = {};    // آخرین پلاک هر دوربین برای فلش خوانش تازه
+
+        function plateChip(text, mini) {
+            // فاز ۴۵ — کامپوننت پلاک واقعی (هم‌قرارداد با PlateFmt سرور)؛ بدون به‌هم‌ریختگی bidi
+            var host = document.createElement('span');
+            if (window.plateHtml) host.innerHTML = window.plateHtml(text, mini);
+            else host.textContent = text || '—';
+            return host.firstElementChild || host;
+        }
+
+        function dirBadge(dir, result) {
+            var b = document.createElement('span');
+            b.className = 'dir-badge ' + (dir === 'ورود' ? 'in' : 'out');
+            b.textContent = (dir === 'ورود' ? '⬅ ' : '➡ ') + dir;
+            return b;
+        }
+
+        function tickRow(e, flash) {
+            var row = document.createElement('div');
+            row.className = 'tick-row ' + (e.result === 'مجاز' ? 'ok' : 'err') + (flash ? ' flash' : '');
+            row.dataset.ev = e.id;
+            row.appendChild(plateChip(e.plate, true));
+            var body = document.createElement('div');
+            body.className = 'tick-body';
+            var l1 = document.createElement('div'); l1.className = 'tick-l1';
+            var nm = document.createElement('b'); nm.textContent = e.owner;
+            l1.appendChild(nm); l1.appendChild(dirBadge(e.dir));
+            var l2 = document.createElement('div'); l2.className = 'tick-l2';
+            l2.textContent = (e.gate || '—') + ' · ' + (e.lot || '—') + (e.cam ? ' · 📷 ' + e.cam : ' · ' + (e.method || '')) +
+                (e.conf ? ' · ' + MSG_CONF + ' ' + faNum(e.conf) + '٪' : '') + (e.result === 'مجاز' ? '' : ' · ' + e.result);
+            body.appendChild(l1); body.appendChild(l2);
+            row.appendChild(body);
+            var t = document.createElement('span'); t.className = 'tick-time'; t.textContent = e.time || '';
+            row.appendChild(t);
+            return row;
+        }
+
+        function paintCam(dv) {
+            var tile = document.querySelector('[data-cam-id="' + dv.id + '"]');
+            if (!tile) return;
+            var badge = tile.querySelector('[data-role="cam-badge"]');
+            if (badge) {
+                if (!dv.active) { badge.className = 'badge badge-mute'; badge.textContent = MSG_INACTIVE; }
+                else if (dv.online) { badge.className = 'badge badge-ok'; badge.textContent = MSG_ONLINE; }
+                else { badge.className = 'badge badge-err'; badge.textContent = MSG_OFFLINE; }
+            }
+            var feed = tile.querySelector('[data-role="cam-feed"]');
+            if (feed) feed.className = 'cam-feed' + (dv.online ? ' on' : '');
+            var off = tile.querySelector('[data-role="cam-off"]');
+            if (off) off.style.display = dv.online ? 'none' : '';
+            var ls = tile.querySelector('[data-role="cam-lastseen"]');
+            if (ls) ls.textContent = dv.lastSeen || '—';
+            var pl = tile.querySelector('[data-role="cam-plate"]');
+            var meta = tile.querySelector('[data-role="cam-readmeta"]');
+            if (dv.last && pl && meta) {
+                pl.innerHTML = window.plateHtml ? window.plateHtml(dv.last.plate) : (dv.last.plate || '—');
+                pl.classList.remove('hot');
+                if (knownCam[dv.id] && knownCam[dv.id] !== dv.last.plate + '|' + dv.last.time) {
+                    var pr = pl.querySelector('.plate-real') || pl;
+                    pr.classList.add('hot');
+                    var feedEl = tile.querySelector('[data-role="cam-feed"]');
+                    if (feedEl) { feedEl.classList.remove('pulse'); void feedEl.offsetWidth; feedEl.classList.add('pulse'); }
+                }
+                knownCam[dv.id] = dv.last.plate + '|' + dv.last.time;
+                meta.textContent = (dv.last.dir === 'ورود' ? MSG_DIR_IN : MSG_DIR_OUT) +
+                    (dv.last.conf ? ' · ' + MSG_CONF + ' ' + faNum(dv.last.conf) + '٪' : '') +
+                    (dv.last.result === 'مجاز' ? '' : ' · ' + dv.last.result) + ' — ' + dv.last.owner;
+            }
+        }
+
+        function paint(j) {
+            var k = j.kpis || {};
+            function setV(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; }
+            setV('lv-inside', faNum(k.inside || 0));
+            setV('lv-cap', faNum(k.cap || 0));
+            setV('lv-today', faNum(k.today || 0));
+            setV('lv-auto', faNum(k.autoReads || 0));
+            setV('lv-online', faNum(k.online || 0) + '<span style="font-size:12px;color:var(--ink-2)"> / ' + faNum(k.cams || 0) + '</span>');
+
+            (j.cameras || []).forEach(paintCam);
+
+            var tk = document.getElementById('ticker');
+            if (tk) {
+                var evs = j.events || [];
+                if (knownEv === null) knownEv = {};
+                var seenNow = {};
+                tk.textContent = '';
+                if (!evs.length) tk.innerHTML = '<div class="empty">' + MSG_NO_EVENTS + '</div>';
+                evs.forEach(function (e) {
+                    seenNow[e.id] = 1;
+                    tk.appendChild(tickRow(e, !knownEv[e.id] && Object.keys(knownEv).length > 0));
+                });
+                knownEv = seenNow;
+            }
+
+            var il = document.getElementById('insideList');
+            if (il) {
+                var ins = j.inside || [];
+                il.textContent = '';
+                if (!ins.length) il.innerHTML = '<div class="empty">' + MSG_NO_INSIDE + '</div>';
+                ins.forEach(function (v) {
+                    var row = document.createElement('div');
+                    row.className = 'tick-row ok';
+                    row.appendChild(plateChip(v.plate, true));
+                    var body = document.createElement('div'); body.className = 'tick-body';
+                    var l1 = document.createElement('div'); l1.className = 'tick-l1';
+                    var nm = document.createElement('b'); nm.textContent = v.owner;
+                    l1.appendChild(nm);
+                    var l2 = document.createElement('div'); l2.className = 'tick-l2';
+                    l2.textContent = '🅿️ ' + (v.lot || '—') + ' · ' + MSG_ENTER + ' ' + (v.since || '—');
+                    body.appendChild(l1); body.appendChild(l2);
+                    row.appendChild(body);
+                    il.appendChild(row);
+                });
+            }
+            var ic = document.getElementById('inside-count');
+            if (ic) ic.textContent = faNum(k.inside || 0) + ' ' + MSG_VEHICLES;
+        }
+        liveCommands({ url: '/Parking/LiveData', intervalSec: 6, apply: paint });
+})();
+</script>
+}

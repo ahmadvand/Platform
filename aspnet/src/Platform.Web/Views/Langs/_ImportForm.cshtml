@@ -1,0 +1,20 @@
+@{
+    // فاز ۷۷ — مودال درون‌ریزی بستهٔ ترجمه به سامانه (به‌جای کپی دستی فایل)
+    string T(string fa) => HrT.T(fa);
+}
+<form method="post" action="/Langs/Import" enctype="multipart/form-data" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="fld">
+        <label>@T("فایل بستهٔ ترجمه (.json یا .zip)")</label>
+        <input type="file" name="file" accept=".json,.zip" required />
+    </div>
+    <p style="color:var(--ink-3);font-size:11px;line-height:2;margin:6px 0 0">
+        @T("قالب بسته: خروجی «بستهٔ زبان» برنامهٔ TranslationStudio یا دکمهٔ «خروجی بسته» همین صفحه — کد، نام، جهت و ترجمه‌ها داخل آن است.")
+        <br />
+        @T("درون‌ریزی ادغامی است: کلیدهای موجود همان زبان به‌روز می‌شوند و کلیدهای جدید اضافه می‌شوند؛ هیچ ترجمه‌ای حذف نمی‌شود. زبان «fa» مبدأ است و بسته نمی‌پذیرد.")
+    </p>
+    <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-primary">@T("درون‌ریزی و فعال‌سازی")</button>
+        <button type="button" class="btn" onclick="this.closest('.modal-overlay')._close()">@T("انصراف")</button>
+    </div>
+</form>

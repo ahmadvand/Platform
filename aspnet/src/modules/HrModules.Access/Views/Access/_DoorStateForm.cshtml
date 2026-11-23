@@ -1,0 +1,27 @@
+@{
+    var gate = (Gate)ViewBag.Gate!;
+}
+<div data-modal-title="@HrT.F("حالت درب — {0}", gate.Name)" hidden></div>
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("وضعیت فعلی:") <b>@HrT.T(gate.DoorState)</b> @HrT.T("— «نرمال» یعنی کنترل موتور دسترسی فعال است.")
+</div>
+<div class="btn-row" style="flex-wrap:wrap">
+    <form method="post" action="/Access/SetDoorState" class="inline-form" data-ajax data-refresh>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@gate.Id" /><input type="hidden" name="state" value="نرمال" />
+        <button class="btn @(gate.DoorState == "نرمال" ? "btn-dark" : "")">@HrT.T("نرمال (کنترل موتور دسترسی)")</button>
+    </form>
+    <form method="post" action="/Access/SetDoorState" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("درب «{0}» به حالت باز دائم برود؟ (عبور آزاد بدون کنترل مجوز)", gate.Name)" data-danger="1">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@gate.Id" /><input type="hidden" name="state" value="باز دائم" />
+        <button class="btn @(gate.DoorState == "باز دائم" ? "btn-dark" : "")">@HrT.T("🔓 باز دائم")</button>
+    </form>
+    <form method="post" action="/Access/SetDoorState" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("درب «{0}» به حالت قفل دائم برود؟ (مسدود کامل — همه ترددها رد می‌شوند)", gate.Name)" data-danger="1">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@gate.Id" /><input type="hidden" name="state" value="قفل دائم" />
+        <button class="btn btn-err">@HrT.T("🔒 قفل دائم")</button>
+    </form>
+</div>
+<div style="margin-top:14px">
+    <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+</div>

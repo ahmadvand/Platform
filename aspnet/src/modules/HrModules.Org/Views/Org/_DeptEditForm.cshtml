@@ -1,0 +1,16 @@
+@{
+    var dept = (Department)ViewBag.Dept!;
+}
+<div data-modal-title="@(HrT.F("ویرایش واحد — {0}", dept.Name))" hidden></div>
+<form method="post" action="/Org/EditDept" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@dept.Id" />
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام واحد")</label><input name="name" value="@dept.Name" required /></div>
+        <div class="fld"><label>@HrT.T("کد")</label><input name="code" value="@dept.Code" required /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره تغییرات")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

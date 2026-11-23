@@ -1,0 +1,295 @@
+@{
+    ViewData["Title"] = HrT.T("نمای زنده حراست");
+    var devices = (List<Device>)ViewBag.DevicesList;
+    var online = (int)ViewBag.Online;
+    var companies = (List<Company>)ViewBag.Companies;
+    var curCo = (string?)ViewBag.Co;
+}
+<div class="chips">
+    <span class="chip">@HrT.T("دستگاه‌ها:") <b id="chip-total">@Jalali.Num(devices.Count)</b></span>
+    <span class="chip">@HrT.T("آنلاین:") <b id="chip-online">@Jalali.Num(online)</b></span>
+    <span class="chip">@HrT.T("تردد امروز:") <b id="chip-today">…</b></span>
+    <span class="chip">@HrT.T("اسکن ناشناس:") <b id="chip-unknown">…</b></span>
+    <span class="chip">@HrT.T("آخرین تردد:") <b id="chip-last">—</b></span>
+    <form method="get" style="display:inline-flex;gap:6px;align-items:center">
+        <select name="co" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه شرکت‌ها")</option>
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+            }
+        </select>
+    </form>
+    <span class="badge badge-ok" style="margin-inline-start:auto"><span class="dot dot-on"></span> @HrT.T("زنده — هر ۶ ثانیه")</span>
+</div>
+
+<div class="live-grid">
+    <div class="live-main">
+        <div class="card">
+            <div class="card-h">
+                <h2>🖥️ @HrT.T("دیوار دستگاه‌های تردد")</h2>
+                <span class="hint">@HrT.T("وضعیت اتصال، شمارش امروز و آخرین تردد هر دستگاه — به‌روزرسانی خودکار")</span>
+            </div>
+            <div class="card-b">
+                @if (devices.Count == 0)
+                {
+                    <div class="empty">@HrT.T("دستگاهی ثبت نشده است — از صفحه «دستگاه‌های تردد» تعریف کنید")</div>
+                }
+                <div class="cam-wall" id="devWall">
+                    @foreach (var d in devices)
+                    {
+                        <div class="cam-tile" data-dev-id="@d.Id">
+                            <div class="cam-head">
+                                <strong>@d.Name</strong>
+                                <span class="badge badge-mute" data-role="dev-badge">…</span>
+                            </div>
+                            <div class="dev-vis" data-role="dev-vis">
+                                <div class="cam-osd">
+                                    <span class="rec-dot"></span>
+                                    <span data-role="dev-osd">DEV · @d.Kind@(string.IsNullOrEmpty(d.Brand) ? "" : " · " + d.Brand)@(string.IsNullOrEmpty(d.Ip) ? "" : " · " + d.Ip)</span>
+                                </div>
+                                <div class="dev-scan"></div>
+                                <div class="dev-lastav" data-role="dev-av">—</div>
+                                <div class="cam-off" data-role="dev-off">⛔ @HrT.T("بدون اتصال")</div>
+                                <div class="cam-read">
+                                    <span class="dev-lastname" data-role="dev-last">@HrT.T("در انتظار اولین تردد…")</span>
+                                    <span class="cam-readmeta" data-role="dev-lastmeta">—</span>
+                                </div>
+                            </div>
+                            <div class="cam-foot">
+                                <span title="@HrT.T("شرکت")">🏢 @(d.Company?.Name ?? "—")</span>
+                                <span title="@HrT.T("محل نصب")">📍 @(d.Location ?? "—")</span>
+                                <span title="@HrT.T("تردد امروز")">@HrT.T("تردد امروز:") <b data-role="dev-today" class="num">۰</b></span>
+                                <span class="num" style="font-size:10px" data-role="dev-lastseen">@(d.LastSeenAt is null ? HrT.T("بدون سابقه اتصال") : Jalali.FmtLong(d.LastSeenAt.Value))</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aside class="live-side">
+        <div class="card">
+            <div class="card-h">
+                <h2>🔔 @HrT.T("ترددهای زنده")</h2>
+                <span class="hint">@HrT.T("۸۰ اسکن آخر — تازه‌ها فلش می‌خورند")</span>
+            </div>
+            <div class="ticker" id="punchTicker">
+                <div class="empty">@HrT.T("در حال اتصال…")</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-h"><h2>ℹ️ @HrT.T("راهنمای پنل")</h2></div>
+            <div class="card-b" style="font-size:11.5px;color:var(--ink-2);line-height:2.1">
+                <div><span class="dir-badge in">⬅ @HrT.T("ورود")</span> @HrT.T("نخستین اسکن فرد در روز")</div>
+                <div><span class="dir-badge out">@HrT.T("خروج") ➡</span> @HrT.T("آخرین اسکن فرد در روز")</div>
+                <div><span class="dir-badge mid">⬌ @HrT.T("تردد")</span> @HrT.T("اسکن‌های میانی روز")</div>
+                <div><span class="dir-badge bad">⚠ @HrT.T("ناشناس")</span> @HrT.T("کد پرسنلی ناشناخته — نیازمند بررسی")</div>
+                <div style="margin-top:6px;color:var(--ink-3)">@HrT.T("هر تردد جدید به‌صورت نوتیفیکیشن با نام، کد پرسنلی، واحد و دستگاه نمایش داده می‌شود. برای مانیتورینگ سالن حراست، همین صفحه را روی نمایشگر باز نگه دارید.")</div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+@* استک نوتیفیکیشن — هر تردد تازه یک کارت با اطلاعات کامل فرد *@
+<div class="noty-stack" id="notyStack" aria-live="polite"></div>
+
+@section Scripts {
+<script>
+(function () {
+    var ticker = document.getElementById('punchTicker');
+    if (!ticker) return;   // پاکسازی ناوبری pjax
+
+    // فاز ۹۰ — برچسب‌های JS از سرور به زبان جاری رندر می‌شوند (چندزبانه)
+    var LBL = {
+        online: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("آنلاین")))',
+        offline: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("آفلاین")))',
+        inactive: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("غیرفعال")))',
+        lastConn: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("آخرین اتصال:")))',
+        pcode: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کد پرسنلی")))',
+        code: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کد")))',
+        in: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ورود")))',
+        out: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خروج")))',
+        noPunch: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("هنوز ترددی ثبت نشده است")))',
+    };
+
+    function faNum(n) { return Number(n).toLocaleString('fa-IR'); }
+    var known = null;      // شناسه ترددهای دیده‌شده — poll اول مبناست (بدون نوتیفیکیشن انبوه)
+
+    function kindClass(kind) {
+        return kind === 'ورود' ? 'in' : kind === 'خروج' ? 'out' : kind === 'ناشناس' ? 'bad' : 'mid';
+    }
+    function kindArrow(kind) {
+        return kind === 'ورود' ? '⬅ ' : kind === 'خروج' ? '' : kind === 'ناشناس' ? '⚠ ' : '⬌ ';
+    }
+
+    // فاز ۴۵ — نمایش عکس پرسنل در آواتارها (در نبود عکس، حرف اول نام)
+    function avFill(el, person, photo) {
+        var ch = (person || '—').trim().charAt(0);
+        if (photo) {
+            var img = el.querySelector('img');
+            if (!img) { el.textContent = ''; img = document.createElement('img'); el.appendChild(img); }
+            img.src = photo;
+            img.alt = ch;
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block';
+        } else {
+            el.textContent = ch;
+        }
+    }
+
+    // ---------- نوتیفیکیشن زنده (اطلاعات کامل فرد) ----------
+    function notify(p) {
+        var stack = document.getElementById('notyStack');
+        if (!stack) return;
+        var n = document.createElement('div');
+        n.className = 'noty' + (p.kind === 'ناشناس' ? ' noty-bad' : p.kind === 'خروج' ? ' noty-out' : '');
+
+        var av = document.createElement('div');
+        av.className = 'noty-av' + (p.kind === 'ناشناس' ? ' noty-av-bad' : '');
+        avFill(av, p.person, p.photo);
+
+        var body = document.createElement('div');
+        body.className = 'noty-b';
+        var l1 = document.createElement('div'); l1.className = 'noty-l1';
+        var nm = document.createElement('b'); nm.textContent = p.person || '—';
+        var kb = document.createElement('span');
+        kb.className = 'dir-badge ' + kindClass(p.kind);
+        kb.textContent = kindArrow(p.kind) + p.kind;
+        l1.appendChild(nm); l1.appendChild(kb);
+        var l2 = document.createElement('div'); l2.className = 'noty-l2';
+        l2.textContent = LBL.pcode + ' ' + faNum(p.code || 0) + (p.dept ? ' · ' + p.dept : '') + (p.company ? ' · ' + p.company : '');
+        var l3 = document.createElement('div'); l3.className = 'noty-l2';
+        l3.textContent = '🖥️ ' + (p.device || '—') + (p.note ? ' · ' + p.note : '');
+        body.appendChild(l1); body.appendChild(l2); body.appendChild(l3);
+
+        var side = document.createElement('div');
+        side.className = 'noty-side';
+        var tm = document.createElement('div'); tm.className = 'noty-time'; tm.textContent = p.time || '';
+        var x = document.createElement('button'); x.className = 'noty-x'; x.textContent = '✕'; x.type = 'button';
+        side.appendChild(tm); side.appendChild(x);
+
+        n.appendChild(av); n.appendChild(body); n.appendChild(side);
+        stack.appendChild(n);
+        while (stack.children.length > 5) stack.removeChild(stack.firstElementChild);
+
+        var gone = false;
+        function dismiss() {
+            if (gone) return; gone = true;
+            n.classList.add('noty-hide');
+            setTimeout(function () { n.remove(); }, 350);
+        }
+        x.addEventListener('click', dismiss);
+        n.addEventListener('click', dismiss);
+        setTimeout(dismiss, 9000);
+    }
+
+    // ---------- سطر تیکر ----------
+    function tickRow(p, flash) {
+        var row = document.createElement('div');
+        row.className = 'tick-row ' + (p.kind === 'ناشناس' ? 'err' : p.kind === 'ورود' ? 'ok' : '') + (flash ? ' flash' : '');
+        row.dataset.pid = p.id;
+
+        var av = document.createElement('span');
+        av.className = 'tick-av' + (p.kind === 'ناشناس' ? ' tick-av-bad' : '');
+        avFill(av, p.person, p.photo);
+
+        var body = document.createElement('div'); body.className = 'tick-body';
+        var l1 = document.createElement('div'); l1.className = 'tick-l1';
+        var nm = document.createElement('b'); nm.textContent = p.person || '—';
+        var kb = document.createElement('span');
+        kb.className = 'dir-badge ' + kindClass(p.kind);
+        kb.textContent = kindArrow(p.kind) + p.kind;
+        l1.appendChild(nm); l1.appendChild(kb);
+        var l2 = document.createElement('div'); l2.className = 'tick-l2';
+        l2.textContent = LBL.code + ' ' + faNum(p.code || 0) + (p.dept ? ' · ' + p.dept : '') + ' · 🖥️ ' + (p.device || '—') + (p.note ? ' · ' + p.note : '');
+        body.appendChild(l1); body.appendChild(l2);
+
+        var t = document.createElement('span'); t.className = 'tick-time'; t.textContent = p.time || '';
+        row.appendChild(av); row.appendChild(body); row.appendChild(t);
+        return row;
+    }
+
+    // ---------- دیوار دستگاه‌ها ----------
+    function paintDev(dv) {
+        var tile = document.querySelector('[data-dev-id="' + dv.id + '"]');
+        if (!tile) return;
+        var badge = tile.querySelector('[data-role="dev-badge"]');
+        if (badge) {
+            if (!dv.active) { badge.className = 'badge badge-mute'; badge.textContent = LBL.inactive; }
+            else if (dv.online) { badge.className = 'badge badge-ok'; badge.textContent = '🟢 ' + LBL.online; }
+            else { badge.className = 'badge badge-err'; badge.textContent = '🔴 ' + LBL.offline; }
+        }
+        var vis = tile.querySelector('[data-role="dev-vis"]');
+        if (vis) vis.className = 'dev-vis' + (dv.online ? ' on' : '');
+        var off = tile.querySelector('[data-role="dev-off"]');
+        if (off) off.style.display = dv.online ? 'none' : '';
+        var ls = tile.querySelector('[data-role="dev-lastseen"]');
+        if (ls) ls.textContent = LBL.lastConn + ' ' + (dv.lastSeenText || '—');
+
+        var todayEl = tile.querySelector('[data-role="dev-today"]');
+        if (todayEl) todayEl.textContent = faNum(dv.todayCount || 0);
+
+        if (dv.last) {
+            var avEl = tile.querySelector('[data-role="dev-av"]');
+            var nmEl = tile.querySelector('[data-role="dev-last"]');
+            var metaEl = tile.querySelector('[data-role="dev-lastmeta"]');
+            var sig = dv.last.person + '|' + dv.last.time;
+            if (nmEl) nmEl.textContent = dv.last.person;
+            if (metaEl) metaEl.textContent = (dv.last.kind === 'ورود' ? '⬅ ' + LBL.in : dv.last.kind === 'خروج' ? LBL.out + ' ➡' : '⬌ ' + dv.last.kind) + ' — ' + dv.last.time + ' · ' + LBL.code + ' ' + faNum(dv.last.code || 0);
+            if (avEl) {
+                var fresh = avEl.dataset.sig && avEl.dataset.sig !== sig;
+                avFill(avEl, dv.last.person, dv.last.photo);
+                avEl.dataset.sig = sig;
+                if (fresh && vis) { vis.classList.remove('pulse'); void vis.offsetWidth; vis.classList.add('pulse'); }
+            }
+        }
+    }
+
+    function setChip(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+
+    function paint(j) {
+        var k = j.chips || {};
+        setChip('chip-total', faNum(k.devices || 0));
+        setChip('chip-online', faNum(k.online || 0));
+        setChip('chip-today', faNum(k.todayTotal || 0));
+        setChip('chip-unknown', faNum(k.unknownToday || 0));
+        setChip('chip-last', k.lastText || '—');
+
+        (j.devices || []).forEach(paintDev);
+
+        var ps = j.punches || [];
+        // ترددهای تازه — قدیمی‌به‌جدید تا نوتیفیکیشنِ تازه‌ترین در گوشه بماند
+        for (var i = ps.length - 1; i >= 0; i--) {
+            if (known && !known[ps[i].id]) notify(ps[i]);
+        }
+
+        if (ticker) {
+            var seen = {};
+            ticker.textContent = '';
+            if (!ps.length) ticker.innerHTML = '<div class="empty">' + LBL.noPunch + '</div>';
+            ps.forEach(function (p) {
+                seen[p.id] = 1;
+                ticker.appendChild(tickRow(p, known && !known[p.id]));
+            });
+            known = seen;
+        }
+    }
+
+    // poll سفارشی ۶ ثانیه — ثبت در hrajTimers برای پاکسازی هنگام ناوبری pjax
+    function poll() {
+        if (document.hidden) return;
+        fetch('/Devices/PunchFeed' + window.location.search, {
+            credentials: 'same-origin',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (j) { if (j) paint(j); })
+            .catch(function () { /* خطای گذرا — چرخه بعدی */ });
+    }
+    poll();
+    var timer = setInterval(poll, 6000);
+    (window.hrajTimers = window.hrajTimers || []).push(timer);
+})();
+</script>
+}

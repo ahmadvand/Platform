@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = HrT.T("کارکرد من");
+
+    var jy = (int)ViewBag.JY; var jm = (int)ViewBag.JM;
+    var records = (List<AttendanceRecord>)ViewBag.Records;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("🕒 کارکرد ماه") @Jalali.MonthName(jm) @Jalali.ToPersianDigits(jy)</h2>
+        <form method="get" action="/Self/Attendance" class="toolbar">
+            <div class="fld"><label>@HrT.T("سال")</label>
+                <select name="y">
+                    @for (var y = jy - 2; y <= jy + 1; y++)
+                    {
+                        <option value="@y" selected="@(y == jy)">@Jalali.ToPersianDigits(y)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("ماه")</label>
+                <select name="m">
+                    @for (var m = 1; m <= 12; m++)
+                    {
+                        <option value="@m" selected="@(m == jm)">@Jalali.MonthName(m)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("تاریخ")</th><th>@HrT.T("روز")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("ورود")</th><th>@HrT.T("خروج")</th><th>@HrT.T("کارکرد")</th><th>@HrT.T("تأخیر")</th><th>@HrT.T("خروج زودتر")</th><th>@HrT.T("اضافه‌کاری")</th></tr></thead>
+            <tbody>
+                @foreach (var r in records)
+                {
+                    var dt = Jalali.ParseDateKey(r.Date);
+                    <tr>
+                        <td>@Jalali.FmtFa(dt)</td>
+                        <td>@Jalali.WeekdayName(dt)</td>
+                        <td><span class="badge @(r.Status == "حاضر" || r.Status == "تأخیر" ? "badge-ok" : r.Status == "غایب" ? "badge-err" : r.Status == "تأخیر" ? "badge-warn" : "badge-info")">@HrT.T(r.Status)</span></td>
+                        <td class="num">@(r.CheckIn is null ? "—" : Jalali.FmtTime(r.CheckIn.Value))</td>
+                        <td class="num">@(r.CheckOut is null ? "—" : Jalali.FmtTime(r.CheckOut.Value))</td>
+                        <td class="num">@Jalali.MinutesToHm(r.WorkMinutes)</td>
+                        <td class="num">@(r.LateMinutes > 0 ? Jalali.ToPersianDigits(r.LateMinutes) + " " + HrT.T("دقیقه") : "—")</td>
+                        <td class="num">@(r.EarlyMinutes > 0 ? Jalali.ToPersianDigits(r.EarlyMinutes) + " " + HrT.T("دقیقه") : "—")</td>
+                        <td class="num">@(r.OvertimeMinutes > 0 ? Jalali.ToPersianDigits(r.OvertimeMinutes) + " " + HrT.T("دقیقه") : "—")</td>
+                    </tr>
+                }
+                @if (records.Count == 0)
+                {
+                    <tr><td colspan="9"><div class="empty">@HrT.T("برای این ماه رکوردی ثبت نشده است.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

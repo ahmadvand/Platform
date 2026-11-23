@@ -1,0 +1,17 @@
+@{
+    var company = (Company)ViewBag.Company!;
+}
+<div data-modal-title="@HrT.F("ویرایش شرکت — {0}", company.Name)" hidden></div>
+<form method="post" action="/Companies/Edit" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@company.Id" />
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام شرکت") *</label><input name="name" value="@company.Name" required /></div>
+        <div class="fld"><label>@HrT.T("کد شرکت") *</label><input name="code" value="@company.Code" required dir="ltr" style="text-align:left" /></div>
+    </div>
+    <div class="hint" style="margin-top:8px">@HrT.T("کد شرکت در فیلترهای سراسری و کدهای موجودیت‌های وابسته دیده می‌شود — با دقت تغییر دهید")</div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره تغییرات")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

@@ -1,0 +1,167 @@
+@{
+    var d = (Device)Model;
+    var isPartial = Context.Request.Query["partial"].ToString() == "1";
+    var suggestedIp = (string?)ViewBag.SuggestedIp;
+    var isEdit = ViewBag.IsEdit is true;
+    var companies = (List<Company>)ViewBag.Companies;
+}
+<div data-modal-title="@(ViewBag.IsEdit is true ? HrT.T("ویرایش دستگاه") + " — " + d.Name : HrT.T("تعریف دستگاه جدید"))" hidden></div>
+    <form method="post" action="@(isEdit ? $"/Devices/Edit/{d.Id}" : "/Devices/Create")" class="card-b" id="devForm" data-mode="@(isEdit ? "edit" : "create")" data-ajax data-ajax-redirect="@(isPartial ? null : "/Devices")">
+        @Html.AntiForgeryToken()
+        @if (!isEdit)
+        {
+            <div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+                💡 <b>@HrT.T("نوع دستگاه")</b> @HrT.T("و") <b>@HrT.T("برند")</b> @HrT.T("را انتخاب کنید — بقیه فیلدها (کارکرد، فاصله پایش، مدل، سریال، IP آزاد و نام) بر اساس همان نوع به‌صورت پیش‌فرض پر می‌شوند و شما فقط اصلاح می‌کنید.")
+            </div>
+        }
+        <div class="form-grid">
+            <div class="fld"><label>@HrT.T("شرکت مالک *")</label>
+                <select name="companyId" required>
+                    @foreach (var c in companies)
+                    {
+                        <option value="@c.Id" selected="@(d.CompanyId == c.Id)">@c.Name (@c.Code)</option>
+                    }
+                </select>
+                <div class="hint">@HrT.T("پرسنل شناسایی‌شده توسط این دستگاه به همین شرکت اضافه می‌شود")</div>
+            </div>
+            <div class="fld"><label>@HrT.T("نوع دستگاه *")</label>
+                <select name="kind" id="fKind">
+                    @foreach (var k in DeviceDefaults.KindKeys)
+                    {
+                        <option value="@k" selected="@(d.Kind == k)">@DeviceDefaults.Kinds[k].Icon @HrT.T(k)</option>
+                    }
+                </select>
+                <div class="hint" id="bioHint">@HrT.T(DeviceDefaults.Kinds[d.Kind].BioHint)</div>
+            </div>
+            <div class="fld"><label>@HrT.T("برند *")</label>
+                <select name="brand" id="fBrand">
+                    @foreach (var b in DeviceDefaults.BrandKeys)
+                    {
+                        <option value="@b" selected="@(d.Brand == b)">@b</option>
+                    }
+                </select>
+                <div class="hint" id="protocolHint"></div>
+            </div>
+            <div class="fld"><label>@HrT.T("مدل")</label>
+                <select name="model" id="fModel"></select>
+                <div class="hint" id="portHint"></div>
+            </div>
+            <div class="fld fld-full"><label>@HrT.T("نام دستگاه") *</label>
+                <input name="name" id="fName" required value="@d.Name" placeholder="@HrT.T("مثال: ترمینال اثر انگشت ورودی اصلی")" />
+            </div>
+            <div class="fld"><label>@HrT.T("سریال") *</label>
+                <div style="display:flex;gap:6px">
+                    <input name="serial" id="fSerial" required value="@d.Serial" style="flex:1" />
+                    <button type="button" class="btn btn-sm" id="btnSerial" title="@HrT.T("تولید سریال جدید بر اساس برند و مدل")">@HrT.T("⟳ تولید")</button>
+                </div>
+            </div>
+            <div class="fld"><label>@HrT.T("آدرس IP") @(isEdit ? "" : HrT.T("(پیشنهاد خودکار)"))</label>
+                <input name="ip" id="fIp" value="@(d.Ip ?? suggestedIp ?? "")" placeholder="192.168.10.x" dir="ltr" />
+            </div>
+            <div class="fld"><label>@HrT.T("محل نصب")</label>
+                <input name="location" id="fLocation" value="@d.Location" placeholder="@HrT.T("مثال: ورودی اصلی سایت")" />
+            </div>
+            <div class="fld"><label>@HrT.T("کارکرد") *</label>
+                <select name="purpose" id="fPurpose">
+                    <option value="حضور و غیاب" selected="@(d.Purpose == "حضور و غیاب")">@HrT.T("حضور و غیاب")</option>
+                    <option value="کنترل تردد" selected="@(d.Purpose == "کنترل تردد")">@HrT.T("کنترل تردد")</option>
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("حالت اتصال") *</label>
+                <select name="mode" id="fMode">
+                    <option value="آنلاین" selected="@(d.Mode == "آنلاین")">@HrT.T("آنلاین")</option>
+                    <option value="آفلاین" selected="@(d.Mode == "آفلاین")">@HrT.T("آفلاین")</option>
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("فاصله پایش (ثانیه)")</label>
+                <input name="pollingInterval" id="fPolling" type="number" min="10" max="1440" value="@d.PollingInterval" />
+                <div class="hint">@HrT.T("کنترلر دسترسی: ۳۰ ثانیه — ترمینال‌ها: ۴۵ تا ۶۰ ثانیه")</div>
+            </div>
+            <div class="fld"><label>@HrT.T("نحوه اتصال گیت‌وی *")</label>
+                <select name="transport" id="fTransport">
+                    <option value="adms" selected="@(d.Transport == "adms")">@HrT.T("ADMS / PUSH — دستگاه به سرور متصل می‌شود")</option>
+                    <option value="tcp" selected="@(d.Transport == "tcp")">@HrT.T("TCP — پول مستقیم توسط گیت‌وی")</option>
+                </select>
+                <div class="hint">@HrT.T("دستگاه‌های ZKTeco معمولاً ADMS هستند؛ کنترلرهای ساده TCP")</div>
+            </div>
+            <div class="fld"><label>@HrT.T("پورت پروتکل دستگاه")</label>
+                <input name="devicePort" id="fDevicePort" type="number" min="1" max="65535" value="@d.DevicePort" placeholder="@HrT.T("پیش‌فرض گیت‌وی (4370)")" dir="ltr" />
+            </div>
+            <div class="fld"><label>@HrT.T("کلید ارتباطی (CommKey)")</label>
+                <input name="commKey" id="fCommKey" type="number" min="0" value="@d.CommKey" placeholder="@HrT.T("پیش‌فرض گیت‌وی (0)")" dir="ltr" />
+            </div>
+            <div class="fld"><label>@HrT.T("وضعیت")</label>
+                <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                    <input type="checkbox" name="active" value="true" checked="@d.Active" /> @HrT.T("دستگاه فعال باشد")
+                </label>
+            </div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px">
+            <button class="btn btn-primary">@(isEdit ? HrT.T("ذخیره تغییرات") : HrT.T("ثبت دستگاه"))</button>
+            <button type="button" class="btn" data-close-modal data-goto="/Devices">@HrT.T("انصراف")</button>
+        </div>
+    </form>
+
+
+    <script>
+        // کاتالوگ انواع/برندها — از سرور (DeviceDefaults) تزریق می‌شود
+        var CATALOG = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
+        {
+            kinds = DeviceDefaults.Kinds.ToDictionary(x => x.Key, x => new { x.Value.Purpose, x.Value.Polling, NamePrefix = HrT.T(x.Value.NamePrefix), BioHint = HrT.T(x.Value.BioHint) }),
+            brands = DeviceDefaults.Brands.ToDictionary(x => x.Key, x => new { x.Value.SerialPrefix, x.Value.Models, x.Value.Port, x.Value.Protocol }),
+            suggestedIp = suggestedIp,
+        }));
+
+        var form = document.getElementById('devForm');
+        var isEdit = form.dataset.mode === 'edit';
+        var $ = function (id) { return document.getElementById(id); };
+        var touched = { name: isEdit, serial: isEdit, port: isEdit }; // در ویرایش، مقادیر کاربر دست‌نخورده می‌ماند
+
+        $('fName').addEventListener('input', function () { touched.name = true; });
+        $('fSerial').addEventListener('input', function () { touched.serial = true; });
+
+        function pad(n) { return (n < 10 ? '00' : n < 100 ? '0' : '') + n; }
+        function suggestSerial() {
+            var brand = CATALOG.brands[$('fBrand').value];
+            var model = $('fModel').value || brand.Models[0];
+            $('fSerial').value = brand.SerialPrefix + '-' + model + '-' + Math.floor(1000 + Math.random() * 9000);
+        }
+        function suggestName() {
+            if (touched.name) return;
+            var k = CATALOG.kinds[$('fKind').value];
+            var loc = $('fLocation').value.trim();
+            $('fName').value = k.NamePrefix + ' ' + $('fBrand').value + ' ' + $('fModel').value + (loc ? ' — ' + loc : '');
+        }
+        function fillBrand() {
+            var b = CATALOG.brands[$('fBrand').value];
+            var sel = $('fModel');
+            sel.innerHTML = '';
+            b.Models.forEach(function (m) { sel.add(new Option(m, m)); });
+            $('protocolHint').textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پروتکل اتصال:")))' + ' ' + b.Protocol;
+            $('portHint').textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("پورت پیش‌فرض پروتکل:")))' + ' ' + b.Port;
+            if (!touched.port) $('fDevicePort').value = b.Port;
+            if (!touched.serial) suggestSerial();
+            suggestName();
+        }
+        function fillKind() {
+            var k = CATALOG.kinds[$('fKind').value];
+            $('fPurpose').value = k.Purpose;
+            $('fPolling').value = k.Polling;
+            $('bioHint').textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("قالب‌های هویتی معمول:")))' + ' ' + k.BioHint;
+            suggestName();
+        }
+
+        $('fKind').addEventListener('change', fillKind);
+        $('fBrand').addEventListener('change', fillBrand);
+        $('fModel').addEventListener('change', function () { if (!touched.serial) suggestSerial(); suggestName(); });
+        $('fLocation').addEventListener('input', suggestName);
+        $('fDevicePort').addEventListener('input', function () { touched.port = true; });
+        $('btnSerial').addEventListener('click', function () { touched.serial = true; suggestSerial(); });
+
+        // مقدار اولیه
+        fillBrand();
+        if (!isEdit) {
+            fillKind();
+            if (!$('fIp').value && CATALOG.suggestedIp) $('fIp').value = CATALOG.suggestedIp;
+        }
+    </script>

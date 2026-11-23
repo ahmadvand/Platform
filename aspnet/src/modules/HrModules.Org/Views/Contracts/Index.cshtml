@@ -1,0 +1,120 @@
+@{
+    // فاز ۱۳۲ (مورد ۱۰ ROADMAP-ADDITIONS) — قراردادها و احکام پرسنل
+    ViewData["Title"] = HrT.T("قراردادها و احکام");
+    var contracts = (List<Contract>)ViewBag.Contracts;
+    var decrees = (List<Decree>)ViewBag.Decrees;
+    var q = (string)ViewBag.Q;
+    var canEdit = Me.Get()!.Has("employees.edit");
+    var today = DateTime.Today;
+
+    string CBadge(string s) => s switch
+    {
+        "فعال" => "badge-ok",
+        "منقضی" => "badge-warn",
+        _ => "badge-mute",
+    };
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("قراردادهای پرسنل")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("جستجو")</label><input name="q" value="@q" placeholder="@HrT.T("نام، کد پرسنلی یا شماره سند")" /></div>
+            <button class="btn btn-dark">@HrT.T("جستجو")</button>
+            @if (canEdit)
+            {
+                <button type="button" class="btn btn-primary" data-modal="/Contracts/CreateContract" data-modal-title="@HrT.T("قرارداد جدید")">@HrT.T("+ قرارداد")</button>
+                <button type="button" class="btn btn-primary" data-modal="/Contracts/CreateDecree" data-modal-title="@HrT.T("حکم جدید")">@HrT.T("+ حکم")</button>
+            }
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("قرارداد فعال:") <b>@Jalali.Num(contracts.Count(c => c.Status == "فعال"))</b></span>
+            <span class="chip">@HrT.T("قرارداد آزمایشی در جریان:") <b>@Jalali.Num(contracts.Count(c => c.Type == "آزمایشی" && c.Status == "فعال"))</b></span>
+            <span class="chip">@HrT.T("احکام بدون اقرار:") <b class="text-danger">@Jalali.Num(decrees.Count(d => !d.Acknowledged))</b></span>
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("پرسنل")</th><th>@HrT.T("کد")</th><th>@HrT.T("واحد")</th><th>@HrT.T("شماره")</th>
+                        <th>@HrT.T("نوع")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th>@HrT.T("حقوق پایه")</th><th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in contracts)
+                    {
+                        var autoExpired = c.EndDate is not null && c.EndDate.Value.Date < today && c.Status == "فعال";
+                        <tr>
+                            <td><strong>@c.Employee?.FullName</strong></td>
+                            <td class="num">@Jalali.ToPersianDigits(c.Employee?.PersonnelCode ?? "")</td>
+                            <td>@c.Employee?.Department?.Name</td>
+                            <td>@c.ContractNo</td>
+                            <td>@HrT.T(c.Type)</td>
+                            <td class="num">@Jalali.FmtFaLong(c.StartDate)</td>
+                            <td class="num">@(c.EndDate is null ? "—" : Jalali.FmtFaLong(c.EndDate.Value))</td>
+                            <td class="num">@HrT.Num(c.Salary.ToString("N0"))</td>
+                            <td><span class="badge @(autoExpired ? "badge-err" : CBadge(c.Status))">@(autoExpired ? HrT.T("پایان یافته") : HrT.T(c.Status))</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!contracts.Any())
+        {
+            <p class="hint">@HrT.T("قراردادی برای نمایش وجود ندارد — با دکمهٔ «+ قرارداد» ثبت کنید")</p>
+        }
+    </div>
+</div>
+
+<div class="card" style="margin-top:18px">
+    <div class="card-h">
+        <h2>@HrT.T("حکم‌های پرسنل")</h2>
+        <span class="hint">@HrT.T("ابلاغ و اقرار — ترفیع، انتقال، تعلیق و…")</span>
+    </div>
+    <div class="card-b">
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("پرسنل")</th><th>@HrT.T("کد")</th><th>@HrT.T("شماره")</th><th>@HrT.T("نوع")</th>
+                        <th>@HrT.T("تاریخ")</th><th>@HrT.T("شرح")</th><th>@HrT.T("اقرار")</th>
+                        @if (canEdit) { <th></th> }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in decrees)
+                    {
+                        <tr>
+                            <td><strong>@d.Employee?.FullName</strong></td>
+                            <td class="num">@Jalali.ToPersianDigits(d.Employee?.PersonnelCode ?? "")</td>
+                            <td>@d.DecreeNo</td>
+                            <td>@HrT.T(d.Type)</td>
+                            <td class="num">@Jalali.FmtFaLong(d.Date)</td>
+                            <td>@(d.Content ?? "—")</td>
+                            <td><span class="badge @(d.Acknowledged ? "badge-ok" : "badge-warn")">@(d.Acknowledged ? HrT.T("اقرار شده") : HrT.T("ابلاغ‌شده — بدون اقرار"))</span></td>
+                            @if (canEdit && !d.Acknowledged)
+                            {
+                                <td>
+                                    <form method="post" action="/Contracts/AckDecree" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@d.Id" />
+                                        <button class="btn btn-sm">@HrT.T("ثبت اقرار")</button>
+                                    </form>
+                                </td>
+                            }
+                            else if (canEdit)
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!decrees.Any())
+        {
+            <p class="hint">@HrT.T("حکمی برای نمایش وجود ندارد — با دکمهٔ «+ حکم» ثبت کنید")</p>
+        }
+    </div>
+</div>

@@ -1,0 +1,281 @@
+@model List<NotificationRule>
+@{
+    ViewBag.Title = HrT.T("اعلان‌ها");
+    var settings = (NotificationSetting)ViewBag.Settings;
+    var ruleTypes = ((string Type, string Title)[])ViewBag.RuleTypes;
+    var canManage = (bool)ViewBag.CanManage;
+    var logs = (List<NotificationLog>?)ViewBag.Logs ?? new();
+    var alerts = (List<SecurityAlert>?)ViewBag.Alerts ?? new();
+    string AlertBadge(string sev) => sev switch
+    {
+        "بحرانی" => "badge-crit",
+        "بالا" => "badge-warn",
+        "متوسط" => "badge-info",
+        _ => "badge-mute",
+    };
+    string TypeTitle(string t) => ruleTypes.FirstOrDefault(x => x.Type == t).Title ?? t;
+    string ChannelBadge(bool email, bool sms, bool webhook)
+    {
+        var parts = new List<string>();
+        if (email) parts.Add(HrT.T("ایمیل"));
+        if (sms) parts.Add(HrT.T("پیامک"));
+        if (webhook) parts.Add(HrT.T("وب‌هوک"));
+        return parts.Count == 0 ? "—" : string.Join(" + ", parts);
+    }
+}
+@* فاز ۱۲۴-ب — هدر اعلان‌ها و بنر توضیح مطابق طرح Figma *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("اعلان‌ها")</h1>
+        <div class="page-sub">@HrT.F("{0} قاعدهٔ اعلان · {1} رویداد اعلام‌شدهٔ اخیر", Jalali.Num(Model.Count), Jalali.Num(logs.Count))</div>
+    </div>
+</div>
+<div class="notice notice-ok"><span class="n-ic">🔔</span><span>@HrT.T("قواعد اعلان، رویدادهای حساس سامانه را به کانال‌های تعریف‌شده اعلام می‌کنند؛ مجوزهای ارسال در همین صفحه تنظیم می‌شود.")</span></div>
+<div data-refresh-host>
+
+@* فاز ۹۲ (اشکال کاربر) — «مشاهده همه اعلان‌ها» خالی بود؛ اکنون هشدارهای بازِ زنگ
+   (همان منبع منوی زنگ نوار بالایی) با پیوند به صفحهٔ مربوطه در بالای همین صفحه‌اند. *@
+<div class="card">
+    <div class="card-h">
+        <h2>🔔 @HrT.T("هشدارهای باز")</h2>
+        <div class="btn-row">
+            <span class="badge @(alerts.Count > 0 ? "badge-warn" : "badge-ok")">@HrT.Num(alerts.Count) @HrT.T("مورد")</span>
+        </div>
+    </div>
+    <div class="card-b">
+        @if (alerts.Count == 0)
+        {
+            <div class="empty">@HrT.T("هشدار بازی وجود ندارد ✓")</div>
+        }
+        else
+        {
+            <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr>
+                    <th>@HrT.T("شدت")</th><th>@HrT.T("نوع")</th><th>@HrT.T("پیام")</th>
+                    <th>@HrT.T("منبع")</th><th>@HrT.T("زمان")</th><th>@HrT.T("عملیات")</th>
+                </tr></thead>
+                <tbody>
+                @foreach (var a in alerts)
+                {
+                    <tr>
+                        <td><span class="badge @AlertBadge(a.Severity)">@HrT.T(a.Severity)</span></td>
+                        <td><b>@HrT.T(a.Type)</b></td>
+                        <td>@a.Message</td>
+                        <td>@HrT.T(a.Source)</td>
+                        <td class="num">@Jalali.FmtLong(a.CreatedAt)</td>
+                        <td><a class="btn btn-sm" href="@SettingsService.AlertUrl(a.Type, a.Source)">@HrT.T("رفتن به صفحهٔ مربوطه ←")</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            </div>
+            <div class="hint" style="margin-top:8px">@HrT.T("برای علامت‌گذاری به‌عنوان خوانده‌شده، همان هشدار را از زنگ نوار بالایی باز کنید یا از صفحهٔ کنترل تردد آن را حل کنید.")</div>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>🔔 @HrT.T("موتور اعلان‌ها")</h2>
+        <div class="btn-row">
+            <span class="hint">@HrT.T("اجرای دوره‌ای خودکار هر ۳۰ دقیقه")</span>
+            @if (canManage)
+            {
+                <form method="post" asp-action="RunNow" class="inline-form" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-primary btn-sm">▶ @HrT.T("اجرای آزمایشی")</button>
+                </form>
+            }
+        </div>
+    </div>
+    <div class="card-b">
+
+        <div class="stat-grid">
+            <div class="stat c-ok"><div class="ic">📋</div><div><div class="v">@Model.Count</div><div class="l">@HrT.T("قاعده تعریف‌شده")</div></div></div>
+            <div class="stat"><div class="ic">▶</div><div><div class="v">@Model.Count(r => r.Enabled)</div><div class="l">@HrT.T("قاعده فعال")</div></div></div>
+            <div class="stat c-warn"><div class="ic">📨</div><div><div class="v">@(settings.EnabledEmail ? HrT.T("فعال") : HrT.T("خاموش"))</div><div class="l">@HrT.T("کانال ایمیل")</div></div></div>
+            <div class="stat @(settings.EnabledSms ? "c-ok" : "")"><div class="ic">📱</div><div><div class="v">@(settings.EnabledSms ? HrT.T("فعال") : HrT.T("خاموش"))</div><div class="l">@HrT.T("کانال پیامک")</div></div></div>
+        </div>
+
+        @if (!canManage)
+        {
+            <div class="toast toast-err">@HrT.T("برای مدیریت قواعد و تنظیمات اعلان دسترسی کافی ندارید (فقط مشاهده).")</div>
+        }
+
+        <table class="tbl">
+            <thead><tr>
+                <th>@HrT.T("نام قاعده")</th><th>@HrT.T("نوع")</th><th>@HrT.T("آستانه")</th><th>@HrT.T("کانال")</th>
+                <th>@HrT.T("گیرنده اختصاصی")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("آخرین اجرا")</th>
+                @if (canManage) { <th>@HrT.T("عملیات")</th> }
+            </tr></thead>
+            <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="8"><div class="empty">@HrT.T("هنوز قاعده‌ای تعریف نشده — با فرم پایین شروع کنید")</div></td></tr>
+            }
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td><b>@r.Name</b></td>
+                    <td>@TypeTitle(r.Type)</td>
+                    <td class="num">@r.Threshold</td>
+                    <td>@ChannelBadge(r.ViaEmail, r.ViaSms, r.ViaWebhook)</td>
+                    <td class="num">@(r.RecipientEmail ?? r.RecipientPhone ?? HrT.T("پیش‌فرض"))</td>
+                    <td>@if (r.Enabled) { <span class="badge badge-ok">@HrT.T("فعال")</span> } else { <span class="badge badge-mute">@HrT.T("خاموش")</span> }</td>
+                    <td class="num">@(r.LastRunAt is null ? HrT.T("—") : Jalali.FmtLong(r.LastRunAt.Value))</td>
+                    @if (canManage)
+                    {
+                        <td>
+                            <div class="btn-row">
+                                <button type="button" class="btn btn-sm" onclick="editRule(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(new { r.Id, r.Name, r.Type, r.Threshold, r.RecipientEmail, r.RecipientPhone, r.ViaEmail, r.ViaSms, r.ViaWebhook, r.Enabled })))">✏️</button>
+                                <form method="post" asp-action="ToggleRule" class="inline-form" data-ajax data-refresh>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <button class="btn btn-sm @(r.Enabled ? "btn-err" : "btn-ok")">@(r.Enabled ? HrT.T("توقف") : HrT.T("فعال‌سازی"))</button>
+                                </form>
+                                <form method="post" asp-action="DeleteRule" class="inline-form" data-confirm="@HrT.T("حذف این قاعده اعلان؟")" data-danger="1" data-ajax data-refresh>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <button class="btn btn-err btn-sm">🗑️</button>
+                                </form>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        @if (canManage)
+        {
+            <form method="post" asp-action="SaveRule" id="ruleForm" style="margin-top:14px" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="fId" />
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("نام قاعده") *</label><input name="name" id="fName" required placeholder="@HrT.T("مثلاً: تأخیر بالای ۱۵ دقیقه")" /></div>
+                    <div class="fld"><label>@HrT.T("نوع قاعده") *</label>
+                        <select name="type" id="fType">
+                            @foreach (var t in ruleTypes) { <option value="@t.Type">@t.Title</option> }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("آستانه (دقیقه یا روز)")</label><input name="threshold" id="fThreshold" type="number" min="1" max="1440" value="15" /></div>
+                    <div class="fld"><label>@HrT.T("ایمیل گیرنده اختصاصی")</label><input name="recipientEmail" id="fEmail" placeholder="@HrT.T("خالی = ایمیل مدیران از تنظیمات")" /></div>
+                    <div class="fld"><label>@HrT.T("موبایل گیرنده اختصاصی")</label><input name="recipientPhone" id="fPhone" placeholder="09xxxxxxxxx" /></div>
+                    <div class="fld"><label>@HrT.T("کانال‌ها")</label>
+                        <div class="btn-row" style="padding-top:7px">
+                            <label style="display:flex;gap:5px;align-items:center;font-size:12px"><input type="checkbox" name="viaEmail" id="fViaEmail" checked value="true" /> @HrT.T("ایمیل")</label>
+                            <label style="display:flex;gap:5px;align-items:center;font-size:12px"><input type="checkbox" name="viaSms" id="fViaSms" value="true" /> @HrT.T("پیامک")</label>
+                            <label style="display:flex;gap:5px;align-items:center;font-size:12px"><input type="checkbox" name="viaWebhook" id="fViaWebhook" value="true" /> @HrT.T("وب‌هوک")</label>
+                            <label style="display:flex;gap:5px;align-items:center;font-size:12px"><input type="checkbox" name="enabled" id="fEnabled" checked value="true" /> @HrT.T("فعال")</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-primary">💾 @HrT.T("ذخیره قاعده")</button>
+                    <button type="button" class="btn btn-sm" onclick="resetForm()" style="display:none" id="cancelEdit">@HrT.T("انصراف از ویرایش")</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+@if (canManage)
+{
+<div class="card">
+    <div class="card-h"><h2>⚙️ @HrT.T("تنظیمات کانال‌های ارسال")</h2><span class="hint">@HrT.T("SMTP ایمیل و سرویس پیامک (کاوه‌نگار/ملی‌پیامک/هر API سازگار)")</span></div>
+    <div class="card-b">
+        <form method="post" asp-action="Settings" data-ajax data-refresh>
+            @Html.AntiForgeryToken()
+            <div class="chips" style="margin-bottom:12px">
+                <label class="chip" style="cursor:pointer"><input type="checkbox" name="EnabledEmail" value="true" @(settings.EnabledEmail ? "checked" : "") /> @HrT.T("کانال ایمیل فعال")</label>
+                <label class="chip" style="cursor:pointer"><input type="checkbox" name="EnabledSms" value="true" @(settings.EnabledSms ? "checked" : "") /> @HrT.T("کانال پیامک فعال")</label>
+            </div>
+            <div class="form-grid">
+                <div class="fld"><label>SMTP Host</label><input name="SmtpHost" value="@settings.SmtpHost" placeholder="smtp.example.com" /></div>
+                <div class="fld"><label>SMTP Port</label><input name="SmtpPort" type="number" value="@settings.SmtpPort" /></div>
+                <div class="fld"><label>SMTP User</label><input name="SmtpUser" value="@settings.SmtpUser" /></div>
+                <div class="fld"><label>SMTP Password</label><input name="SmtpPass" type="password" placeholder="@HrT.T("خالی بگذارید تا تغییر نکند")" /></div>
+                <div class="fld"><label>@HrT.T("ایمیل فرستنده")</label><input name="FromEmail" value="@settings.FromEmail" placeholder="hr@example.com" /></div>
+                <div class="fld"><label>@HrT.T("ایمیل مدیران (گیرنده پیش‌فرض)")</label><input name="AdminEmails" value="@settings.AdminEmails" placeholder="boss@example.com, hr@example.com" /></div>
+                <div class="fld fld-full"><label>@HrT.T("آدرس API پیامک (با جای‌نگارها)")</label><input name="SmsApiUrl" value="@settings.SmsApiUrl" placeholder="https://api.kavenegar.com/v1/{apikey}/sms/send.json?receptor={phone}&message={message}&sender={sender}" /></div>
+                <div class="fld"><label>@HrT.T("API Key پیامک")</label><input name="SmsApiKey" type="password" placeholder="@HrT.T("خالی بگذارید تا تغییر نکند")" /></div>
+                <div class="fld"><label>@HrT.T("شماره فرستنده پیامک")</label><input name="SmsSender" value="@settings.SmsSender" placeholder="+98..." /></div>
+                @* فاز ۱۳۵ (مورد ۱۸) — کانال وب‌هوک *@
+                <div class="fld fld-full"><label>@HrT.T("URL وب‌هوک (JSON POST)")</label><input name="WebhookUrl" value="@settings.WebhookUrl" placeholder="https://example.com/hooks/hr" /></div>
+                <div class="fld fld-full"><label>@HrT.T("کلید امضای وب‌هوک (اختیاری)")</label><input name="WebhookSecret" type="password" placeholder="@HrT.T("هدر X-Hr-Signature با HMAC-SHA256 بدنه")" /></div>
+                <div class="fld"><label>@HrT.T("SSL برای SMTP")</label>
+                    <div class="btn-row" style="padding-top:7px">
+                        <label style="display:flex;gap:5px;align-items:center;font-size:12px"><input type="checkbox" name="SmtpSsl" value="true" @(settings.SmtpSsl ? "checked" : "") /> SSL/TLS</label>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-row"><button class="btn btn-primary">💾 @HrT.T("ذخیره تنظیمات")</button></div>
+        </form>
+    </div>
+</div>
+}
+
+<div class="card">
+    <div class="card-h"><h2>📨 @HrT.T("لاگ اعلان‌ها")</h2><span class="hint">@HrT.T("۵۰ مورد اخیر — sent: ارسال واقعی، simulated: بدون کانال فعال")</span></div>
+    <div class="card-b">
+        <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("قاعده")</th><th>@HrT.T("کانال")</th><th>@HrT.T("گیرنده")</th><th>@HrT.T("عنوان")</th><th>@HrT.T("وضعیت")</th></tr></thead>
+            <tbody>
+            @if (logs.Count == 0)
+            {
+                <tr><td colspan="6"><div class="empty">@HrT.T("لاگی ثبت نشده")</div></td></tr>
+            }
+            @foreach (var l in logs)
+            {
+                <tr>
+                    <td class="num">@Jalali.FmtLong(l.CreatedAt)</td>
+                    <td>@l.RuleName</td>
+                    <td>@(l.Channel == "email" ? HrT.T("ایمیل") : HrT.T("پیامک"))</td>
+                    <td class="num">@l.Recipient</td>
+                    <td>@l.Title</td>
+                    <td>
+                        @switch (l.Status)
+                        {
+                            case "sent": <span class="badge badge-ok">@HrT.T("ارسال شد")</span> break;
+                            case "failed": <span class="badge badge-err" title="@l.Error">@HrT.T("خطا")</span> break;
+                            default: <span class="badge badge-warn" title="@l.Error">@HrT.T("شبیه‌سازی")</span> break;
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function editRule(r) {
+    document.getElementById('fId').value = r.Id;
+    document.getElementById('fName').value = r.Name;
+    document.getElementById('fType').value = r.Type;
+    document.getElementById('fThreshold').value = r.Threshold;
+    document.getElementById('fEmail').value = r.RecipientEmail || '';
+    document.getElementById('fPhone').value = r.RecipientPhone || '';
+    document.getElementById('fViaEmail').checked = r.ViaEmail;
+    document.getElementById('fViaSms').checked = r.ViaSms;
+    document.getElementById('fViaWebhook').checked = r.ViaWebhook;
+    document.getElementById('fEnabled').checked = r.Enabled;
+    document.getElementById('cancelEdit').style.display = '';
+    document.getElementById('ruleForm').scrollIntoView({ behavior: 'smooth' });
+}
+function resetForm() {
+    document.getElementById('ruleForm').reset();
+    document.getElementById('fId').value = '';
+    document.getElementById('fThreshold').value = 15;
+    document.getElementById('fViaEmail').checked = true;
+    document.getElementById('fEnabled').checked = true;
+    document.getElementById('cancelEdit').style.display = 'none';
+}
+</script>
+}
+
+</div>

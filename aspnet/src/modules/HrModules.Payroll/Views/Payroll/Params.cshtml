@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = HrT.T("پارامترهای سالانه حقوق");
+    var rows = (List<PayrollParameter>)Model;
+    var companies = (List<Company>)ViewBag.Companies;
+    var companyId = (string?)ViewBag.CompanyId;
+    var year = (int)ViewBag.Year;
+    var canManage = Me.Get()!.Has("payroll.params.edit");
+    var now = Jalali.ToJalali(DateTime.Now);
+}
+<div class="chips">
+    <form method="get" action="/Payroll/Params" style="display:flex;gap:8px;align-items:end">
+        <div class="fld" style="margin:0"><label>@HrT.T("شرکت")</label>
+            <select name="companyId" onchange="this.form.submit()">
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id" selected="@(companyId == c.Id)">@c.Name</option>
+                }
+            </select>
+        </div>
+        <div class="fld" style="margin:0"><label>@HrT.T("سال جلالی")</label>
+            <select name="year" onchange="this.form.submit()">
+                @for (int y = now.Y + 1; y >= now.Y - 4; y--)
+                {
+                    <option value="@y" selected="@(year == y)">@Jalali.ToPersianDigits(y)</option>
+                }
+            </select>
+        </div>
+    </form>
+    @if (canManage)
+    {
+        <a class="btn btn-sm btn-primary" href="/Payroll/ParamCreate?companyId=@companyId&year=@year" data-modal="/Payroll/ParamCreate?companyId=@companyId&year=@year" data-modal-title="@(HrT.F("پارامتر جدید — {0}", Jalali.ToPersianDigits(year)))" style="margin-inline-start:auto">@HrT.T("＋ پارامتر جدید")</a>
+    }
+</div>
+
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("📐 همه مبالغ به") <b>@Money.CurTitle()</b> @HrT.T("است. پارامترها در فرمول اقلام با کدشان صدا زده می‌شوند (مثال:") <code>حق_مسکن</code>@HrT.T(").")
+    @HrT.T("«پلکان_مالیات» خاص است: JSON پله‌های [سقف مبلغ، نرخ درصدی] — سقف ۰ یعنی نامحدود.")
+    @HrT.T("تغییر سال حقوق جدید = کپی پارامترهای سال قبل و اصلاح مبالغ.")
+</div>
+
+<div data-refresh-host>
+    <div class="card" style="overflow:auto">
+        <table class="tbl">
+            <thead>
+                <tr><th>@HrT.T("کد")</th><th>@HrT.T("عنوان")</th><th class="num">@HrT.F("مقدار ({0})", Money.CurTitle())</th><th>@HrT.T("مقدار متنی")</th>
+                    @if (canManage)
+                    {
+                        <th>@HrT.T("عملیات")</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in rows)
+                {
+                    <tr>
+                        <td dir="ltr" style="text-align:right"><code>@p.Code</code></td>
+                        <td><b>@p.Title</b></td>
+                        <td class="num">@Jalali.Num((long)p.Value)</td>
+                        <td dir="ltr" style="text-align:right"><code style="font-size:10px">@(p.StrValue ?? "—")</code></td>
+                        @if (canManage)
+                        {
+                            <td>
+                                <div style="display:flex;gap:6px">
+                                    <a class="btn btn-sm" href="/Payroll/ParamEdit/@p.Id?companyId=@companyId&year=@year" data-modal="/Payroll/ParamEdit/@p.Id?companyId=@companyId&year=@year" data-modal-title="@(HrT.F("ویرایش پارامتر — {0}", p.Title))">✎</a>
+                                    <form method="post" action="/Payroll/ParamDelete" class="inline-form" data-ajax data-refresh data-confirm="@(HrT.F("حذف پارامتر «{0}»؟", p.Title))">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <input type="hidden" name="companyId" value="@companyId" />
+                                        <input type="hidden" name="jYear" value="@year" />
+                                        <button class="btn btn-sm btn-err">🗑️</button>
+                                    </form>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+                @if (!rows.Any())
+                {
+                    <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">@HrT.T("برای این شرکت/سال پارامتری ثبت نشده است")</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

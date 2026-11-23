@@ -1,0 +1,160 @@
+@{
+    var i = (PayItem)Model;
+    var isEdit = ViewBag.IsEdit is true;
+    var companyId = (string)ViewBag.CompanyId;
+    var depts = (List<Department>)ViewBag.Depts;
+    var positions = (List<Position>)ViewBag.Positions;
+    var shifts = (List<AttShiftInfo>)ViewBag.Shifts; // فاز ۶۱ — از قرارداد حضور (IAttendanceGateway.ActiveShiftsAsync)
+    var emps = (List<Employee>)ViewBag.Emps;
+}
+<div data-modal-title="@(isEdit ? HrT.F("ویرایش قلم — {0}", i.Title) : HrT.T("قلم حقوق جدید"))" hidden></div>
+<form method="post" action="/Payroll/ItemSave" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@(isEdit ? i.Id : "")" /> @* در Create خالی — وگرنه ItemSave مسیر ویرایش می‌رود و NotFound می‌دهد *@
+    <input type="hidden" name="companyId" value="@(isEdit ? i.CompanyId : companyId)" />
+    <div class="form-grid">
+        @* فاز ۹۳ — hint از label جدا شد تا برچسب یک‌سطر بماند و باکس «کد قلم» هم‌سطح بقیه بایستد *@
+        <div class="fld"><label>@HrT.T("کد قلم *")</label>
+            <input name="code" required minlength="2" value="@i.Code" dir="ltr" style="text-align:left" placeholder="masken" />
+            <div class="hint">@HrT.T("(در فرمول‌ها با قلم('کد') صدا زده می‌شود)")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("عنوان *")</label>
+            <input name="title" required value="@i.Title" placeholder="@(HrT.T("حق مسکن"))" />
+        </div>
+        <div class="fld"><label>@HrT.T("نوع *")</label>
+            <select name="kind">
+                @foreach (var k in Platform.Web.Controllers.PayrollController.ItemKinds)
+                {
+                    <option value="@k" selected="@(i.Kind == k)">@HrT.T(k)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("ترتیب محاسبه/نمایش")</label>
+            <input name="order" type="number" value="@i.Order" />
+        </div>
+        <div class="fld fld-full"><label>@HrT.T("فرمول *")</label>
+            <textarea name="formula" id="fFormula" required rows="3" dir="ltr" style="text-align:left;font-family:var(--mono,monospace);font-size:12px">@i.Formula</textarea>
+            <div id="fFormulaBuilder"></div> @* فاز ۴۴ — سازندهٔ بصری (Drag & Drop) — هم‌زمان همان textarea را پر می‌کند *@
+            <div class="hint">@HrT.T("بلوک‌ها را بکشید و رها کنید یا دستی بنویسید — مثال:") <code dir="ltr">دقیقه_اضافه_کاری / 60 * ساعتی * 1.4</code></div>
+        </div>
+        <div class="fld"><label>@HrT.T("هدف‌گیری *")</label>
+            <select name="scopeType" id="fScope">
+                @foreach (var s in Platform.Web.Controllers.PayrollController.ScopeTypes)
+                {
+                    <option value="@s" selected="@(i.ScopeType == s)">@HrT.T(s)</option>
+                }
+            </select>
+        </div>
+        <div class="fld" id="fldScopeId" style="@(i.ScopeType == "همه" ? "display:none" : "")"><label>@HrT.T("هدف *")</label>
+            @if (i.ScopeType == "پرسنل")
+            {
+                @* فاز ۱۲۱ — هدف «پرسنل» با جستجوی زندهٔ سرور (emp-picker) — به‌جای آرایهٔ ۱۰هزارتایی *@
+                var selEmp = emps.FirstOrDefault(e => e.Id == i.ScopeId);
+                <div class="emp-picker" data-name="scopeId" data-min="1"
+                     data-selected="@System.Text.Json.JsonSerializer.Serialize(selEmp is null
+                         ? Array.Empty<object>()
+                         : new[] { new { id = selEmp.Id, label = $"{selEmp.PersonnelCode} — {selEmp.FullName}" } })"
+                     data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+            }
+            else
+            {
+                <select name="scopeId" id="fScopeId">
+                    @if (i.ScopeType == "دپارتمان")
+                    {
+                        foreach (var d in depts)
+                        {
+                            <option value="@d.Id" selected="@(i.ScopeId == d.Id)">@d.Name</option>
+                        }
+                    }
+                    else if (i.ScopeType == "پست")
+                    {
+                        foreach (var p in positions)
+                        {
+                            <option value="@p.Id" selected="@(i.ScopeId == p.Id)">@p.Title</option>
+                        }
+                    }
+                    else if (i.ScopeType == "شیفت")
+                    {
+                        foreach (var s in shifts)
+                        {
+                            <option value="@s.Id" selected="@(i.ScopeId == s.Id)">@s.Name (@s.StartTime–@s.EndTime)</option>
+                        }
+                    }
+                    else if (i.ScopeType == "استخدام")
+                    {
+                        foreach (var t in new[] { "رسمی", "قراردادی", "پیمانکاری", "اقماری", "کارآموز" })
+                        {
+                            <option value="@t" selected="@(i.ScopeId == t)">@HrT.T(t)</option>
+                        }
+                    }
+                </select>
+            }
+        </div>
+        <div class="fld"><label>@HrT.T("اولویت (در کدهای تکراری)")</label>
+            <input name="priority" type="number" value="@i.Priority" />
+            <div class="hint">@HrT.T("بالاتر = برنده در تعارض کد یکسان")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("وضعیت")</label>
+            <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                <input type="checkbox" name="active" value="true" checked="@i.Active" /> @HrT.T("قلم فعال باشد")
+            </label>
+        </div>
+        <div class="fld fld-full">
+            <label>@HrT.T("مشمولیت‌ها")</label>
+            <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:6px;font-size:12px">
+                <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="taxable" value="true" checked="@i.Taxable" /> @HrT.T("مشمول مالیات")</label>
+                <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="insurable" value="true" checked="@i.Insurable" /> @HrT.T("مشمول بیمه")</label>
+                <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="continuous" value="true" checked="@i.Continuous" /> @HrT.T("مستمر (غیرمستمر = نرخ مقطوع مالیات)")</label>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره قلم")</button>
+        <button type="button" class="btn" data-close-modal data-goto="/Payroll/Items">@HrT.T("انصراف")</button>
+    </div>
+</form>
+<script>
+    // فاز ۴۴ — سازندهٔ بصری فرمول: پالت متغیرها/توابع/اقلام همین شرکت + درگ‌ودراپ روی بوم
+    // (با گارد + fallback DOMContentLoaded — اگر JS هنوز لود نشده باشد؛ در مودال همیشه هم‌اکنون آماده است)
+    (function () {
+        function boot() {
+            if (!window.hrajFormulaBuilder || !document.getElementById('fFormulaBuilder')) return false;
+            window.hrajFormulaBuilder(document.getElementById('fFormula'), {
+                mount: document.getElementById('fFormulaBuilder'),
+                vars: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(PayrollEngine.VarDocs.Select(v => new { c = v.Code, t = v.Title }))),
+                funcs: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(PayrollEngine.FunctionDocs.Select(f => new { n = f.Name, sig = f.Sig, d = f.Desc }))),
+                items: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ItemCodes ?? new object[0])),
+            });
+            return true;
+        }
+        if (!boot()) document.addEventListener('DOMContentLoaded', boot);
+    })();
+</script>
+<script>
+    (function () {
+        var scope = document.getElementById('fScope'), wrap = document.getElementById('fldScopeId');
+        scope.addEventListener('change', function () {
+            if (scope.value === 'همه') { wrap.style.display = 'none'; return; }
+            wrap.style.display = '';
+            // فاز ۱۲۱ — هدف «پرسنل» = انتخابگر جستجومحور (بدون آرایهٔ کامل پرسنل در صفحه)
+            if (scope.value === 'پرسنل') {
+                wrap.innerHTML = '<div class="emp-picker" data-name="scopeId" data-min="1"></div>';
+                if (window.empPickerBoot) window.empPickerBoot(wrap);
+                return;
+            }
+            // بازسازی گزینه‌ها بر اساس نوع هدف
+            wrap.innerHTML = '<select name="scopeId" id="fScopeId"></select>';
+            var sel = document.getElementById('fScopeId');
+            var opts = [];
+            if (scope.value === 'دپارتمان') opts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(depts.Select(d => new { v = d.Id, t = d.Name })));
+            else if (scope.value === 'پست') opts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(positions.Select(p => new { v = p.Id, t = p.Title })));
+            else if (scope.value === 'شیفت') opts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(shifts.Select(s => new { v = s.Id, t = s.Name + " (" + s.StartTime + "–" + s.EndTime + ")" })));
+            else if (scope.value === 'استخدام') opts = ['رسمی', 'قراردادی', 'پیمانکاری', 'اقماری', 'کارآموز'].map(function (t) { return { v: t, t: t }; });
+            opts.forEach(function (o) {
+                var el = document.createElement('option');
+                el.value = o.v; el.textContent = o.t;
+                sel.appendChild(el);
+            });
+        });
+    })();
+</script>

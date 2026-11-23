@@ -1,0 +1,171 @@
+@{
+    ViewData["Title"] = HrT.T("پرسنل");
+    var employees = (List<Employee>)Model;
+    var depts = (List<Department>)ViewBag.Depts;
+    var positions = (List<Position>)ViewBag.Positions;
+    var shifts = (IEnumerable<dynamic>)(ViewBag.Shifts ?? System.Linq.Enumerable.Empty<object>()); // فاز ۶۷ — بدون نوع ماژول
+    var canManage = Me.Get()!.Has("employees.create") || Me.Get()!.Has("employees.edit") || Me.Get()!.Has("employees.delete");
+    var userByEmp = ViewBag.UserByEmp as Dictionary<string, User> ?? new Dictionary<string, User>();
+    // فاز ۱۲۷ — پرسنل مطابق طرح Figma صفحهٔ ۴: هدر داده‌محور + کارت فیلتر + دفتر کارکنان + خلاصهٔ فهرست
+    // همهٔ شمارش‌ها از خود فهرستِ همین صفحه می‌آید — هیچ عددی جعل نمی‌شود.
+    int active = employees.Count(e => e.Status == "فعال");
+    int inactive = employees.Count - active;
+    int linked = employees.Count(e => userByEmp.ContainsKey(e.Id));
+    int deptsUsed = employees.Where(e => e.DepartmentId != null).Select(e => e.DepartmentId).Distinct().Count();
+}
+
+@* ============ هدر پرسنل — طرح Figma صفحهٔ ۴: عنوان + زیرنویس داده‌محور + اکشن‌های موجود ============ *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("پرسنل")</h1>
+        <div class="page-sub">@HrT.F("{0} کارکنان در فهرست · {1} فعال · {2} غیرفعال · {3} واحد سازمانی — {4}", Jalali.Num(employees.Count), Jalali.Num(active), Jalali.Num(inactive), Jalali.Num(deptsUsed), Jalali.FmtFa(DateTime.Now))</div>
+    </div>
+    @if (canManage || Me.Get()!.Has("reports.export"))
+    {
+        <div class="page-actions">
+            @if (Me.Get()!.Has("reports.export"))
+            {
+                <a class="btn" href="/Export/Employees" title="@(HrT.T("خروجی اکسل فهرست پرسنل"))">@HrT.T("📤 برون‌ریزی اکسل")</a>
+            }
+            @if (canManage)
+            {
+                <a class="btn" href="/Employees/Import">@HrT.T("📥 ورود گروهی از اکسل")</a>
+                <button class="btn btn-primary" data-modal="/Employees/Create" data-modal-title="@(HrT.T("ثبت پرسنل جدید"))">@HrT.T("+ ثبت پرسنل جدید")</button>
+            }
+        </div>
+    }
+</div>
+
+@* ============ کارت فیلتر — همان فرم و رفتار قبلی با چیدمان طرح ============ *@
+<div class="card">
+    <div style="padding:14px 18px">
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("جستجو")</label><input name="q" value="@ViewBag.Q" placeholder="@(HrT.T("نام یا کد پرسنلی..."))" /></div>
+            <div class="fld"><label>@HrT.T("واحد")</label>
+                <select name="deptId"><option value="">@HrT.T("همه واحدها")</option>
+                    @foreach (var d in depts)
+                    {
+                        <option value="@d.Id" selected="@(ViewBag.DeptId == d.Id)">@d.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("شرکت")</label>
+                <select name="co"><option value="">@HrT.T("همه شرکت‌ها")</option>
+                    @foreach (var c in (List<Company>)ViewBag.Companies)
+                    {
+                        <option value="@c.Id" selected="@(ViewBag.Co == c.Id)">@c.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("نوع اشتغال")</label>
+                <select name="type"><option value="">@HrT.T("همه")</option>
+                    @foreach (var t in new[] { "رسمی", "قراردادی", "پیمانکاری", "اقماری", "کارآموز" })
+                    {
+                        <option value="@t" selected="@(ViewBag.Type == t)">@HrT.T(t)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("اعمال فیلتر")</button>
+            <a href="/Employees" class="btn">@HrT.T("حذف فیلتر")</a>
+        </form>
+    </div>
+    <div class="card-foot">@HrT.T("جستجو فقط در همین محدوده — فیلترها روی فهرست زندهٔ زیر اعمال می‌شوند.")</div>
+</div>
+
+@* ============ دفتر کارکنان — حفظ کامل همهٔ ستون‌ها و اکشن‌ها ============ *@
+<div class="card">
+    <div class="card-h">
+        <div>
+            <h2>🗂️ @HrT.T("دفتر کارکنان")</h2>
+            <div class="hint">@HrT.F("فهرست زنده · {0} رکورد نمایش‌داده‌شده در محدودهٔ دسترسی شما", Jalali.Num(employees.Count))</div>
+        </div>
+    </div>
+    <div class="table-wrap" data-refresh-host>
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th>@HrT.T("کد")</th><th>@HrT.T("نام و نام خانوادگی")</th><th>@HrT.T("شرکت")</th><th>@HrT.T("واحد")</th><th>@HrT.T("پست")</th>
+                    <th>@HrT.T("نوع")</th><th>@HrT.T("شیفت")</th><th>@HrT.T("تماس")</th><th>@HrT.T("حساب کاربری")</th>
+                    <th class="num">@HrT.T("حقوق پایه")</th><th class="num">@HrT.T("مانده مرخصی")</th><th>@HrT.T("وضعیت")</th>
+                    @if (canManage)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in employees)
+                {
+                    <tr>
+                        <td class="num">@Jalali.ToPersianDigits(e.PersonnelCode)</td>
+                        <td>
+                            <div style="display:flex;gap:9px;align-items:center">
+                                @if (!string.IsNullOrEmpty(e.PhotoPath))
+                                {
+                                    <img src="@e.PhotoPath" alt="" style="width:32px;height:32px;border-radius:10px;object-fit:cover;border:1px solid var(--line)" />
+                                }
+                                else
+                                {
+                                    <span class="avatar avatar-sm">@Jalali.ToPersianDigits(e.FullName.Trim()[..1])</span>
+                                }
+                                <strong>@e.FullName</strong>
+                            </div>
+                        </td>
+                        <td style="font-size:11px">@(e.Company?.Name ?? "—")</td>
+                        <td>@e.Department?.Name</td>
+                        <td>@e.Position?.Title</td>
+                        <td><span class="badge badge-mute">@e.EmploymentType</span></td>
+                        <td>@(e.ShiftId != null && ViewBag.ShiftNameById is Dictionary<string, string> sn && sn.TryGetValue(e.ShiftId, out var shn) ? shn : "—")</td>
+                        <td class="num">@Jalali.ToPersianDigits(e.Phone ?? "—")</td>
+                        <td>
+                            @if (userByEmp.TryGetValue(e.Id, out var lu))
+                            {
+                                <span class="badge badge-info" title="@(HrT.T("کاربر متصل به این پرسنل"))">@lu.Username</span>
+                            }
+                            else
+                            {
+                                <span style="color:var(--ink-3)">—</span>
+                            }
+                        </td>
+                        <td class="num">@Money.Fmt(e.BaseSalary)</td>
+                        <td class="num">@Jalali.ToPersianDigits((e.AnnualLeaveEnt - e.AnnualLeaveUsed).ToString("0.#")) @HrT.T("روز")</td>
+                        <td><span class="badge @(e.Status == "فعال" ? "badge-ok" : "badge-mute")">@HrT.T(e.Status)</span></td>
+                        @if (canManage)
+                        {
+                            <td>
+                                <div class="btn-row" style="gap:4px">
+                                    <a class="btn btn-sm" href="/Employees/Edit/@e.Id" data-modal="/Employees/Edit/@e.Id" data-modal-title="@(HrT.F("ویرایش پرسنل — {0}", e.FullName))" title="@(HrT.T("ویرایش اطلاعات پرسنل"))">@HrT.T("✎ ویرایش")</a>
+                                    <form method="post" action="/Employees/Toggle" class="inline-form" data-confirm="@(HrT.F("تغییر وضعیت «{0}»؟", e.FullName))" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@e.Id" />
+                                        <button class="btn btn-sm @(e.Status == "فعال" ? "btn-err" : "btn-ok")">
+                                            @(e.Status == "فعال" ? HrT.T("غیرفعال‌سازی") : HrT.T("فعال‌سازی"))
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!employees.Any())
+        {
+            <div class="empty">@HrT.T("پرسنلی با این شرایط یافت نشد")</div>
+        }
+    </div>
+</div>
+
+@* ============ خلاصهٔ فهرست — قرص‌های آماری واقعی از همین صفحه (مطابق کارت خلاصهٔ طرح) ============ *@
+<div class="card">
+    <div class="card-h"><h2>📌 @HrT.T("خلاصهٔ فهرست پرسنل")</h2></div>
+    <div class="card-b">
+        <div class="btn-row">
+            <span class="badge badge-ok">@HrT.F("{0} پرسنل فعال", Jalali.Num(active))</span>
+            <span class="badge badge-mute">@HrT.F("{0} غیرفعال", Jalali.Num(inactive))</span>
+            <span class="badge badge-info">@HrT.F("{0} حساب کاربری متصل", Jalali.Num(linked))</span>
+            <span class="badge badge-warn">@HrT.F("{0} بدون حساب کاربری", Jalali.Num(employees.Count - linked))</span>
+        </div>
+        <div class="hint" style="margin-top:10px">@HrT.T("آمارها از فهرست زندهٔ همین صفحه محاسبه می‌شود؛ شیفت‌ها از ماژول حضور و واحدها از چارت سازمانی.")</div>
+    </div>
+</div>

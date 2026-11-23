@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = HrT.T("تنظیمات محاسبه حقوق");
+    var companies = (List<Company>)ViewBag.Companies;
+    var settings = (Dictionary<string, PayrollSetting>)ViewBag.Settings;
+    var canManage = Me.Get()!.Has("payroll.settings");
+}
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("⚙️ هر شرکت روش محاسبه و منبع مقادیر تردد مستقل خودش را انتخاب می‌کند — هر دو روش پشتیبانی می‌شود.")
+    @HrT.T("مبالغ همگی") <b>@Money.CurTitle()</b> @HrT.T("است.")
+</div>
+
+<div class="grid two-col" style="align-items:start">
+    @foreach (var c in companies)
+    {
+        var s = settings.GetValueOrDefault(c.Id) ?? new PayrollSetting { CompanyId = c.Id };
+        <div class="card">
+            <div class="card-h"><h2>@c.Name</h2><span class="badge badge-info" dir="ltr">@c.Code</span></div>
+            <form method="post" action="/Payroll/SettingsSave" class="card-b" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="companyId" value="@c.Id" />
+                <div class="fld" style="margin-bottom:10px"><label>@HrT.T("روش محاسبه *")</label>
+                    <select name="calcMethod">
+                        <option value="ماهانه" selected="@(s.CalcMethod == "ماهانه")">@HrT.T("ماهانه ثابت — پایه کامل ماه، کسور غیبت روزشمار")</option>
+                        <option value="کارکردی" selected="@(s.CalcMethod == "کارکردی")">@HrT.T("کارکردی — پایه روزشمار بر اساس روزهای پرداختی")</option>
+                    </select>
+                </div>
+                <div class="fld" style="margin-bottom:10px"><label>@HrT.T("منبع مقادیر تردد (اولویت) *")</label>
+                    <select name="workSource">
+                        <option value="1" selected="@(s.WorkSource == 1)">@HrT.T("۱ — سطح رکورد: جمع فیلدهای آماده رکورد تردد")</option>
+                        <option value="2" selected="@(s.WorkSource == 2)">@HrT.T("۲ — روزشمار با وضعیت‌های تأییدشده (اصلاحات/مرخصی/مأموریت/تعطیل) — پیش‌فرض")</option>
+                        <option value="3" selected="@(s.WorkSource == 3)">@HrT.T("۳ — روزشمار + اضافه‌کاری فقط از مجوزهای تأییدشده")</option>
+                    </select>
+                    <div class="hint">@HrT.T("پیش‌فرض سامانه اولویت ۲ است — روزهای ماه از رکورد تردد نهایی (پس از اصلاحات) شمرده می‌شود.")</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-bottom:10px">
+                    <div class="fld" style="margin:0;flex:1"><label>@HrT.T("روزهای ماه")</label>
+                        <input name="monthDays" type="number" min="28" max="31" value="@s.MonthDays" />
+                    </div>
+                    <div class="fld" style="margin:0;flex:1"><label>@HrT.T("ساعت پایه ماه")</label>
+                        <input name="hourBase" type="number" min="120" max="260" value="@s.HourBase" />
+                    </div>
+                    <div class="fld" style="margin:0;flex:1"><label>@HrT.F("رند مبلغ ({0})", Money.CurTitle())</label>
+                        <select name="roundUnit">
+                            <option value="0" selected="@(s.RoundUnit == 0)">@HrT.F("بدون رند ({0})", Money.CurTitle())</option>
+                            <option value="100" selected="@(s.RoundUnit == 100)">@HrT.Num(100) @Money.Sym()</option>
+                            <option value="1000" selected="@(s.RoundUnit == 1000)">@HrT.Num(1000) @Money.Sym()</option>
+                            <option value="10000" selected="@(s.RoundUnit == 10000)">@HrT.Num(10000) @Money.Sym()</option>
+                        </select>
+                    </div>
+                </div>
+                @if (canManage)
+                {
+                    <button class="btn btn-primary">@HrT.T("ذخیره تنظیمات")</button>
+                }
+                else
+                {
+                    <div class="hint">@HrT.T("فقط مدیر حقوق و دستمزد می‌تواند تغییر دهد")</div>
+                }
+            </form>
+        </div>
+    }
+</div>

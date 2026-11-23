@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    ============================================================
+    HrModules.Payroll (فاز ۵۸) — ماژول حقوق و دستمزد، پروژهٔ جدا
+    ============
+    کنترلر لیست حقوق (اقلام فرمول‌ساز، پارامترهای سالانه، اجرا، فیش،
+    عیدی و تسویه) و همهٔ ویوها در همین اسمبلی کامپایل می‌شوند.
+
+    بستهٔ مشتری بدون این ماژول:
+      dotnet publish -p:HrModulePayroll=false
+    در این حالت DLL ماژول از خروجی حذف می‌شود (نه فقط خاموش — «نصب نیست»).
+
+    متعهد به: Platform.Core (پلتفرم مشترک) — وابستگی یک‌طرفه.
+    موتور محاسبه (PayrollEngine/PayrollFormula) و EssAuth در پلتفرم
+    مشترک‌اند چون DbSeeder و پرتال «من» هاست هم از آن‌ها استفاده می‌کنند.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+    <!-- پشتیبانی صریح Razor برای MVC — بدون این، ویوها در اسمبلی کامپایل نمی‌شوند -->
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فاز ۶۱ — لایهٔ دیتای ماژول در پروژهٔ جدا (HrModules.X.Data) کامپایل می‌شود؛
+         این پروژه فقط کنترلر/ویو/سرویس است تا نوع‌ها دوبار تعریف نشوند (CS0433) -->
+    <Compile Remove="Data\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- خروجی اکسل لیست حقوق (همان نسخهٔ هاست) -->
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform.Core\Platform.Core.csproj" />
+    <!-- فاز ۶۸ — پرتال من (SelfPayController) به MvcBase/سرویس‌های هاست نیاز دارد — جهت وابستگی یک‌طرفه باقی می‌ماند: هاست هرگز به ماژول ارجاع ندارد -->
+    <ProjectReference Include="..\..\Platform.Web\Platform.Web.csproj" />
+    <ProjectReference Include="Data\HrModules.Payroll.Data.csproj" />
+  </ItemGroup>
+
+</Project>

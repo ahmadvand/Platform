@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = HrT.T("شرکت‌ها");
+    var companies = (List<Company>)Model;
+    var canManage = Me.Get()!.Has("companies.create") || Me.Get()!.Has("companies.edit") || Me.Get()!.Has("companies.delete");
+    var deptCounts = (Dictionary<string, int>)ViewBag.DeptCounts;
+    var posCounts = (Dictionary<string, int>)ViewBag.PosCounts;
+    var empCounts = (Dictionary<string, int>)ViewBag.EmpCounts;
+    var shiftCounts = (Dictionary<string, int>)ViewBag.ShiftCounts;
+    var deviceCounts = (Dictionary<string, int>)ViewBag.DeviceCounts;
+    var zoneCounts = (Dictionary<string, int>)ViewBag.ZoneCounts;
+    var visitorCounts = (Dictionary<string, int>)ViewBag.VisitorCounts;
+    var userCounts = (Dictionary<string, int>)ViewBag.UserCounts;
+    var hasPayroll = (List<string>)ViewBag.HasPayroll;
+}
+<div class="chips">
+    <span class="chip">@HrT.T("شرکت‌های ثبت‌شده:") <b>@Jalali.Num(companies.Count)</b></span>
+    <span class="chip">@HrT.T("فعال:") <b>@Jalali.Num(companies.Count(c => c.Active))</b></span>
+    <span class="chip">@HrT.T("کل پرسنل:") <b>@Jalali.Num(empCounts.Values.Sum())</b></span>
+    @if (canManage)
+    {
+        <button class="btn btn-sm btn-primary" data-modal="/Companies/Create" data-modal-title="@HrT.T("تعریف شرکت جدید")" style="margin-inline-start:auto">＋ @HrT.T("شرکت جدید")</button>
+    }
+</div>
+
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    🏢 @HrT.T("معماری چندشرکتی — هر شرکت") <b>@HrT.T("چارت سازمانی، پست‌های سازمانی، شیفت‌ها، دستگاه‌ها، مناطق و گیت‌ها، ارباب‌رجوع و پیکربندی حقوق")</b> @HrT.T("مستقل خودش را دارد. تعریف شرکت اینجا نقطهٔ شروع افزودن شرکت جدید است؛ سپس در «چارت سازمانی» واحد و پست‌های همان شرکت را بسازید.")
+</div>
+
+<div data-refresh-host>
+    <div class="card" style="overflow:auto">
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th>@HrT.T("شرکت")</th>
+                    <th>@HrT.T("کد")</th>
+                    <th>@HrT.T("چارت / پست")</th>
+                    <th>@HrT.T("پرسنل")</th>
+                    <th>@HrT.T("شیفت")</th>
+                    <th>@HrT.T("دستگاه")</th>
+                    <th>@HrT.T("مناطق")</th>
+                    <th>@HrT.T("ارباب‌رجوع")</th>
+                    <th>@HrT.T("کاربران")</th>
+                    <th>@HrT.T("حقوق")</th>
+                    <th>@HrT.T("وضعیت")</th>
+                    @if (canManage)
+                    {
+                        <th>@HrT.T("عملیات")</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in companies)
+                {
+                    <tr style="@(c.Active ? "" : "opacity:.55")">
+                        <td><b>@c.Name</b></td>
+                        <td class="num" dir="ltr" style="text-align:right">@c.Code</td>
+                        <td class="num">@Jalali.Num(deptCounts.GetValueOrDefault(c.Id)) / @Jalali.Num(posCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(empCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(shiftCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(deviceCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(zoneCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(visitorCounts.GetValueOrDefault(c.Id))</td>
+                        <td class="num">@Jalali.Num(userCounts.GetValueOrDefault(c.Id))</td>
+                        <td>@(hasPayroll.Contains(c.Id) ? "✅" : "—")</td>
+                        <td><span class="badge @(c.Active ? "badge-ok" : "badge-err")">@(c.Active ? HrT.T("فعال") : HrT.T("متوقف"))</span></td>
+                        @if (canManage)
+                        {
+                            <td style="white-space:nowrap">
+                                <button type="button" class="btn btn-sm" data-modal="/Companies/EditForm?id=@c.Id" data-modal-title="@HrT.F("ویرایش شرکت — {0}", c.Name)" title="@HrT.T("ویرایش نام/کد")">✎</button>
+                                <form method="post" action="/Companies/ToggleActive" class="inline-form" data-ajax data-refresh>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@c.Id" />
+                                    <button class="btn btn-sm" title="@(c.Active ? HrT.T("توقف شرکت") : HrT.T("فعال‌سازی شرکت"))">@(c.Active ? "⏸" : "▶")</button>
+                                </form>
+                                <form method="post" action="/Companies/Delete" class="inline-form" data-confirm="@HrT.F("حذف شرکت «{0}»؟ — در صورت داشتن هر داده‌ای (پرسنل، چارت، دستگاه و…) حذف رد می‌شود", c.Name)" data-danger="1" data-ajax data-refresh>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@c.Id" />
+                                    <button class="btn btn-sm btn-err" title="@HrT.T("حذف")">🗑️</button>
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

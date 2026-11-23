@@ -1,0 +1,34 @@
+<Project>
+
+  <!--
+    ============================================================
+    فاز ۷۰ — خودرسانی ماژول‌ها به خروجی هاست (مستقل از ترتیب بیلد)
+    [مشکل] تارگت CopyHrModulePlugins روی «هاست» AfterTargets=Build است؛
+    در بیلد solution ترتیب پروژه‌ها تضمین‌شده نیست و هاست زودتر از بعضی
+    ماژول‌ها بیلد می‌شود. ویلدکارد فقط dllهای «همان لحظه» را کپی می‌کند
+    و dllهای UI ماژول‌هایی که دیرتر بیلد شده‌اند (Org/Devices/Access/
+    Attendance/Parking/Payroll) به bin هاست نمی‌رسند → منوی ماژول غایب
+    (تجربهٔ مشتری ۲۰۲۶/۱۰/۳۰: dll پارکینگ Data هست ولی UI نیست).
+    [راه‌حل] هر ماژول بعد از Build خودش خروجی‌اش را کنار هاست می‌گذارد؛
+    چون ماژول به هاست ارجاع دارد، Build ماژول همیشه «بعد از» Clean/Build
+    هاست است ⇒ هیچ رقابتی وجود ندارد. مسیر با MSBuildThisFileDirectory
+    (پوشهٔ src/modules) مطلق ساخته می‌شود — مستقل از عمق پروژه (Dataها
+    یک لایه عمیق‌ترند). CopyHrModulePlugins هاست هم به‌عنوان پشتیبان می‌ماند.
+    [دقت] محاسبهٔ مسیر «درون تارگت» انجام می‌شود نه در props؛ در msbuild خام
+    بدون /p:Configuration مقدار Configuration هنگام import خالی است و
+    مسیر خراب می‌شد — در زمان اجرای تارگت همیشه مقدار درست دارد.
+    [یکپارچه‌سازی ۲۰۲۶-۱۱-۰۴] نام هاست اکنون Platform.Web است.
+    ============================================================
+  -->
+  <Target Name="CopySelfToHostOutput" AfterTargets="Build">
+    <PropertyGroup>
+      <_HrHostOutDir>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)', '..', 'Platform.Web', 'bin', '$(Configuration)', 'net8.0'))</_HrHostOutDir>
+    </PropertyGroup>
+    <Message Importance="high" Text="[HrSelfCopy] $(TargetName) → $(_HrHostOutDir)" />
+    <ItemGroup>
+      <_SelfOut Include="$(TargetPath)" />
+      <_SelfOut Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_SelfOut)" DestinationFolder="$(_HrHostOutDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

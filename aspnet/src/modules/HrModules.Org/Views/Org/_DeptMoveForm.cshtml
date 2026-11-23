@@ -1,0 +1,34 @@
+@{
+    var dept = (Department)ViewBag.Dept!;
+    var moveTargets = (List<Department>)ViewBag.MoveTargets;
+    var deptNames = (Dictionary<string, string>)ViewBag.DeptNames;
+}
+<div data-modal-title="@(HrT.F("انتقال واحد — {0}", dept.Name))" hidden></div>
+<form method="post" action="/Org/MoveDept" data-ajax data-refresh data-choices="move" data-dept="@dept.Name" data-old="@(ViewBag.OldName ?? HrT.T("ریشه چارت"))" data-count="@(ViewBag.EmpCount ?? 0)">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@dept.Id" />
+    <input type="hidden" name="leaveEmployees" value="false" />
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("انتقال به")</label>
+            <select name="parentId">
+                <option value="">@HrT.T("— ریشه چارت (بدون والد) —")</option>
+                @foreach (var t in moveTargets)
+                {
+                    @if (t.Id == dept.ParentId)
+                    {
+                        <option value="@t.Id" selected>@t.Name (@t.Code) @HrT.T("— والد فعلی")</option>
+                    }
+                    else
+                    {
+                        <option value="@t.Id">@t.Name (@t.Code)</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="hint">@HrT.T("مقصدها فقط از همین شرکت‌اند — جابجایی بین شرکت‌ها مجاز نیست")</div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("جابجایی")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

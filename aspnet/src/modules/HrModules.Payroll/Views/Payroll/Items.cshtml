@@ -1,0 +1,221 @@
+@{
+    ViewData["Title"] = HrT.T("فرمول‌ساز اقلام حقوق");
+    var items = (List<PayItem>)Model;
+    var companies = (List<Company>)ViewBag.Companies;
+    var companyId = (string?)ViewBag.CompanyId;
+    var canManage = Me.Get()!.Has("payroll.items.edit");
+    var now = Jalali.ToJalali(DateTime.Now);
+    var depts = (List<Department>)ViewBag.Depts;
+    var positions = (List<Position>)ViewBag.Positions;
+    var shifts = (List<AttShiftInfo>)ViewBag.Shifts; // فاز ۶۱ — از قرارداد حضور (IAttendanceGateway.ActiveShiftsAsync)
+    var emps = (List<Employee>)ViewBag.Emps;
+    string ScopeName(PayItem i) => i.ScopeType switch
+    {
+        "دپارتمان" => HrT.F("بخش: {0}", depts.FirstOrDefault(d => d.Id == i.ScopeId)?.Name ?? i.ScopeId),
+        "پست" => HrT.F("پست: {0}", positions.FirstOrDefault(p => p.Id == i.ScopeId)?.Title ?? i.ScopeId),
+        "شیفت" => HrT.F("شیفت: {0}", shifts.FirstOrDefault(s => s.Id == i.ScopeId)?.Name ?? i.ScopeId),
+        "پرسنل" => HrT.F("پرسنل: {0}", emps.FirstOrDefault(e => e.Id == i.ScopeId)?.FullName ?? i.ScopeId),
+        "استخدام" => HrT.F("اشتغال: {0}", i.ScopeId),
+        _ => HrT.T("همه پرسنل شرکت"),
+    };
+}
+<div class="chips">
+    <form method="get" action="/Payroll/Items" style="display:flex;gap:8px;align-items:end">
+        <div class="fld" style="margin:0"><label>@HrT.T("شرکت")</label>
+            <select name="companyId" onchange="this.form.submit()">
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id" selected="@(companyId == c.Id)">@c.Name</option>
+                }
+            </select>
+        </div>
+    </form>
+    @if (canManage)
+    {
+        <a class="btn btn-sm btn-primary" href="/Payroll/ItemCreate?companyId=@companyId" data-modal="/Payroll/ItemCreate?companyId=@companyId" data-modal-title="@(HrT.T("قلم حقوق جدید"))" style="margin-inline-start:auto">@HrT.T("＋ قلم جدید")</a>
+    }
+</div>
+
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("🧮 هر شرکت فرمول‌های اختصاصی خودش را می‌سازد — برای") <b>@HrT.T("کل پرسنل، یک دپارتمان، یک پست، یک شیفت یا یک نفر")</b>@HrT.T(".")
+    @HrT.T("در کدهای تکراری، هدف اختصاصی‌تر (پرسنل > شیفت > پست > دپارتمان > همه) با اولویت بالاتر برنده است.")
+    @HrT.T("ترتیب محاسبه: ابتدا همه مزایا، بعد کسور؛ هر قلم با") <code>قلم('کد')</code> @HrT.T("به اقلام قبلی دسترسی دارد.")
+</div>
+
+<div class="grid two-col" style="grid-template-columns:2fr 1fr;align-items:start">
+    <div data-refresh-host>
+        <div class="card" style="overflow:auto">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("کد")</th><th>@HrT.T("عنوان")</th><th>@HrT.T("نوع")</th><th>@HrT.T("فرمول")</th>
+                        <th>@HrT.T("مشمولیت")</th><th>@HrT.T("هدف")</th><th class="num">@HrT.T("ترتیب")</th><th>@HrT.T("وضعیت")</th>
+                        @if (canManage)
+                        {
+                            <th>@HrT.T("عملیات")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in items)
+                    {
+                        <tr style="@(i.Active ? "" : "opacity:.55")">
+                            <td dir="ltr" style="text-align:right"><code>@i.Code</code></td>
+                            <td><b>@i.Title</b> @(i.IsSystem ? Html.Raw("<span class=\"badge badge-mute\">" + HrT.T("سیستمی") + "</span>") : null)</td>
+                            <td><span class="badge @(i.Kind == "مزیت" ? "badge-ok" : "badge-warn")">@HrT.T(i.Kind)</span></td>
+                            <td dir="ltr" style="text-align:right"><code style="font-size:11px">@i.Formula</code></td>
+                            <td>
+                                @if (i.Taxable)
+                                {
+                                    <span class="badge badge-warn">@HrT.T("مالیات")</span>
+                                }
+                                @if (i.Insurable)
+                                {
+                                    <span class="badge badge-info">@HrT.T("بیمه")</span>
+                                }
+                                @if (!i.Continuous)
+                                {
+                                    <span class="badge badge-mute">@HrT.T("مقطوع")</span>
+                                }
+                                @if (!i.Taxable && !i.Insurable && i.Continuous)
+                                {
+                                    <span class="badge badge-mute">@HrT.T("معاف")</span>
+                                }
+                            </td>
+                            <td style="font-size:11px">@ScopeName(i)</td>
+                            <td class="num">@Jalali.ToPersianDigits(i.Order.ToString())</td>
+                            <td><span class="badge @(i.Active ? "badge-ok" : "badge-err")">@(i.Active ? HrT.T("فعال") : HrT.T("خاموش"))</span></td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    <div style="display:flex;gap:6px">
+                                        <a class="btn btn-sm" href="/Payroll/ItemEdit/@i.Id" data-modal="/Payroll/ItemEdit/@i.Id" data-modal-title="@(HrT.F("ویرایش قلم — {0}", i.Title))">✎</a>
+                                        <form method="post" action="/Payroll/ItemDelete" class="inline-form" data-ajax data-refresh
+                                              data-confirm="@(HrT.F("حذف قلم «{0}»؟", i.Title))" data-danger="@(i.IsSystem ? "0" : "1")">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@i.Id" />
+                                            <button class="btn btn-sm btn-err" @(i.IsSystem ? "disabled title='" + HrT.T("قلم سیستمی قابل حذف نیست") + "'" : "")>🗑️</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                    @if (!items.Any())
+                    {
+                        <tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">@HrT.T("برای این شرکت هنوز قلمی تعریف نشده است")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("🧪 آزمایش فرمول")</h2></div>
+            <div class="card-b">
+                <div class="fld" style="margin-bottom:8px"><label>@HrT.T("پرسنل نمونه")</label>
+                    <select id="tEmp"></select>
+                </div>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                    <div class="fld" style="margin:0;flex:1"><label>@HrT.T("سال")</label><input id="tY" type="number" value="@now.Y" /></div>
+                    <div class="fld" style="margin:0;flex:1"><label>@HrT.T("ماه")</label>
+                        <select id="tM">
+                            @for (int m = 1; m <= 12; m++)
+                            {
+                                <option value="@m" selected="@(m == now.M)">@Jalali.MonthName(m)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="fld" style="margin-bottom:8px"><label>@HrT.T("فرمول")</label>
+                    <textarea id="tFormula" rows="3" dir="ltr" style="text-align:left;font-family:var(--mono,monospace);font-size:12px" placeholder="@HrT.T("مثال: دقیقه_اضافه_کاری / 60 * ساعتی * 1.4")"></textarea>
+                    <div id="tFormulaBuilder"></div> @* فاز ۴۴ — سازندهٔ بصری برای آزمایش فرمول هم *@
+                </div>
+                <button class="btn btn-dark btn-block" id="tRun" type="button">@HrT.T("ارزیابی فرمول")</button>
+                <div id="tResult" style="margin-top:10px;font-size:12px"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("📘 متغیرها")</h2></div>
+            @* فاز ۵۱ — padding-top:0: ظرف اسکرول پدینگ بالا نباید داشته باشد؛ با پدینگ، سطرها از
+               نوار ۱۶px بالای سربرگ چسبان (sticky) رد می‌شدند و پشت آن دیده می‌شدند *@
+            <div class="card-b" style="max-height:300px;overflow:auto;font-size:11px;padding-top:0">
+                <table class="tbl">
+                    <thead><tr><th>@HrT.T("نام")</th><th>@HrT.T("شرح")</th></tr></thead>
+                    <tbody>
+                        @foreach (var v in PayrollEngine.VarDocs)
+                        {
+                            <tr><td dir="ltr" style="text-align:right"><code>@v.Code</code></td><td>@v.Title</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("ƒ توابع")</h2></div>
+            <div class="card-b" style="font-size:12px;line-height:2">
+                @foreach (var f in PayrollEngine.FunctionDocs)
+                {
+                    <div><code dir="ltr">@f.Sig</code><br /><span style="color:var(--ink-2);font-size:11px">@f.Desc</span></div>
+                }
+                <div style="margin-top:8px;color:var(--ink-2)">@HrT.T("عملگرها:") <code dir="ltr">+ − * / % ^ ( ) &lt; &lt;= &gt; &gt;= == != &amp;&amp; || !</code> @HrT.T("— ارقام فارسی و نیم‌فاصله پذیرفته می‌شود.")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        // فاز ۴۴ — سازندهٔ بصری فرمول در پنل آزمایش — با گارد + انتظار برای لود formula-builder.js
+        // (اسکریپت‌های صفحه قبل از اسکریپت‌های انتهای body اجرا می‌شوند → fallback به DOMContentLoaded)
+        (function () {
+            function boot() {
+                if (!window.hrajFormulaBuilder || !document.getElementById('tFormulaBuilder')) return false;
+                window.hrajFormulaBuilder(document.getElementById('tFormula'), {
+                    mount: document.getElementById('tFormulaBuilder'),
+                    vars: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(PayrollEngine.VarDocs.Select(v => new { c = v.Code, t = v.Title }))),
+                    funcs: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(PayrollEngine.FunctionDocs.Select(f => new { n = f.Name, sig = f.Sig, d = f.Desc }))),
+                    items: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(items.Select(x => new { c = x.Code, t = x.Title }))),
+                });
+                return true;
+            }
+            if (!boot()) document.addEventListener('DOMContentLoaded', boot);
+        })();
+
+        var empSel = document.getElementById('tEmp');
+        var cid = '@companyId';
+        fetch('/api/payroll/employees?companyId=' + encodeURIComponent(cid), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(function (r) { return r.json(); })
+            .then(function (list) {
+                (list || []).forEach(function (e) {
+                    var o = document.createElement('option');
+                    o.value = e.id; o.textContent = e.label;
+                    empSel.appendChild(o);
+                });
+            });
+        document.getElementById('tRun').addEventListener('click', function () {
+            var res = document.getElementById('tResult');
+            var f = document.getElementById('tFormula').value;
+            if (!f.trim()) { res.innerHTML = '<span style="color:var(--err)">@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("فرمول را وارد کنید")))</span>'; return; }
+            var fd = new FormData();
+            fd.append('employeeId', empSel.value);
+            fd.append('jYear', document.getElementById('tY').value);
+            fd.append('jMonth', document.getElementById('tM').value);
+            fd.append('formula', f);
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) fd.append('__RequestVerificationToken', token.value);
+            res.textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("در حال ارزیابی…")))';
+            fetch('/Payroll/TestFormula', { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function (r) { return r.json(); })
+                .then(function (j) {
+                    if (!j.ok) { res.innerHTML = '<div style="color:var(--err)">✖ ' + (j.message || '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا")))') + '</div>'; return; }
+                    var v = j.vars || [];
+                    var rows = v.map(function (x) { return '<tr><td dir="ltr" style="text-align:right"><code>' + x.code + '</code></td><td class="num">' + x.value.toLocaleString('fa-IR') + '</td></tr>'; }).join('');
+                    res.innerHTML = '<div style="color:var(--ok);margin-bottom:6px">@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("✔ مقدار فرمول:"))) <b>' + (j.value || 0).toLocaleString('fa-IR') + '</b> @Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(Money.Sym()))</div>'
+                        + '<details><summary style="cursor:pointer">@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("متغیرهای زمینه"))) (' + v.length + ')</summary><div style="max-height:260px;overflow:auto"><table class="tbl">' + rows + '</table></div></details>';
+                })
+                .catch(function () { res.innerHTML = '<span style="color:var(--err)">@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطای شبکه")))</span>'; });
+        });
+    })();
+</script>

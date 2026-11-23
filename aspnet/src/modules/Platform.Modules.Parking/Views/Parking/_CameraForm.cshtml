@@ -1,0 +1,47 @@
+@{
+    var gates = (List<ParkingGate>)ViewBag.Gates;
+}
+<div data-modal-title="@HrT.T("دوربین پلاک‌خوان جدید")" hidden></div>
+<form method="post" action="/Parking/CreateCamera" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام دوربین *")</label><input name="name" required placeholder="@HrT.T("دوربین پلاک‌خوان ورودی اصلی")" /></div>
+        <div class="fld"><label>@HrT.T("گیت متصل * (تعیین‌کننده شرکت دوربین)")</label>
+            <select name="gateId" required>
+                @foreach (var g in gates)
+                {
+                    <option value="@g.Id">@g.Name @(g.Lot != null ? "— " + g.Lot.Name : "") @(g.Lot?.Company != null ? "(" + g.Lot.Company.Code + ")" : "")</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("برند")</label>
+            <select name="brand">
+                <option value="Hikvision">Hikvision</option>
+                <option value="Dahua">Dahua</option>
+                <option value="ZKTeco">ZKTeco</option>
+                <option value="UNV">UNV</option>
+                <option value="Edimax">Edimax</option>
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("مدل")</label><input name="model" placeholder="iDS-TMG418" /></div>
+        <div class="fld"><label>IP</label><input name="ip" placeholder="10.10.4.21" /></div>
+        <div class="fld"><label>@HrT.T("محل نصب")</label><input name="location" placeholder="@HrT.T("لاین ورودی، ترافیک سنگین")" /></div>
+        <div class="fld"><label>@HrT.T("جهت لاین")</label>
+            <select name="direction"><option value="دوطرفه">@HrT.T("دوطرفه")</option><option value="ورودی">@HrT.T("ورودی")</option><option value="خروجی">@HrT.T("خروجی")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("حداقل اطمینان شناسایی (٪)")</label>
+            <input type="number" name="confidenceThreshold" min="0" max="100" value="70" />
+        </div>
+        <div class="fld" style="grid-column:1/-1"><label>@HrT.T("آدرس جریان تصویر (RTSP) — اختیاری")</label>
+            <input name="streamUrl" dir="ltr" placeholder="rtsp://10.10.4.21:554/Streaming/Channels/101" />
+        </div>
+        <div class="fld" style="grid-column:1/-1"><label>@HrT.T("شماره سریال (SN) — خالی = تولید خودکار")</label>
+            <input name="serial" dir="ltr" placeholder="ANPR-PG-IN1-1234" />
+        </div>
+    </div>
+    <div class="hint" style="margin-top:8px">@HrT.T("پس از ثبت، دوربین با") SN @HrT.T("و توکن یکتا می‌تواند مثل دستگاه‌های تردد پلاک‌ها را به") <code>POST /api/anpr/webhook</code> @HrT.T("بفرستد و ورود/خروج خودکار ثبت شود.")</div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ایجاد دوربین")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

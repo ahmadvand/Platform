@@ -1,0 +1,121 @@
+skills/
+node_modules/
+upload/
+
+# Build artifacts
+**/bin/
+**/obj/
+**/publish*/
+
+# Runtime data & logs
+**/logs/
+*.log
+aspnet/src/Platform.Web/hr.db*
+aspnet/tools/HrMigrate/hr.db*
+
+# Secrets / machine-specific
+.env
+keys/
+/license-keys/
+tools/LicenseGen/**/private.pem
+tools/LicenseGen/**/public.pem
+# فاز ۸۸ — محتویات runtime اپ نادیده می‌ماند (کلید JWT، مجوز، hrsettings)؛ اما
+# بسته‌های زبان تعبیه‌شده در App_Data/langpacks «دارایی ساخت» هستند و باید در مخزن باشند
+# (تا سورس‌زیپ و کلون تازه هم ۷ زبان تعبیه‌شده را داشته باشند).
+aspnet/src/Platform.Web/App_Data/*
+!aspnet/src/Platform.Web/App_Data/langpacks/
+aspnet/src/Platform.Web/hrsettings.json
+
+# Dev verification screenshots & temp dumps
+verify-*.png
+shot-*.png
+tool-results/
+backups/
+
+# Deliverables & local tooling (not source) — فاز ۶۲: docs گیت‌شده می‌مانند تا از ری‌بیلد سندباکس جان سالم ببرند
+download/*
+!download/README.md
+!download/HR-Platform-*-Docs-FA.zip
+!download/docs/
+download/docs/*.tmp
+scripts/dotnet-install.sh
+scripts/smoke-clean.py
+
+# Logo uploaded by the admin (user data, not source)
+aspnet/src/Platform.Web/wwwroot/uploads/*
+!aspnet/src/Platform.Web/wwwroot/uploads/.gitkeep
+scripts/topbar-*.png
+# فاز ۱۰۶ — مرکز دانلود: مسیر قدیم /dl حذف شد؛ مسیر جدید /dlc هم خروجی تولید است نه سورس
+aspnet/src/Platform.Web/wwwroot/dl/
+aspnet/src/Platform.Web/wwwroot/dlc/
+
+# E2E run artifacts (regenerated every run — never source)
+scripts/wizard-test-run/
+scripts/p64-test-run/
+.start-web.lock
+scripts/zipverify/
+scripts/regen-dl.log
+scripts/ghost-backup-*/
+tmp-p67/
+# فایل‌های گذرای e2e ایزوله
+scripts/tmp-e2e/
+# فاز ۱۰۶ — HTML پیش‌نمایش تولیدی برای راستی‌آزمایی بصری بسته‌ها (ژنراتورش گیت‌شده است)
+scripts/ss-preview/
+scripts/p67verify/
+scripts/e2e67/
+tmp-p68/
+scripts/p68errors.txt
+tmp-p69/
+scripts/p69-selfdescribing-test.sh.log
+aspnet-wt69/
+
+# فایل‌های گذرای e2e ایزوله (پورت 3200)
+scripts/tmp-e2e/
+
+# فاز ۸۷ — WIP فریزشده و پشتیبان‌های محلی (سورس نیستند)
+aspnet/wip-frozen-20261104/
+.stale-backup-20261103/
+backups/
+tmp-p*/
+tool-results/
+
+# تنظیمات رمزشدهٔ نصب — ماشینی
+aspnet/src/Platform.Web/hrsettings.bin
+wiztest-tmp/
+
+# فاز ۹۲ — نمونهٔ تست E2E (نسخهٔ موقت نصب)
+wiztest92/
+apps.pem
+scripts/license-signing-94/private.pem
+
+# فاز ۶۲ — دیپلوی self-contained (بوت سریع بدون SDK؛ فایل اجرایی + پلاگین‌ها گیت‌شده می‌مانند)
+aspnet/sc-run/App_Data/*
+!aspnet/sc-run/App_Data/langpacks/
+!aspnet/sc-run/App_Data/modules.manifest.json
+aspnet/sc-run/hr.db*
+aspnet/sc-run/hrsettings.json
+aspnet/sc-run/wwwroot/dl/
+
+# فاز ۱۰۳ — بقایای پیش‌ازادغام (پشتیبان خارج از درخت کامپایل؛ به ریپو وارد نمی‌شود)
+aspnet/.legacy-untracked/
+aspnet/sc-run/wwwroot/dlc/
+
+# فاز ۱۳۱ — مورد ۲۱ ROADMAP-ADDITIONS: پایگاه داده/پیکربندی رمزنگاری‌شده/کلیدها
+# هرگز وارد مخزن نمی‌شوند (فایل‌های ردیابی‌شده با --cached از ایندکس خارج شدند؛ روی دیسک ماندند)
+aspnet/src/Platform.Web/app.db*
+aspnet/src/Platform.Web/wizard-test.db
+aspnet/src/Platform.Web/hrsettings.bin
+aspnet/src/Platform.Web/appsettings.bin
+aspnet/src/Platform.Web/App_Data/
+
+# فاز ۱۳۶ — پروژه‌های ممنوعه (دستور صریح کاربر ۲۰۲۶-۱۱-۲۱): هرگز دوباره ردیابی نشوند
+# با git rm حذف شدند؛ اگر بازیابی سندباکس روی دیسک برگرداندشان، ghost-guard دیپلوی/regen را می‌بندد
+aspnet/src/HrAttendance.Web/
+aspnet/src/HrPlatform.Contracts/
+aspnet/src/HrPlatform.Core/
+aspnet/src/modules/HrModules.Parking/
+aspnet/src/modules/HrModules.Visitors/
+aspnet/HrAttendance.sln
+
+# فاز ۱۳۶ — fixture قدیمی آزمون با کپی درخت شبح (دستور کاربر: حذف همیشگی)
+scripts/finalverify/

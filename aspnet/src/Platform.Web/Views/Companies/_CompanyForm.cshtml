@@ -1,0 +1,13 @@
+<div data-modal-title="@HrT.T("تعریف شرکت جدید")" hidden></div>
+<form method="post" action="/Companies/Create" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام شرکت") *</label><input name="name" required placeholder="@HrT.T("شرکت نمونه سهام خاص")" /></div>
+        <div class="fld"><label>@HrT.T("کد شرکت") *</label><input name="code" required placeholder="NTC-03" dir="ltr" style="text-align:left" /></div>
+    </div>
+    <div class="hint" style="margin-top:8px">@HrT.T("پس از ثبت، چارت سازمانی، شیفت‌ها، دستگاه‌ها و تنظیمات حقوق مستقل این شرکت در صفحات مربوط آماده می‌شود")</div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت شرکت")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

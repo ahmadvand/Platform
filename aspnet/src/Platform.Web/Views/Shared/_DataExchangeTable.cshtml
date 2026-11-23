@@ -1,0 +1,64 @@
+@* فاز ۱۲۲ — جدول «اعلامی‌محور» خانواده‌های داده — پارتیال مشترک مرکز (/DataTransfer) و هاب (/Data).
+مدل = کاتالوگ فیلترشدهٔ ماژول‌های حاضر و فعال (DataExchange.Catalog با ملاک ModSvc.Enabled).
+هر ماژول خانواده‌های خودش را با IHrDataModule.DataExchange اعلام می‌کند؛ ماژول غایب/خاموش = هیچ ردیفی. *@
+@model List<Platform.Web.Services.DataExchange.DataEntity>
+@{
+    var groups = Model.GroupBy(x => x.Group).ToList();
+    string T(string fa) => HrT.T(fa);
+}
+<div class="chips">
+    <span class="chip">@T("مهاجرت داده از و به هر نرم‌افزار دیگر")</span>
+    <span class="chip">@T("قالب‌ها:") <b>XLSX · CSV · JSON</b></span>
+    <span class="chip">@T("خانواده‌های داده:") <b>@HrT.Num(Model.Count)</b></span>
+    <span class="chip">@T("گروه‌ها:") <b>@HrT.Num(groups.Count)</b></span>
+</div>
+
+@foreach (var g in groups)
+{
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T(g.Key)</h2><span class="hint">@HrT.F("{0} خانوادهٔ داده", HrT.Num(g.Count()))</span></div>
+        <div class="card-b" style="padding:0">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@T("داده")</th>
+                        <th>@T("رکوردها")</th>
+                        <th>@T("کلید هم‌آوری")</th>
+                        <th>@T("درون‌ریزی")</th>
+                        <th>@T("برون‌بری")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in g)
+                    {
+                        <tr>
+                            <td><b>@HrT.T(e.Title)</b> <span class="hint" dir="ltr">(@e.ClrName)</span></td>
+                            <td class="num">@HrT.Num(e.Count)</td>
+                            <td>@(e.BusinessKey is null ? T("Id") : e.BusinessKey)</td>
+                            <td>
+                                @if (e.CanImport)
+                                {
+                                    <a class="btn btn-sm" href="/Data/ImportForm?entity=@e.Key">⤵ @T("درون‌ریزی")</a>
+                                    <a class="btn btn-sm" href="/Data/Template?entity=@e.Key">@T("قالب خالی")</a>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-mute">@T("فقط برون‌بری")</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-sm" href="/Data/Export?entity=@e.Key&fmt=xlsx">📊 @T("اکسل")</a>
+                                <a class="btn btn-sm" href="/Data/Export?entity=@e.Key&fmt=csv">📄 @T("CSV")</a>
+                                <a class="btn btn-sm" href="/Data/Export?entity=@e.Key&fmt=json">🧬 @T("JSON")</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@if (Model.Count == 0)
+{
+    <div class="toast">@T("هیچ خانوادهٔ داده‌ای برای نمایش نیست — هیچ ماژولی دادهٔ خودش را اعلام نکرده است")</div>
+}

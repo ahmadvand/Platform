@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ابزار تولید مجوز نصب (فاز ۴۶) — فقط برای تولیدکنندهٔ نرم‌افزار
+    فرمان‌ها (با دو خط تیره قبل از هر پارامتر):
+      LicenseGen keygen  [دایرکتوری کلید]
+      LicenseGen issue   key=private.pem  licensee="شرکت"  machine=XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+                         [expires=yyyy-MM-dd] [max-employees=N] [notes="..."] [out=license.dat]
+      LicenseGen show    license.dat  pub=public.pem
+    مثال کامل در فایل README-Licensing-FA.md
+    هشدار: private.pem را هرگز همراه نصب مشتری منتشر نکنید!
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LicenseGen</RootNamespace>
+  </PropertyGroup>
+</Project>

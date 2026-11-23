@@ -1,0 +1,43 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("گزارش درون‌ریزی");
+    var ent = (Platform.Web.Services.DataExchange.DataEntity)ViewBag.Entity;
+    var report = (Platform.Web.Services.DataExchange.CommitReport)ViewBag.Report;
+    var hasErr = report.Errors.Count > 0;
+}
+<div class="chips">
+    <span class="chip">@HrT.F("گزارش درون‌ریزی «{0}»", HrT.T(ent.Title))</span>
+    <a class="chip" href="/Data">@HrT.T("← هاب داده")</a>
+</div>
+
+<div class="grid three-col" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><div class="card-b" style="text-align:center">
+        <div style="font-size:26px;font-weight:800;color:var(--ok)">@HrT.Num(report.Inserted)</div>
+        <div class="hint">@HrT.T("رکورد جدید")</div>
+    </div></div>
+    <div class="card"><div class="card-b" style="text-align:center">
+        <div style="font-size:26px;font-weight:800;color:var(--info)">@HrT.Num(report.Updated)</div>
+        <div class="hint">@HrT.T("به‌روزرسانی شد")</div>
+    </div></div>
+    <div class="card"><div class="card-b" style="text-align:center">
+        <div style="font-size:26px;font-weight:800;color:@(hasErr ? "var(--err)" : "var(--ink-2)")">@HrT.Num(report.Errors.Count)</div>
+        <div class="hint">@HrT.T("خطا / نادیده‌گرفته")</div>
+    </div></div>
+</div>
+
+@if (hasErr)
+{
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("گزارش خطاها")</h2></div>
+        <div class="card-b" style="max-height:420px;overflow:auto">
+            @foreach (var er in report.Errors)
+            {
+                <div style="padding:6px 2px;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--err)">@er</div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="toast toast-ok" data-toast>@HrT.T("درون‌ریزی بدون خطا انجام شد ✓")</div>
+}

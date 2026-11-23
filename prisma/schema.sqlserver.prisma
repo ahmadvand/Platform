@@ -1,0 +1,547 @@
+// ==================================================================
+// اسکیمای SQL Server — آینه کامل اسکیمای اصلی (provider = sqlserver)
+// فعال‌سازی:  node scripts/use-sqlserver.mjs
+// (این فایل جای prisma/schema.prisma را می‌گیرد و کلاینت تولید می‌شود)
+// ==================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// ============ Core HR ============
+
+model Company {
+  id          String       @id @default(cuid())
+  name        String       @db.NVarChar(200)
+  code        String       @unique @db.NVarChar(50)
+  active      Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  departments Department[]
+  employees   Employee[]
+}
+
+model Department {
+  id         String       @id @default(cuid())
+  name       String       @db.NVarChar(200)
+  code       String       @unique @db.NVarChar(50)
+  companyId  String
+  company    Company      @relation(fields: [companyId], references: [id])
+  parentId   String?
+  parent     Department?  @relation("DeptTree", fields: [parentId], references: [id])
+  children   Department[] @relation("DeptTree")
+  positions  Position[]
+  employees  Employee[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model Position {
+  id           String     @id @default(cuid())
+  title        String     @db.NVarChar(200)
+  code         String     @unique @db.NVarChar(50)
+  grade        String?    @db.NVarChar(50)
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+  employees    Employee[]
+  description  String?    @db.NVarChar(500)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Employee {
+  id              String    @id @default(cuid())
+  personnelCode   String    @unique @db.NVarChar(20)
+  firstName       String    @db.NVarChar(100)
+  lastName        String    @db.NVarChar(100)
+  nationalId      String    @unique @db.NVarChar(20)
+  birthDate       String?   @db.NVarChar(20)
+  phone           String?   @db.NVarChar(20)
+  email           String?   @db.NVarChar(100)
+  employmentType  String    @db.NVarChar(30)
+  status          String    @default("فعال") @db.NVarChar(30)
+  hireDate        DateTime
+  endDate         DateTime?
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id])
+  departmentId    String?
+  department      Department? @relation(fields: [departmentId], references: [id])
+  positionId      String?
+  position        Position?   @relation(fields: [positionId], references: [id])
+  baseSalary      Float     @default(0)
+  shiftId         String?
+  shift           Shift?    @relation(fields: [shiftId], references: [id])
+  annualLeaveEnt  Float     @default(26)
+  annualLeaveUsed Float     @default(0)
+  sickLeaveEnt    Float     @default(2)
+  sickLeaveUsed   Float     @default(0)
+  contracts       Contract[]
+  decrees         Decree[]
+  attendance      AttendanceRecord[]
+  leaves          LeaveRequest[]
+  missions        Mission[]
+  permits         OvertimePermit[]
+  accessPerms     AccessPermission[]
+  accessEvents    AccessEvent[]
+  corrections     CorrectionRequest[]
+  payslips        Payslip[]
+  user            User?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Contract {
+  id         String    @id @default(cuid())
+  employeeId String
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  type       String    @db.NVarChar(30)
+  contractNo String    @unique @db.NVarChar(50)
+  startDate  DateTime
+  endDate    DateTime?
+  salary     Float     @default(0)
+  status     String    @default("فعال") @db.NVarChar(30)
+  createdAt  DateTime  @default(now())
+}
+
+model Decree {
+  id           String   @id @default(cuid())
+  employeeId   String
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  type         String   @db.NVarChar(30)
+  decreeNo     String   @db.NVarChar(50)
+  date         DateTime
+  content      String?  @db.NVarChar(1000)
+  acknowledged Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+// ============ Shifts & Attendance ============
+
+model Shift {
+  id            String  @id @default(cuid())
+  name          String  @db.NVarChar(100)
+  type          String  @db.NVarChar(30)
+  startTime     String  @db.NVarChar(10)
+  endTime       String  @db.NVarChar(10)
+  breakMinutes  Int     @default(60)
+  cyclePattern  String? @db.NVarChar(20)
+  toleranceLate Int     @default(10)
+  active        Boolean @default(true)
+  employees     Employee[]
+  createdAt     DateTime @default(now())
+}
+
+model Device {
+  id                String  @id @default(cuid())
+  name              String  @db.NVarChar(100)
+  brand             String  @db.NVarChar(30)
+  serial            String  @unique @db.NVarChar(50)
+  ip                String? @db.NVarChar(50)
+  location          String? @db.NVarChar(100)
+  purpose           String  @db.NVarChar(30)
+  mode              String  @default("آنلاین") @db.NVarChar(20)
+  lastSync          DateTime?
+  active            Boolean @default(true)
+  webhookToken      String  @unique @db.NVarChar(64)
+  pollingInterval   Int     @default(60)
+  lastSeenAt        DateTime?
+  lastPulledAt      DateTime?
+  firmware          String? @db.NVarChar(50)
+  userCount         Int?
+  attendanceRecords AttendanceRecord[]
+  commands          DeviceCommand[]
+  gates             Gate[]
+  createdAt         DateTime @default(now())
+}
+
+model AttendanceRecord {
+  id              String    @id @default(cuid())
+  employeeId      String
+  employee        Employee  @relation(fields: [employeeId], references: [id])
+  deviceId        String?
+  device          Device?   @relation(fields: [deviceId], references: [id])
+  date            String    @db.NVarChar(10)
+  checkIn         DateTime?
+  checkOut        DateTime?
+  workMinutes     Int       @default(0)
+  lateMinutes     Int       @default(0)
+  earlyMinutes    Int       @default(0)
+  overtimeMinutes Int       @default(0)
+  status          String    @db.NVarChar(30)
+  note            String?   @db.NVarChar(500)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model LeaveRequest {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  type       String   @db.NVarChar(30)
+  fromDate   String   @db.NVarChar(10)
+  toDate     String   @db.NVarChar(10)
+  days       Float    @default(1)
+  hours      Int?
+  reason     String?  @db.NVarChar(500)
+  status     String   @default("در انتظار تأیید") @db.NVarChar(30)
+  approver   String?  @db.NVarChar(100)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Mission {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  type        String   @db.NVarChar(30)
+  destination String   @db.NVarChar(200)
+  purpose     String?  @db.NVarChar(500)
+  fromDate    String   @db.NVarChar(10)
+  toDate      String   @db.NVarChar(10)
+  status      String   @default("در انتظار تأیید") @db.NVarChar(30)
+  approver    String?  @db.NVarChar(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model OvertimePermit {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  type       String   @db.NVarChar(30)
+  date       String   @db.NVarChar(10)
+  fromTime   String   @db.NVarChar(10)
+  toTime     String   @db.NVarChar(10)
+  reason     String?  @db.NVarChar(500)
+  status     String   @default("در انتظار تأیید") @db.NVarChar(30)
+  approver   String?  @db.NVarChar(100)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ============ Access Control ============
+
+model Zone {
+  id          String  @id @default(cuid())
+  name        String  @db.NVarChar(100)
+  code        String  @unique @db.NVarChar(30)
+  riskLevel   String  @default("عادی") @db.NVarChar(20)
+  description String? @db.NVarChar(500)
+  gates       Gate[]
+  accessPerms AccessPermission[]
+  createdAt   DateTime @default(now())
+}
+
+model Gate {
+  id           String  @id @default(cuid())
+  name         String  @db.NVarChar(100)
+  code         String  @unique @db.NVarChar(30)
+  zoneId       String
+  zone         Zone    @relation(fields: [zoneId], references: [id])
+  deviceId     String?
+  device       Device? @relation(fields: [deviceId], references: [id])
+  type         String  @db.NVarChar(30)
+  direction    String  @default("دوطرفه") @db.NVarChar(20)
+  status       String  @default("فعال") @db.NVarChar(20)
+  accessEvents AccessEvent[]
+  createdAt    DateTime @default(now())
+}
+
+model AccessPermission {
+  id         String    @id @default(cuid())
+  employeeId String?
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  visitorId  String?
+  visitor    Visitor?  @relation("VisitorPerms", fields: [visitorId], references: [id])
+  zoneId     String
+  zone       Zone      @relation(fields: [zoneId], references: [id])
+  type       String    @default("دائم") @db.NVarChar(20)
+  validFrom  DateTime  @default(now())
+  validUntil DateTime?
+  days       String?   @db.NVarChar(50)
+  timeFrom   String?   @db.NVarChar(10)
+  timeUntil  String?   @db.NVarChar(10)
+  status     String    @default("فعال") @db.NVarChar(20)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model AccessEvent {
+  id         String   @id @default(cuid())
+  employeeId String?
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  visitorId  String?
+  visitor    Visitor?  @relation("VisitorEvents", fields: [visitorId], references: [id])
+  gateId     String
+  gate       Gate     @relation(fields: [gateId], references: [id])
+  direction  String   @db.NVarChar(10)
+  method     String   @default("کارت") @db.NVarChar(20)
+  result     String   @default("مجاز") @db.NVarChar(20)
+  reason     String?  @db.NVarChar(200)
+  timestamp  DateTime @default(now())
+}
+
+// ============ Visitors & Security ============
+
+model Contractor {
+  id          String    @id @default(cuid())
+  name        String    @db.NVarChar(200)
+  code        String    @unique @db.NVarChar(30)
+  contactName String?   @db.NVarChar(100)
+  phone       String?   @db.NVarChar(20)
+  contractNo  String?   @db.NVarChar(50)
+  validUntil  DateTime?
+  active      Boolean   @default(true)
+  visitors    Visitor[]
+  createdAt   DateTime  @default(now())
+}
+
+model Visitor {
+  id            String    @id @default(cuid())
+  firstName     String    @db.NVarChar(100)
+  lastName      String    @db.NVarChar(100)
+  nationalId    String    @db.NVarChar(20)
+  phone         String?   @db.NVarChar(20)
+  idDocType     String    @default("کارت ملی") @db.NVarChar(30)
+  type          String    @default("مهمان") @db.NVarChar(20)
+  hostName      String    @db.NVarChar(100)
+  hostDept      String?   @db.NVarChar(100)
+  purpose       String    @db.NVarChar(300)
+  contractorId  String?
+  contractor    Contractor? @relation(fields: [contractorId], references: [id])
+  status        String    @default("در انتظار تأیید") @db.NVarChar(30)
+  approvedBy    String?   @db.NVarChar(100)
+  requestedAt   DateTime  @default(now())
+  card          VisitorCard?
+  logs          VisitLog[]
+  accessEvents  AccessEvent[] @relation("VisitorEvents")
+  accessPerms   AccessPermission[] @relation("VisitorPerms")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model VisitorCard {
+  id         String   @id @default(cuid())
+  cardNo     String   @unique @db.NVarChar(30)
+  type       String   @default("QR") @db.NVarChar(20)
+  visitorId  String   @unique
+  visitor    Visitor  @relation(fields: [visitorId], references: [id])
+  issuedAt   DateTime @default(now())
+  validUntil DateTime
+  returned   Boolean  @default(false)
+}
+
+model VisitLog {
+  id        String   @id @default(cuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+  direction String   @db.NVarChar(10)
+  gateName  String?  @db.NVarChar(100)
+  timestamp DateTime @default(now())
+}
+
+model SecurityAlert {
+  id        String   @id @default(cuid())
+  type      String   @db.NVarChar(30)
+  severity  String   @default("متوسط") @db.NVarChar(20)
+  message   String   @db.NVarChar(500)
+  source    String   @default("کنترل تردد") @db.NVarChar(30)
+  refId     String?  @db.NVarChar(64)
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ Auth & RBAC ============
+
+model User {
+  id                  Int      @id @default(autoincrement())
+  username            String   @unique @db.NVarChar(32)
+  passwordHash        String   @db.NVarChar(200)
+  fullName            String   @db.NVarChar(100)
+  employeeId          String?  @unique
+  employee            Employee? @relation(fields: [employeeId], references: [id])
+  isActive            Boolean  @default(true)
+  isSuperadmin        Boolean  @default(false)
+  failedLoginAttempts Int      @default(0)
+  lockedUntil         DateTime?
+  passwordChangedAt   DateTime @default(now())
+  passwordExpiresAt   DateTime?
+  mustChangePassword  Boolean  @default(false)
+  lastLoginAt         DateTime?
+  roles               UserRole[]
+  refreshTokens       RefreshToken[]
+  passwordHistory     PasswordHistory[]
+  passwordResets      PasswordReset[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.NVarChar(30)
+  title       String   @db.NVarChar(100)
+  description String?  @db.NVarChar(300)
+  users       UserRole[]
+  permissions RolePermission[]
+  createdAt   DateTime @default(now())
+}
+
+model Permission {
+  id    Int    @id @default(autoincrement())
+  key   String @unique @db.NVarChar(50)
+  title String @db.NVarChar(200)
+  grp   String @db.NVarChar(50)
+  roles RolePermission[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model RefreshToken {
+  id         String    @id @default(cuid())
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique @db.NVarChar(128)
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  deviceInfo String?   @db.NVarChar(300)
+  ip         String?   @db.NVarChar(50)
+  createdAt  DateTime  @default(now())
+}
+
+model PasswordHistory {
+  id           String   @id @default(cuid())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  passwordHash String   @db.NVarChar(200)
+  createdAt    DateTime @default(now())
+}
+
+model PasswordReset {
+  id        String    @id @default(cuid())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @db.NVarChar(128)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId Int?
+  actorName   String?  @db.NVarChar(100)
+  action      String   @db.NVarChar(30)
+  entity      String   @db.NVarChar(30)
+  entityId    String?  @db.NVarChar(64)
+  detail      String?  @db.NVarChar(MAX)
+  ip          String?  @db.NVarChar(50)
+  at          DateTime @default(now())
+}
+
+// ============ Device Operations ============
+
+model DeviceCommand {
+  id              String    @id @default(cuid())
+  deviceId        String
+  device          Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  type            String    @db.NVarChar(20)
+  payload         String?   @db.NVarChar(MAX)
+  status          String    @default("pending") @db.NVarChar(15)
+  createdByUserId Int?
+  createdBy       String?   @db.NVarChar(100)
+  result          String?   @db.NVarChar(300)
+  createdAt       DateTime  @default(now())
+  deliveredAt     DateTime?
+  ackedAt         DateTime?
+}
+
+// ============ Payroll / Corrections / Holidays ============
+
+model CorrectionRequest {
+  id           String    @id @default(cuid())
+  employeeId   String
+  employee     Employee  @relation(fields: [employeeId], references: [id])
+  date         String    @db.NVarChar(10)
+  requestedIn  DateTime?
+  requestedOut DateTime?
+  reason       String    @db.NVarChar(500)
+  status       String    @default("در انتظار تأیید") @db.NVarChar(30)
+  reviewedBy   String?   @db.NVarChar(100)
+  reviewNote   String?   @db.NVarChar(300)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Holiday {
+  id        String   @id @default(cuid())
+  date      String   @unique @db.NVarChar(10)
+  title     String   @db.NVarChar(100)
+  jYear     Int
+  jMonth    Int
+  jDay      Int
+  createdAt DateTime @default(now())
+}
+
+model PayrollRun {
+  id            String    @id @default(cuid())
+  jYear         Int
+  jMonth        Int
+  status        String    @default("پیش‌نویس") @db.NVarChar(20)
+  note          String?   @db.NVarChar(300)
+  totalGross    Float     @default(0)
+  totalNet      Float     @default(0)
+  employeeCount Int       @default(0)
+  createdBy     String?   @db.NVarChar(100)
+  finalizedAt   DateTime?
+  payslips      Payslip[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([jYear, jMonth])
+}
+
+model Payslip {
+  id           String     @id @default(cuid())
+  runId        String
+  run          PayrollRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  employeeId   String
+  employee     Employee   @relation(fields: [employeeId], references: [id])
+  baseSalary   Float      @default(0)
+  overtimePay  Float      @default(0)
+  allowances   Float      @default(0)
+  absentDeduct Float      @default(0)
+  insurance    Float      @default(0)
+  tax          Float      @default(0)
+  netPay       Float      @default(0)
+  workedMin    Int        @default(0)
+  overtimeMin  Int        @default(0)
+  absentDays   Float      @default(0)
+  detail       String?    @db.NVarChar(MAX)
+  createdAt    DateTime   @default(now())
+
+  @@unique([runId, employeeId])
+}

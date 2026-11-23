@@ -1,0 +1,6267 @@
+[
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 264,
+  "text": "[HrModuleRuntime] لود پلاگین ناموفق: {Path.GetFileName(dll)} — {ex.GetType().Name}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 268,
+  "text": "[HrModuleRuntime] کشف پلاگین از {dirs.Length} پوشه — {PluginAssemblies.Count} اسمبلی: {string.Join("
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 329,
+  "text": "[HrModuleRuntime] خطای ConfigureDataServices ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 357,
+  "text": "[HrModuleRuntime] خطای ComposeModel ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 365,
+  "text": "[HrModuleRuntime] خطای ComposeCrossModule ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 393,
+  "text": "[HrModuleRuntime] خطای {(preSeed ? "
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 406,
+  "text": "[HrModuleRuntime] خطای ClearDemo ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 420,
+  "text": "[HrModuleRuntime] خطای حذف آبشاری شرکت در ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 431,
+  "text": "[HrModuleRuntime] خطای CompanyCounts ماژول {mod}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 440,
+  "text": "[HrModuleRuntime] خطای CompanyCount ماژول {mod}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 450,
+  "text": "[HrModuleRuntime] خطای CompaniesWithConfig ماژول {m.Code}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 539,
+  "text": "[HrModuleRuntime] خطای ConfigureServices ماژول {b.ModuleCode}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/GatewayContracts.cs",
+  "line": 552,
+  "text": "[HrModuleRuntime] خطای ConfigureApp ماژول {b.ModuleCode}: {ex.Message}"
+ },
+ {
+  "file": "HrPlatform.Contracts/AttCalc.cs",
+  "line": 87,
+  "text": "غایب"
+ },
+ {
+  "file": "HrPlatform.Contracts/AttCalc.cs",
+  "line": 88,
+  "text": "تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 9,
+  "text": "حقوق و دستمزد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 11,
+  "text": "فرمول‌ساز اقلام، پارامترهای سالانه، اجرای لیست حقوق، فیش حقوقی، عیدی و تسویه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 23,
+  "text": "حقوق و دستمزد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 25,
+  "text": "لیست حقوق"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 26,
+  "text": "فرمول‌ساز اقلام"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 27,
+  "text": "پارامترهای سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 28,
+  "text": "عیدی و تسویه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 29,
+  "text": "تنظیمات محاسبه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 31,
+  "text": "پرتال من"
+ },
+ {
+  "file": "modules/HrModules.Payroll/PayrollUiModule.cs",
+  "line": 33,
+  "text": "فیش حقوقی من"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 44,
+  "text": "کارکردی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 54,
+  "text": "صبح"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 58,
+  "text": "همه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 70,
+  "text": "پایه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 71,
+  "text": "اضافه_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 72,
+  "text": "حق_مسکن"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 73,
+  "text": "بن_کارگری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 74,
+  "text": "حق_اولاد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 75,
+  "text": "حق_تأهل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 78,
+  "text": "فوق_العاده_نوبت_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 85,
+  "text": "فوق_العاده_نوبت_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 86,
+  "text": "پایه_محاسبه * {rate} / 100"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 89,
+  "text": "فوق_العاده_شب_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 90,
+  "text": "دقیقه_شب_کاری / 60 * ساعتی * نرخ_شب_کاری / 100"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 91,
+  "text": "پایه_سنوات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 92,
+  "text": "if(سال_خدمت >= 1, پایه_سنوات_روزانه * 30, 0)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 94,
+  "text": "عیدی_سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 95,
+  "text": "round(min(پایه_مبنا * 2, حداقل_ماهانه * 3) * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 96,
+  "text": "سنوات_سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 97,
+  "text": "round(پایه_مبنا * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 98,
+  "text": "کسور_غیبت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 99,
+  "text": "بیمه_سهم_کارگر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 100,
+  "text": "min(درآمد_مشمول_بیمه, سقف_بیمه_روزانه * ماه_روزها) * نرخ_بیمه_کارگر / 100"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 101,
+  "text": "مالیات_حقوق"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 102,
+  "text": "مالیات(max(0, درآمد_مشمول_مالیات - معافیت_مالیات_ماهانه))"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 103,
+  "text": "مالیات_مقطوع"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 104,
+  "text": "جمع_غیرمستمر_مشمول * نرخ_مقطوع / 100"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 136,
+  "text": "حداقل_روزانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 137,
+  "text": "حداقل_ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 138,
+  "text": "حداقل_ساعتی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 139,
+  "text": "حق_مسکن"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 140,
+  "text": "بن_کارگری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 141,
+  "text": "حق_اولاد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 142,
+  "text": "حق_تأهل_ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 143,
+  "text": "پایه_سنوات_روزانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 144,
+  "text": "ضریب_اضافه_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 145,
+  "text": "نرخ_نوبت_صبح"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 146,
+  "text": "نرخ_نوبت_عصر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 147,
+  "text": "نرخ_نوبت_شب"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 148,
+  "text": "نرخ_شب_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 149,
+  "text": "نرخ_بیمه_کارگر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 150,
+  "text": "نرخ_بیمه_کارفرما"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 151,
+  "text": "سقف_بیمه_روزانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 152,
+  "text": "معافیت_مالیات_ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 153,
+  "text": "نرخ_مقطوع"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 154,
+  "text": "پلکان_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 178,
+  "text": "سیستم"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 179,
+  "text": "نمونه محاسبه‌شده توسط موتور داینامیک هنگام راه‌اندازی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollSeeder.cs",
+  "line": 186,
+  "text": "[DbInit] لیست نمونه حقوق «{company.Name}» ساخته نشد: {ex.Message}"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollDataModule.cs",
+  "line": 19,
+  "text": "حقوق و دستمزد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollDataModule.cs",
+  "line": 21,
+  "text": "فرمول‌ساز اقلام، پارامترهای سالانه، اجرای لیست حقوق، فیش حقوقی، عیدی و تسویه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 85,
+  "text": "عدد «{text}» نامعتبر است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 102,
+  "text": "رشته بسته نشده است — علامت ' جا افتاده"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 128,
+  "text": "کاراکتر غیرمجاز «{c}» در فرمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 157,
+  "text": "عبارت اضافه پس از پایان فرمول: «{p.Cur().Text}»"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 175,
+  "text": "به «{op}» نیاز است اما «{(c.Text == "
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 267,
+  "text": "پرانتز بسته نشده است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 282,
+  "text": "پرانتز تابع «{c.Text}» بسته نشده است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 289,
+  "text": "فرمول ناقص است — انتهای فرمول نامنتظره"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 290,
+  "text": "عبارت نامعتبر: «{c.Text}»"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 300,
+  "text": "فرمول خالی است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 312,
+  "text": "در اینجا فقط عدد مجاز است، رشته داده شد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 320,
+  "text": "فرمول خالی است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 322,
+  "text": "نتیجه فرمول رشته است — فرمول باید عدد برگرداند"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 334,
+  "text": "گره نامعتبر در درخت فرمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 340,
+  "text": "متغیر «{name}» تعریف نشده است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 387,
+  "text": "باقیمانده بر صفر ممکن نیست"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 390,
+  "text": "تقسیم بر صفر در فرمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 394,
+  "text": "عملگر «{b.Op}» پشتیبانی نمی‌شود"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 401,
+  "text": "توان منفی پشتیبانی نمی‌شود"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 403,
+  "text": "توان باید عدد صحیح باشد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 418,
+  "text": "قلم"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 419,
+  "text": "مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 420,
+  "text": "تابع «{c.Name}» شناخته‌شده نیست"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 426,
+  "text": "آرگومان {i + 1} تابع «{c.Name}» کم است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 432,
+  "text": "تابع «{fn}» به آرگومان رشته‌ای نیاز دارد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 434,
+  "text": "آرگومان تابع «{fn}» باید رشته باشد — مثال: {fn}('کد')"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollFormula.cs",
+  "line": 449,
+  "text": "پارامتر «پلکان_مالیات» برای این شرکت/سال تعریف نشده است"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollPdf.cs",
+  "line": 22,
+  "text": "دوره {Jalali.MonthName(jm)} {HrT.Digits(jy.ToString())}"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 276,
+  "text": "پایه_مبنا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 277,
+  "text": "پایه_محاسبه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 278,
+  "text": "روزانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 279,
+  "text": "ساعتی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 280,
+  "text": "ماه_روزها"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 281,
+  "text": "ساعت_پایه_ماه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 282,
+  "text": "روش_ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 283,
+  "text": "روش_کارکردی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 284,
+  "text": "کارکرد_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 285,
+  "text": "پرداختی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 286,
+  "text": "غیبت_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 287,
+  "text": "مرخصی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 288,
+  "text": "استعلاجی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 289,
+  "text": "مرخصی_بدون_حقوق_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 290,
+  "text": "مأموریت_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 291,
+  "text": "تعطیل_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 292,
+  "text": "دقیقه_کارکرد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 293,
+  "text": "دقیقه_اضافه_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 294,
+  "text": "دقیقه_اضافه_کاری_رکورد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 295,
+  "text": "دقیقه_اضافه_کاری_مجوز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 296,
+  "text": "دقیقه_تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 297,
+  "text": "دقیقه_تعجیل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 298,
+  "text": "دقیقه_شب_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 299,
+  "text": "کارکرد_از_سال_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 300,
+  "text": "متأهل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 301,
+  "text": "تعداد_فرزند"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 302,
+  "text": "سال_خدمت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 303,
+  "text": "سن"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 304,
+  "text": "شیفت_نوبتکاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 305,
+  "text": "شیفت_شبکاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 306,
+  "text": "شیفت_اقماری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 307,
+  "text": "شیفت_ساعات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 308,
+  "text": "جمع_مزایا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 309,
+  "text": "جمع_کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 310,
+  "text": "درآمد_مشمول_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 311,
+  "text": "درآمد_مشمول_بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 312,
+  "text": "جمع_غیرمستمر_مشمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 317,
+  "text": "round(مبلغ، اعشار؟)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 318,
+  "text": "کمینه چند مقدار"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 319,
+  "text": "بیشینه چند مقدار"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 320,
+  "text": "قدرمطلق"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 321,
+  "text": "گرد به بالا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 322,
+  "text": "گرد به پایین"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 323,
+  "text": "if(شرط، آری، خیر)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 324,
+  "text": "قلم"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 325,
+  "text": "مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 339,
+  "text": "پایه_مبنا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 340,
+  "text": "پایه_محاسبه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 341,
+  "text": "روزانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 342,
+  "text": "ساعتی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 343,
+  "text": "ماه_روزها"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 344,
+  "text": "ساعت_پایه_ماه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 345,
+  "text": "روش_ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 346,
+  "text": "روش_کارکردی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 347,
+  "text": "کارکرد_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 348,
+  "text": "پرداختی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 349,
+  "text": "غیبت_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 350,
+  "text": "مرخصی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 351,
+  "text": "استعلاجی_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 352,
+  "text": "مرخصی_بدون_حقوق_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 353,
+  "text": "مأموریت_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 354,
+  "text": "تعطیل_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 355,
+  "text": "دقیقه_کارکرد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 356,
+  "text": "دقیقه_اضافه_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 357,
+  "text": "دقیقه_اضافه_کاری_رکورد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 358,
+  "text": "دقیقه_اضافه_کاری_مجوز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 359,
+  "text": "دقیقه_تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 360,
+  "text": "دقیقه_تعجیل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 361,
+  "text": "دقیقه_شب_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 362,
+  "text": "کارکرد_از_سال_روز"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 363,
+  "text": "متأهل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 364,
+  "text": "تعداد_فرزند"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 365,
+  "text": "سال_خدمت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 366,
+  "text": "سن"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 367,
+  "text": "شیفت_نوبتکاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 368,
+  "text": "شیفت_اقماری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 377,
+  "text": "شیفت_شبکاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 378,
+  "text": "شیفت_ساعات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 382,
+  "text": "شیفت_شبکاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 383,
+  "text": "شیفت_ساعات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 418,
+  "text": "پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 422,
+  "text": "دپارتمان"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 423,
+  "text": "پست"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 424,
+  "text": "شیفت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 425,
+  "text": "پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 426,
+  "text": "استخدام"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 451,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 457,
+  "text": "جمع_مزایا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 458,
+  "text": "جمع_کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 459,
+  "text": "درآمد_مشمول_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 460,
+  "text": "درآمد_مشمول_بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 461,
+  "text": "جمع_غیرمستمر_مشمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 475,
+  "text": "قلم «{it.Title}» ({it.Code}): {ex.Message}"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 527,
+  "text": "پیش‌نویس"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 546,
+  "text": "{ex.Message} — پرسنل «{emp.FullName}» (کد {emp.PersonnelCode})"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 552,
+  "text": "پایه_محاسبه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 553,
+  "text": "اضافه_کاری"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 554,
+  "text": "پایه_محاسبه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 555,
+  "text": "کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 556,
+  "text": "بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 557,
+  "text": "مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 613,
+  "text": "round(min(پایه_مبنا * 2, حداقل_ماهانه * 3) * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 614,
+  "text": "round(پایه_مبنا * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 622,
+  "text": "جمع_مزایا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 623,
+  "text": "جمع_کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 624,
+  "text": "درآمد_مشمول_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 625,
+  "text": "درآمد_مشمول_بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 626,
+  "text": "جمع_غیرمستمر_مشمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 640,
+  "text": "{ex.Message} — پرسنل «{emp.FullName}» (کد {emp.PersonnelCode}) [{label}]"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 643,
+  "text": "عیدی_سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 644,
+  "text": "سنوات_سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 677,
+  "text": "round(min(پایه_مبنا * 2, حداقل_ماهانه * 3) * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 679,
+  "text": "round(پایه_مبنا * کارکرد_از_سال_روز / 365)"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 682,
+  "text": "جمع_مزایا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 683,
+  "text": "جمع_کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 684,
+  "text": "درآمد_مشمول_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 685,
+  "text": "درآمد_مشمول_بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 686,
+  "text": "جمع_غیرمستمر_مشمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 710,
+  "text": "عیدی_سالانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 720,
+  "text": "پرسنل یافت نشد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 731,
+  "text": "جمع_مزایا"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 732,
+  "text": "جمع_کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 733,
+  "text": "درآمد_مشمول_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 734,
+  "text": "درآمد_مشمول_بیمه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/PayrollEngine.cs",
+  "line": 735,
+  "text": "جمع_غیرمستمر_مشمول"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 18,
+  "text": "پیش‌نویس"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 65,
+  "text": "کد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 68,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 78,
+  "text": "همه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 119,
+  "text": "ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 142,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 174,
+  "text": "پیش‌نویس"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Data/Domain/PayrollEntities.cs",
+  "line": 207,
+  "text": "پیش‌نویس"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 23,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 24,
+  "text": "همه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 151,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 322,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 656,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 780,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Controllers/PayrollController.cs",
+  "line": 785,
+  "text": "تسویه‌شده"
+ },
+ {
+  "file": "modules/HrModules.Visitors/VisitorsUiModule.cs",
+  "line": 9,
+  "text": "بازدیدکنندگان"
+ },
+ {
+  "file": "modules/HrModules.Visitors/VisitorsUiModule.cs",
+  "line": 11,
+  "text": "ارباب رجوع، کارت بازدید، پیمانکاران و هشدارهای امنیتی"
+ },
+ {
+  "file": "modules/HrModules.Visitors/VisitorsUiModule.cs",
+  "line": 19,
+  "text": "کنترل تردد و حراست"
+ },
+ {
+  "file": "modules/HrModules.Visitors/VisitorsUiModule.cs",
+  "line": 21,
+  "text": "ارباب رجوع"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsDataModule.cs",
+  "line": 18,
+  "text": "بازدیدکنندگان"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsDataModule.cs",
+  "line": 20,
+  "text": "ارباب رجوع، کارت بازدید، پیمانکاران و هشدارهای امنیتی"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 36,
+  "text": "شرکت صنعت‌گستر بوشهر"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 37,
+  "text": "شرکت ایمن‌سازان پارس"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 38,
+  "text": "شرکت نگین تعمیرات صنعتی"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 52,
+  "text": "کارت ملی"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 65,
+  "text": "بارکد"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 74,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 79,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 85,
+  "text": "اسماعیل"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 86,
+  "text": "هدیه"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 87,
+  "text": "کوروش"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 88,
+  "text": "ژیار"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 89,
+  "text": "نرگس"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 90,
+  "text": "بهمن"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 91,
+  "text": "روح‌الله"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/VisitorsSeeder.cs",
+  "line": 92,
+  "text": "شهاب"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/Domain/VisitorsEntities.cs",
+  "line": 34,
+  "text": "کارت ملی"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/Domain/VisitorsEntities.cs",
+  "line": 35,
+  "text": "مهمان"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/Domain/VisitorsEntities.cs",
+  "line": 44,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Data/Domain/VisitorsEntities.cs",
+  "line": 71,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 91,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 113,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 143,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 168,
+  "text": "داخل سازمان"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 170,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 175,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 197,
+  "text": "خارج شده"
+ },
+ {
+  "file": "modules/HrModules.Visitors/Controllers/VisitorsController.cs",
+  "line": 200,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.Attendance/SelfAttController.cs",
+  "line": 75,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/SelfAttController.cs",
+  "line": 94,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/SelfAttController.cs",
+  "line": 115,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 13,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 15,
+  "text": "شیفت‌ها و نوبت‌کاری، تردد روزانه، درخواست‌های مرخصی/ماموریت/اضافه‌کار و اصلاحات و موتور محاسبهٔ کارکرد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 32,
+  "text": "منابع انسانی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 34,
+  "text": "شیفت‌ها و نوبت‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 36,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 38,
+  "text": "تردد روزانه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 39,
+  "text": "درخواست‌ها"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 41,
+  "text": "پرتال من"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 43,
+  "text": "درخواست‌های من"
+ },
+ {
+  "file": "modules/HrModules.Attendance/AttendanceUiModule.cs",
+  "line": 44,
+  "text": "کارکرد من"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 84,
+  "text": "پرسنل {employeeId} یافت نشد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 95,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 221,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 223,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 249,
+  "text": "بدون واحد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 269,
+  "text": "بدون واحد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 270,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 312,
+  "text": "بدون واحد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 356,
+  "text": "بدون واحد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 390,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 460,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDbContext.cs",
+  "line": 463,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 25,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 27,
+  "text": "شیفت‌ها و نوبت‌کاری، تردد روزانه، درخواست‌های مرخصی/ماموریت/اضافه‌کار و اصلاحات و موتور محاسبهٔ کارکرد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 81,
+  "text": "شیفت اداری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 82,
+  "text": "نوبت اول (صبح)"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 83,
+  "text": "نوبت دوم (عصر)"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 84,
+  "text": "نوبت سوم (شب)"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 85,
+  "text": "شیفت ۱۲ ساعته روز"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 86,
+  "text": "شیفت اقماری ۱۴/۱۴"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 112,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 113,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 137,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 146,
+  "text": "غایب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 166,
+  "text": "تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 180,
+  "text": "مریم تهرانی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 183,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 184,
+  "text": "ساعتی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 185,
+  "text": "استعلاجی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 186,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 187,
+  "text": "بدون‌حقوق"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 188,
+  "text": "زایمان"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 198,
+  "text": "ناصر زارعی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 201,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 202,
+  "text": "خارجی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 203,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 211,
+  "text": "فرهاد سلطانی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 214,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 215,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 216,
+  "text": "کار در تعطیل"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 217,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 222,
+  "text": "فراموشی زدن کارت هنگام ورود صبحگاهی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 223,
+  "text": "قطعی برق واحد — ثبت نشدن خروج"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 224,
+  "text": "کارکرد دستگاه انبار خراب بود"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 225,
+  "text": "مأموریت اداری خارج از سایت"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceDataModule.cs",
+  "line": 237,
+  "text": "مریم تهرانی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 74,
+  "text": "شرکت ساختمانی آریا سازه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 79,
+  "text": "دفتر مرکزی آریا سازه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 81,
+  "text": "کارگاه مرکزی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 83,
+  "text": "مدیر کارگاه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 85,
+  "text": "اپراتور ساختمانی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 87,
+  "text": "حسابدار"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 90,
+  "text": "شیفت روز کارگاه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 92,
+  "text": "شیفت شب کارگاه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 99,
+  "text": "محمود"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 100,
+  "text": "اکبر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 101,
+  "text": "رضوان"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 102,
+  "text": "حبیب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 103,
+  "text": "نرگس"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 104,
+  "text": "یوسف"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 122,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 141,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 144,
+  "text": "غایب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 159,
+  "text": "تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 165,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 168,
+  "text": "امور خانوادگی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 174,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 177,
+  "text": "نظارت اجرایی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 184,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 187,
+  "text": "بتن‌ریزی شبانه"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 223,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/AttendanceSeeder.cs",
+  "line": 230,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 17,
+  "text": "عادی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 42,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 53,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 59,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 70,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 75,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 86,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 91,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Data/Domain/AttendanceEntities.cs",
+  "line": 106,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 88,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 110,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 132,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 154,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 172,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 178,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 202,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 218,
+  "text": "مأموریت"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 220,
+  "text": "مأموریت"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 242,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 266,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/RequestsController.cs",
+  "line": 293,
+  "text": "اصلاح‌شده (درخواست اصلاح تردد)"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/AttendanceController.cs",
+  "line": 67,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Controllers/ShiftsController.cs",
+  "line": 21,
+  "text": "عادی"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/GatewayUiModule.cs",
+  "line": 9,
+  "text": "دروازهٔ دستگاه‌ها"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/GatewayUiModule.cs",
+  "line": 11,
+  "text": "پایش درون‌اپی دستگاه‌های تردد (poll TCP + پل ADMS) و دوربین‌های پلاک‌خوان (پل ANPR + حلقهٔ راهبند) — جایگزین سرویس ویندو"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/GatewayUiModule.cs",
+  "line": 19,
+  "text": "کنترل تردد و حراست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/GatewayUiModule.cs",
+  "line": 21,
+  "text": "دروازهٔ دستگاه‌ها"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 53,
+  "text": "کلید ارتباطی (CommKey) پذیرفته نشد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 57,
+  "text": "پاسخ اتصال نامعتبر: {r.Cmd}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 90,
+  "text": "فریم TCP نامعتبر (سرصفحه ZK نیست)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 97,
+  "text": "اتصال برقرار نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 103,
+  "text": "اتصال دستگاه قطع شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 112,
+  "text": "اتصال برقرار نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 135,
+  "text": "{action} ناموفق (کد {r.Cmd})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 143,
+  "text": "خواندن ساعت"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 144,
+  "text": "داده ساعت کوتاه است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 152,
+  "text": "تنظیم ساعت"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 158,
+  "text": "خواندن نسخه"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 167,
+  "text": "خواندن تنظیم {key}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 182,
+  "text": "خواندن ظرفیت"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 183,
+  "text": "پاسخ ظرفیت کوتاه است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 199,
+  "text": "بازکردن درب"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 205,
+  "text": "ری‌استارت"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 211,
+  "text": "خاموش‌کردن"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 217,
+  "text": "نوسازی داده"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 223,
+  "text": "فعال‌سازی"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 229,
+  "text": "غیرفعال‌سازی"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 237,
+  "text": "پخش صدا"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 243,
+  "text": "پاک‌سازی داده‌ها"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 249,
+  "text": "پاک‌سازی رکوردها"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 255,
+  "text": "خواندن وضعیت"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 265,
+  "text": "ثبت رویدادها"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 289,
+  "text": "دستور بافر پشتیبانی نمی‌شود (کد {first.Cmd})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 292,
+  "text": "حجم داده نامعتبر است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 321,
+  "text": "خواندن تکه {start}:[{size}] ناموفق بود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 402,
+  "text": "نوشتن کاربر"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 412,
+  "text": "حذف کاربر"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 461,
+  "text": "قالب هویتی کاربر {pin} خالی است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 463,
+  "text": "قالب هویتی کاربر {pin} بیش از حد بزرگ است ({template.Length} بایت)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Protocol/ZkTcpClient.cs",
+  "line": 476,
+  "text": "نوشتن قالب هویتی کاربر {pin}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Controllers/DeviceGatewayController.cs",
+  "line": 221,
+  "text": "لاگ فعالیت پاک شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Controllers/DeviceGatewayController.cs",
+  "line": 237,
+  "text": "راه‌اندازی مجدد دستی ({n} پولر + {m} حلقهٔ دوربین) — اعمال در چرخهٔ بعدی supervisor"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 174,
+  "text": "این دستور در حالت ADMS قابل اجرا نیست — انتقال قالب هویتی فقط با اتصال TCP مستقیم ممکن است (نحوه اتصال دستگاه را در ویرا"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 175,
+  "text": "دستور {c.Type} قابل ترجمه به ADMS نیست — ack ناموفق ثبت شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 183,
+  "text": "تحویل {outLines.Count} دستور به دستگاه (ADMS handshake)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 220,
+  "text": "ACK دستور: {result}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 230,
+  "text": "{sent} رکورد تردد از مسیر ADMS ورود شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 238,
+  "text": "{users.Count} کاربر از دستگاه ثبت شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AdmsEndpoints.cs",
+  "line": 243,
+  "text": "خطای پردازش داده دستگاه: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 32,
+  "text": "دروازهٔ دستگاه‌ها فعال نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 38,
+  "text": "SN دوربین الزامی است — ?SN=… یا /anpr/{sn}/plate"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 42,
+  "text": "پلاکی در درخواست دیده نشد — body JSON/form یا متن خام یا ?plate="
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 53,
+  "text": "خوانش پلاک ({reads.Count} ردیف) → پاسخ {status}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 70,
+  "text": "دروازهٔ دستگاه‌ها فعال نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 76,
+  "text": "SN دوربین الزامی است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 245,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 247,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Bridge/AnprEndpoints.cs",
+  "line": 248,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 47,
+  "text": "دروازه: بانک هنوز آماده نیست ({Message}) — ۵ ثانیه دیگر"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 53,
+  "text": "دروازهٔ دستگاه‌ها (ماژول درون‌اپی) فعال شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 54,
+  "text": "=== دروازهٔ دستگاه‌ها (فاز ۶۳) شروع شد — حالت ماژول درون‌اپی ==="
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 64,
+  "text": "خاموشی دروازه"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 65,
+  "text": "=== دروازهٔ دستگاه‌ها متوقف شد ==="
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 132,
+  "text": "از فهرست دوربین‌ها خارج شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 139,
+  "text": "پایش دوربین‌ها از تنظیمات خاموش است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 145,
+  "text": "از فهرست دستگاه‌های TCP خارج شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 152,
+  "text": "ماژول خاموش است (کلید مدیر/مجوز/نصب)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 154,
+  "text": "پایش دستگاه‌ها فعال شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 155,
+  "text": "پایش دستگاه‌ها متوقف شد — {why}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 187,
+  "text": "پایش متوقف است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 188,
+  "text": "پورت اختصاصی در تنظیمات خالی است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 189,
+  "text": "پورت تنظیم‌شده همان پورت خود اپ است — endpoint مستقیم سرویس می‌دهد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 190,
+  "text": "پورت اپ شناسایی نشد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 239,
+  "text": "خطای supervisor دروازه: {Message}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 240,
+  "text": "خطای همگام‌سازی کانفیگ: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 256,
+  "text": "Poller راه‌اندازی شد — {dev.Ip}:{(dev.Port is > 0 ? dev.Port : _rt.Config.DefaultDevicePort)}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 265,
+  "text": "Poller متوقف شد — "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 271,
+  "text": "خاموشی دروازه"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 298,
+  "text": "خطای poller دستگاه {Serial}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 299,
+  "text": "خطای چرخهٔ poll: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 319,
+  "text": "حلقهٔ دوربین پلاک‌خوان راه‌اندازی شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 328,
+  "text": "حلقهٔ دوربین متوقف شد — "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 334,
+  "text": "خاموشی دروازه"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 369,
+  "text": "خطای حلقهٔ دوربین {Serial}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 370,
+  "text": "خطای حلقهٔ دوربین: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 386,
+  "text": "ضربان دوربین سالم است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 387,
+  "text": "ضربان دوربین سالم"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 403,
+  "text": "قالب HTTP ری‌استارت دوربین در appsettings (Gateway:Anpr:Cameras) پیکربندی نشده است"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 404,
+  "text": "قالب HTTP راهبند در appsettings (Gateway:Anpr:Cameras) پیکربندی نشده — آدرس کنترل راهبند سازنده را با {ip} وارد کنید"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 406,
+  "text": "دستور {c.Type} قابل اجرا نیست — قالب HTTP تنظیم نشده"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 412,
+  "text": "دستور با موفقیت به دوربین ارسال شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 413,
+  "text": "دستور {c.Type}: {(ok ? "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 419,
+  "text": "دستور «{c.Type}» برای دوربین پلاک‌خوان قابل اجرا نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 462,
+  "text": "دستگاه آفلاین است (آخرین poll: {live.LastPoll:HH:mm:ss})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/GatewayWorker.cs",
+  "line": 467,
+  "text": "خطای sweeper: {Message}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 34,
+  "text": "اتصال TCP برقرار شد ({dev.Ip}:{port})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 41,
+  "text": "اتصال TCP ناموفق: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 80,
+  "text": "اجرا شد (TCP)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 88,
+  "text": "درب به مدت {seconds} ثانیه باز شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 94,
+  "text": "ساعت دستگاه با سرور همگام شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 99,
+  "text": "دستگاه ری‌استارت می‌شود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 104,
+  "text": "داده‌های داخلی دستگاه نوسازی شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 115,
+  "text": "{users.Count} کاربر از دستگاه خوانده و به سامانه ثبت شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 133,
+  "text": "کاربر {pinQ} از دستگاه خوانده شد ({hits.Count} رکورد)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 137,
+  "text": "کاربر {pinQ} روی دستگاه یافت نشد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 144,
+  "text": "دستگاه فعال شد — پذیرش تردد از سر گرفته شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 149,
+  "text": "دستگاه غیرفعال شد (حالت تعمیرات — صفحه قفل است)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 192,
+  "text": "{bios.Count} قالب هویتی برای {users.Count} کاربر خوانده و ثبت شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 200,
+  "text": "هیچ کاربری برای ارسال تعیین نشده بود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 238,
+  "text": "نوشتن قالب {type}[{JInt(jb, "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 242,
+  "text": "{pushed} کاربر + {tplCount} قالب هویتی روی دستگاه ثبت شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 256,
+  "text": "کاربر {pin} روی دستگاه ثبت شد (uid={uid})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 265,
+  "text": "کاربر {pin} از دستگاه حذف شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 271,
+  "text": "رکوردهای تردد دستگاه پاک شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 276,
+  "text": "کل داده‌های دستگاه پاک شد"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 281,
+  "text": "نوع دستور {c.Type} در حالت TCP پشتیبانی نمی‌شود"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 289,
+  "text": "خطای اجرای دستور {c.Type}: {ex.Message}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 294,
+  "text": "دستور {c.Type}: {result}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 308,
+  "text": "خواندن رکوردهای تردد ناموفق: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 322,
+  "text": "ورود رکوردها به سامانه ناموفق: "
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/ZkPoller.cs",
+  "line": 326,
+  "text": "{sent} رکورد تردد از دستگاه ورود شد ({punches.Count} خوانده‌شده)"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 53,
+  "text": "جابه‌جایی پورت relay"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 68,
+  "text": "پورت اختصاصی ADMS روی {port} فعال شد — حواله به پورت اپ ({upstreamPort})"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 74,
+  "text": "اتصال به پورت {port} ممکن نشد — {ex.Message}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 94,
+  "text": "پورت اختصاصی ADMS ({old}) بسته شد — {reason}"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 129,
+  "text": "پورت اپ (حلقه‌باز) در دسترس نیست"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Runtime/AdmsRelay.cs",
+  "line": 159,
+  "text": "خطای relay پورت ADMS: "
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 27,
+  "text": "تجهیزات و گیت‌وی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 29,
+  "text": "دستگاه‌های تردد، داده‌های هویتی/بیومتریک، تنظیمات گیت‌وی و وب‌هوک‌ها — تغذیه‌کنندهٔ حضور، کنترل تردد و پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 119,
+  "text": "ترمینال ورودی اصلی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 120,
+  "text": "تشخیص چهره گیت شرقی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 121,
+  "text": "دستگاه دفتر مرکزی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 122,
+  "text": "ترمینال انبار محصول"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 123,
+  "text": "ترمینال کارگاه فنی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 124,
+  "text": "کنترلر منطقه حساس"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesDataModule.cs",
+  "line": 268,
+  "text": "ناشناس"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 14,
+  "text": "تجهیزات و گیت‌وی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 16,
+  "text": "دستگاه‌های تردد، داده‌های هویتی/بیومتریک، تنظیمات گیت‌وی و وب‌هوک‌ها — تغذیه‌کنندهٔ حضور، کنترل تردد و پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 24,
+  "text": "کنترل تردد و حراست"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 26,
+  "text": "دستگاه‌های تردد"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 27,
+  "text": "نمای زنده حراست"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 28,
+  "text": "داده‌های هویتی"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 30,
+  "text": "مدیریت سیستم"
+ },
+ {
+  "file": "modules/HrModules.Devices/DevicesUiModule.cs",
+  "line": 32,
+  "text": "تنظیمات گیت‌وی"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 326,
+  "text": "شبیه‌ساز"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 336,
+  "text": "موتور تردد در این نسخه نصب نیست (ماژول حضور در بسته نیست)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 370,
+  "text": "موتور تردد در این نسخه نصب نیست (ماژول حضور در بسته نیست)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 428,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 458,
+  "text": "ابتدا یک شرکت تعریف کنید (صفحه شرکت‌ها)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 589,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Devices/Controllers/DevicesController.cs",
+  "line": 590,
+  "text": "آفلاین"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 14,
+  "text": "سازمان و پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 16,
+  "text": "چارت سازمانی، پرسنل، قراردادها و احکام، تعطیلات رسمی و ورود اکسل — پایهٔ مشترک همهٔ ماژول‌های سیستم"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 29,
+  "text": "منابع انسانی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 31,
+  "text": "پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 32,
+  "text": "چارت سازمانی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgUiModule.cs",
+  "line": 33,
+  "text": "تعطیلات رسمی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 29,
+  "text": "سازمان و پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 31,
+  "text": "چارت سازمانی، پرسنل، قراردادها و احکام، تعطیلات رسمی و ورود اکسل — پایهٔ مشترک همهٔ ماژول‌های سیستم"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 114,
+  "text": "دفتر مدیریت عامل"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 115,
+  "text": "منابع انسانی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 116,
+  "text": "حراست و حفاظت"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 117,
+  "text": "تولید و بهره‌برداری"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 118,
+  "text": "مالی و اداری"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 119,
+  "text": "فنی و مهندسی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 120,
+  "text": "بازرگانی و خرید"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 121,
+  "text": "HSE و ایمنی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 123,
+  "text": "واحد الفین"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 124,
+  "text": "واحد پلی‌اتیلن"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 125,
+  "text": "واحد یوتیلیتی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 135,
+  "text": "مدیرعامل"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 136,
+  "text": "مدیر منابع انسانی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 137,
+  "text": "کارشناس منابع انسانی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 138,
+  "text": "رئیس حراست"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 139,
+  "text": "نگهبان"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 140,
+  "text": "مدیر تولید"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 141,
+  "text": "سرپرست شیفت"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 142,
+  "text": "اپراتور تولید"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 143,
+  "text": "رئیس مالی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 144,
+  "text": "حسابدار"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 145,
+  "text": "مدیر فنی و مهندسی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 146,
+  "text": "تکنسین نگهداری و تعمیرات"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 147,
+  "text": "کارشناس بازرگانی و خرید"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 148,
+  "text": "کارشناس HSE"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 162,
+  "text": "کامران"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 163,
+  "text": "مریم"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 164,
+  "text": "سعید"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 165,
+  "text": "پریسا"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 166,
+  "text": "حسین"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 167,
+  "text": "جواد"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 168,
+  "text": "یاسر"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 169,
+  "text": "لیلا"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 170,
+  "text": "فرهاد"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 171,
+  "text": "رضا"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 172,
+  "text": "مهدی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 173,
+  "text": "امیر"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 174,
+  "text": "علی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 175,
+  "text": "حسن"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 176,
+  "text": "سامان"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 177,
+  "text": "هومن"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 178,
+  "text": "بهزاد"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 179,
+  "text": "آرش"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 180,
+  "text": "مسعود"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 181,
+  "text": "زهرا"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 182,
+  "text": "فاطمه"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 183,
+  "text": "ناصر"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 184,
+  "text": "بهنام"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 185,
+  "text": "کیان"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 186,
+  "text": "سارا"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 187,
+  "text": "الناز"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 188,
+  "text": "شیما"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 189,
+  "text": "نگار"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 209,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 213,
+  "text": "مجرد"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 231,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 235,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 241,
+  "text": "پروژه‌ای"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 246,
+  "text": "آزمایشی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 254,
+  "text": "منقضی"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 258,
+  "text": "استخدام"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 260,
+  "text": "احکام استخدام اولیه صادر و ابلاغ گردید."
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 267,
+  "text": "ترفیع"
+ },
+ {
+  "file": "modules/HrModules.Org/OrgDataModule.cs",
+  "line": 270,
+  "text": "در اجرای ماده ۲۹ آیین‌نامه کارگزینی به رتبه بالاتر ارتقا یافت."
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 111,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 112,
+  "text": "متأهل"
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 150,
+  "text": "غیرفعال"
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 178,
+  "text": " — پین "
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 237,
+  "text": "متأهل"
+ },
+ {
+  "file": "modules/HrModules.Org/Controllers/EmployeesController.cs",
+  "line": 308,
+  "text": "قالب-ورود-گروهی.xlsx"
+ },
+ {
+  "file": "modules/HrModules.Access/AccessUiModule.cs",
+  "line": 9,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/AccessUiModule.cs",
+  "line": 11,
+  "text": "مناطق و گیت‌ها، مجوزهای عبور، گروه‌های دسترسی و کارت‌های شناسایی"
+ },
+ {
+  "file": "modules/HrModules.Access/AccessUiModule.cs",
+  "line": 19,
+  "text": "کنترل تردد و حراست"
+ },
+ {
+  "file": "modules/HrModules.Access/AccessUiModule.cs",
+  "line": 21,
+  "text": "مناطق و گیت‌ها"
+ },
+ {
+  "file": "modules/HrModules.Access/AccessUiModule.cs",
+  "line": 22,
+  "text": "کارت‌های شناسایی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 20,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 22,
+  "text": "مناطق و گیت‌ها، مجوزهای عبور، گروه‌های دسترسی و کارت‌های شناسایی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 94,
+  "text": "ورودی اصلی سایت"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 95,
+  "text": "منطقه تولید"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 96,
+  "text": "انبار محصول"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 97,
+  "text": "دفتر مرکزی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 98,
+  "text": "انبار مواد شیمیایی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 102,
+  "text": "گیت اصلی ورودی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 103,
+  "text": "گیت اصلی خروجی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 104,
+  "text": "گیت شرقی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 105,
+  "text": "درب واحد الفین"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 106,
+  "text": "درب واحد پلی‌اتیلن"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 107,
+  "text": "گیت انبار محصول"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 108,
+  "text": "درب برقی دفتر مرکزی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 109,
+  "text": "درب انبار مواد شیمیایی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 112,
+  "text": "خراب"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 125,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 128,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 133,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 135,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 136,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 137,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 138,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 139,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 140,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 141,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 142,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 143,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 144,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 145,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 150,
+  "text": "کارت"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 159,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 165,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 170,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 171,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 183,
+  "text": "ورود غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 184,
+  "text": "بحرانی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 185,
+  "text": "تلاش {dir} غیرمجاز توسط {empNames.GetValueOrDefault(employeeId, "
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDataModule.cs",
+  "line": 186,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDbContext.cs",
+  "line": 74,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessDbContext.cs",
+  "line": 82,
+  "text": "منقضی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessPermissionEvaluator.cs",
+  "line": 23,
+  "text": "فاقد مجوز دسترسی به این منطقه"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessPermissionEvaluator.cs",
+  "line": 54,
+  "text": "خارج از ساعات/روزهای مجاز یا مجوز منقضی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 48,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 51,
+  "text": "کارت موقت پیمانکار"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 56,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 57,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 62,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/AccessSeeder.cs",
+  "line": 64,
+  "text": "به‌عنوان مفقود اعلام شد — اسکن رد می‌شود"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 18,
+  "text": "عادی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 44,
+  "text": "درب برقی"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 45,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 46,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 48,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 70,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 76,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 89,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 90,
+  "text": "کارت"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 91,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Data/Domain/AccessEntities.cs",
+  "line": 105,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 23,
+  "text": "درب در حالت قفل دائم است"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 31,
+  "text": "گیت خارج از بازه زمانی مجاز است"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 59,
+  "text": "خارج از پنجره زمانی گروه دسترسی"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 60,
+  "text": "فاقد مجوز دسترسی به این منطقه"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 76,
+  "text": "آنت‌ی‌پس‌بک: ورود مجدد بدون خروج قبلی از منطقه"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 86,
+  "text": "اثر انگشت"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 93,
+  "text": "اثر انگشت"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 105,
+  "text": "دومرحله‌ای"
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 108,
+  "text": "احراز دومرحله‌ای این منطقه فعال است (اختیاری — تعیین‌شده توسط مدیر): {method} + "
+ },
+ {
+  "file": "modules/HrModules.Access/Services/AccessControl.cs",
+  "line": 109,
+  "text": "اثر انگشت/چهره"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 187,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 192,
+  "text": "بالا"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 194,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 210,
+  "text": "کارت در مخزن ثبت نشده است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 212,
+  "text": "کارت به‌عنوان مفقود اعلام شده است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 214,
+  "text": "کارت باطل شده است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 216,
+  "text": "کارت به پرسنلی تخصیص نیافته است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 218,
+  "text": "اعتبار کارت منقضی شده است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 220,
+  "text": "کارت فاقد دارنده است"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 234,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 237,
+  "text": "دومرحله‌ای"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 242,
+  "text": "آنت‌ی‌پس‌بک"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 243,
+  "text": "بحرانی"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 245,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 264,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 274,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 275,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 299,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 301,
+  "text": "تخلیه اضطراری"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 305,
+  "text": "تخلیه اضطراری"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 307,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 329,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 412,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/AccessController.cs",
+  "line": 434,
+  "text": "لغوشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 29,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 80,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 111,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 116,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 137,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 158,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 163,
+  "text": "کارت گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 166,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 184,
+  "text": "باطل"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 206,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Controllers/CardsController.cs",
+  "line": 231,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Parking/ParkingUiModule.cs",
+  "line": 9,
+  "text": "پارکینگ (پلاک‌خوان)"
+ },
+ {
+  "file": "modules/HrModules.Parking/ParkingUiModule.cs",
+  "line": 11,
+  "text": "پارکینگ‌ها و دروازه‌ها، خودروها، مجوزهای عبور و رخدادهای ANPR"
+ },
+ {
+  "file": "modules/HrModules.Parking/ParkingUiModule.cs",
+  "line": 22,
+  "text": "پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Parking/ParkingUiModule.cs",
+  "line": 24,
+  "text": "کنترل پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 48,
+  "text": "پارکینگ اصلی ورودی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 49,
+  "text": "جنب ورودی اصلی سایت، سطح همکف"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 53,
+  "text": "پارکینگ کارکنان شیفت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 54,
+  "text": "ضلع شرقی سایت، طبقه منفی یک"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 60,
+  "text": "پارکینگ دفتر مرکزی آریا سازه"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 61,
+  "text": "پشت ساختمان اداری"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 67,
+  "text": "راهبند ورودی اصلی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 68,
+  "text": "راهبند خروجی اصلی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 69,
+  "text": "گیت موتورسیکلت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 70,
+  "text": "راهبند ورودی شیفت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 71,
+  "text": "راهبند خروجی شیفت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 76,
+  "text": "پراید"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 77,
+  "text": "سفید"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 78,
+  "text": "ع"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 94,
+  "text": "{left}{letter}{right} ایران {iran}"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 98,
+  "text": "وانت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 102,
+  "text": "هوندا"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 117,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 120,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 126,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 128,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 133,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 134,
+  "text": "لغوشده"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 139,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 141,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 157,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 158,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 163,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 164,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 175,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 182,
+  "text": "43و912 ایران 77"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 183,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 190,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 191,
+  "text": "مجوز منقضی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 211,
+  "text": "لاین ورود، ترافیک سنگین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 218,
+  "text": "دوربین پلاک‌خوان {g.Name}"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 224,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingSeeder.cs",
+  "line": 230,
+  "text": "آفلاین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingDbContext.cs",
+  "line": 105,
+  "text": "مهمان/ناشناس"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingDataModule.cs",
+  "line": 19,
+  "text": "پارکینگ (پلاک‌خوان)"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/ParkingDataModule.cs",
+  "line": 21,
+  "text": "پارکینگ‌ها و دروازه‌ها، خودروها، مجوزهای عبور و رخدادهای ANPR"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 43,
+  "text": "راهبند"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 44,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 45,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 47,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 66,
+  "text": "سواری"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 86,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 91,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 113,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 114,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 115,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 148,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "modules/HrModules.Parking/Data/Domain/ParkingEntities.cs",
+  "line": 153,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 35,
+  "text": "بازکردن راهبند"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 36,
+  "text": "بستن راهبند"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 37,
+  "text": "ضربان سنجش اتصال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 38,
+  "text": "ری‌استارت دوربین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 51,
+  "text": "سرویس پل"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 78,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 108,
+  "text": "آفلاین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 116,
+  "text": "قطع دوربین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 117,
+  "text": "بالا"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 118,
+  "text": "دوربین پلاک‌خوان «{c.Name}» ({c.Brand} — {c.Serial}) از دسترس خارج شد. آخرین اتصال: "
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 119,
+  "text": "بدون سابقه"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 120,
+  "text": "کنترل پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 162,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 169,
+  "text": "بالا"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 170,
+  "text": "{reason} — پلاک «{plate}» در {gate.Name} ({gate.Lot?.Name})"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 171,
+  "text": "کنترل پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 179,
+  "text": "گیت غیرفعال است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 180,
+  "text": "گیت قفل دائم است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 181,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 182,
+  "text": "جهت عبور با گیت هم‌خوانی ندارد"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 187,
+  "text": "خودرو فاقد مجوز پارکینگ است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 188,
+  "text": "خودرو غیرفعال است (توقیف/خارج از سرویس)"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 199,
+  "text": "مجوز فعال برای این پارکینگ ندارد"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 200,
+  "text": "مجوز پارکینگ لغو شده است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 201,
+  "text": "مجوز منقضی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 210,
+  "text": "ورود تکراری — خروج قبلی ثبت نشده است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 211,
+  "text": "خروج تکراری — ورود قبلی ثبت نشده است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 218,
+  "text": "ظرفیت پارکینگ تکمیل است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 225,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 294,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 295,
+  "text": "خروجی"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 296,
+  "text": "خروج"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingOps.cs",
+  "line": 299,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingGatewaySink.cs",
+  "line": 86,
+  "text": "با موفقیت اجرا شد"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingGatewaySink.cs",
+  "line": 96,
+  "text": "دوربین یافت نشد یا غیرفعال است"
+ },
+ {
+  "file": "modules/HrModules.Parking/Services/ParkingGatewaySink.cs",
+  "line": 145,
+  "text": "مجاز"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 377,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 445,
+  "text": "غیرفعال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 457,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 465,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 466,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 473,
+  "text": "تخلیه اضطراری"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 474,
+  "text": "بالا"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 476,
+  "text": "کنترل پارکینگ"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 506,
+  "text": "لغوشده"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 526,
+  "text": "آفلاین"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/ParkingController.cs",
+  "line": 621,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/HrModules.Parking/Controllers/Api/AnprWebhookController.cs",
+  "line": 128,
+  "text": "مجاز"
+ },
+ {
+  "file": "HrPlatform.Core/Services/AuthCore.cs",
+  "line": 157,
+  "text": "سیستم"
+ },
+ {
+  "file": "HrPlatform.Core/Services/HrLangStore.cs",
+  "line": 65,
+  "text": "فارسی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/HrLangStore.cs",
+  "line": 80,
+  "text": "فارسی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/HrLangStore.cs",
+  "line": 107,
+  "text": "فارسی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/PlateFmt.cs",
+  "line": 26,
+  "text": "ایران"
+ },
+ {
+  "file": "HrPlatform.Core/Services/EssAuth.cs",
+  "line": 57,
+  "text": "کوکی خودخدمتی نامعتبر: {Msg}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 21,
+  "text": "تأخیر پرسنل امروز"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 22,
+  "text": "غیبت پرسنل امروز"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 23,
+  "text": "انقضای قرارداد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 24,
+  "text": "دستگاه آفلاین"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 25,
+  "text": "درخواست‌های در انتظار تأیید"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 57,
+  "text": "قاعده نامشخص: {rule.Type}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 86,
+  "text": "خطای اجرای قاعده اعلان {Rule}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 100,
+  "text": "اعلام تأخیر ({rows.Count} نفر) — {DateTime.Now:yyyy/MM/dd HH:mm}\\n"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 102,
+  "text": "• {x.FullName} ({x.PersonnelCode}) — {x.LateMinutes} دقیقه تأخیر"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 103,
+  "text": "تأخیر {rows.Count} نفر"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 110,
+  "text": "اعلام غیبت ({rows.Count} نفر) — {DateTime.Now:yyyy/MM/dd HH:mm}\\n"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 113,
+  "text": "غیبت {rows.Count} نفر"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 123,
+  "text": "قراردادهای در حال انقضا تا {until:yyyy/MM/dd} ({rows.Count} مورد):\\n"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 125,
+  "text": "• {x.FirstName} {x.LastName} ({x.PersonnelCode}) — قرارداد {x.ContractNo} — تا {x.EndDate:yyyy/MM/dd}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 126,
+  "text": "{rows.Count} قرارداد در حال انقضا"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 135,
+  "text": "دستگاه‌های بدون ارتباط بیش از {minutes} دقیقه ({rows.Count} دستگاه):\\n"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 137,
+  "text": "• {x.Name} ({x.Ip}) — آخرین ارتباط: {(x.LastSeenAt?.ToString("
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 138,
+  "text": "{rows.Count} دستگاه آفلاین"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 146,
+  "text": "درخواست‌های در انتظار تأیید:\\n• مرخصی: {c.Leaves}\\n• مأموریت: {c.Missions}\\n• اصلاح تردد: {c.Corrections}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 147,
+  "text": "{hits} درخواست در انتظار"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 170,
+  "text": "SMTP تنظیم نشده — ارسال شبیه‌سازی شد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 186,
+  "text": "سرویس پیامک تنظیم نشده — ارسال شبیه‌سازی شد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 200,
+  "text": "خطای ارسال اعلان {Rule}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 242,
+  "text": "موتور اعلان‌ها: {N} اعلان ارسال/ثبت شد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/Notifications.cs",
+  "line": 245,
+  "text": "خطای دوره اعلان‌ها"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 32,
+  "text": "بازکردن درب"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 33,
+  "text": "همگام‌سازی ساعت"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 34,
+  "text": "ری‌استارت دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 35,
+  "text": "ارسال کاربر به دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 36,
+  "text": "حذف کاربر از دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 37,
+  "text": "دریافت اطلاعات کاربر"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 38,
+  "text": "دریافت فهرست کاربران"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 39,
+  "text": "دریافت اطلاعات هویتی از دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 40,
+  "text": "ارسال کاربر + قالب‌های هویتی به دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 41,
+  "text": "به‌روزرسانی داده‌ها"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 42,
+  "text": "پاک‌سازی داده‌ها"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 43,
+  "text": "پاک‌سازی رکوردهای تردد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 44,
+  "text": "فعال‌سازی دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 45,
+  "text": "غیرفعال‌سازی دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 58,
+  "text": "سرویس پل"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 89,
+  "text": "آنلاین"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 142,
+  "text": "ناشناس"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 143,
+  "text": "کد پرسنلی در سامانه یافت نشد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 167,
+  "text": "ورود"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 195,
+  "text": "آفلاین"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 204,
+  "text": "قطع دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 205,
+  "text": "بالا"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 206,
+  "text": "دستگاه «{d.Name}» ({d.Brand} — {d.Serial}) از دسترس خارج شد. آخرین اتصال: "
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 207,
+  "text": "بدون سابقه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 208,
+  "text": "دستگاه‌های تردد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/DeviceOps.cs",
+  "line": 287,
+  "text": "کد پرسنلی در سامانه یافت نشد"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BuildInfo.cs",
+  "line": 25,
+  "text": "سامانه یکپارچه منابع انسانی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BuildInfo.cs",
+  "line": 29,
+  "text": "نامشخص"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 30,
+  "text": "همهٔ داده‌ها"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 51,
+  "text": "شرکتِ خودم"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 52,
+  "text": "واحد سازمانی خودم"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 53,
+  "text": "فقط رکوردهای خودم"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 54,
+  "text": "همهٔ داده‌ها"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 60,
+  "text": "شرکت‌های انتخابی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 61,
+  "text": "واحد سازمانی انتخابی (با زیرشاخه‌ها)"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 62,
+  "text": "فقط رکوردهای خودم"
+ },
+ {
+  "file": "HrPlatform.Core/Services/UserScope.cs",
+  "line": 63,
+  "text": "همهٔ داده‌ها — بدون محدودیت"
+ },
+ {
+  "file": "HrPlatform.Core/Services/PdfReport.cs",
+  "line": 78,
+  "text": "٪"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 21,
+  "text": "اثر انگشت"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 22,
+  "text": "چهره"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 23,
+  "text": "کارت"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 24,
+  "text": "رمز عددی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 25,
+  "text": "کف دست"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 26,
+  "text": "عکس چهره"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 33,
+  "text": "شست راست"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 34,
+  "text": "شست چپ"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 41,
+  "text": "شماره کارت"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 42,
+  "text": "قالب چهره"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 43,
+  "text": "رمز عددی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 44,
+  "text": "تصویر چهره"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 45,
+  "text": "اسلات {index}"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 50,
+  "text": "مدیر دستگاه"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 51,
+  "text": "سرپرست"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 52,
+  "text": "ثبت‌نام‌کننده"
+ },
+ {
+  "file": "HrPlatform.Core/Services/BioSyncCore.cs",
+  "line": 53,
+  "text": "عادی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 17,
+  "text": "نیلی درخشان (پیش‌فرض)"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 18,
+  "text": "فیروزه‌ای سازمانی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 19,
+  "text": "آبی دریایی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 20,
+  "text": "سبز جنگل"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 21,
+  "text": "بنفش سلطنتی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 22,
+  "text": "شفق نارنجی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 23,
+  "text": "سرخابی"
+ },
+ {
+  "file": "HrPlatform.Core/Services/SettingsService.cs",
+  "line": 24,
+  "text": "گرافیت"
+ },
+ {
+  "file": "HrPlatform.Core/Infrastructure/HasPerm.cs",
+  "line": 31,
+  "text": "احراز هویت لازم است"
+ },
+ {
+  "file": "HrPlatform.Core/Infrastructure/HasPerm.cs",
+  "line": 44,
+  "text": "دسترسی کافی ندارید (مجوز لازم: "
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 68,
+  "text": "قراردادی"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 69,
+  "text": "فعال"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 82,
+  "text": "مجرد"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 103,
+  "text": "دائم"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 108,
+  "text": "فعال"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 117,
+  "text": "استخدام"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 277,
+  "text": "ترمینال اثر انگشت"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 282,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 289,
+  "text": "آنلاین"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 371,
+  "text": "شبیه‌ساز"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 397,
+  "text": "تردد"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 525,
+  "text": "شرکت پتروشیمی پارس آسیا"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 629,
+  "text": "ورود غیرمجاز"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 630,
+  "text": "متوسط"
+ },
+ {
+  "file": "HrPlatform.Core/Domain/Entities.cs",
+  "line": 632,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Program.cs",
+  "line": 206,
+  "text": "افزودن تأمین‌کنندهٔ ویوهای Razor ناموفق بود"
+ },
+ {
+  "file": "HrAttendance.Web/Program.cs",
+  "line": 231,
+  "text": "راه‌اندازی اولیه بانک در استارتاپ ناموفق بود — سامانه در حالت تعمیر بالا آمد؛ اتصال را از /Setup اصلاح کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Program.cs",
+  "line": 236,
+  "text": "سامانه هنوز پیکربندی نشده است — ویزارد راه‌اندازی اولیه در /Setup در انتظار است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 93,
+  "text": "ماژول شناخته نشده است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 94,
+  "text": "ماژول‌های پایه ستون فقرات سامانه‌اند و قابل خاموش‌کردن نیستند"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 96,
+  "text": "ماژول «"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 98,
+  "text": "این ماژول در مجوز نصب فعال نشده است — برای افزودن آن، مجوز جدید با فهرست ماژول‌ها دریافت کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 115,
+  "text": "ماژول «{m.Title}» فعال شد — منو و صفحه‌های آن از همین لحظه در دسترس است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 116,
+  "text": "ماژول «{m.Title}» غیرفعال شد — منو و صفحه‌های آن پنهان است؛ داده‌ها محفوظ می‌مانند"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 120,
+  "text": "نوشتن وضعیت ماژول‌ها ممکن نشد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 121,
+  "text": "ذخیرهٔ وضعیت ماژول ممکن نشد: "
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleStateService.cs",
+  "line": 149,
+  "text": "خواندن وضعیت ماژول‌ها ممکن نشد — همهٔ ماژول‌ها فعال فرض می‌شوند"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleCatalog.cs",
+  "line": 94,
+  "text": "کنترلر «{key}» به دو ماژول نسبت داده شده: {map[key]} و {m.Code}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/ModuleCatalog.cs",
+  "line": 107,
+  "text": "اکشن «{ctrl}.{act}» به دو ماژول نسبت داده شده: {prev} و {ui.Code}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 18,
+  "text": "هستهٔ پلتفرم"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 21,
+  "text": "ورود و کاربران و نقش‌ها، شرکت‌ها، ویزارد راه‌اندازی و تنظیمات، حسابرسی، اعلان‌ها، گزارش‌ساز، پرتال «من»، مجوز نصب و پوست"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 34,
+  "text": "عمومی"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 36,
+  "text": "داشبورد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 38,
+  "text": "تحلیل و گزارش"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 40,
+  "text": "گزارش‌ساز تحلیلی"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 42,
+  "text": "پرتال من"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 44,
+  "text": "خانه من"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 46,
+  "text": "مدیریت سیستم"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 48,
+  "text": "شرکت‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 49,
+  "text": "مجوز نصب"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 50,
+  "text": "کاربران و نقش‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 51,
+  "text": "اعلان‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 52,
+  "text": "تنظیمات سامانه"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 53,
+  "text": "زبان‌ها و ترجمه"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/CoreModule.cs",
+  "line": 54,
+  "text": "حسابرسی"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 80,
+  "text": "هنوز بررسی نشده"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 133,
+  "text": "خطا در ارزیابی مجوز"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 134,
+  "text": "خطا در خواندن وضعیت مجوز: "
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 169,
+  "text": "مجوز «{payload.Licensee}» در تاریخ {Jalali.ToPersianDigits(Jalali.FmtFa(exp.ToLocalTime()))} منقضی شده است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 182,
+  "text": "مجوز فعال — دارنده: {payload.Licensee} — اعتبار تا {Jalali.ToPersianDigits(Jalali.FmtFa(e.ToLocalTime()))}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 183,
+  "text": "مجوز دائمی فعال — دارنده: {payload.Licensee}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 196,
+  "text": "اطلاعات دورهٔ آزمایشی دستکاری شده است — برای ادامه، مجوز نصب وارد کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 197,
+  "text": "دورهٔ آزمایشی {Jalali.ToPersianDigits(TrialDays.ToString())} روزه به پایان رسیده است — برای ادامه، مجوز نصب وارد کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 203,
+  "text": "حالت آزمایشی — {Jalali.ToPersianDigits((daysLeft + 1).ToString())} روز باقی‌مانده"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 234,
+  "text": "مجوز پذیرفته نشد — "
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 240,
+  "text": "مجوز نصب ذخیره شد — دارنده: {Licensee}، وضعیت: {State}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 242,
+  "text": "مجوز با موفقیت ثبت و فعال شد — "
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 243,
+  "text": "مجوز ذخیره شد اما فعال نیست — "
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 251,
+  "text": "قالب فایل مجوز درست نیست (باید payload.signature باشد)"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 263,
+  "text": "امضای دیجیتال تأیید نشد — فایل دستکاری شده یا متعلق به این محصول نیست"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 267,
+  "text": "امضای دیجیتال تأیید نشد — فایل دستکاری شده یا با کلید دیگری امضا شده است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 271,
+  "text": "بدنهٔ مجوز خوانده نشد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 273,
+  "text": "این مجوز برای محصول دیگری صادر شده است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 278,
+  "text": "خواندن فایل مجوز ممکن نشد ("
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 321,
+  "text": "خواندن کلید عمومی مجوز ممکن نشد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 354,
+  "text": "جفت‌کلید امضای مجوز ساخته شد (App_Data/license-keys)"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 372,
+  "text": "بازگشایی کلید خصوصی مجوز ممکن نشد (keyring تغییر کرده؟) — ساخت جفت‌کلید جدید توصیه می‌شود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 389,
+  "text": "کلید خصوصی امضا در دسترس نیست — ابتدا جفت‌کلید بسازید"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 410,
+  "text": "امضای مجوز با کلید همین نصب ناموفق بود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 411,
+  "text": "امضای مجوز ممکن نشد ("
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 422,
+  "text": "حذف {File} ممکن نشد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 465,
+  "text": "سقف مجوز نصب: حداکثر {Jalali.ToPersianDigits(max.ToString())} پرسنل — برای افزایش ظرفیت با تولیدکننده تماس بگیرید"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 495,
+  "text": "خواند شناسهٔ ماشین ممکن نشد — از عوامل جایگزین استفاده می‌شود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 539,
+  "text": "خواندن فایل دورهٔ آزمایشی ممکن نشد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Services/LicenseService.cs",
+  "line": 553,
+  "text": "ثبت دورهٔ آزمایشی روی دیسک ممکن نشد — آزمایش بین ری‌استارت‌ها حفظ نمی‌شود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 173,
+  "text": "ویزارد راه‌اندازی: ساخت و مقداردهی بانک {Provider} …"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 177,
+  "text": "راه‌اندازی اولیه بانک ناموفق بود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 191,
+  "text": "مجوز ارسالی ویزارد پذیرفته نشد: {Msg}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 195,
+  "text": "مجوز نصب از ویزارد راه‌اندازی ثبت شد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 210,
+  "text": "زبان پیش‌فرض نصب: {Lang}"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 233,
+  "text": "ویزارد راه‌اندازی: پیکربندی رمزشده در {File} ذخیره و اعمال شد (License:Mode={Mode}, TrialDays={Days})"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 279,
+  "text": "ویزارد راه‌اندازی: جفت‌کلید امضای مجوز ساخته شد ({Fpr})"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 284,
+  "text": "ویزارد راه‌اندازی: ساخت جفت‌کلید امضا ناموفق بود"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/SetupController.cs",
+  "line": 313,
+  "text": "ویزارد راه‌اندازی: مجوز «{Licensee}» با کلید همین نصب امضا شد"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/AuthController.cs",
+  "line": 163,
+  "text": "ورود خودکار پرتال کارکنان"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/UsersController.cs",
+  "line": 498,
+  "text": "حساب مدیر ارشد قابل حذف نیست"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/UsersController.cs",
+  "line": 505,
+  "text": "حساب خودتان قابل حذف نیست"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/CompaniesController.cs",
+  "line": 126,
+  "text": "توقف ممکن نیست: این تنها شرکت فعال سامانه است"
+ },
+ {
+  "file": "HrAttendance.Web/Modules/Core/Controllers/LicenseController.cs",
+  "line": 55,
+  "text": "سامانه یکپارچه منابع انسانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 45,
+  "text": "مشاهده داشبورد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 47,
+  "text": "مشاهده شرکت‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 48,
+  "text": "تعریف و مدیریت شرکت‌ها (چندشرکتی)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 50,
+  "text": "مشاهده پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 51,
+  "text": "مدیریت پرسنل و قراردادها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 52,
+  "text": "ورود گروهی پرسنل از فایل اکسل (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 54,
+  "text": "[ریز] ثبت پرسنل جدید"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 55,
+  "text": "[ریز] ویرایش پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 56,
+  "text": "[ریز] حذف پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 57,
+  "text": "مشاهده چارت سازمانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 58,
+  "text": "مدیریت ساختار سازمانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 60,
+  "text": "[ریز] واحدهای سازمانی (ایجاد/ویرایش/جابه‌جایی)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 61,
+  "text": "[ریز] پست‌های سازمانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 63,
+  "text": "مشاهده حضور و غیاب"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 64,
+  "text": "ثبت و اصلاح تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 66,
+  "text": "[ریز] ثبت و اصلاح دستی رکورد تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 67,
+  "text": "تأیید درخواست‌های تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 68,
+  "text": "مشاهده شیفت‌ها و نوبت‌کاری"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 69,
+  "text": "تعریف و مدیریت شیفت‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 70,
+  "text": "مشاهده اصلاح تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 71,
+  "text": "تأیید اصلاح تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 72,
+  "text": "مشاهده تقویم تعطیلات"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 73,
+  "text": "مدیریت تعطیلات"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 75,
+  "text": "مشاهده کنترل تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 76,
+  "text": "مدیریت مناطق و مجوزها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 78,
+  "text": "[ریز] مناطق، آنتی‌پس‌بک و وضعیت اضطراری"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 79,
+  "text": "[ریز] گیت‌ها، برنامهٔ زمانی و فرمان درب"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 80,
+  "text": "[ریز] مجوزهای تردد پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 81,
+  "text": "[ریز] رسیدگی به هشدارهای کنترل تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 82,
+  "text": "[ریز] ثبت تردد دستی در گیت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 83,
+  "text": "مشاهده کارت‌های شناسایی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 84,
+  "text": "صدور و مدیریت کارت‌های شناسایی (تخصیص/عودت/مفقودی)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 86,
+  "text": "[ریز] صدور و تخصیص کارت به پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 87,
+  "text": "[ریز] عودت/مفقودی/ابطال و حذف کارت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 88,
+  "text": "مشاهده ارباب رجوع"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 89,
+  "text": "مدیریت مهمانان و کارت‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 91,
+  "text": "[ریز] ثبت و تأیید مهمان/پیمانکار"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 92,
+  "text": "[ریز] صدور کارت مهمان و ثبت ورود/خروج"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 94,
+  "text": "مشاهده کنترل پارکینگ"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 95,
+  "text": "مدیریت پارکینگ‌ها، گیت‌ها، خودروها و مجوزها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 96,
+  "text": "ثبت ورود و خروج خودرو و کنترل راهبند"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 98,
+  "text": "[ریز] پارکینگ‌ها و گیت‌های پارکینگ"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 99,
+  "text": "[ریز] خودروها و مجوزهای پارکینگ"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 100,
+  "text": "[ریز] دوربین‌های پلاک‌خوان (ANPR)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 101,
+  "text": "[ریز] فرمان راهبند و وضعیت گیت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 102,
+  "text": "[ریز] ثبت دستی ورود/خروج خودرو"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 104,
+  "text": "مشاهده دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 105,
+  "text": "کنترل دستگاه‌ها (بازکردن درب، زمان، ری‌استارت)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 106,
+  "text": "مدیریت دستگاه‌ها و انتقال کاربران"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 108,
+  "text": "[ریز] تعریف، ویرایش و فعال/غیرفعال‌سازی دستگاه"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 109,
+  "text": "[ریز] انتقال کاربران بین دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 110,
+  "text": "ابزارهای شبیه‌سازی تردد و دستگاه‌ها (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 111,
+  "text": "خواندن تردد از دستگاه‌ها (سرویس پل)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 112,
+  "text": "مشاهده تنظیمات گیت‌وی C#"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 113,
+  "text": "ویرایش تنظیمات گیت‌وی C#"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 114,
+  "text": "مشاهده داده‌های هویتی و بایومتریک"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 115,
+  "text": "دریافت و انتقال داده‌های هویتی بین دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 116,
+  "text": "[ریز] دریافت و مدیریت دادهٔ هویتی دستگاه"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 117,
+  "text": "[ریز] ارسال و انتقال قالب‌ها بین دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 119,
+  "text": "مشاهده حقوق و دستمزد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 120,
+  "text": "ایجاد و نهایی‌سازی لیست حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 121,
+  "text": "ایجاد و ویرایش اقلام فرمول‌ساز حقوق (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 122,
+  "text": "ایجاد و ویرایش پارامترهای سالانه حقوق (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 123,
+  "text": "چاپ و خروجی PDF لیست حقوق و فیش‌ها (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 125,
+  "text": "[ریز] ایجاد لیست حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 126,
+  "text": "[ریز] نهایی‌سازی لیست حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 127,
+  "text": "[ریز] حذف لیست حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 128,
+  "text": "[ریز] خروجی اکسل/PDF لیست حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 129,
+  "text": "[ریز] فرمول‌ساز اقلام حقوق (ایجاد/ویرایش/حذف)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 130,
+  "text": "[ریز] پارامترهای سالانهٔ حقوق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 131,
+  "text": "عیدی و پایه سنوات سالانه و تسویه حساب"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 132,
+  "text": "خروجی اکسل و گزارش‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 133,
+  "text": "گزارش‌ساز و داشبورد تحلیلی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 135,
+  "text": "مشاهده کاربران و نقش‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 136,
+  "text": "ایجاد کاربر جدید"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 137,
+  "text": "مدیریت کاربران، نقش‌ها و بازنشانی رمز"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 138,
+  "text": "[ریز] ایجاد شرکت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 139,
+  "text": "[ریز] ویرایش و فعال/غیرفعال‌سازی شرکت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 140,
+  "text": "[ریز] حذف شرکت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 141,
+  "text": "ایجاد و مدیریت نقش‌ها و محدودیت رکوردی (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 143,
+  "text": "[ریز] مشاهده نقش‌ها و دسترسی‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 144,
+  "text": "[ریز] ایجاد نقش جدید"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 145,
+  "text": "[ریز] ویرایش نقش و ماتریس دسترسی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 146,
+  "text": "[ریز] حذف نقش"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 148,
+  "text": "مشاهده گزارش حسابرسی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 150,
+  "text": "مشاهده اعلان‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 151,
+  "text": "مدیریت قواعد و تنظیمات اعلان"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 154,
+  "text": "[ریز] ویرایش کاربر و نقش‌های او"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 155,
+  "text": "[ریز] بازنشانی رمز و بازکردن قفل کاربر"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 156,
+  "text": "[ریز] حذف کاربر"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 158,
+  "text": "مشاهده تنظیمات سامانه (شرکت/لوگو/پالت/نسخه)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 159,
+  "text": "ویرایش اطلاعات شرکت، لوگو و پالت رنگ سامانه"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 161,
+  "text": "پرتال من — خانه و کارکرد من"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 162,
+  "text": "ثبت درخواست‌های من (مرخصی/مأموریت/اصلاح تردد)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 163,
+  "text": "فیش‌های حقوقی من"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 170,
+  "text": "[ریز] ایجاد شیفت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 171,
+  "text": "[ریز] ویرایش شیفت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 172,
+  "text": "[ریز] حذف شیفت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 173,
+  "text": "[ریز] ثبت تعطیلی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 174,
+  "text": "[ریز] حذف تعطیلی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 175,
+  "text": "[ریز] ثبت درخواست مرخصی/مأموریت/مجوز"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 176,
+  "text": "[ریز] تأیید/رد مرخصی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 177,
+  "text": "[ریز] تأیید/رد مأموریت"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 178,
+  "text": "[ریز] تأیید/رد مجوز خروج ساعتی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 179,
+  "text": "[ریز] گروه‌های تردد، عضویت و گیتِ گروه"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 180,
+  "text": "[ریز] ذخیرهٔ چیدمان نقشهٔ مناطق"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 181,
+  "text": "[ریز] فرمان‌های دستگاه (درب/زمان/ری‌استارت/پاک‌سازی آفلاین)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 182,
+  "text": "[ریز] محاسبه/نهایی‌سازی/حذف پیش‌نویس عیدی و سنوات"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 183,
+  "text": "[ریز] خروجی عیدی و سنوات"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 184,
+  "text": "[ریز] محاسبه/نهایی‌سازی/حذف تسویه‌حساب"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 185,
+  "text": "[ریز] تنظیمات محاسبهٔ حقوق (روش/منبع/گردها)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 190,
+  "text": "مدیر ارشد سیستم"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 191,
+  "text": "مدیر منابع انسانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 198,
+  "text": "اپراتور تردد"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 206,
+  "text": "حراست و نگهبانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 211,
+  "text": "سرویس پل دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 214,
+  "text": "مشاهده‌گر"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 219,
+  "text": "پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 291,
+  "text": "مدیر ارشد سیستم"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 292,
+  "text": "مریم تهرانی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 293,
+  "text": "رضا کریمی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 294,
+  "text": "حسین بهرامی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 295,
+  "text": "کارشناس مشاهده‌گر"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 296,
+  "text": "سرویس پل دستگاه‌ها"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 331,
+  "text": "شرکت پتروشیمی پارس آسیا"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 344,
+  "text": "تأخیر خروج"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 345,
+  "text": "مجوز منقضی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 346,
+  "text": "کارت گمشده"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 372,
+  "text": "شرکت پتروشیمی پارس آسیا"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 373,
+  "text": "حضور و غیاب · کنترل تردد · ارباب رجوع"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 390,
+  "text": "نیلی درخشان (پیش‌فرض)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 401,
+  "text": "آبی سازمانی (سبک BioTime)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 412,
+  "text": "سرمه‌ای امنیتی (سبک BioStar)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 423,
+  "text": "سبز دسترسی"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 434,
+  "text": "خاکستری صنعتی (سبک Hikvision)"
+ },
+ {
+  "file": "HrAttendance.Web/Data/DbSeeder.cs",
+  "line": 446,
+  "text": "پارسان (قالب داشبورد مدرن)"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceGatewayChannel.cs",
+  "line": 124,
+  "text": "دروازه: پانچ دستگاه {Serial} نادیده شد — ماژول حضور در این نسخه نصب نیست"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceGatewayChannel.cs",
+  "line": 130,
+  "text": "دروازه: {Count} پانچ با پین ناشناس از دستگاه {Serial}"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceGatewayChannel.cs",
+  "line": 164,
+  "text": "با موفقیت اجرا شد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceGatewayChannel.cs",
+  "line": 174,
+  "text": "ماژول پارکینگ در این نسخه نصب نیست"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 22,
+  "text": "ترمینال اثر انگشت"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 23,
+  "text": "ترمینال تشخیص چهره"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 24,
+  "text": "ترمینال ترکیبی چهره و اثر انگشت"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 25,
+  "text": "کنترلر دسترسی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 26,
+  "text": "ترمینال کارتی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DeviceDefaults.cs",
+  "line": 36,
+  "text": "سایر"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 25,
+  "text": "پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 32,
+  "text": "علی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 33,
+  "text": "سارا"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 40,
+  "text": "تردد تاریخی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 80,
+  "text": "قراردادی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 98,
+  "text": "رسمی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 107,
+  "text": "پرسنل"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 153,
+  "text": "قراردادی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 216,
+  "text": "تردد تاریخی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/ExcelImport.cs",
+  "line": 336,
+  "text": "حاضر"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 55,
+  "text": "کاربر ناشناخته"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 80,
+  "text": "بدون دامنهٔ معتبر"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 108,
+  "text": "بدون دامنهٔ معتبر"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 135,
+  "text": "{companies.Count} شرکت"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 136,
+  "text": "{depts.Count} واحد سازمانی (با زیرشاخه)"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 137,
+  "text": "فقط خودم"
+ },
+ {
+  "file": "HrAttendance.Web/Services/DataScopeService.cs",
+  "line": 138,
+  "text": "بدون دامنهٔ معتبر"
+ },
+ {
+  "file": "HrAttendance.Web/Services/BioSync.cs",
+  "line": 90,
+  "text": "قراردادی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/BioSync.cs",
+  "line": 91,
+  "text": "فعال"
+ },
+ {
+  "file": "HrAttendance.Web/Services/BioSync.cs",
+  "line": 323,
+  "text": "ناصر رضایی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/BioSync.cs",
+  "line": 324,
+  "text": "مهدی قاسمی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/BioSync.cs",
+  "line": 325,
+  "text": "علی یوسفی"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 35,
+  "text": "پورت پل ADMS باید بین ۱ تا ۶۵۵۳۵ باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 36,
+  "text": "زمان انتظار TCP باید بین ۱۰۰۰ تا ۶۰۰۰۰ میلی‌ثانیه باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 37,
+  "text": "فاصله poll باید بین ۱۵ تا ۳۶۰۰ ثانیه باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 38,
+  "text": "فاصله بازبینی (sweeper) باید بین ۳۰ تا ۳۶۰۰ ثانیه باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 39,
+  "text": "فاصله دریافت تنظیمات باید بین ۱۰ تا ۳۶۰۰ ثانیه باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 40,
+  "text": "پورت پیش‌فرض دستگاه باید بین ۱ تا ۶۵۵۳۵ باشد"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 41,
+  "text": "کلید ارتباطی پیش‌فرض نامعتبر است"
+ },
+ {
+  "file": "HrAttendance.Web/Services/GatewayConfig.cs",
+  "line": 43,
+  "text": "سطح لاگ نامعتبر است"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/SetupState.cs",
+  "line": 47,
+  "text": "خطای نامشخص در اتصال به بانک داده"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/SetupState.cs",
+  "line": 49,
+  "text": "رشته اتصال بانک داده تنظیم نشده است"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/SetupState.cs",
+  "line": 53,
+  "text": "سرور SQL Server پیدا نشد (آدرس/پورت اشتباه یا سرور خاموش است)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/SetupState.cs",
+  "line": 55,
+  "text": "نام کاربری/رمز SQL نادرست است"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/SetupState.cs",
+  "line": 57,
+  "text": "مهلت اتصال به سرور به پایان رسید"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/AuditSink.cs",
+  "line": 19,
+  "text": "سیستم"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 33,
+  "text": "فارسی"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 56,
+  "text": "بستهٔ زبان en همگام شد — {Count} کلید افزوده شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 62,
+  "text": "سید زبان‌های پویا ناموفق بود — سامانه با fa/en استاتیک ادامه می‌دهد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 75,
+  "text": "اسکیما آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 83,
+  "text": "پایگاه موجود ناقص بود — {Created} جدول غایب ساخته شد ({Tables}) و {Preserved} جدول موجود (داده‌ها) دست‌نخورده ماند ({Ms}"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 84,
+  "text": "، "
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 99,
+  "text": "RBAC آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 104,
+  "text": "داده نمایشی آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 111,
+  "text": "کاربران پیش‌فرض آماده شدند"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 116,
+  "text": "تنظیمات سامانه آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 120,
+  "text": "پالت‌های رنگ آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 134,
+  "text": "سید ماژول {Module} آماده شد ({Ms}ms)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 140,
+  "text": "سید ماژول {Module} ناموفق بود — در بوت بعدی دوباره تلاش می‌شود"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 234,
+  "text": "ALTER TABLE Devices ADD COLUMN Kind TEXT NOT NULL DEFAULT 'ترمینال اثر انگشت'"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 236,
+  "text": "ستون Devices.Kind به دیتابیس موجود اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 258,
+  "text": "ستون Devices.Transport اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 275,
+  "text": "ستون‌های اتصال گیت‌وی (Transport/DevicePort/CommKey) اضافه شدند"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 297,
+  "text": "ستون Roles.ParentRoleId اضافه شد (سلسله‌مراتب نقش‌ها)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 324,
+  "text": "جدول GatewaySettings به دیتابیس موجود اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 346,
+  "text": "ستون Zones.AntiPassback اضافه شد (فاز ۱۷)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 382,
+  "text": "ستون‌های برنامه زمانی گیت‌ها اضافه شدند (فاز ۱۷)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 398,
+  "text": "جدول AccessGroups اضافه شد (فاز ۱۷)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 427,
+  "text": "جدول‌های گروه دسترسی اضافه شدند (فاز ۱۷)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 450,
+  "text": "جدول NotificationRules به دیتابیس موجود اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 469,
+  "text": "جدول NotificationLogs به دیتابیس موجود اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 491,
+  "text": "جدول NotificationSettings به دیتابیس موجود اضافه شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 512,
+  "text": "ستون {Table}.{Col} اضافه شد (فاز ۲۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 516,
+  "text": "TEXT NOT NULL DEFAULT 'مجرد'"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 565,
+  "text": "جدول PayItems اضافه شد (فاز ۲۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 623,
+  "text": "جدول‌های موتور حقوق داینامیک اضافه شدند (فاز ۲۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 650,
+  "text": "جدول PayrollBonusRows اضافه شد (فاز ۲۵)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 677,
+  "text": "جدول PayrollSettlements اضافه شد (فاز ۲۵)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 763,
+  "text": "ایندکس‌های یکتای شرکت‌دار کاتالوگ‌ها بازسازی شدند (فاز ۲۸)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 802,
+  "text": "جدول Cards ساخته شد (فاز ۲۹)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 815,
+  "text": "ALTER TABLE Gates ADD COLUMN DoorState TEXT NOT NULL DEFAULT 'نرمال'"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 816,
+  "text": "ALTER TABLE Gates ADD DoorState nvarchar(max) NOT NULL DEFAULT N'نرمال'"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 818,
+  "text": "ستون Gates.DoorState اضافه شد (فاز ۲۹)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 839,
+  "text": "ستون {Table}.{Col} اضافه شد (فاز ۳۰)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 889,
+  "text": "جدول DeviceOfflinePunches ساخته شد (فاز ۳۰)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 928,
+  "text": "جدول AppSettings ساخته شد (فاز ۳۱)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 986,
+  "text": "جدول ColorPalettes ساخته شد (فاز ۳۲)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1006,
+  "text": "ستون AppSettings.ActivePaletteId اضافه شد (فاز ۳۲)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1029,
+  "text": "ستون ParkingEvents.{Col} اضافه شد (فاز ۴۱)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1056,
+  "text": "ستون {Table}.PhotoPath اضافه شد (فاز ۴۵)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1080,
+  "text": "ستون Roles.IsBuiltIn اضافه شد (فاز ۷۴)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1158,
+  "text": "ستون {Table}.{Col} در پایگاه غایب است اما با ALTER امن ساخته نمی‌شود (PK/computed) — دستی برطرف شود"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1171,
+  "text": "ستون {Table}.{Col} افزوده شد (وصال عمومی اسکیما — فاز ۷۸b)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1175,
+  "text": "افزودن ستون {Table}.{Col} ناموفق بود — ادامهٔ استارت‌آپ"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbInit.cs",
+  "line": 1180,
+  "text": "وصال عمومی اسکیما: {Count} ستون غایب به جدول‌های موجود افزوده شد"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/AuditExt.cs",
+  "line": 18,
+  "text": "سیستم"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/ModuleGate.cs",
+  "line": 56,
+  "text": "ماژول «"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/ModuleGate.cs",
+  "line": 57,
+  "text": "ماژول «"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 114,
+  "text": "آدرس سرور را وارد کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 115,
+  "text": "نام کاربری SQL را وارد کنید"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 134,
+  "text": "اتصال موفق بود و بانک «{dbName}» ساخته شد ✓"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 137,
+  "text": "اتصال به سرور موفق بود؛ بانک «{dbName}» هنوز وجود ندارد (در زمان ذخیره ساخته می‌شود)"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 138,
+  "text": "اتصال به بانک «{dbName}» موفق بود ✓"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 143,
+  "text": "اتصال ناموفق: "
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 157,
+  "text": "مسیر بانک معتبر است: {file}"
+ },
+ {
+  "file": "HrAttendance.Web/Infrastructure/DbConfig.cs",
+  "line": 161,
+  "text": "مسیر بانک معتبر نیست: "
+ }
+]

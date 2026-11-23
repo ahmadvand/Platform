@@ -1,0 +1,119 @@
+@{
+    ViewData["Title"] = HrT.T("دسترسی‌های مؤثر کاربر");
+    // فاز ۷۶ — چندزبانه
+    string T(string fa) => HrT.T(fa);
+    var u = (Platform.Web.Domain.User)ViewBag.PUser!;
+    var sa = (bool)ViewBag.PSa!;
+    var rows = (List<(string Grp, List<(string Grp, string Key, string Reason)> Items)>)ViewBag.PRows!;
+    var extra = (List<string>)ViewBag.PExtra!;
+    var emp = ViewBag.PPeople as HrPersonBrief;
+    var total = rows.Sum(r => r.Items.Count);
+}
+<style>
+    /* فاز ۷۶ — نمای دسترسی‌های مؤثر: چیپ‌های کلید + نشان منشأ */
+    .perm-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+    .perm-g { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: var(--surface-2, #fafbff); }
+    .perm-g h3 { margin: 0 0 10px; font-size: 13px; display: flex; align-items: center; gap: 7px; }
+    .perm-g h3 .cnt { margin-inline-start: auto; font-size: 10.5px; color: var(--ink-3); font-weight: 400; }
+    .perm-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .perm-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card);
+        border-radius: 9px; padding: 3px 8px; font-size: 11px; }
+    .perm-chip code { font-family: var(--mono, monospace); direction: ltr; font-size: 10.5px; color: var(--ink); }
+    .perm-why { font-size: 9px; border-radius: 99px; padding: 1px 6px; background: var(--accent-soft, rgba(99,102,241,.1));
+        color: var(--accent-deep, #4338ca); white-space: nowrap; }
+    .perm-why.direct { background: rgba(5,150,105,.1); color: #065f46; }
+    .perm-why.sa { background: rgba(217,119,6,.12); color: #92400e; }
+</style>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+    <h1 style="font-size:18px;margin:0">🛡️ @T("دسترسی‌های مؤثر کاربر")</h1>
+    <a class="btn btn-sm" href="/Users">← @T("کاربران و نقش‌ها")</a>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@u.FullName <span style="color:var(--ink-3);font-weight:400" dir="ltr">(@u.Username)</span></h2>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            @if (sa)
+            {
+                <span class="badge" style="background:rgba(217,119,6,.12);color:#92400e">⭐ @T("دسترسی کامل (superadmin) — همهٔ کلیدهای کاتالوگ")</span>
+            }
+            <span class="badge @(u.IsActive ? "badge-ok" : "badge-mute")">@(u.IsActive ? T("فعال") : T("غیرفعال"))</span>
+            @if (!string.IsNullOrEmpty(u.Company?.Name))
+            {
+                <span class="badge badge-info">@u.Company!.Name</span>
+            }
+        </div>
+    </div>
+    <div class="card-b" style="display:grid;gap:12px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <b style="font-size:12.5px">@T("نقش‌ها"):</b>
+            @if (u.Roles.Any(r => r.Role is not null))
+            {
+                @foreach (var r in u.Roles)
+                {
+                    if (r.Role is null) { continue; }
+                    <span class="badge badge-info">@r.Role.Title</span>
+                }
+            }
+            else
+            {
+                <span class="badge badge-mute">—</span>
+            }
+            @if (emp is not null)
+            {
+                <b style="font-size:12.5px;margin-inline-start:10px">@T("پرسنل"):</b>
+                <span class="badge badge-info">@(emp.PersonnelCode) — @(emp.FullName)</span>
+            }
+            <span class="cnt" style="margin-inline-start:auto;font-size:11px;color:var(--ink-3)">@T("کلید فعال"): <b>@HrT.Digits(total.ToString())</b></span>
+        </div>
+
+        @if (!sa && total == 0 && extra.Count == 0)
+        {
+            <div style="color:var(--ink-2);font-size:12.5px;line-height:2">— @T("بدون نقش و بدون دسترسی — کاربر هنوز هیچ مجوزی ندارد.")</div>
+        }
+        else
+        {
+            <div class="perm-groups">
+                @foreach (var g in rows)
+                {
+                    <div class="perm-g">
+                        <h3>📁 @g.Grp <span class="cnt">@HrT.Digits(g.Items.Count.ToString()) @T("کلید فعال")</span></h3>
+                        <div class="perm-chips">
+                            @foreach (var it in g.Items)
+                            {
+                                <span class="perm-chip" title="@it.Key">
+                                    <code>@it.Key</code>
+                                    @if (it.Reason == "مستقیم")
+                                    {
+                                        <span class="perm-why direct">@T("مستقیم")</span>
+                                    }
+                                    else if (it.Reason == "superadmin")
+                                    {
+                                        <span class="perm-why sa">superadmin</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="perm-why">@T(it.Reason)</span>
+                                    }
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+                @if (extra.Count > 0)
+                {
+                    <div class="perm-g" style="border-style:dashed">
+                        <h3>🧩 @T("کلیدهای خام خارج از کاتالوگ") <span class="cnt">@HrT.Digits(extra.Count.ToString())</span></h3>
+                        <div class="perm-chips">
+                            @foreach (var k in extra)
+                            {
+                                <span class="perm-chip"><code>@k</code></span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

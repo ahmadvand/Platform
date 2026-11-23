@@ -1,0 +1,38 @@
+@{
+    var lots = (List<ParkingLot>)ViewBag.Lots;
+    var devices = (List<Device>)ViewBag.Devices;
+}
+<div data-modal-title="@HrT.T("گیت پارکینگ جدید")" hidden></div>
+<form method="post" action="/Parking/CreateGate" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام گیت *")</label><input name="name" required placeholder="@HrT.T("راهبند ورودی اصلی")" /></div>
+        <div class="fld"><label>@HrT.T("کد *")</label><input name="code" required placeholder="PG-XX" /></div>
+        <div class="fld"><label>@HrT.T("پارکینگ * (تعیین‌کننده شرکت گیت)")</label>
+            <select name="lotId" required>
+                @foreach (var l in lots)
+                {
+                    <option value="@l.Id">@l.Name @(l.Company != null ? "— " + l.Company.Code : "")</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("دستگاه متصل")</label>
+            <select name="deviceId"><option value="">@HrT.T("— بدون دستگاه —")</option>
+                @foreach (var d in devices)
+                {
+                    <option value="@d.Id">@d.Name @(d.Company != null ? "(" + d.Company.Code + ")" : "")</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type"><option value="راهبند">@HrT.T("راهبند")</option><option value="پلاک‌خوان">@HrT.T("پلاک‌خوان")</option><option value="کارتی">@HrT.T("کارتی")</option><option value="درب برقی">@HrT.T("درب برقی")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("جهت")</label>
+            <select name="direction"><option value="ورودی">@HrT.T("ورودی")</option><option value="خروجی">@HrT.T("خروجی")</option><option value="دوطرفه">@HrT.T("دوطرفه")</option></select>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ایجاد گیت")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

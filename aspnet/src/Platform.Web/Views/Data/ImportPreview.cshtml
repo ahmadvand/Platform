@@ -1,0 +1,75 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("پیش‌نمایش درون‌ریزی");
+    var ent = (Platform.Web.Services.DataExchange.DataEntity)ViewBag.Entity;
+    var parsed = (Platform.Web.Services.DataExchange.ParsedImport)ViewBag.Parsed;
+    var rowsJson = (string)ViewBag.RowsJson;
+    var fatal = parsed.Errors.Count > 0;
+}
+<div class="chips">
+    <span class="chip">@HrT.F("پیش‌نمایش درون‌ریزی «{0}»", HrT.T(ent.Title))</span>
+    <span class="chip">@HrT.T("فایل:") <b>@parsed.SourceFile</b></span>
+    <span class="chip">@HrT.F("{0} ردیف", HrT.Num(parsed.Rows.Count))</span>
+    <a class="chip" href="/Data/ImportForm?entity=@ent.Key">@HrT.T("← فایل دیگر")</a>
+</div>
+
+@if (fatal)
+{
+    <div class="toast toast-err" data-toast>
+        <b>@HrT.T("ثبت انجام نمی‌شود — خطاهای زیر را برطرف کنید:")</b>
+        <ul style="margin-top:6px">
+            @foreach (var er in parsed.Errors.Take(20))
+            {
+                <li>@er</li>
+            }
+        </ul>
+    </div>
+    <div class="card">
+        <div class="card-b"><a class="btn" href="/Data/ImportForm?entity=@ent.Key">@HrT.T("← بازگشت و اصلاح فایل")</a></div>
+    </div>
+}
+else
+{
+    <div class="toast toast-ok" data-toast>
+        @HrT.F("فایل معتبر است — {0} ردیف آمادهٔ ثبت. جدول زیر پیش‌نمایش است؛ با تأیید، همهٔ ردیف‌ها با هم‌آوری ثبت می‌شوند.", HrT.Num(parsed.Rows.Count))
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("پیش‌نمایش ردیف‌ها")</h2><span class="hint">@HrT.F("حداکثر {0} ردیف از {1}", HrT.Num(Platform.Web.Services.DataExchange.PreviewRows), HrT.Num(parsed.Rows.Count))</span></div>
+        <div class="table-wrap" style="max-height:420px">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        @foreach (var c in parsed.Columns)
+                        {
+                            <th dir="ltr">@c</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (r, i) in parsed.Rows.Take(Platform.Web.Services.DataExchange.PreviewRows).Select((r, i) => (r, i + 1)))
+                    {
+                        <tr>
+                            <td class="num">@HrT.Num(i)</td>
+                            @foreach (var c in parsed.Columns)
+                            {
+                                <td>@(r.GetValueOrDefault(c) ?? "")</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form method="post" action="/Data/ImportCommit" class="card" data-confirm="@HrT.F("ثبت {0} ردیف در «{1}»؟ رکوردهای موجود با کلید هم‌آوری ویرایش می‌شوند.", HrT.Num(parsed.Rows.Count), HrT.T(ent.Title))">
+        <div class="card-b">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="entity" value="@ent.Key" />
+            <input type="hidden" name="rowsJson" value="@rowsJson" />
+            <div class="btn-row">
+                <button class="btn btn-primary">💾 @HrT.F("تأیید و ثبت {0} ردیف", HrT.Num(parsed.Rows.Count))</button>
+                <a class="btn" href="/Data/ImportForm?entity=@ent.Key">@HrT.T("انصراف")</a>
+            </div>
+        </div>
+    </form>
+}

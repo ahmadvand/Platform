@@ -1,0 +1,187 @@
+@{
+    // فاز ۱۳۵ (مورد ۹ ROADMAP-ADDITIONS) — گردش‌کار تأیید چندمرحله‌ای + جانشین‌پذیری
+    ViewData["Title"] = HrT.T("گردش‌کار تأیید");
+    var stepPerms = ((string, string)[])ViewBag.StepPerms;
+    var flows = (List<ApprovalFlow>)ViewBag.Flows;
+    var instances = (List<ApprovalInstance>)ViewBag.Instances;
+    var delegations = (List<ApprovalDelegation>)ViewBag.Delegations;
+    var reqTypes = new[] { "مرخصی", "مأموریت", "مجوز اضافه‌کاری", "اصلاح تردد" };
+
+    string SBadge(ApprovalInstance i) => i.Status == "تأیید نهایی" ? "badge-ok" : i.Status == "رد شده" ? "badge-err" : "badge-info";
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("گردش‌کار تأیید چندمرحله‌ای")</h2>
+        <span class="hint">@HrT.T("تصمیم هر مرحله با دکمهٔ تأیید/رد همان درخواست‌ها ثبت می‌شود؛ فقط مرحلهٔ آخر اثر نهایی می‌گذارد")</span>
+    </div>
+    <div class="card-b">
+        <h3>@HrT.T("گردش‌کارهای تعریف‌شده")</h3>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("نام")</th>
+                        <th>@HrT.T("نوع درخواست")</th>
+                        <th>@HrT.T("مراحل")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                        <th>@HrT.T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in flows)
+                    {
+                        <tr>
+                            <td><strong>@f.Name</strong></td>
+                            <td>@HrT.T(f.ReqType)</td>
+                            <td>
+                                @foreach (var s in f.Steps.OrderBy(x => x.Order))
+                                {
+                                    <span class="chip">@Jalali.Num(s.Order). @s.Title (@s.Perm)</span>
+                                }
+                            </td>
+                            <td><span class="badge @(f.Active ? "badge-ok" : "badge-warn")">@(f.Active ? HrT.T("فعال") : HrT.T("غیرفعال"))</span></td>
+                            <td>
+                                <form method="post" action="/Approvals/ToggleFlow" class="inline-form" data-ajax data-refresh>
+                                    <input type="hidden" name="id" value="@f.Id" />
+                                    <button class="btn btn-sm">@(f.Active ? HrT.T("غیرفعال‌سازی") : HrT.T("فعال‌سازی"))</button>
+                                </form>
+                                <form method="post" action="/Approvals/DeleteFlow" class="inline-form" data-ajax data-refresh>
+                                    <input type="hidden" name="id" value="@f.Id" />
+                                    <button class="btn btn-sm btn-danger">@HrT.T("حذف")</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h3>@HrT.T("گردش‌کار جدید")</h3>
+        <form method="post" action="/Approvals/CreateFlow" data-ajax data-refresh>
+            <input type="hidden" name="__RequestVerificationToken" />
+            <div class="fld"><label>@HrT.T("نام")</label><input name="name" /></div>
+            <div class="fld"><label>@HrT.T("نوع درخواست")</label>
+                <select name="reqType">
+                    @foreach (var t in reqTypes)
+                    {
+                        <option value="@t">@HrT.T(t)</option>
+                    }
+                </select>
+            </div>
+            @for (var i = 1; i <= 4; i++)
+            {
+                <div class="fld-row">
+                    <div class="fld"><label>@HrT.F("عنوان مرحلهٔ {0}", Jalali.Num(i))</label><input name="stepTitle" /></div>
+                    <div class="fld"><label>@HrT.T("مجوز تأیید")</label>
+                        <select name="stepPerm">
+                            <option value="">—</option>
+                            @foreach (var (title, perm) in stepPerms)
+                            {
+                                <option value="@perm">@title (@perm)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+            <button class="btn btn-dark">@HrT.T("ثبت گردش‌کار")</button>
+            <span class="hint">@HrT.T("مرحله‌هایی که مجوزشان خالی بماند نادیده گرفته می‌شوند؛ ترتیب = ترتیب ثبت")</span>
+        </form>
+
+        <h3>@HrT.T("رونوشت‌های در جریان")</h3>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("درخواست")</th>
+                        <th>@HrT.T("گردش‌کار")</th>
+                        <th>@HrT.T("پیشرفت")</th>
+                        <th>@HrT.T("مرحلهٔ جاری")</th>
+                        <th>@HrT.T("شروع")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in instances)
+                    {
+                        var steps = i.Flow?.Steps.OrderBy(s => s.Order).ToList() ?? new List<ApprovalFlowStep>();
+                        var cur = steps.FirstOrDefault(s => s.Order == i.CurrentStep);
+                        <tr>
+                            <td><strong>@i.Title</strong></td>
+                            <td>@i.Flow?.Name</td>
+                            <td>
+                                @foreach (var s in steps)
+                                {
+                                    var done = i.Actions.Any(a => a.StepOrder == s.Order && a.Decision == "تأیید");
+                                    <span class="chip @(done ? "chip-ok" : s.Order == i.CurrentStep ? "chip-cur" : "")">@Jalali.Num(s.Order)</span>
+                                }
+                            </td>
+                            <td>@(cur != null ? cur.Title : "—") <span class="badge @(SBadge(i))">@HrT.T(i.Status)</span></td>
+                            <td class="num">@Jalali.FmtFaLong(i.CreatedAt)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!instances.Any())
+        {
+            <p class="hint">@HrT.T("رونوشت در جریانی نیست — وقتی جریان فعال باشد، اولین تصمیم روی درخواست رونوشت می‌سازد")</p>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("جانشین‌پذیری")</h2>
+        <span class="hint">@HrT.T("سپردن موقت تأییدِ یک مجوز به همکار در بازهٔ مشخص — مرخصی/سفر رسمی")</span>
+    </div>
+    <div class="card-b">
+        <form method="post" action="/Approvals/CreateDelegation" data-ajax data-refresh class="toolbar">
+            <div class="fld"><label>@HrT.T("جانشین (نام کامل کاربر)")</label><input name="toUser" /></div>
+            <div class="fld"><label>@HrT.T("مجوز")</label>
+                <select name="perm">
+                    @foreach (var (title, perm) in stepPerms)
+                    {
+                        <option value="@perm">@title (@perm)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("از")</label><input name="fromDate" type="date" value="@DateTime.Today.ToString("yyyy-MM-dd")" /></div>
+            <div class="fld"><label>@HrT.T("تا")</label><input name="toDate" type="date" value="@DateTime.Today.AddDays(7).ToString("yyyy-MM-dd")" /></div>
+            <button class="btn btn-dark">@HrT.T("سپردن")</button>
+        </form>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("سپردهنده")</th>
+                        <th>@HrT.T("جانشین")</th>
+                        <th>@HrT.T("مجوز")</th>
+                        <th>@HrT.T("بازه")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                        <th>@HrT.T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in delegations)
+                    {
+                        <tr>
+                            <td>@d.FromUser</td>
+                            <td><strong>@d.ToUser</strong></td>
+                            <td>@d.Perm</td>
+                            <td class="num">@Jalali.FmtFaLong(d.FromDate) — @Jalali.FmtFaLong(d.ToDate)</td>
+                            <td><span class="badge @(d.Revoked ? "badge-warn" : "badge-ok")">@(d.Revoked ? HrT.T("لغوشده") : HrT.T("فعال"))</span></td>
+                            <td>
+                                @if (!d.Revoked)
+                                {
+                                    <form method="post" action="/Approvals/RevokeDelegation" class="inline-form" data-ajax data-refresh>
+                                        <input type="hidden" name="id" value="@d.Id" />
+                                        <button class="btn btn-sm">@HrT.T("لغو")</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

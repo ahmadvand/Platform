@@ -1,0 +1,31 @@
+<Project>
+  <!-- ============================================================
+    فاز ۸۴ — OWASP Top 10:2025 (A03 — شکست‌های زنجیرهٔ تأمین نرم‌افزار)
+    ممیزی خودکار وابستگی‌ها: در هر restore/build، NuGet پایگاه حفره‌های
+    شناخته‌شدهٔ GitHub Advisory را با همهٔ وابستگی‌های ترانزیتیو مقایسه
+    می‌کند و هشدار NU1900..NU1919 می‌دهد — بدون هیچ اثر جانبی در اجرا.
+    سطح low = حساس‌ترین حالت (حتی حفره‌های کم‌شدت هم گزارش می‌شوند).
+    بستهٔ قفل‌شدهٔ هر پروژهٔ HrModules.* هم (پلاگین‌ها + ابزارها) مشمول همین
+    قانون می‌شوند؛ نسخهٔ بسته‌ها همین‌جا مدیریت نمی‌شود تا هیچ رفتاری تغییر نکند.
+  ============================================================ -->
+  <PropertyGroup>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+  </PropertyGroup>
+
+  <!--
+    فاز ۸۴ — وصلهٔ حفره‌های شناخته‌شدهٔ وابستگی‌های ترانزیتیو (OWASP A03 — زنجیرهٔ تأمین):
+    نتیجهٔ دستور «list package» با گزینهٔ آسیب‌پذیری روی کل سولوشن — سه بستهٔ ترانزیتیو با
+    حفرهٔ فعال (High/Moderate) بودند؛ با ارجاع مستقیم در این فایل مشترک، نسخهٔ وصله‌شده روی
+    همهٔ ۱۶ پروژه (هاست + ماژول‌ها) حاکم می‌شود. هیچ API مصرفی تغییر نمی‌کند (ترمیم
+    امنیتی همان خط نسخه‌بندی است) — گزارش ممیزی:
+      • SQLitePCLRaw.bundle_e_sqlite3 ≥ 2.1.11  (GHSA-2m69-gcr7-jv3q — High)
+      • System.Security.Cryptography.Pkcs ≥ 8.0.2 (GHSA-846f-f764-76mx — High)
+      • System.Security.Cryptography.Xml ≥ 8.0.5 (ده‌ها advisory — High)
+  -->
+  <ItemGroup>
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.14" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.2" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.5" />
+  </ItemGroup>
+</Project>

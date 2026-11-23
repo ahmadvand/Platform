@@ -1,0 +1,165 @@
+@{
+    ViewData["Title"] = HrT.T("پرتال من");
+    var emp = ViewBag.Emp as Platform.Contracts.HrSelfProfile;
+    // فاز ۷۶ — چندزبانه: همهٔ متن‌های ثابت با زبان جاری
+    string T(string fa) => HrT.T(fa);
+    // فاز ۱۲۶ — پرتال من مطابق طرح Figma صفحهٔ ۳: هدر + بنر + ۴ KPI + جدول حضور + درخواست‌های اخیر + فیش حقوقی
+    // همهٔ اعداد از دادهٔ واقعی همین کاربر می‌آید (SelfHomeAsync + SelfRequestsAsync گیت‌وی حضور)؛ هیچ عددی جعل نمی‌شود.
+    int present = (int)ViewBag.Present, late = (int)ViewBag.Late, absent = (int)ViewBag.Absent;
+    int leaveDays = (int)ViewBag.LeaveDays, pending = (int)ViewBag.Pending;
+    int workMinutes = (int)ViewBag.WorkMinutes, overtime = (int)ViewBag.Overtime;
+    var reqRows = (ViewBag.ReqRows as IReadOnlyList<Platform.Contracts.HrSelfRequestRow>)
+        ?? new List<Platform.Contracts.HrSelfRequestRow>();
+    string roleDesc = string.IsNullOrWhiteSpace(emp!.Position)
+        ? (string.IsNullOrWhiteSpace(emp.Department) ? emp.EmploymentType : emp.Department)
+        : emp.Position;
+    // قرص وضعیت درخواست بر پایهٔ مقدار واقعی entity (در انتظار تأیید | تأیید شده | رد شده)
+    string pillFor(string s) => s switch
+    {
+        "در انتظار تأیید" => "badge-warn",
+        "تأیید شده" => "badge-ok",
+        "رد شده" => "badge-err",
+        _ => "badge-mute"
+    };
+    string fmtKey(string k) => string.IsNullOrEmpty(k) ? "—" : Jalali.FmtFa(Jalali.ParseDateKey(k));
+}
+
+@* ============ هدر پرتال — طرح Figma صفحهٔ ۳: عنوان + زیرنویس داده‌محور + اکشن‌های موجود ============ *@
+<div class="page-h">
+    <div>
+        <h1>@T("پرتال من")</h1>
+        <div class="page-sub">@T("نمای شخصی") @emp.FullName · @roleDesc · @T("کد") @Jalali.ToPersianDigits(emp.PersonnelCode) · @ViewBag.JMonth</div>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-primary" href="/Self/Requests">📨 @T("ثبت درخواست جدید")</a>
+        <a class="btn" href="/Self/Attendance">🕒 @T("کارکرد من")</a>
+    </div>
+</div>
+
+@* ============ بنر وضعیت درخواست‌ها — داده‌محور (مطابق بنر طرح) ============ *@
+@if (pending > 0)
+{
+    <div class="notice notice-warn"><span class="n-ic">📨</span><span>@HrT.F("{0} درخواست در انتظار تأیید سرپرست دارید.", Jalali.Num(pending)) @T("پیگیری از «درخواست‌های اخیر» همین صفحه؛ تأیید یا رد توسط سرپرست/منابع انسانی انجام می‌شود و نتیجه همین‌جا نمایش داده می‌شود.")</span></div>
+}
+else
+{
+    <div class="notice notice-ok"><span class="n-ic">✅</span><span>@T("درخواست در انتظاری ندارید؛ نتیجهٔ تأیید درخواست‌های بعدی همین‌جا نمایش داده می‌شود.")</span></div>
+}
+
+@* ============ ۴ شاخص اصلی — کارت‌های طرح (صفحهٔ ۳ فیگما) ============ *@
+<div class="ps-grid">
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic t">⏱️</div></div>
+        <div class="ps-v t">@Jalali.MinutesToHm(workMinutes)</div>
+        <div class="ps-l">@T("کارکرد") @ViewBag.JMonth</div>
+        <span class="ps-sub">🟢 @HrT.Num(present) @T("روز حاضر") · 🔴 @HrT.Num(absent) @T("روز غیبت")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic o">🌴</div></div>
+        <div class="ps-v o">@Jalali.Num(emp.LeaveRemaining) @T("روز")</div>
+        <div class="ps-l">@T("مانده مرخصی استحقاقی سال")</div>
+        <span class="ps-sub">🩺 @T("استعلاجی سال:") @Jalali.Num(emp.SickLeaveRemaining) @T("روز")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic b">➕</div></div>
+        <div class="ps-v b">@Jalali.MinutesToHm(overtime)</div>
+        <div class="ps-l">@T("اضافه‌کاری") @ViewBag.JMonth</div>
+        <span class="ps-sub">⚑ @T("تأخیر ماه:") @HrT.Num(late) @T("دقیقه")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic r">📨</div></div>
+        <div class="ps-v r">@HrT.Num(pending)</div>
+        <div class="ps-l">@T("درخواست‌های باز")</div>
+        <span class="ps-sub"><a href="/Self/Requests">@T("مرخصی، مأموریت و اصلاح تردد ←")</a></span>
+    </div>
+</div>
+
+@* ============ ردیف ۱: جدول آخرین روزهای کاری (پهن) + اطلاعات من (باریک) ============ *@
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>🕒 @HrT.F("آخرین روزهای کاری ({0})", ViewBag.JMonth)</h2><a class="btn btn-sm" href="/Self/Attendance">@T("کارکرد کامل ماه")</a></div>
+        <div class="table-wrap" style="max-height:none">
+            <table class="tbl">
+                <thead><tr><th>@T("تاریخ")</th><th>@T("ورود")</th><th>@T("خروج")</th><th>@T("کارکرد")</th><th>@T("تأخیر")</th><th>@T("اضافه‌کاری")</th><th>@T("وضعیت")</th></tr></thead>
+                <tbody>
+                    @* فاز ۶۷ — بدون نوع ماژول؛ رکوردها به‌صورت پویا *@
+                    @foreach (var r in ViewBag.Recent)
+                    {
+                        <tr>
+                            <td>@Jalali.FmtFa(Jalali.ParseDateKey(r.Date))</td>
+                            @* فاز ۷۳ — بدون فرض nullability: cast صریح هر دو شکل (DateTime?/DateTime) را پوشش می‌دهد *@
+                            <td class="num">@(r.CheckIn is null ? "—" : Jalali.FmtTime((DateTime)r.CheckIn))</td>
+                            <td class="num">@(r.CheckOut is null ? "—" : Jalali.FmtTime((DateTime)r.CheckOut))</td>
+                            <td class="num">@Jalali.MinutesToHm(r.WorkMinutes)</td>
+                            <td class="num">@(r.LateMinutes > 0 ? HrT.F("{0} دقیقه", Jalali.ToPersianDigits(r.LateMinutes)) : "—")</td>
+                            <td class="num">@(r.OvertimeMinutes > 0 ? HrT.F("{0} دقیقه", Jalali.ToPersianDigits(r.OvertimeMinutes)) : "—")</td>
+                            <td><span class="badge @(r.Status == "حاضر" || r.Status == "تأخیر" ? "badge-ok" : r.Status == "غایب" ? "badge-err" : "badge-info")">@HrT.T(r.Status)</span></td>
+                        </tr>
+                    }
+                    @if (((System.Collections.ICollection)ViewBag.Recent).Count == 0)
+                    {
+                        <tr><td colspan="7"><div class="empty">@T("رکوردی برای ماه جاری ثبت نشده است.")</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-foot">@HrT.F("خلاصهٔ {0}: {1} روز حاضر · {2} روز غیبت · {3} دقیقه تأخیر · {4} روز مرخصی/مأموریت — کارکرد بدون کسر استراحت", ViewBag.JMonth, Jalali.Num(present), Jalali.Num(absent), Jalali.Num(late), Jalali.Num(leaveDays))</div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>👤 @T("اطلاعات من")</h2></div>
+        <div class="card-b">
+            <div class="kvs">
+                <div class="kvr"><span class="k">@T("نام و نام خانوادگی")</span><span class="v"><b>@emp.FullName</b></span></div>
+                <div class="kvr"><span class="k">@T("کد پرسنلی")</span><span class="v num">@Jalali.ToPersianDigits(emp.PersonnelCode)</span></div>
+                <div class="kvr"><span class="k">@T("واحد سازمانی")</span><span class="v">@(string.IsNullOrEmpty(emp.Department) ? "—" : emp.Department)</span></div>
+                <div class="kvr"><span class="k">@T("سمت")</span><span class="v">@(string.IsNullOrEmpty(emp.Position) ? "—" : emp.Position)</span></div>
+                <div class="kvr"><span class="k">@T("نوع استخدام")</span><span class="v">@emp.EmploymentType</span></div>
+                <div class="kvr"><span class="k">@T("مانده مرخصی استحقاقی سال")</span><span class="v num">@(HrT.F("{0} روز", Jalali.Num(emp.LeaveRemaining)))</span></div>
+                <div class="kvr"><span class="k">@T("مانده مرخصی استعلاجی سال")</span><span class="v num">@(HrT.F("{0} روز", Jalali.Num(emp.SickLeaveRemaining)))</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ============ ردیف ۲: درخواست‌های اخیر (پهن) + فیش حقوقی (باریک) ============ *@
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>📨 @T("درخواست‌های اخیر")</h2><a class="btn btn-sm" href="/Self/Requests">@T("همهٔ درخواست‌ها")</a></div>
+        <div class="table-wrap" style="max-height:none">
+            <table class="tbl">
+                <thead><tr><th>@T("نوع")</th><th>@T("شرح")</th><th>@T("بازه")</th><th>@T("وضعیت")</th><th>@T("تأییدکننده")</th></tr></thead>
+                <tbody>
+                    @* فاز ۱۲۶ — ادغام مرخصی/مأموریت/اصلاح تردد از گیت‌وی حضور؛ قرص وضعیت بر مقدار واقعی *@
+                    @foreach (var r in reqRows)
+                    {
+                        var from = fmtKey(r.FromKey);
+                        var period = string.IsNullOrEmpty(r.ToKey) || r.FromKey == r.ToKey ? from : $"{from} ← {fmtKey(r.ToKey)}";
+                        <tr>
+                            <td><b>@HrT.T(r.Kind)</b> <span class="muted">· @HrT.T(r.Type)</span></td>
+                            <td>@HrT.T(r.Detail)</td>
+                            <td class="num">@period</td>
+                            <td><span class="badge @pillFor(r.Status)">@HrT.T(r.Status)</span></td>
+                            <td>@HrT.T(r.Approver)</td>
+                        </tr>
+                    }
+                    @if (reqRows.Count == 0)
+                    {
+                        <tr><td colspan="5"><div class="empty">@T("درخواستی ثبت نشده است؛ از «ثبت درخواست جدید» می‌توانید مرخصی، مأموریت یا اصلاح تردد ثبت کنید.")</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-foot">@T("تازه‌ترین درخواست‌های مرخصی، مأموریت و اصلاح تردد · ثبت و پیگیری کامل در «درخواست‌های من»")</div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>💰 @T("فیش حقوقی من")</h2></div>
+        <div class="card-b">
+            <div class="kvs">
+                <div class="kvr"><span class="k">@T("ماه جاری")</span><span class="v">@ViewBag.JMonth</span></div>
+                <div class="kvr"><span class="k">@T("فیش‌های صادرشده")</span><span class="v"><a href="/Self/Payslips">@T("مشاهدهٔ فهرست فیش‌ها ←")</a></span></div>
+            </div>
+            <div class="hint" style="margin-top:12px">@T("فیش حقوقی پس از تأیید نهایی حقوق ماه در «فیش حقوقی من» منتشر می‌شود و همیشه در دسترس شماست.")</div>
+            <a class="btn btn-primary" style="margin-top:12px" href="/Self/Payslips">🧾 @T("مشاهدهٔ فیش‌های من")</a>
+        </div>
+    </div>
+</div>

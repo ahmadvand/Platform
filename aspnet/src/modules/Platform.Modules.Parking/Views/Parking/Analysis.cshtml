@@ -1,0 +1,65 @@
+@{
+    // فاز ۱۳۴ (مورد ۴ ROADMAP-ADDITIONS — تکمیل تحلیلی) — تحلیل اشغال پارکینگ
+    ViewData["Title"] = HrT.T("تحلیل اشغال پارکینگ");
+    var hours = (List<ParkingHourRow>)Model;
+    var lots = (List<ParkingLot>)ViewBag.Lots;
+    var day = (DateTime)ViewBag.Day;
+    var lot = (string?)ViewBag.Lot;
+    var maxInside = Math.Max(1, hours.Max(h => h.Inside));
+
+    string Bar(int n) => "█" + string.Concat(Enumerable.Repeat("▁", Math.Max(0, (int)Math.Round(n * 10.0 / maxInside) - 1)));
+    string HBadge(int h, int inside) => h == (int)ViewBag.PeakHour ? "badge-warn" : inside > 0 ? "badge-ok" : "";
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("تحلیل اشغال پارکینگ")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("روز")</label><input name="date" type="date" value="@day.ToString("yyyy-MM-dd")" /></div>
+            <div class="fld"><label>@HrT.T("پارکینگ")</label>
+                <select name="lot">
+                    <option value="">@HrT.T("همه")</option>
+                    @foreach (var l in lots)
+                    {
+                        <option value="@l.Id" selected="@(lot == l.Id)">@l.Name</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("پیک اشغال:") <b class="text-danger">@HrT.F("ساعت {0} — {1} خودرو", Jalali.Num(ViewBag.PeakHour), Jalali.Num(ViewBag.PeakInside))</b></span>
+            <span class="chip">@HrT.T("میانگین مدت توقف:") <b>@Jalali.Num(ViewBag.AvgDwell) دقیقه</b></span>
+            <span class="chip">@HrT.T("بلندترین توقف:") <b>@Jalali.Num(ViewBag.MaxDwell) دقیقه</b></span>
+            <span class="chip">@HrT.T("نشست کامل‌شده:") <b>@Jalali.Num(ViewBag.ClosedSessions)</b></span>
+            <span class="chip">@HrT.T("هنوز داخل:") <b>@Jalali.Num(ViewBag.StillInside)</b></span>
+        </div>
+        <p class="hint">@HrT.T("«داخل» هر ساعت از جفت‌سازی ورود/خروج مجاز هر پلاک محاسبه می‌شود؛ نشست‌های بدون خروج تا پایان روز داخل فرض شده‌اند. ردیف پیک با نشانگر زرد مشخص است — مبنای تصمیم ظرفیت یا مدیریت ورود در ساعات شلوغ.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("ساعت")</th>
+                        <th>@HrT.T("داخل (اشغال)")</th>
+                        <th>@HrT.T("نمودار")</th>
+                        <th>@HrT.T("ورود")</th>
+                        <th>@HrT.T("خروج")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var h in hours)
+                    {
+                        <tr class="@(h.Hour == (int)ViewBag.PeakHour ? "row-peak" : "")">
+                            <td><strong>@Jalali.ToPersianDigits(h.Hour.ToString("00")):۰۰</strong></td>
+                            <td class="num">@Jalali.Num(h.Inside)</td>
+                            <td class="bar">@Bar(h.Inside)</td>
+                            <td class="num">@(h.InCount > 0 ? Jalali.Num(h.InCount) : "—")</td>
+                            <td class="num">@(h.OutCount > 0 ? Jalali.Num(h.OutCount) : "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+@* فاز ۵۸/۶۱ — usingهای ویوهای ماژول کنترل تردد؛ فضانام‌های پلتفرم بدون تغییر مانده‌اند
+   (انواع پلتفرم از Platform.Core، entityهای تردد از لایهٔ دیتای خود ماژول تأمین می‌شود).
+   Layout در زمان اجرا از هاست پیدا می‌شود (_Layout) — همان پوستهٔ سراسری.
+   فاز ۶۱: inject کانتکست مرکب هاست (AppDbContext) حذف شد — ماژول‌ها ویو را با ViewBag تغذیه می‌کنند. *@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using Platform.Web.Data
+@using HrModules.Access.Domain
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

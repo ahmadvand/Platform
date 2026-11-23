@@ -1,0 +1,61 @@
+@{
+    // فاز ۱۳۳ (مورد ۵ ROADMAP-ADDITIONS) — اشغال ظرفیت پارکینگ
+    ViewData["Title"] = HrT.T("اشغال ظرفیت پارکینگ");
+    var rows = (List<ParkingOccupancyRow>)Model;
+    var totalCap = (int)ViewBag.TotalCap;
+    var totalInside = (int)ViewBag.TotalInside;
+    var totalPermits = (int)ViewBag.TotalPermits;
+    var totalFill = (decimal)ViewBag.TotalFill;
+
+    string FBadge(decimal fill) => fill >= 90 ? "badge-err" : fill >= 70 ? "badge-warn" : "badge-ok";
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("اشغال ظرفیت پارکینگ")</h2>
+        <span class="hint">@HrT.T("داخل = آخرین عبور مجاز هر پلاک ورود بوده است")</span>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("جمع ظرفیت:") <b>@Jalali.Num(totalCap)</b> @HrT.T("جایگاه")</span>
+            <span class="chip">@HrT.T("الان داخل:") <b>@Jalali.Num(totalInside)</b></span>
+            <span class="chip">@HrT.T("نرخ اشغال کل:") <b>@Jalali.ToPersianDigits(totalFill.ToString("0"))٪</b></span>
+            <span class="chip">@HrT.T("مجوز فعال:") <b>@Jalali.Num(totalPermits)</b></span>
+        </div>
+        <p class="hint">@HrT.T("نرخ اشغال بالای ۹۰٪ قرمز و بالای ۷۰٪ زرد است؛ ستون «ردِ امروز» تعداد تردد غیرمجاز امروز به‌دلیل تکمیل ظرفیت را نشان می‌دهد — هشداری برای تصمیم افزایش ظرفیت یا سخت‌گیری مجوزها.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("پارکینگ")</th>
+                        <th>@HrT.T("شرکت")</th>
+                        <th>@HrT.T("ظرفیت")</th>
+                        <th>@HrT.T("مجوز فعال")</th>
+                        <th>@HrT.T("الان داخل")</th>
+                        <th>@HrT.T("خالی")</th>
+                        <th>@HrT.T("اشغال")</th>
+                        <th>@HrT.T("ردِ امروز (تکمیل ظرفیت)")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td><strong>@r.LotName</strong></td>
+                            <td>@r.Company</td>
+                            <td class="num">@Jalali.Num(r.Capacity)</td>
+                            <td class="num">@Jalali.Num(r.PermitsActive)</td>
+                            <td class="num">@Jalali.Num(r.Inside)</td>
+                            <td class="num">@Jalali.Num(Math.Max(0, r.Capacity - r.Inside))</td>
+                            <td><span class="badge @FBadge(r.FillPct)">@Jalali.ToPersianDigits(r.FillPct.ToString("0"))٪</span></td>
+                            <td class="num">@(r.DeniedToday > 0 ? HrT.T("⚠ ") + Jalali.Num(r.DeniedToday) : "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("پارکینگی تعریف نشده — از کارت «پارکینگ‌ها» در صفحهٔ کنترل پارکینگ اضافه کنید")</p>
+        }
+    </div>
+</div>

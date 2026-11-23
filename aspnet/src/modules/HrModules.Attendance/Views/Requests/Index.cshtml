@@ -1,0 +1,244 @@
+@{
+    ViewData["Title"] = HrT.T("درخواست‌ها");
+    var tab = (string)ViewBag.Tab;
+    var leaves = (List<LeaveRequest>)ViewBag.Leaves;
+    var missions = (List<Mission>)ViewBag.Missions;
+    var permits = (List<OvertimePermit>)ViewBag.Permits;
+    var corrections = (List<CorrectionRequest>)ViewBag.Corrections;
+    // فاز ۱۱۴ — لیست کامل پرسنل حذف شد (انتخابگر جستجومحور /Ui/EmpSearch)
+    var canCorrect = (bool)ViewBag.CanCorrect;
+    var canManage = Me.Get()!.Has("attendance.requests.create");
+    // فاز ۷۵ — گیت ریزِ هر تب جداگانه (کلید درشت والد از Matches پاس می‌شود)
+    var canApproveLeaves = Me.Get()!.Has("attendance.leaves.approve");
+    var canApproveMissions = Me.Get()!.Has("attendance.missions.approve");
+    var canApprovePermits = Me.Get()!.Has("attendance.permits.approve");
+
+    string StatBadge(string s) => s switch
+    {
+        "تأیید شده" => "badge-ok",
+        "رد شده" => "badge-err",
+        _ => "badge-warn",
+    };
+}
+<div class="tabs">
+    <a href="/Requests?tab=leaves" class="@(tab == "leaves" ? "on" : "")">@HrT.T("مرخصی") (@Jalali.Num(leaves.Count))</a>
+    <a href="/Requests?tab=missions" class="@(tab == "missions" ? "on" : "")">@HrT.T("مأموریت") (@Jalali.Num(missions.Count))</a>
+    <a href="/Requests?tab=permits" class="@(tab == "permits" ? "on" : "")">@HrT.T("مجوزها") (@Jalali.Num(permits.Count))</a>
+    <a href="/Requests?tab=corrections" class="@(tab == "corrections" ? "on" : "")">@HrT.T("اصلاح تردد") (@Jalali.Num(corrections.Count))</a>
+</div>
+
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("درخواست‌ها")</h1>
+        <div class="page-sub">@HrT.T("ثبت و تأیید مرخصی، مأموریت و اجازه — با گیت تأیید جداگانه")</div>
+    </div>
+</div>
+<div data-refresh-host>
+@if (tab == "leaves")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("درخواست‌های مرخصی")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Requests/CreateLeave" data-modal-title="@HrT.T("درخواست مرخصی جدید")">@HrT.T("+ درخواست جدید")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پرسنل")</th><th>@HrT.T("نوع")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th class="num">@HrT.T("روز")</th><th>@HrT.T("دلیل")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("تأییدکننده")</th>@if (canApproveLeaves) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var l in leaves)
+                    {
+                        <tr>
+                            <td><strong>@l.Employee?.FullName</strong></td>
+                            <td><span class="badge badge-mute">@HrT.T(l.Type)</span></td>
+                            <td class="num">@Jalali.ToPersianDigits(l.FromDate)</td>
+                            <td class="num">@Jalali.ToPersianDigits(l.ToDate)</td>
+                            <td class="num">@Jalali.ToPersianDigits(l.Days.ToString("0.#"))</td>
+                            <td>@l.Reason</td>
+                            <td><span class="badge @StatBadge(l.Status)">@HrT.T(l.Status)</span></td>
+                            <td>@(l.Approver ?? "—")</td>
+                            @if (canApproveLeaves)
+                            {
+                                <td>
+                                    @if (l.Status == "در انتظار تأیید")
+                                    {
+                                        <div class="btn-row">
+                                            <form method="post" action="/Requests/DecideLeave" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@l.Id" /><input type="hidden" name="approve" value="true" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("تأیید")</button>
+                                            </form>
+                                            <form method="post" action="/Requests/DecideLeave" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@l.Id" /><input type="hidden" name="approve" value="false" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("رد")</button>
+                                            </form>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "missions")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("درخواست‌های مأموریت")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Requests/CreateMission" data-modal-title="@HrT.T("درخواست مأموریت جدید")">@HrT.T("+ درخواست جدید")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پرسنل")</th><th>@HrT.T("نوع")</th><th>@HrT.T("مقصد")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th>@HrT.T("هدف")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("تأییدکننده")</th>@if (canApproveMissions) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var m in missions)
+                    {
+                        <tr>
+                            <td><strong>@m.Employee?.FullName</strong></td>
+                            <td><span class="badge badge-mute">@HrT.T(m.Type)</span></td>
+                            <td>@m.Destination</td>
+                            <td class="num">@Jalali.ToPersianDigits(m.FromDate)</td>
+                            <td class="num">@Jalali.ToPersianDigits(m.ToDate)</td>
+                            <td>@HrT.T(m.Purpose)</td>
+                            <td><span class="badge @StatBadge(m.Status)">@HrT.T(m.Status)</span></td>
+                            <td>@(m.Approver ?? "—")</td>
+                            @if (canApproveMissions)
+                            {
+                                <td>
+                                    @if (m.Status == "در انتظار تأیید")
+                                    {
+                                        <div class="btn-row">
+                                            <form method="post" action="/Requests/DecideMission" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@m.Id" /><input type="hidden" name="approve" value="true" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("تأیید")</button>
+                                            </form>
+                                            <form method="post" action="/Requests/DecideMission" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@m.Id" /><input type="hidden" name="approve" value="false" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("رد")</button>
+                                            </form>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "permits")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("مجوزهای اضافه‌کاری / کار در تعطیل")</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Requests/CreatePermit" data-modal-title="@HrT.T("مجوز جدید (اضافه‌کاری / کار در تعطیل)")">@HrT.T("+ مجوز جدید")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پرسنل")</th><th>@HrT.T("نوع")</th><th>@HrT.T("تاریخ")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th>@HrT.T("دلیل")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("تأییدکننده")</th>@if (canApprovePermits) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var p in permits)
+                    {
+                        <tr>
+                            <td><strong>@p.Employee?.FullName</strong></td>
+                            <td><span class="badge badge-mute">@HrT.T(p.Type)</span></td>
+                            <td class="num">@Jalali.ToPersianDigits(p.Date)</td>
+                            <td class="num">@Jalali.ToPersianDigits(p.FromTime)</td>
+                            <td class="num">@Jalali.ToPersianDigits(p.ToTime)</td>
+                            <td>@p.Reason</td>
+                            <td><span class="badge @StatBadge(p.Status)">@HrT.T(p.Status)</span></td>
+                            <td>@(p.Approver ?? "—")</td>
+                            @if (canApprovePermits)
+                            {
+                                <td>
+                                    @if (p.Status == "در انتظار تأیید")
+                                    {
+                                        <div class="btn-row">
+                                            <form method="post" action="/Requests/DecidePermit" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@p.Id" /><input type="hidden" name="approve" value="true" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("تأیید")</button>
+                                            </form>
+                                            <form method="post" action="/Requests/DecidePermit" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@p.Id" /><input type="hidden" name="approve" value="false" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("رد")</button>
+                                            </form>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("درخواست‌های اصلاح تردد") (PLAN P4.3)</h2><span class="hint">@HrT.T("تأیید → بازنویسی واقعی رکورد تردد با موتور محاسبه")</span>
+            @if (canCorrect)
+            {
+                <button class="btn btn-primary" data-modal="/Requests/CreateAdminCorrection" data-modal-title="@HrT.T("اصلاحیهٔ تردد از سمت مدیر")">@HrT.T("+ ثبت اصلاحیهٔ مدیر")</button>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("پرسنل")</th><th>@HrT.T("تاریخ")</th><th>@HrT.T("ورود اصلاحی")</th><th>@HrT.T("خروج اصلاحی")</th><th>@HrT.T("دلیل")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("بررسی‌کننده")</th>@if (canCorrect) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var c in corrections)
+                    {
+                        <tr>
+                            <td><strong>@c.Employee?.FullName</strong></td>
+                            <td class="num">@Jalali.ToPersianDigits(c.Date)</td>
+                            <td class="num">@(c.RequestedIn is null ? "—" : Jalali.FmtTime(c.RequestedIn.Value))</td>
+                            <td class="num">@(c.RequestedOut is null ? "—" : Jalali.FmtTime(c.RequestedOut.Value))</td>
+                            <td>@c.Reason</td>
+                            <td><span class="badge @StatBadge(c.Status)">@HrT.T(c.Status)</span></td>
+                            <td>@(c.ReviewedBy ?? "—")</td>
+                            @if (canCorrect)
+                            {
+                                <td>
+                                    @if (c.Status == "در انتظار تأیید")
+                                    {
+                                        <div class="btn-row">
+                                            <form method="post" action="/Requests/DecideCorrection" class="inline-form" data-confirm="@HrT.T("با تأیید، رکورد تردد بازنویسی می‌شود. مطمئنید؟")" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@c.Id" /><input type="hidden" name="approve" value="true" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("تأیید و اعمال")</button>
+                                            </form>
+                                            <form method="post" action="/Requests/DecideCorrection" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@c.Id" /><input type="hidden" name="approve" value="false" />
+                                                <button class="btn btn-sm btn-err">@HrT.T("رد")</button>
+                                            </form>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+</div>

@@ -1,0 +1,32 @@
+@{
+    var gates = (List<ParkingGate>)ViewBag.Gates;
+}
+<div data-modal-title="@HrT.T("شبیه‌ساز پلاک‌خوان — ثبت عبور خودرو")" hidden></div>
+<form method="post" action="/Parking/Scan" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("پلاک خودرو *")</label><input name="plate" required placeholder="@HrT.T("12ع471 ایران 36")" /></div>
+        <div class="fld"><label>@HrT.T("گیت پارکینگ *")</label>
+            <select name="gateId" required>
+                @foreach (var g in gates)
+                {
+                    <option value="@g.Id">@g.Name (@(g.Lot?.Name ?? "—") · @g.Direction)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("جهت")</label>
+            <select name="direction"><option value="ورود">@HrT.T("ورود")</option><option value="خروج">@HrT.T("خروج")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("روش")</label>
+            <select name="method"><option value="پلاک‌خوان">@HrT.T("پلاک‌خوان")</option><option value="کارت">@HrT.T("کارت")</option><option value="دستی">@HrT.T("دستی")</option></select>
+        </div>
+    </div>
+    <div style="color:var(--ink-2);font-size:11.5px;margin:8px 0 0">
+        @HrT.T("ارزیابی کامل موتور مجوز: فعال‌بودن گیت، حالت راهبند، هم‌خوانی جهت، مجوز معتبر (دائم/موقت)،")
+        @HrT.T("آنتی‌پس‌بک (عبور تکراری) و ظرفیت پارکینگ. عبور غیرمجاز هشدار امنیتی ثبت می‌کند.")
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت عبور")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

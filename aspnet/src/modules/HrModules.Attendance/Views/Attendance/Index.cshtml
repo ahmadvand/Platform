@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = HrT.T("تردد روزانه");
+    var records = (List<AttendanceRecord>)Model;
+    var dk = (string)ViewBag.Date;
+    var devices = (List<Device>)ViewBag.Devices;
+    // فاز ۶۱ — نام شیفت هر پرسنل از دروازهٔ ماژول (Employee دیگر navigation شیفت ندارد)
+    var shiftByEmp = (Dictionary<string, AttShiftInfo>)ViewBag.ShiftByEmp;
+    var canPunch = Me.Get()!.Has("attendance.records.manage");
+    var dt = Jalali.ParseDateKey(dk);
+
+    var present = records.Count(r => r.Status == "حاضر");
+    var late = records.Count(r => r.Status == "تأخیر");
+    var absent = records.Count(r => r.Status == "غایب");
+    var leave = records.Count(r => r.Status == "مرخصی");
+    var mission = records.Count(r => r.Status == "مأموریت");
+    var ot = records.Sum(r => r.OvertimeMinutes);
+}
+<div data-refresh-host>
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("کارت تردد —") @Jalali.FmtFaLong(dt)</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("تاریخ")</label><input type="date" name="date" value="@dk" /></div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+            @* فاز ۹۸ (درخواست کاربر) — برون‌ریزی اکسل تردد همان روز از خود صفحه *@
+            @if (Me.Get()!.Has("reports.export"))
+            {
+                <a class="btn btn-sm" href="/Export/Attendance?date=@dk" title="@(HrT.T("خروجی اکسل تردد این روز"))">@HrT.T("📤 برون‌ریزی اکسل")</a>
+            }
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("حاضر:") <b>@Jalali.Num(present)</b></span>
+            <span class="chip">@HrT.T("تأخیر:") <b>@Jalali.Num(late)</b></span>
+            <span class="chip">@HrT.T("غایب:") <b>@Jalali.Num(absent)</b></span>
+            <span class="chip">@HrT.T("مرخصی:") <b>@Jalali.Num(leave)</b></span>
+            <span class="chip">@HrT.T("مأموریت:") <b>@Jalali.Num(mission)</b></span>
+            <span class="chip">@HrT.T("اضافه‌کاری کل:") <b>@Jalali.MinutesToHm(ot)</b></span>
+        </div>
+        @if (canPunch)
+        {
+            <form method="post" action="/Attendance/Punch" class="form-grid" style="background:#f8fafc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin-bottom:16px" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="fld"><label>@HrT.T("کد پرسنلی")</label><input name="personnelCode" required placeholder="1001" /></div>
+                <div class="fld"><label>@HrT.T("دستگاه")</label>
+                    <select name="deviceId">
+                        @foreach (var d in devices)
+                        {
+                            <option value="@d.Id">@d.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("نوع ثبت")</label>
+                    <select name="kind">
+                        <option value="in">@HrT.T("ورود")</option>
+                        <option value="out">@HrT.T("خروج")</option>
+                        <option value="both">@HrT.T("ورود و خروج (هم‌زمان)")</option>
+                    </select>
+                </div>
+                <div class="fld"><label>&nbsp;</label><button class="btn btn-primary btn-block">@HrT.T("ثبت تردد (شبیه‌ساز)")</button></div>
+            </form>
+        }
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("کد")</th><th>@HrT.T("نام")</th><th>@HrT.T("واحد")</th><th>@HrT.T("شیفت")</th>
+                        <th>@HrT.T("ورود")</th><th>@HrT.T("خروج")</th><th>@HrT.T("کارکرد")</th>
+                        <th>@HrT.T("دیرکرد")</th><th>@HrT.T("تعجیل")</th><th>@HrT.T("اضافه‌کاری")</th>
+                        <th>@HrT.T("دستگاه")</th><th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in records)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.ToPersianDigits(r.Employee!.PersonnelCode)</td>
+                            <td><strong>@r.Employee.FullName</strong></td>
+                            <td>@r.Employee.Department?.Name</td>
+                            <td>@(shiftByEmp.TryGetValue(r.EmployeeId, out var sh) ? sh.Name : "—")</td>
+                            <td class="num">@(r.CheckIn is null ? "—" : Jalali.FmtTime(r.CheckIn.Value))</td>
+                            <td class="num">@(r.CheckOut is null ? "—" : Jalali.FmtTime(r.CheckOut.Value))</td>
+                            <td class="num">@Jalali.MinutesToHm(r.WorkMinutes)</td>
+                            <td class="num">@(r.LateMinutes > 0 ? Jalali.Num(r.LateMinutes) + " " + HrT.T("د") : "—")</td>
+                            <td class="num">@(r.EarlyMinutes > 0 ? Jalali.Num(r.EarlyMinutes) + " " + HrT.T("د") : "—")</td>
+                            <td class="num">@(r.OvertimeMinutes > 0 ? Jalali.Num(r.OvertimeMinutes) + " " + HrT.T("د") : "—")</td>
+                            <td>@(r.Device?.Name ?? "—")</td>
+                            <td>
+                                <span class="badge @(r.Status switch { "حاضر" => "badge-ok", "تأخیر" => "badge-warn", "غایب" => "badge-err", "مرخصی" => "badge-info", "مأموریت" => "badge-info", _ => "badge-mute" })">@HrT.T(r.Status)</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (!records.Any())
+            {
+                <div class="empty">@HrT.T("رکوردی برای این تاریخ ثبت نشده است")</div>
+            }
+        </div>
+    </div>
+</div>
+</div>

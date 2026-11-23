@@ -1,0 +1,99 @@
+@{
+    // فاز ۱۳۴ (مورد ۵ ROADMAP-ADDITIONS) — داشبورد کیفیت ANPR و دلایل رد شدن
+    ViewData["Title"] = HrT.T("کیفیت پلاک‌خوان");
+    var reasons = (IEnumerable<dynamic>)ViewBag.Reasons;
+    var buckets = (IEnumerable<dynamic>)ViewBag.ConfBuckets;
+    var cameras = (List<AnprCameraStat>)ViewBag.Cameras;
+    var days = (int)ViewBag.Days;
+
+    string ConfBadge(decimal pct) => pct >= 95 ? "badge-ok" : pct >= 85 ? "badge-warn" : "badge-err";
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("داشبورد کیفیت ANPR")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("بازه")</label>
+                <select name="days">
+                    @foreach (var d in new[] { 1, 7, 30, 90 })
+                    {
+                        <option value="@d" selected="@(days == d)">@HrT.F("{0} روز", Jalali.Num(d))</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("جمع تردد:") <b>@Jalali.Num(ViewBag.Total)</b></span>
+            <span class="chip">@HrT.T("نرخ موفقیت:") <b>@Jalali.ToPersianDigits(ViewBag.OkPct.ToString("0"))٪</b></span>
+            <span class="chip">@HrT.T("میانگین اطمینان:") <b>@Jalali.ToPersianDigits(ViewBag.AvgConf.ToString("0"))٪</b></span>
+            <span class="chip">@HrT.T("غیرمجاز:") <b class="text-danger">@Jalali.Num(ViewBag.Deny)</b></span>
+        </div>
+
+        <h3>@HrT.T("دلایل رد شدن")</h3>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("دلیل")</th><th>@HrT.T("تعداد")</th></tr></thead>
+                <tbody>
+                    @foreach (var r in reasons)
+                    {
+                        <tr><td>@HrT.T((string)r.Reason)</td><td class="num">@Jalali.Num(r.Count)</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!reasons.Any())
+        {
+            <p class="hint">@HrT.T("در این بازه ردی رد نشده")</p>
+        }
+
+        <h3>@HrT.T("توزیع اطمینان پلاک‌خوان")</h3>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("کان")</th><th>@HrT.T("تعداد")</th></tr></thead>
+                <tbody>
+                    @foreach (var b in buckets)
+                    {
+                        <tr><td>@b.Bucket</td><td class="num">@Jalali.Num(b.Count)</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!buckets.Any())
+        {
+            <p class="hint">@HrT.T("در این بازه خوانش پلاک‌خوان با درصد اطمینان ثبت نشده")</p>
+        }
+
+        <h3>@HrT.T("آمار دوربین‌ها (به تفکیک گیت)")</h3>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("گیت")</th>
+                        <th>@HrT.T("جمع خوانش")</th>
+                        <th>@HrT.T("مجاز")</th>
+                        <th>@HrT.T("نرخ موفقیت")</th>
+                        <th>@HrT.T("میانگین اطمینان")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in cameras)
+                    {
+                        <tr>
+                            <td><strong>@c.Camera</strong></td>
+                            <td class="num">@Jalali.Num(c.Total)</td>
+                            <td class="num">@Jalali.Num(c.Ok)</td>
+                            <td><span class="badge @ConfBadge(c.OkPct)">@Jalali.ToPersianDigits(c.OkPct.ToString("0"))٪</span></td>
+                            <td class="num">@(c.AvgConf > 0 ? Jalali.ToPersianDigits(c.AvgConf.ToString("0")) + "٪" : "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!cameras.Any())
+        {
+            <p class="hint">@HrT.T("در این بازه عبوری با روش پلاک‌خوان ثبت نشده — روش‌های کارت/دستی در این داشبورد نمی‌شمارند")</p>
+        }
+    </div>
+</div>

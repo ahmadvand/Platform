@@ -1,0 +1,165 @@
+@model GatewaySetting
+@{
+    ViewBag.Title = HrT.T("تنظیمات گیت‌وی");
+    var devices = (IEnumerable<dynamic>)ViewBag.Devices;
+    var canEdit = (bool)ViewBag.CanEdit;
+    var tcpDevices = devices.Where(d => d.Transport == "tcp").ToList();
+    var admsDevices = devices.Where(d => d.Transport == "adms").ToList();
+
+    string FetchHint()
+    {
+        if (Model.LastFetchedAt is null) return HrT.T("هنوز گیت‌وی تنظیمات را دریافت نکرده است");
+        var mins = (DateTime.Now - Model.LastFetchedAt.Value).TotalMinutes;
+        return mins < 1 ? HrT.T("همین حالا") : HrT.F("{0} دقیقه پیش", Jalali.Num((int)mins));
+    }
+    bool FetchFresh = Model.LastFetchedAt is not null &&
+        (DateTime.Now - Model.LastFetchedAt.Value).TotalMinutes < (Model.ConfigRefreshSec * 3.0 / 60) + 2;
+}
+<div data-refresh-host>
+
+<div class="card">
+    <div class="card-h">
+        <h2>🖧 @HrT.T("سرویس گیت‌وی دستگاه‌های تردد (C# / Windows Service)")</h2>
+        <span class="badge @(FetchFresh ? "badge-ok" : "badge-mute")">
+            @(FetchFresh ? HrT.T("● متصل") : HrT.T("○ بدون گزارش")) — @HrT.T("آخرین دریافت کانفیگ:") @FetchHint()
+        </span>
+    </div>
+    <div class="card-b">
+        <p style="color:var(--ink-2);font-size:12.5px;line-height:2;margin-bottom:14px">
+            @HrT.T("این پنل منبع واحد تنظیمات سرویس") <b>HrDeviceGateway</b> @HrT.T("است. سرویس نصب‌شده روی سرور ویندوزی، تنظیمات را از مسیر") <code>api/gateway/config</code> @HrT.T("با حساب سرویس پل (")<code>svc_bridge</code>@HrT.T(") به‌صورت دوره‌ای دریافت و") <b>@HrT.T("بدون نیاز به ری‌استارت")</b> @HrT.T("اعمال می‌کند؛ فقط تغییر «پورت پل ADMS» پس از ری‌استارت سرویس فعال می‌شود. مقادیر اولیه اتصال (آدرس سرور و رمز حساب سرویس پل) در فایل") <code>appsettings.json</code> @HrT.T("کنار سرویس نگه‌داری می‌شود.")
+        </p>
+
+        <div class="stat-grid">
+            <div class="stat @(Model.Enabled ? "c-ok" : "c-err")"><div class="ic">⚡</div><div><div class="v">@(Model.Enabled ? HrT.T("فعال") : HrT.T("متوقف"))</div><div class="l">@HrT.T("وضعیت پایش")</div></div></div>
+            <div class="stat"><div class="ic">🔗</div><div><div class="v">@Jalali.Num(Model.ListenPort)</div><div class="l">@HrT.T("پورت پل ADMS")</div></div></div>
+            <div class="stat"><div class="ic">⏱️</div><div><div class="v">@Jalali.Num(Model.PollIntervalSec)</div><div class="l">@HrT.T("فاصله poll (ثانیه)")</div></div></div>
+            <div class="stat"><div class="ic">📡</div><div><div class="v">@Jalali.Num(tcpDevices.Count)</div><div class="l">@HrT.T("دستگاه TCP (پول مستقیم)")</div></div></div>
+            <div class="stat"><div class="ic">🛰</div><div><div class="v">@Jalali.Num(admsDevices.Count)</div><div class="l">@HrT.T("دستگاه ADMS (PUSH)")</div></div></div>
+            <div class="stat"><div class="ic">🔁</div><div><div class="v" id="gwVersion">@Jalali.Num(Model.ConfigVersion)</div><div class="l">@HrT.T("نسخه کانفیگ")</div></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>⚙️ @HrT.T("ویرایش تنظیمات")</h2>
+        <span class="hint">@HrT.T("نسخه فعلی:") @Jalali.Num(Model.ConfigVersion) — @HrT.T("به‌روزرسانی:") @Jalali.FmtLong(Model.UpdatedAt)</span>
+    </div>
+    <div class="card-b">
+        @if (!canEdit)
+        {
+            <div class="toast toast-err">@HrT.T("برای ویرایش تنظیمات گیت‌وی دسترسی کافی ندارید (مجوز gateway.edit).")</div>
+        }
+        <form method="post" action="/Gateway/Save" data-ajax>
+            @Html.AntiForgeryToken()
+            <div class="form-grid">
+                <div class="fld fld-full">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                        <input type="checkbox" name="Enabled" value="true" @(Model.Enabled ? "checked" : "") style="width:auto" @(canEdit ? "" : "disabled") />
+                        <b>@HrT.T("پایش دستگاه‌ها فعال باشد")</b>
+                        <span style="color:var(--ink-3);font-weight:400">@HrT.T("(غیرفعال‌کردن، pollerها را موقتاً متوقف می‌کند بدون توقف سرویس)")</span>
+                    </label>
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("پورت پل ADMS (PUSH)")</label>
+                    <input type="number" name="ListenPort" value="@Model.ListenPort" min="1" max="65535" @(canEdit ? "" : "disabled") />
+                    <span style="font-size:10.5px;color:var(--ink-3)">@HrT.T("دستگاه‌های ADMS به این پورت متصل می‌شوند — اعمال پس از ری‌استارت سرویس")</span>
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("زمان انتظار TCP (میلی‌ثانیه)")</label>
+                    <input type="number" name="TcpTimeoutMs" value="@Model.TcpTimeoutMs" min="1000" max="60000" step="500" @(canEdit ? "" : "disabled") />
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("فاصله پیش‌فرض poll (ثانیه)")</label>
+                    <input type="number" name="PollIntervalSec" value="@Model.PollIntervalSec" min="15" max="3600" @(canEdit ? "" : "disabled") />
+                    <span style="font-size:10.5px;color:var(--ink-3)">@HrT.T("برای دستگاه‌هایی که فاصله اختصاصی ندارند")</span>
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("فاصله بازبینی وضعیت (ثانیه)")</label>
+                    <input type="number" name="SweeperIntervalSec" value="@Model.SweeperIntervalSec" min="30" max="3600" @(canEdit ? "" : "disabled") />
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("فاصله دریافت تنظیمات از سرور (ثانیه)")</label>
+                    <input type="number" name="ConfigRefreshSec" value="@Model.ConfigRefreshSec" min="10" max="3600" @(canEdit ? "" : "disabled") />
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("سطح لاگ سرویس")</label>
+                    <select name="LogLevel" @(canEdit ? "" : "disabled")>
+                        @foreach (var lv in GatewayConfig.LogLevels)
+                        {
+                            <option value="@lv" selected="@(Model.LogLevel == lv)">@lv</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("پورت پیش‌فرض دستگاه (ZK: 4370)")</label>
+                    <input type="number" name="DefaultDevicePort" value="@Model.DefaultDevicePort" min="1" max="65535" @(canEdit ? "" : "disabled") />
+                    <span style="font-size:10.5px;color:var(--ink-3)">@HrT.T("برای دستگاه‌هایی که پورت اختصاصی ندارند")</span>
+                </div>
+                <div class="fld">
+                    <label>@HrT.T("کلید ارتباطی پیش‌فرض (CommKey)")</label>
+                    <input type="number" name="DefaultCommKey" value="@Model.DefaultCommKey" min="0" @(canEdit ? "" : "disabled") />
+                </div>
+            </div>
+            @if (canEdit)
+            {
+                <div class="btn-row">
+                    <button class="btn btn-primary">💾 @HrT.T("ذخیره تنظیمات")</button>
+                    <a href="/Devices" class="btn">@HrT.T("مدیریت دستگاه‌ها")</a>
+                    <a href="/Biometrics" class="btn">@HrT.T("داده‌های هویتی")</a>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+// پس از ذخیره AJAX، نسخه کانفیگ همان‌جا به‌روز می‌شود (بدون رفرش)
+document.addEventListener('hraj:refresh', function (e) {
+    if (e.detail && e.detail.configVersion != null) {
+        var el = document.getElementById('gwVersion');
+        if (el) el.textContent = Number(e.detail.configVersion).toLocaleString('fa-IR');
+    }
+});
+</script>
+}
+
+<div class="card">
+    <div class="card-h"><h2>📋 @HrT.T("دستگاه‌های تحت مدیریت گیت‌وی")</h2>
+        <span class="hint">@HrT.T("نحوه اتصال هر دستگاه از فرم «ویرایش دستگاه» تعیین می‌شود")</span>
+    </div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("دستگاه")</th><th>@HrT.T("سریال")</th><th>@HrT.T("نحوه اتصال")</th><th>IP</th><th>@HrT.T("پورت")</th><th>CommKey</th><th>@HrT.T("فاصله poll (ثانیه)")</th></tr></thead>
+            <tbody>
+            @if (!devices.Any())
+            {
+                <tr><td colspan="7"><div class="empty">@HrT.T("دستگاه فعالی ثبت نشده است")</div></td></tr>
+            }
+            @foreach (var d in devices)
+            {
+                <tr>
+                    <td><b>@d.Name</b></td>
+                    <td class="num">@d.Serial</td>
+                    <td>
+                        @if (d.Transport == "tcp")
+                        {
+                            <span class="badge badge-info">@HrT.T("TCP — پول مستقیم")</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-ok">ADMS — PUSH</span>
+                        }
+                    </td>
+                    <td class="num">@(d.Ip ?? "—")</td>
+                    <td class="num">@(d.DevicePort is null ? HrT.T("پیش‌فرض") : d.DevicePort?.ToString())</td>
+                    <td class="num">@(d.CommKey is null ? HrT.T("پیش‌فرض") : d.CommKey?.ToString())</td>
+                    <td class="num">@Jalali.Num(d.PollingInterval)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>

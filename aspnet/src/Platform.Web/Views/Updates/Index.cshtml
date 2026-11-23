@@ -1,0 +1,230 @@
+@{
+    ViewBag.Title = HrT.T("به‌روزرسانی سامانه");
+    var version = (string)ViewBag.Version;
+    var vendor = (string)ViewBag.Vendor;
+    var pending = (UpdateApplier.PendingInfo?)ViewBag.Pending;
+    var alreadyFlagged = (bool)ViewBag.AlreadyFlagged;
+    var backups = (List<(string Name, long Bytes, DateTime At)>)ViewBag.Backups;
+    var modules = (List<(string Code, string Title)>)ViewBag.Modules;
+    string Sz(long b) => b >= 1 << 20 ? HrT.F("{0} مگابایت", (b / (1024m * 1024m)).ToString("0.#"))
+                       : HrT.F("{0} کیلوبایت", (b / 1024m).ToString("0.#"));
+}
+<div data-refresh-host>
+
+<div class="card">
+    <div class="card-h">
+        <h2>⬆️ @HrT.T("به‌روزرسانی سامانه")</h2>
+        <div class="btn-row">
+            <span class="badge badge-ok">@HrT.T("نسخهٔ فعلی") @HrT.Digits(version)</span>
+            @if (!string.IsNullOrWhiteSpace(vendor))
+            {
+                <span class="hint">@HrT.T("تولیدکننده:") @vendor</span>
+            }
+        </div>
+    </div>
+    <div class="card-b">
+        <div class="hint" style="margin-bottom:10px">
+            @HrT.T("به‌روزرسانی بسته‌ای: ماژول‌ها یا کل سامانه با یک فایل zip از این صفحه ارتقا می‌یابند — پشتیبان‌گیری خودکار، نصب با اجرای بعدی، و بازگردانی با یک کلیک.")
+        </div>
+        @if (alreadyFlagged)
+        {
+            <div class="toast toast-err">@HrT.T("یک به‌روزرسانی در انتظار اعمال است (فایل apply.json موجود است) — برنامه را ری‌استارت کنید تا نصب کامل شود. اگر ری‌استارت کردید و این پیام ماند، دسترسی نوشتن فایل‌های نصب را بررسی کنید.")</div>
+        }
+        @if (pending is not null)
+        {
+            <div class="lic-box" style="border-color:var(--accent)">
+                <div class="lic-title">📦 @HrT.T("بستهٔ در صف نصب") — @HrT.Digits(pending.Version)</div>
+                @if (!string.IsNullOrWhiteSpace(pending.NotesFa) || !string.IsNullOrWhiteSpace(pending.NotesEn))
+                {
+                    <div style="font-size:12.5px;margin:6px 0">@HrT.T("یادداشت بسته:") @pending.NotesFa @pending.NotesEn</div>
+                }
+                <div class="hint" style="margin-bottom:10px">@HrT.T("درج‌شده در:") @pending.CreatedAt</div>
+                <div class="btn-row">
+                    <form method="post" asp-action="Apply" data-confirm="@HrT.T("پشتیبان خودکار گرفته می‌شود و بسته نصب می‌شود. ادامه می‌دهید؟")">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-primary">🚀 @HrT.T("نصب به‌روزرسانی")</button>
+                    </form>
+                    <form method="post" asp-action="Discard" data-confirm="@HrT.T("بستهٔ در صف حذف شود؟")" data-danger="1">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-err btn-sm">🗑 @HrT.T("لغو بستهٔ در صف")</button>
+                    </form>
+                </div>
+            </div>
+        }
+        <form method="post" asp-action="Upload" enctype="multipart/form-data" style="margin-top:6px">
+            @Html.AntiForgeryToken()
+            <div class="btn-row" style="align-items:center">
+                <input type="file" name="package" accept=".zip" required
+                       style="font-size:12.5px;padding:8px 10px;border:1px dashed var(--line);border-radius:8px;max-width:420px" />
+                <button class="btn btn-primary">📦 @HrT.T("بارگذاری و اعتبارسنجی بسته")</button>
+            </div>
+            <div class="hint" style="margin-top:8px">
+                @HrT.T("فایل zip حاوی manifest.json + پوشه‌های نصب (bin و wwwroot و …). حداکثر ۳۰۰ مگابایت. قالب دقیق در راهنمای پایین همین صفحه.")
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>💾 @HrT.T("پشتیبان‌های نصب")</h2>
+        <div class="btn-row">
+            <form method="post" asp-action="BackupNow">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-sm">💾 @HrT.T("پشتیبان‌گیری الان")</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-b">
+        @if (backups.Count == 0)
+        {
+            <div class="empty">@HrT.T("هنوز پشتیبانی ساخته نشده — هنگام نصب هر به‌روزرسانی، پشتیبان خودکار گرفته می‌شود")</div>
+        }
+        else
+        {
+            <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("فایل")</th><th>@HrT.T("حجم")</th><th>@HrT.T("زمان")</th><th>@HrT.T("عملیات")</th></tr></thead>
+                <tbody>
+                @foreach (var b in backups)
+                {
+                    <tr>
+                        <td><code>@b.Name</code></td>
+                        <td class="num">@Sz(b.Bytes)</td>
+                        <td class="num">@Jalali.FmtLong(b.At)</td>
+                        <td>
+                            <div class="btn-row">
+                                <a class="btn btn-sm" href="/Updates/DownloadBackup?name=@b.Name">@HrT.T("دانلود")</a>
+                                <form method="post" asp-action="Restore" data-confirm="@HrT.F("نصب به نسخهٔ پشتیبان «{0}» برمی‌گردد (با اجرای بعدی اعمال می‌شود). ادامه؟", b.Name)" data-danger="1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="name" value="@b.Name" />
+                                    <button class="btn btn-sm btn-warn">↩ @HrT.T("بازگردانی")</button>
+                                </form>
+                                <form method="post" asp-action="DeleteBackup" data-confirm="@HrT.T("این پشتیبان حذف شود؟")" data-danger="1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="name" value="@b.Name" />
+                                    <button class="btn btn-sm btn-err">🗑</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            </div>
+        }
+    </div>
+</div>
+
+@* فاز ۱۳۵ (مورد ۲۰ ROADMAP-ADDITIONS) — پشتیبان‌گیری زمان‌بندی‌شدهٔ دیتابیس + نگهداشت N نسخه *@
+@{
+    var s = (AppSettings)ViewBag.S;
+    var dbBackups = (List<(string Name, long Bytes, DateTime At)>)ViewBag.DbBackups;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>🗄 @HrT.T("پشتیبان‌گیری خودکار دیتابیس")</h2>
+        <form method="post" asp-action="SaveDbBackup" class="toolbar" data-ajax data-refresh>
+            @Html.AntiForgeryToken()
+            <label class="chk"><input type="checkbox" name="backupEnabled" value="true" checked="@(s.BackupEnabled)" /> @HrT.T("فعال")</label>
+            <input name="backupTime" type="time" value="@s.BackupTime" />
+            <input name="backupRetention" type="number" min="1" max="90" value="@s.BackupRetention" style="width:5rem" />
+            <span class="hint">@HrT.T("نسخهٔ نگهداشت")</span>
+            <button class="btn btn-sm">💾 @HrT.T("ذخیرهٔ تنظیمات")</button>
+        </form>
+        <form method="post" asp-action="DbBackupNow" class="inline-form" data-ajax data-refresh>
+            @Html.AntiForgeryToken()
+            <button class="btn btn-sm btn-dark">🗄 @HrT.T("پشتیبان دیتابیس — الان")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <p class="hint">@HrT.T("هر روز در ساعت تعیین‌شده، فایل‌های دیتابیس (hr.db و wal/shm) در backups/db زیپ می‌شوند و فقط N نسخهٔ آخر نگه داشته می‌شود؛ اجرای موفق روزانه ثبت می‌شود تا اجرای دوباره در همان روز رخ ندهد.") @HrT.T("آخرین اجرا:") <b>@(string.IsNullOrEmpty(s.BackupLastDate) ? "—" : s.BackupLastDate)</b></p>
+        @if (dbBackups.Count == 0)
+        {
+            <div class="empty">@HrT.T("هنوز پشتیبان دیتابیس ساخته نشده — با دکمهٔ «الان» امتحان کنید")</div>
+        }
+        else
+        {
+            <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("فایل")</th>
+                        <th>@HrT.T("حجم")</th>
+                        <th>@HrT.T("زمان")</th>
+                        <th>@HrT.T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in dbBackups)
+                    {
+                        <tr>
+                            <td><code>@b.Name</code></td>
+                            <td class="num">@Jalali.ToPersianDigits((b.Bytes / 1024).ToString("N0")) کیلوبایت</td>
+                            <td class="num">@Jalali.FmtFaLong(b.At)</td>
+                            <td>
+                                <form method="post" asp-action="DeleteDbBackup" data-confirm="@HrT.T("این پشتیبان دیتابیس حذف شود؟")" data-danger="1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="name" value="@b.Name" />
+                                    <button class="btn btn-sm btn-err">🗑</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>؟ @HrT.T("راهنمای به‌روزرسانی — گام‌به‌گام")</h2></div>
+    <div class="card-b">
+        <ol style="line-height:2;font-size:13px;padding-inline-start:20px">
+            <li><b>@HrT.T("ساخت بسته:")</b> @HrT.T("روی دستگاه توسعه، اسکریپت ساخت بسته را با شمارهٔ نسخهٔ جدید اجرا کنید — لینوکس:")<br />
+                <code style="direction:ltr;display:inline-block;margin:4px 0">./scripts/make-update-package.sh 2.7.6 --notes-fa "رفع اشکال دستگاه‌ها" --notes-en "Device fixes"</code><br />
+                @HrT.T("ویندوز:")<br />
+                <code style="direction:ltr;display:inline-block;margin:4px 0">powershell -ExecutionPolicy Bypass -File scripts\make-update-package.ps1 -Version 2.7.6 -NotesFa "رفع اشکال دستگاه‌ها"</code><br />
+                @HrT.T("خروجی: dist/hr-update-2.7.6.zip (شامل bin و wwwroot و web.config و manifest.json). اگر فقط یک ماژول عوض شده، در راهنمای زیر فقط DLL همان ماژول را در بسته بگذارید.")
+            </li>
+            <li><b>@HrT.T("بارگذاری در پنل ادمین:")</b> @HrT.T("همین صفحه ← بارگذاری zip ← اعتبارسنجی خودکار (نسخه، قالب، امنیت مسیرها).")</li>
+            <li><b>@HrT.T("نصب:")</b> @HrT.T("دکمهٔ «نصب به‌روزرسانی» — پیش از نصب، از کد فعلی پشتیبان خودکار گرفته می‌شود؛ سپس فایل‌ها استقرار می‌یابند. پس از ری‌استارت سرویس، نسخهٔ جدید فعال است و مهاجرت‌های بانک داده خودکار اجرا می‌شوند.")</li>
+            <li><b>@HrT.T("بازگردانی در صورت نیاز:")</b> @HrT.T("از جدول «پشتیبان‌های نصب» ← بازگردانی ← ری‌استارت. هیچ داده‌ای (بانک، تنظیمات، آپلودها) از بین نمی‌رود.")</li>
+        </ol>
+
+        <div style="margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>@HrT.T("به‌روزرسانی فقط یک ماژول:")</b>
+            <div class="hint" style="margin-top:6px">
+                @HrT.T("هر ماژول یک DLL است (مثل HrModules.Payroll.dll) که نماهای کامپایل‌شده را هم درون خود دارد. برای ارتقای همان ماژول، بستهٔ zip را فقط با همان DLL (و در صورت لزوم DLLهای وابسته) بسازید؛ بقیهٔ فایل‌ها دست‌نخورده می‌مانند. ماژول‌های نصب‌شده در این نصب:")
+            </div>
+            <div class="chips" style="margin-top:8px">
+                @foreach (var (code, title) in modules)
+                {
+                    <span class="chip">@HrT.T(title) <code dir="ltr" style="font-size:10px">@code</code></span>
+                }
+            </div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>@HrT.T("نصب روی ویندوز (IIS):")</b>
+            <div class="hint" style="margin-top:6px">
+                @HrT.T("وقتی اپ روی IIS اجراست، DLLهای در حال استفاده قفل‌اند؛ نصب‌کنندهٔ شما (installer/Install-HRPlatform.ps1) وظیفهٔ زمان‌بندی‌شدهٔ «HR Platform Updater» را می‌سازد که در هر توقف/ری‌استارتِ اپ، بستهٔ آماده را خودکار جای‌گذاری می‌کند. کافی است در همین صفحه «نصب به‌روزرسانی» را بزنید و سرویس را ری‌استارت کنید (Stop-Website / Start-Website یا از IIS Manager).")
+            </div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:10px">
+            <b>@HrT.T("قالب manifest.json:")</b>
+            <pre style="direction:ltr;text-align:left;font-size:11.5px;background:var(--line-soft);padding:10px;border-radius:8px;overflow:auto">{
+  "format": "hr-update-pack",
+  "version": "2.7.6",
+  "minVersion": "2.7.5",
+  "includeAppSettings": false,
+  "notes": { "fa": "…", "en": "…" }
+}</pre>
+            <div class="hint">@HrT.T("پوشهٔ App_Data از هر بسته‌ای نادیده گرفته می‌شود — دادهٔ نصب (بانک، تنظیمات رمز، آپلودها) هرگز با به‌روزرسانی بازنویسی نمی‌شود.")</div>
+        </div>
+    </div>
+</div>
+
+</div>

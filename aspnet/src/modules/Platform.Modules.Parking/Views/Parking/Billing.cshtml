@@ -1,0 +1,64 @@
+@{
+    // فاز ۱۳۵ (مورد ۱۵ ROADMAP-ADDITIONS) — صورتحساب ماهانهٔ پارکینگ
+    ViewData["Title"] = HrT.T("صورتحساب پارکینگ");
+    var rows = (List<ParkingBillingRow>)Model;
+    var jy = (int)ViewBag.Jy;
+    var jm = (int)ViewBag.Jm;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("صورتحساب ماهانهٔ پارکینگ")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("سال")</label><input name="jy" type="number" value="@jy" /></div>
+            <div class="fld"><label>@HrT.T("ماه")</label>
+                <select name="jm">
+                    @for (var i = 1; i <= 12; i++)
+                    {
+                        <option value="@i" selected="@(jm == i)">@Jalali.MonthName(i)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("جمع صورتحساب ماه:") <b class="text-danger">@Money.Fmt((decimal)ViewBag.Total)</b></span>
+            <span class="chip">@HrT.T("خودروی مشمول:") <b>@Jalali.Num(ViewBag.Count)</b></span>
+        </div>
+        <p class="hint">@HrT.T("این مبالغ به‌طور خودکار در موتور حقوق‌ودستمزد به‌عنوان متغیر «پارکینگ_مبلغ» برای هر پرسنل در دسترس‌اند — برای کسر از حقوق، در تنظیمات حقوق همان شرکت یک قلمِ کسور با کد «پارکینگ» و فرمول «پارکینگ_مبلغ» تعریف کنید؛ پارکینگِ رایگان (MonthlyFee=۰) مشمول نمی‌شود.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("کد پرسنلی")</th>
+                        <th>@HrT.T("پرسنل")</th>
+                        <th>@HrT.T("شرکت")</th>
+                        <th>@HrT.T("پارکینگ")</th>
+                        <th>@HrT.T("پلاک")</th>
+                        <th>@HrT.T("نوع مجوز")</th>
+                        <th>@HrT.T("حق ماهانه")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td class="num">@r.PersonnelCode</td>
+                            <td><strong>@r.Employee</strong></td>
+                            <td>@r.Company</td>
+                            <td>@r.LotName</td>
+                            <td>@r.Plate</td>
+                            <td>@HrT.T(r.PermitType)</td>
+                            <td class="num">@Money.Fmt(r.Fee)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("در این ماه مجوز فعالی روی پارکینگ‌های دارای حق ماهانه نیست")</p>
+        }
+    </div>
+</div>

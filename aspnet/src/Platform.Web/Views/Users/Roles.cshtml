@@ -1,0 +1,167 @@
+@{
+    // فاز ۷۷ — صفحهٔ مدیریت نقش‌ها: جدول صفحه‌بندی‌شده + جستجو + سلسله‌مراتب نقش‌ها
+    // فرم‌ها همه مودالی‌اند تا صفحه شلوغ نشود (تقاضای فاز ۷۷).
+    ViewData["Title"] = HrT.T("نقش‌ها و دسترسی‌ها");
+    var rows = (List<Platform.Web.Controllers.UsersController.RoleRow>)ViewBag.Rows;
+    var page = (int)ViewBag.Page;
+    var pages = (int)ViewBag.Pages;
+    var total = (int)ViewBag.Total;
+    var q = (string)ViewBag.Q;
+    var canCreate = (bool)ViewBag.CanRoleCreate;
+    var canEdit = (bool)ViewBag.CanRoleEdit;
+    var canDelete = (bool)ViewBag.CanRoleDelete;
+    string T(string fa) => HrT.T(fa);
+}
+<style>
+    /* فاز ۷۷ — جدول نقش‌ها */
+    .roles-tbl td { vertical-align: middle; }
+    .roles-tbl .role-title { font-weight: 700; }
+    .roles-tbl .role-name { direction: ltr; font-family: var(--mono, monospace); font-size: 10.5px; color: var(--ink-3); }
+    .roles-tbl .parent-badge { display: inline-flex; align-items: center; gap: 4px; border: 1px dashed var(--line); border-radius: 9px; padding: 2px 8px; font-size: 10.5px; color: var(--ink-2); background: var(--surface-2, #fafbff); }
+    .roles-tbl .cnt-badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 9px; padding: 2px 8px; font-size: 10.5px; border: 1px solid var(--line); background: var(--card); }
+    .roles-tbl .cnt-badge.inh { background: rgba(99,102,241,.07); border-color: rgba(99,102,241,.3); color: #4338ca; }
+    .roles-tbl .cnt-badge.usr { background: rgba(5,150,105,.07); border-color: rgba(5,150,105,.28); color: #065f46; }
+    .pager { display: flex; gap: 6px; align-items: center; justify-content: flex-start; flex-wrap: wrap; margin-top: 14px; }
+    .pager a, .pager span.cur { border: 1px solid var(--line); border-radius: 9px; padding: 4px 11px; font-size: 11.5px; }
+    .pager span.cur { background: var(--grad-btn, linear-gradient(135deg,#6366f1,#4f46e5)); color: #fff; border-color: transparent; }
+    .pager a:hover { border-color: var(--accent, #6366f1); }
+    .roles-search { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .roles-search input { min-width: 240px; }
+</style>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+    <h1 style="font-size:18px;margin:0">👔 @T("نقش‌ها و دسترسی‌ها")</h1>
+    <a class="btn btn-sm" href="/Users">← @T("کاربران و نقش‌ها")</a>
+    <div style="margin-inline-start:auto"></div>
+    @if (canCreate)
+    {
+        <a class="btn btn-primary" href="/Users/RoleForm" data-modal="/Users/RoleForm" data-modal-title="@T("ایجاد نقش جدید")">＋ @T("نقش جدید")</a>
+    }
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@T("فهرست نقش‌ها") (@HrT.Digits(total.ToString()) @T("نقش"))</h2>
+        <form method="get" action="/Users/Roles" class="roles-search">
+            <input type="search" name="q" value="@q" placeholder="@T("جستجو در نام، عنوان یا توضیح نقش…")" />
+            <button class="btn btn-sm">@T("جستجو")</button>
+            @if (!string.IsNullOrEmpty(q))
+            {
+                <a class="btn btn-sm" href="/Users/Roles">@T("حذف فیلتر")</a>
+            }
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="table-wrap">
+            <table class="tbl roles-tbl">
+                <thead>
+                    <tr>
+                        <th>@T("نقش")</th>
+                        <th>@T("نقش والد")</th>
+                        <th>@T("دامنهٔ داده")</th>
+                        <th>@T("دسترسی‌ها")</th>
+                        <th>@T("کاربران")</th>
+                        <th>@T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td>
+                                <div class="role-title">@r.Title @if (r.IsBuiltIn)
+                                {
+                                    <span class="badge badge-mute" style="font-size:9.5px">@T("داخلی")</span>
+                                }</div>
+                                <div class="role-name">@r.Name</div>
+                                @if (!string.IsNullOrEmpty(r.Description))
+                                {
+                                    <div style="color:var(--ink-3);font-size:10.5px;margin-top:2px">@r.Description</div>
+                                }
+                            </td>
+                            <td>
+                                @if (r.ParentRoleId is null)
+                                {
+                                    <span style="color:var(--ink-3);font-size:11px">— @T("ریشه")</span>
+                                }
+                                else
+                                {
+                                    <span class="parent-badge" title="@T("ارث‌بری از"): @r.InheritedFrom">🌳 @r.ParentTitle</span>
+                                }
+                            </td>
+                            <td><span class="badge badge-warn" title="@T("دامنهٔ رکوردی نقش")">@r.ScopeBadge</span></td>
+                            <td>
+                                <span class="cnt-badge" title="@T("دسترسی مستقیم این نقش")">✎ @HrT.Digits(r.DirectCount.ToString())</span>
+                                @if (r.InheritedCount > 0)
+                                {
+                                    <span class="cnt-badge inh" title="@T("ارث‌رسیده از زنجیرهٔ والد"): @r.InheritedFrom">↳ + @HrT.Digits(r.InheritedCount.ToString())</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="cnt-badge usr">@HrT.Digits(r.UserCount.ToString()) @T("کاربر")</span>
+                                @if (r.ChildCount > 0)
+                                {
+                                    <span class="cnt-badge" title="@T("نقش‌های فرزند")">🌳 @HrT.Digits(r.ChildCount.ToString())</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-row">
+                                    <a class="btn btn-sm" href="/Users/RolePerms?roleId=@r.Id"
+                                       data-modal="/Users/RolePerms?roleId=@r.Id"
+                                       data-modal-title="@T("دسترسی‌های نقش") — @r.Title">🔑 @T("دسترسی‌ها")</a>
+                                    @if (canEdit)
+                                    {
+                                        <a class="btn btn-sm" href="/Users/RoleForm/@r.Id"
+                                           data-modal="/Users/RoleForm/@r.Id"
+                                           data-modal-title="@T("ویرایش نقش") — @r.Title">✎ @T("ویرایش")</a>
+                                    }
+                                    @if (canDelete && !r.IsBuiltIn)
+                                    {
+                                        <form method="post" action="/Users/RoleDelete" class="inline-form" data-confirm="@T("نقش حذف شود؟ این عمل قابل بازگشت نیست.")" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@r.Id" />
+                                            <button class="btn btn-sm btn-err">🗑️ @T("حذف")</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (rows.Count == 0)
+                    {
+                        <tr><td colspan="6" style="color:var(--ink-3);text-align:center;padding:18px">— @T("نقشی یافت نشد")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (pages > 1)
+        {
+            <div class="pager">
+                <span style="font-size:11px;color:var(--ink-3)">@T("صفحه") @HrT.Digits(page.ToString()) @T("از") @HrT.Digits(pages.ToString())</span>
+                @if (page > 1)
+                {
+                    <a href="/Users/Roles?page=@(page - 1)&q=@Uri.EscapeDataString(q ?? "")">‹ @T("قبلی")</a>
+                }
+                @for (var p = Math.Max(1, page - 2); p <= Math.Min(pages, page + 2); p++)
+                {
+                    if (p == page)
+                    {
+                        <span class="cur">@HrT.Digits(p.ToString())</span>
+                    }
+                    else
+                    {
+                        <a href="/Users/Roles?page=@p&q=@Uri.EscapeDataString(q ?? "")">@HrT.Digits(p.ToString())</a>
+                    }
+                }
+                @if (page < pages)
+                {
+                    <a href="/Users/Roles?page=@(page + 1)&q=@Uri.EscapeDataString(q ?? "")">@T("بعدی") ›</a>
+                }
+            </div>
+        }
+        <p style="color:var(--ink-3);font-size:11px;margin-top:12px">
+            💡 @T("نقش فرزند همهٔ دسترسی‌های نقش والد را به ارث می‌برد؛ در مودال «دسترسی‌ها» کلیدهای ارثی با تیکِ قفل مشخص‌اند و فقط دسترسی‌های خود نقش قابل ویرایش است.")
+        </p>
+    </div>
+</div>

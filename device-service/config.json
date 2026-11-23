@@ -1,0 +1,12 @@
+{
+  "apiBase": "http://localhost:3000",
+  "username": "svc_bridge",
+  "password": "Bridge@1234",
+  "listenPort": 8081,
+  "sweeperIntervalSec": 60,
+  "tcpTimeoutMs": 6000,
+  "devices": [
+    { "serial": "ZK-U2000-0142", "transport": "tcp", "ip": "192.168.10.11", "port": 4370, "commKey": 0, "pollIntervalSec": 60 },
+    { "serial": "ZK-FD7-0311", "transport": "adms", "pollIntervalSec": 60 }
+  ]
+}

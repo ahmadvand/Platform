@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Harness for verifying that the composite EF model (host core + discovered plugin
+    data modules) produces EXACTLY the same SQL Server schema as scripts/ddl-sqlserver.sql.
+    Phase 70 — root cause of "Invalid column name 'PositionId1'": a shadow FK appeared in
+    the model but not in the customer DDL. This tool dumps db.Database.GenerateCreateScript()
+    (model-only, no connection opened) and compares per-table column sets with the DDL.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\aspnet\src\Platform.Web\Platform.Web.csproj" />
+  </ItemGroup>
+
+  <!-- Plugin discovery scans AppContext.BaseDirectory — copy HrModules.*.dll here -->
+  <Target Name="CopyPluginsHere" AfterTargets="Build">
+    <ItemGroup>
+      <_Plugins Include="..\..\aspnet\src\modules\**\bin\$(Configuration)\net8.0\HrModules.*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_Plugins)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true"
+          Condition="'@(_Plugins)' != ''" />
+  </Target>
+</Project>

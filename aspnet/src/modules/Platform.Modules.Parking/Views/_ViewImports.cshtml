@@ -1,0 +1,13 @@
+@* فاز ۶۱ — usingهای ویوهای ماژول: انواع پلتفرم از Platform.Core،
+   entityهای پارکینگ از Platform.Modules.Parking.Domain و کد ماژول (ParkingOps و…) از همین اسمبلی.
+   تزریق AppDbContext هاست حذف شد (ویوها مستقیم Db ندارند — همهٔ داده‌ها از کنترلر با ViewBag می‌آیند).
+   Layout در زمان اجرا از هاست پیدا می‌شود (_Layout) — همان پوستهٔ سراسری. *@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using Platform.Web.Data
+@using Platform.Modules.Parking.Domain
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -1,0 +1,92 @@
+@{
+    var depts = (List<Department>)ViewBag.Depts;
+    var positions = (List<Position>)ViewBag.Positions;
+    var shifts = (IEnumerable<dynamic>)(ViewBag.Shifts ?? System.Linq.Enumerable.Empty<object>()); // فاز ۶۷
+}
+<div data-modal-title="@(HrT.T("ثبت پرسنل جدید"))" hidden></div>
+<form method="post" action="/Employees/Create" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("کد پرسنلی *")</label><input name="personnelCode" required placeholder="1030" /></div>
+        <div class="fld"><label>@HrT.T("نام *")</label><input name="firstName" required /></div>
+        <div class="fld"><label>@HrT.T("نام خانوادگی *")</label><input name="lastName" required /></div>
+        <div class="fld"><label>@HrT.T("کد ملی *")</label><input name="nationalId" required maxlength="10" /></div>
+        <div class="fld"><label>@HrT.T("تلفن همراه")</label><input name="phone" placeholder="0912..." /></div>
+        <div class="fld"><label>@HrT.T("نوع اشتغال")</label>
+            <select name="employmentType">
+                @foreach (var t in new[] { "رسمی", "قراردادی", "پیمانکاری", "اقماری", "کارآموز" })
+                {
+                    <option value="@t">@HrT.T(t)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("واحد سازمانی")</label>
+            <select name="departmentId"><option value="">@HrT.T("— انتخاب کنید —")</option>
+                @foreach (var grpC in (List<Company>)ViewBag.Companies)
+                {
+                    <optgroup label="@grpC.Name">
+                    @foreach (var d in depts.Where(x => x.CompanyId == grpC.Id))
+                    {
+                        <option value="@d.Id">@d.Name</option>
+                    }
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("پست سازمانی")</label>
+            <select name="positionId"><option value="">@HrT.T("— انتخاب کنید —")</option>
+                @foreach (var grpC in (List<Company>)ViewBag.Companies)
+                {
+                    <optgroup label="@grpC.Name">
+                    @foreach (var p in positions.Where(x => x.Department != null && x.Department.CompanyId == grpC.Id))
+                    {
+                        <option value="@p.Id">@p.Title (@p.Department?.Name)</option>
+                    }
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("شیفت")</label>
+            <select name="shiftId"><option value="">@HrT.T("— بدون شیفت —")</option>
+                @foreach (var grpC in (List<Company>)ViewBag.Companies)
+                {
+                    <optgroup label="@grpC.Name">
+                    @foreach (var s in shifts.Where(x => x.CompanyId == grpC.Id || x.CompanyId == null))
+                    {
+                        <option value="@s.Id">@s.Name (@s.StartTime–@s.EndTime)</option>
+                    }
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.F("حقوق پایه ({0})", Money.CurTitle())</label><input name="baseSalary" type="number" value="300000000" /></div>
+        <div class="fld"><label>@HrT.T("تاریخ استخدام")</label><input name="hireDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" /></div>
+        <div class="fld"><label>@HrT.T("شرکت *")</label>
+            <select name="companyId" required>
+                @foreach (var c in (List<Company>)ViewBag.Companies)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("وضعیت تأهل")</label>
+            <select name="maritalStatus"><option value="مجرد">@HrT.T("مجرد")</option><option value="متأهل">@HrT.T("متأهل")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("تعداد فرزندان")</label><input name="childCount" type="number" min="0" max="12" value="0" /></div>
+        <div class="fld fld-full">
+            <label>@HrT.T("عکس پرسنل (اختیاری)")</label>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <img id="empPhotoPrev" alt="" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:var(--card);display:none" />
+                <div style="flex:1;min-width:220px">
+                    <input type="file" name="photoFile" accept=".png,.jpg,.jpeg,.webp"
+                           onchange="var p=document.getElementById('empPhotoPrev');if(this.files&&this.files[0]){p.src=URL.createObjectURL(this.files[0]);p.style.display='block'}" />
+                    <div class="hint">@HrT.T("PNG / JPG / WEBP — حداکثر ۲ مگابایت")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت پرسنل")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

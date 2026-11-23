@@ -1,0 +1,336 @@
+@{
+    ViewData["Title"] = HrT.T("دستگاه‌های تردد");
+    var devices = (List<Device>)Model;
+    var pending = (Dictionary<string, int>)ViewBag.Pending;
+    var commands = (List<DeviceCommand>)ViewBag.Commands;
+    // فاز ۱۱۴ — لیست کامل پرسنل حذف شد (انتخابگر جستجومحور /Ui/EmpSearch)
+    var sess = Me.Get()!;
+    var canControl = sess.Has("devices.commands");
+    var canManage = sess.Has("devices.register") || sess.Has("devices.transfer");
+    var online = (int)ViewBag.Online;
+    var buffer = (Dictionary<string, int>)(ViewBag.Buffer ?? new Dictionary<string, int>());
+    var companies = (List<Company>)ViewBag.Companies;
+    var curCo = (string?)ViewBag.Co;
+    // فاز ۱۲۸ — دستگاه‌ها مطابق طرح Figma صفحهٔ ۱۲ — همهٔ اعداد از دادهٔ واقعی همین صفحه
+    int offline = devices.Count - online;
+    int bufferSum = buffer.Values.Sum();
+    int pendSum = pending.Values.Sum();
+    var lastSync = devices.Where(d => d.LastSeenAt != null).OrderByDescending(d => d.LastSeenAt).Select(d => d.LastSeenAt).FirstOrDefault();
+}
+@* ============ هدر دستگاه‌ها — طرح Figma صفحهٔ ۱۲: عنوان + زیرنویس داده‌محور + اکشن ============ *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("دستگاه‌های تردد")</h1>
+        <div class="page-sub">@HrT.F("پایش زندهٔ دستگاه‌ها، کنترل‌ها و دیوایس‌های بیومتریک · {0} دستگاه ثبت‌شده — {1}", Jalali.Num(devices.Count), Jalali.FmtFa(DateTime.Now))</div>
+    </div>
+    @if (canManage)
+    {
+        <div class="page-actions">
+            <a class="btn btn-primary" href="/Devices/Create" data-modal="/Devices/Create" data-modal-title="@HrT.T("تعریف دستگاه جدید")">＋ @HrT.T("تعریف دستگاه جدید")</a>
+        </div>
+    }
+</div>
+@* فاز ۱۲۴-ف — بنر وضعیت اتصال دستگاه‌ها مطابق طرح Figma (دادهٔ واقعی) *@
+@if (devices.Count > 0 && offline > 0)
+{
+    <div class="notice notice-bad"><span class="n-ic">📡</span><span>@HrT.F("{0} دستگاه از {1} دستگاه در وضعیت آفلاین است؛ وضعیت اتصال را از «دروازهٔ دستگاه‌ها» بررسی کنید.", Jalali.Num(offline), Jalali.Num(devices.Count))</span></div>
+}
+else if (devices.Count > 0)
+{
+    <div class="notice notice-ok"><span class="n-ic">📡</span><span>@HrT.F("همهٔ {0} دستگاه ثبت‌شده در وضعیت متصل است.", Jalali.Num(devices.Count))</span></div>
+}
+@* ============ ۴ شاخص اصلی — کارت‌های طرح (صفحهٔ ۱۲ فیگما) — شناسه‌های chip-* حفظ شده تا رصد زنده بشکند ============ *@
+<div class="ps-grid">
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic t">🖥️</div></div>
+        <div class="ps-v t"><span id="chip-total">@Jalali.Num(devices.Count)</span></div>
+        <div class="ps-l">@HrT.T("دستگاه ثبت‌شده")</div>
+        <span class="ps-sub">🟢 <b id="chip-online">@Jalali.Num(online)</b> @HrT.T("متصل") · 🔴 <b id="chip-offline">@Jalali.Num(offline)</b> @HrT.T("قطع")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic b">🕒</div></div>
+        <div class="ps-v b">@(lastSync is null ? "—" : Jalali.FmtTime((DateTime)lastSync))</div>
+        <div class="ps-l">@HrT.T("آخرین همگام‌سازی")</div>
+        <span class="ps-sub">📡 @HrT.T("پایش زندهٔ وضعیت هر ۱۲ ثانیه")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic o">💾</div></div>
+        <div class="ps-v o">@Jalali.Num(bufferSum)</div>
+        <div class="ps-l">@HrT.T("تردد در حافظه آفلاین")</div>
+        <span class="ps-sub">⬇ @HrT.T("دریافت دسته‌ای با حفظ زمان اصلی")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic r">⚠️</div></div>
+        <div class="ps-v r">@Jalali.Num(offline + pendSum)</div>
+        <div class="ps-l">@HrT.T("نیازمند بررسی")</div>
+        <span class="ps-sub">⚑ @HrT.F("{0} دستگاه آفلاین · {1} دستور در صف", Jalali.Num(offline), Jalali.Num(pendSum))</span>
+    </div>
+</div>
+@* ============ فیلتر شرکت — همان فرم و رفتار قبلی با چیدمان کارت طرح ============ *@
+<div class="card" style="margin-bottom:16px">
+    <div style="padding:13px 18px;display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+        <form method="get" style="display:flex;gap:8px;align-items:end">
+            <div class="fld" style="min-width:220px"><label>@HrT.T("شرکت")</label>
+                <select name="co" onchange="this.form.submit()">
+                    <option value="">@HrT.T("همه شرکت‌ها")</option>
+                    @foreach (var c in companies)
+                    {
+                        <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("اعمال فیلتر")</button>
+            <a href="/Devices" class="btn">@HrT.T("حذف فیلتر")</a>
+        </form>
+    </div>
+    <div class="card-foot">@HrT.T("جستجو در همین محدوده — فهرست دستگاه‌های زیر بر اساس شرکت انتخابی فیلتر می‌شود.")</div>
+</div>
+
+<div class="dev-grid">
+    @foreach (var d in devices)
+    {
+        var isOn = DeviceOps.IsOnline(d);
+        <div class="dev-card" data-device-id="@d.Id" style="@(d.Active ? "" : "opacity:.65")">
+            <div class="head">
+                <div>
+                    <h3>@d.Name</h3>
+                    <div class="meta">@HrT.T(d.Kind) · @d.Brand · @HrT.T(d.Purpose)</div>
+                    <div class="meta" style="color:var(--primary)">🏢 @(d.Company?.Name ?? "—")</div>
+                </div>
+                <span class="badge @(isOn ? "badge-ok" : "badge-mute")" data-role="dev-badge">
+                    <span class="dot @(isOn ? "dot-on" : "dot-off")"></span><span data-role="dev-badge-text">@(isOn ? HrT.T("آنلاین") : HrT.T("آفلاین"))</span>
+                </span>
+            </div>
+            <div class="meta">
+                @HrT.T("سریال:") <b>@d.Serial</b> · IP: <b>@(d.Ip ?? "—")</b>
+                <span class="badge @(d.Transport == "tcp" ? "badge-info" : "badge-mute")" style="font-size:9.5px">@(d.Transport == "tcp" ? HrT.T("TCP پول مستقیم") : HrT.T("ADMS پوش"))</span>
+                @if (!d.Active)
+                {
+                    <span class="badge badge-err">@HrT.T("متوقف")</span>
+                }
+                <br />
+                @HrT.T("محل:") @d.Location<br />
+                @HrT.T("آخرین اتصال:") <span data-role="dev-lastseen">@(d.LastSeenAt is null ? "—" : Jalali.FmtLong(d.LastSeenAt.Value))</span>
+                @if (pending.TryGetValue(d.Id, out var pq) && pq > 0)
+                {
+                    <span class="badge badge-warn" data-role="dev-pending">@Jalali.Num(pq) @HrT.T("دستور در صف")</span>
+                }
+                else
+                {
+                    <span class="badge badge-warn" data-role="dev-pending" style="display:none"></span>
+                }
+                <br />
+                Firmware: <b data-role="dev-fw">@(d.Firmware ?? "—")</b> · @HrT.T("کاربران:") <b data-role="dev-uc">@(d.UserCount is null ? "—" : Jalali.Num(d.UserCount.Value))</b>
+                · @HrT.T("گیت‌های متصل:") <b>@(ViewBag.GateCounts is System.Collections.Generic.Dictionary<string, int> gc && gc.TryGetValue(d.Id, out var gcn) ? Jalali.Num(gcn) : "۰")</b>
+                @if (buffer.TryGetValue(d.Id, out var bc) && bc > 0)
+                {
+                    <span class="badge badge-warn" data-role="dev-buffer" title="@HrT.T("ترددهای ثبت‌شده روی دستگاه آفلاین — در انتظار دریافت دسته‌ای")">💾 @Jalali.Num(bc) @HrT.T("تردد در حافظه آفلاین")</span>
+                }
+                else
+                {
+                    <span class="badge badge-warn" data-role="dev-buffer" style="display:none"></span>
+                }
+            </div>
+            @if (canControl)
+            {
+                <div class="btn-row">
+                    <form method="post" action="/Devices/Command" class="inline-form" data-ajax>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" /><input type="hidden" name="type" value="unlock" /><input type="hidden" name="seconds" value="5" />
+                        <button class="btn btn-sm btn-ok" data-toggle-btn>🔓 @HrT.T("بازکردن درب")</button>
+                    </form>
+                    <form method="post" action="/Devices/Command" class="inline-form" data-ajax>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" /><input type="hidden" name="type" value="sync_time" />
+                        <button class="btn btn-sm">🕒 @HrT.T("همگام‌سازی ساعت")</button>
+                    </form>
+                    <form method="post" action="/Devices/Command" class="inline-form" data-ajax data-confirm="@HrT.F("ری‌استارت دستگاه «{0}»؟", d.Name)" data-danger="1">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" /><input type="hidden" name="type" value="restart" />
+                        <button class="btn btn-sm btn-err">↻ @HrT.T("ری‌استارت")</button>
+                    </form>
+                    <form method="post" action="/Devices/Command" class="inline-form" data-ajax>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" /><input type="hidden" name="type" value="refresh_data" />
+                        <button class="btn btn-sm">⟳ @HrT.T("نوسازی داده‌ها")</button>
+                    </form>
+                    <form method="post" action="/Devices/Command" class="inline-form" data-ajax>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" /><input type="hidden" name="type" value="get_users" />
+                        <button class="btn btn-sm">👥 @HrT.T("دریافت کاربران")</button>
+                    </form>
+                </div>
+                <div class="btn-row">
+                    <form method="post" action="/Devices/SimPunch" class="inline-form" data-ajax data-refresh style="display:inline-flex;gap:4px;align-items:center">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" />
+                        <input name="pin" placeholder="@HrT.T("پین (کد پرسنلی)")" style="width:130px;padding:4px 8px" />
+                        <button class="btn btn-sm">🖨 @HrT.T("شبیه‌سازی اسکن")</button>
+                    </form>
+                    <form method="post" action="/Devices/SimHeartbeat" class="inline-form" data-ajax data-refresh>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" />
+                        <button class="btn btn-sm">📡 @HrT.T("ضربان شبیه‌ساز")</button>
+                    </form>
+                    @if (buffer.TryGetValue(d.Id, out var bc2) && bc2 > 0)
+                    {
+                        <form method="post" action="/Devices/FlushOffline" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("دریافت دسته‌ای {0} تردد صف‌شده در حافظه آفلاین «{1}»؟ زمان اصلی هر تردد حفظ می‌شود.", Jalali.Num(bc2), d.Name)">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="deviceId" value="@d.Id" />
+                            <button class="btn btn-sm btn-primary">⬇ @HrT.F("دریافت دسته‌ای ترددهای آفلاین ({0})", Jalali.Num(bc2))</button>
+                        </form>
+                    }
+                </div>
+            }
+            @if (canManage)
+            {
+                <div class="btn-row">
+                    <a class="btn btn-sm" href="/Devices/Edit/@d.Id" data-modal="/Devices/Edit/@d.Id" data-modal-title="@HrT.F("ویرایش دستگاه — {0}", d.Name)">@HrT.T("✎ ویرایش")</a>
+                    <form method="post" action="/Devices/ToggleActive" class="inline-form" data-ajax>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" />
+                        <button class="btn btn-sm" data-role="dev-toggle">@(d.Active ? HrT.T("⏸ توقف دستگاه") : HrT.T("▶ فعال‌سازی"))</button>
+                    </form>
+                    <form method="post" action="/Devices/RotateSecret" class="inline-form" data-ajax data-confirm="@HrT.T("توکن اتصال دستگاه جدید شود؟ (اتصال فعلی قطع و دوباره وصل می‌شود)")" data-danger="1">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="deviceId" value="@d.Id" />
+                        <button class="btn btn-sm">🔑 @HrT.T("چرخش توکن")</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (canManage)
+{
+    <div class="card" style="margin-top:18px">
+        <div class="card-h"><h2>@HrT.T("انتقال کاربر بین دستگاه‌ها")</h2><span class="hint">@HrT.T("push_user به مقصدها + delete_user از مبدأها — اجرا با سرویس ویندوزی گیت‌وی")</span></div>
+        <form method="post" action="/Devices/TransferUser" class="card-b" data-ajax>
+            @Html.AntiForgeryToken()
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("پرسنل *")</label>
+                    @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل *@
+                    <div class="emp-picker" data-name="employeeId" data-min="1"
+                         data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+                </div>
+                <div class="fld"><label>@HrT.T("افزودن به (مقصدها)")</label>
+                    <select name="toDeviceIds" multiple size="6">
+                        @foreach (var d in devices)
+                        {
+                            <option value="@d.Id">@d.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("حذف از (مبدأها)")</label>
+                    <select name="fromDeviceIds" multiple size="6">
+                        @foreach (var d in devices)
+                        {
+                            <option value="@d.Id">@d.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت دستورات انتقال")</button></div>
+        </form>
+    </div>
+}
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("لاگ دستورات (۵۰ مورد اخیر)")</h2><span class="hint">@HrT.T("صف: pending → delivered → acked/failed — به‌روزرسانی زنده هر ۱۲ ثانیه")</span></div>
+    <div class="table-wrap" style="max-height:420px">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("دستگاه")</th><th>@HrT.T("دستور")</th><th>@HrT.T("ثبت‌کننده")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("نتیجه")</th></tr></thead>
+            <tbody id="cmdlog">
+                @foreach (var c in commands)
+                {
+                    <tr>
+                        <td class="num">@Jalali.FmtLong(c.CreatedAt)</td>
+                        <td>@c.Device?.Name</td>
+                        <td><span class="badge badge-info">@HrT.T(DeviceOps.CommandLabels.GetValueOrDefault(c.Type, c.Type))</span></td>
+                        <td>@(c.CreatedBy ?? "—")</td>
+                        <td>
+                            <span class="badge @(c.Status switch { "acked" => "badge-ok", "failed" => "badge-err", "delivered" => "badge-warn", _ => "badge-mute" })">
+                                @(c.Status switch { "acked" => HrT.T("اجرا شد"), "failed" => HrT.T("ناموفق"), "delivered" => HrT.T("تحویل شد"), _ => HrT.T("در صف") })
+                            </span>
+                        </td>
+                        <td>@(c.Result ?? "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!commands.Any())
+        {
+            <div class="empty" id="cmdlog-empty">@HrT.T("هنوز دستوری صادر نشده است")</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+// ===== رصد زنده: وضعیت دستگاه‌ها + چرخه حیات دستورات (صف → تحویل → اجرا) =====
+// فاز ۹۰ — برچسب‌های JS از سرور به زبان جاری رندر می‌شوند (چندزبانه)
+var LBL = {
+    online: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("آنلاین")))',
+    offline: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("آفلاین")))',
+    inQueue: '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("دستور در صف")))',
+};
+function faNum(n) { return Number(n).toLocaleString('fa-IR'); }
+function paintLive(j) {
+    var chips = j.chips || {};
+    var ct = document.getElementById('chip-total'), co = document.getElementById('chip-online'), cx = document.getElementById('chip-offline');
+    if (ct && chips.total != null) ct.textContent = faNum(chips.total);
+    if (co && chips.online != null) co.textContent = faNum(chips.online);
+    if (cx && chips.offline != null) cx.textContent = faNum(chips.offline);
+
+    (j.devices || []).forEach(function (dv) {
+        var card = document.querySelector('[data-device-id="' + dv.id + '"]');
+        if (!card) return;
+        var badge = card.querySelector('[data-role="dev-badge"]');
+        if (badge) {
+            badge.className = 'badge ' + (dv.online ? 'badge-ok' : 'badge-mute');
+            var txt = badge.querySelector('[data-role="dev-badge-text"]');
+            if (txt) txt.textContent = dv.online ? LBL.online : LBL.offline;
+            var dot = badge.querySelector('.dot');
+            if (dot) dot.className = 'dot ' + (dv.online ? 'dot-on' : 'dot-off');
+        }
+        var ls = card.querySelector('[data-role="dev-lastseen"]');
+        if (ls) ls.textContent = dv.lastSeenText || '—';
+        var fw = card.querySelector('[data-role="dev-fw"]');
+        if (fw) fw.textContent = dv.firmware || '—';
+        var uc = card.querySelector('[data-role="dev-uc"]');
+        if (uc) uc.textContent = dv.userCount == null ? '—' : faNum(dv.userCount);
+        var pend = card.querySelector('[data-role="dev-pending"]');
+        if (pend) {
+            if (dv.pending > 0) { pend.style.display = ''; pend.textContent = faNum(dv.pending) + ' ' + LBL.inQueue; }
+            else { pend.style.display = 'none'; }
+        }
+    });
+
+    var tb = document.getElementById('cmdlog');
+    if (tb) {
+        tb.textContent = '';
+        (j.commands || []).forEach(function (c) {
+            var tr = document.createElement('tr');
+            function td(v, cls) { var el = document.createElement('td'); if (cls) el.className = cls; el.textContent = v == null ? '—' : v; return el; }
+            tr.appendChild(td(c.createdText, 'num'));
+            tr.appendChild(td(c.device));
+            var tdType = document.createElement('td');
+            var bType = document.createElement('span'); bType.className = 'badge badge-info'; bType.textContent = c.typeLabel || c.type;
+            tdType.appendChild(bType); tr.appendChild(tdType);
+            tr.appendChild(td(c.createdBy));
+            var tdSt = document.createElement('td');
+            var bSt = document.createElement('span');
+            bSt.className = 'badge ' + (c.status === 'acked' ? 'badge-ok' : c.status === 'failed' ? 'badge-err' : c.status === 'delivered' ? 'badge-warn' : 'badge-mute');
+            bSt.textContent = c.statusText;
+            tdSt.appendChild(bSt); tr.appendChild(tdSt);
+            tr.appendChild(td(c.result));
+            tb.appendChild(tr);
+        });
+    }
+    var empty = document.getElementById('cmdlog-empty');
+    if (empty) empty.style.display = (j.commands || []).length ? 'none' : '';
+}
+liveCommands({ url: '/Devices/Live', intervalSec: 12, apply: paintLive });
+</script>
+}

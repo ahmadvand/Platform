@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = HrT.T("فیش‌های حقوقی من");
+
+    var slips = (List<Payslip>)ViewBag.Slips;
+}
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("💰 فیش‌های حقوقی نهایی‌شده")</h2><span class="hint">@HrT.T("فقط لیست‌های نهایی‌شده اینجا نمایش داده می‌شود")</span></div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("دوره")</th><th>@HrT.T("حقوق پایه")</th><th>@HrT.T("اضافه‌کاری")</th><th>@HrT.T("مزایا")</th><th>@HrT.T("کسورات")</th><th>@HrT.T("بیمه")</th><th>@HrT.T("مالیات")</th><th>@HrT.T("خالص پرداختی")</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var s in slips)
+                {
+                    <tr>
+                        <td>@Jalali.MonthName(s.Run!.JMonth) @Jalali.ToPersianDigits(s.Run.JYear)</td>
+                        <td class="num">@Jalali.Num((long)s.BaseSalary)</td>
+                        <td class="num">@Jalali.Num((long)s.OvertimePay)</td>
+                        <td class="num">@Jalali.Num((long)s.Allowances)</td>
+                        <td class="num">@Jalali.Num((long)s.AbsentDeduct)</td>
+                        <td class="num">@Jalali.Num((long)s.Insurance)</td>
+                        <td class="num">@Jalali.Num((long)s.Tax)</td>
+                        <td class="num"><b>@Jalali.Num((long)s.NetPay)</b></td>
+                        <td>
+                            <div class="btn-row">
+                                <a class="btn btn-sm" href="/Self/Payslip/@s.Id">@HrT.T("فیش")</a>
+                                <a class="btn btn-sm" href="/Self/PayslipPdf?id=@s.Id" target="_blank" title="@(HrT.T("PDF رسمی"))">📄</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (slips.Count == 0)
+                {
+                    <tr><td colspan="9"><div class="empty">@HrT.T("هنوز فیش حقوقی نهایی‌شده‌ای برای شما ثبت نشده است.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

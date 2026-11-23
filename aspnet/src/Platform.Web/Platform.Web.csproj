@@ -1,0 +1,120 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!--
+    ============================================================
+    اطلاعات build (فاز ۳۱) — در زمان تولید/انتشار تزریق می‌شود:
+      dotnet publish -c Release \
+        -p:AppVersion=2.1.0 \
+        -p:VendorName="نام شرکت تولیدکننده"
+    این مقادیر در فوتر، صفحه ورود، کارت «درباره» و PDFها نمایش داده می‌شوند.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+
+    <!-- فاز ۶۲ — فایل‌های obj/project.assets.json پروژه‌های HrModules.*.Data هم‌مسیر
+         منتشر می‌شوند (فرادادهٔ ساخت؛ بی‌اثر در خروجی) — NETSDK1152 خطا ندهد -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+
+    <AppVersion Condition="'$(AppVersion)' == ''">2.7.38</AppVersion>
+    <VendorName Condition="'$(VendorName)' == ''">گروه توسعه سامانه‌های سازمانی</VendorName>
+
+    <Version>$(AppVersion)</Version>
+    <FileVersion>$(AppVersion)</FileVersion>
+    <InformationalVersion>$(AppVersion)</InformationalVersion>
+    <Product>سامانه یکپارچه منابع انسانی</Product>
+    <Company>$(VendorName)</Company>
+    <Copyright>حق نشر © $(VendorName)</Copyright>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- زمان build — هنگام کامپایل تزریق و در کارت «درباره سامانه» شمسی نمایش داده می‌شود -->
+    <AssemblyMetadata Include="BuildTimestamp" Value="$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssZ))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- فاز ۶۸ — هاست فقط پلتفرم مشترک و قراردادها را می‌شناسد؛ ماژول‌ها پلاگین‌اند:
+         در بوت از کنار اپ/پوشهٔ modules/ کشف می‌شوند (HrModuleRuntime + IHrDataModule/IHrUiModule).
+         هیچ ProjectReference به HrModules.* و هیچ DefineConstants ماژولی اینجا نیست. -->
+    <ProjectReference Include="..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="..\Platform.Contracts\Platform.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="QuestPDF" Version="2024.12.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+  </ItemGroup>
+
+
+  <!-- فاز ۶۱ — فقط ویوهای خود اپ Razor کامپایل شوند؛ کپی‌های مرورگر سورس (wwwroot/dl/source)
+       و هر .cshtml دیگری خارج از Views/ هرگز کامپایل نمی‌شوند -->
+  <PropertyGroup>
+    <EnableDefaultRazorGenerateItems>false</EnableDefaultRazorGenerateItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <RazorGenerate Include="Views\**\*.cshtml" />
+  </ItemGroup>
+
+  <!-- فاز ۶۲ — مرکز دانلود (wwwroot/dl: بسته‌های zip + مرورگر سورس) هرگز داخل بستهٔ
+       مشتری publish نمی‌شود؛ در غیر این صورت zip داخل zip و بستهٔ حداقلی باد می‌کند.
+       سرو شدن فایل‌ها در زمان اجرا از دیسک است (StaticFiles) و به آیتم‌های Content نیازی ندارد. -->
+  <ItemGroup>
+    <Content Remove="wwwroot\dl\**" />
+    <None Remove="wwwroot\dl\**" />
+  </ItemGroup>
+
+  <!-- فاز ۱۲۶ — مرکز دانلود /dlc (۵۰۰+ مگ: مرورگر سورس + اسناد) هم از publish خارج شد؛
+       start-web.sh در هر استارت آن را از src هاردلینک می‌کند و کپی آن در خروجی publish
+       فقط دیسک/زمان هدر می‌دهد (تجربهٔ ENOSPC فاز ۱۲۶). -->
+  <ItemGroup>
+    <Content Remove="wwwroot\dlc\**" />
+    <None Remove="wwwroot\dlc\**" />
+  </ItemGroup>
+
+  <!-- فاز ۶۸ — wwwroot در خروجی build هم کپی شود تا اجرای مستقیم exe از bin
+       (بدون publish) هم CSS/JS داشته باشد (WRN: WebRootPath was not found — تجربهٔ مشتری ویندوز).
+       Update روی آیتم‌های پیش‌فرض Content (بدون ساخت آیتم تکراری)؛ dl با قانون بالا حذف شده می‌ماند. -->
+  <ItemGroup>
+    <Content Update="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- فاز ۸۸ — بسته‌های زبان تعبیه‌شده (دری/پشتو/گرجی/قرقیزی/ازبکی/تاجیکی/ترکمنی) در
+       App_Data/langpacks: آیتم‌های Content پیش‌فرضِ SDK فقط تا خروجی publish کپی می‌شوند و
+       در build معمولی کنار dll نمی‌آیند؛ با PreserveNewest هر دو خروجی همیشه به‌روز است.
+       فایل‌های runtime دیگر App_Data (کلید JWT و مجوز) تغییر رفتاری ندارند. -->
+  <ItemGroup>
+    <Content Update="App_Data\langpacks\**\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- فاز ۶۸ — پلاگین‌های ماژول: خروجی ماژول‌ها (HrModules.*.dll) بعد از build/publish هاست
+       کنار اپ کپی می‌شود — قرارداد کشف رانتایم. این تارگت «ژنریک» است (wildcard نام) و
+       هیچ نام ماژولی در هاست ذکر نمی‌شود؛ بسته‌بندی مشتری هم همین قرارداد را سرو می‌کند.
+       اگر ماژولی هنوز build نشده باشد، هیچ چیزی کپی نمی‌شود (اپ بدون ماژول بالا می‌آید). -->
+  <Target Name="CopyHrModulePlugins" AfterTargets="Build">
+    <ItemGroup>
+      <_HrPluginDlls Include="..\modules\**\bin\$(Configuration)\net8.0\HrModules.*.dll" />
+    <_HrPluginDlls Include="..\modules\**\bin\$(Configuration)\net8.0\Platform.Modules.*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HrPluginDlls)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true"
+          Condition="'@(_HrPluginDlls)' != ''" />
+    <Message Importance="normal" Condition="'@(_HrPluginDlls)' != ''"
+             Text="فاز ۶۸ — پلاگین‌های ماژول کپی شد به خروجی: @(_HrPluginDlls->Count()) فایل" />
+  </Target>
+  <Target Name="CopyHrModulePluginsAfterPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_HrPluginDllsPub Include="..\modules\**\bin\$(Configuration)\net8.0\HrModules.*.dll" />
+    <_HrPluginDllsPub Include="..\modules\**\bin\$(Configuration)\net8.0\Platform.Modules.*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HrPluginDllsPub)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true"
+          Condition="'@(_HrPluginDllsPub)' != ''" />
+  </Target>
+</Project>

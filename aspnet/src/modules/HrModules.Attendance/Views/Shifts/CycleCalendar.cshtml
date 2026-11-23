@@ -1,0 +1,106 @@
+@{
+    // فاز ۱۳۵ (مورد ۱۶ ROADMAP-ADDITIONS) — تقویم آینده‌نگر شیت اقماری/چرخشی
+    ViewData["Title"] = HrT.T("تقویم چرخشی");
+    var rows = (List<CycleCalendarRow>)Model;
+    var dayList = (List<DateTime>)ViewBag.Days;
+    var shifts = (List<Shift>)ViewBag.Shifts;
+    var shiftId = (string?)ViewBag.ShiftId;
+    var daysCount = (int)ViewBag.DaysCount;
+    var jalali = new System.Globalization.PersianCalendar();
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("تقویم آینده‌نگر شیت‌های اقماری/چرخشی")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("بازه")</label>
+                <select name="days">
+                    @foreach (var d in new[] { 14, 30, 60, 90 })
+                    {
+                        <option value="@d" selected="@(daysCount == d)">@HrT.F("{0} روز", Jalali.Num(d))</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("شیفت")</label>
+                <select name="shiftId">
+                    <option value="">@HrT.T("همهٔ شیفت‌های چرخشی")</option>
+                    @foreach (var s in shifts)
+                    {
+                        <option value="@s.Id" selected="@(shiftId == s.Id)">@s.Name (@s.CyclePattern)</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("امروز در کار:") <b class="text-danger">@Jalali.Num(ViewBag.TodayOnDuty)</b> نفر</span>
+            <span class="chip">@HrT.T("شیفت‌های چرخشی:") <b>@Jalali.Num(rows.Count)</b></span>
+        </div>
+
+        <h3>@HrT.T("روز شروع چرخه (لنگرگاه)")</h3>
+        @if (!shifts.Any())
+        {
+            <p class="hint">@HrT.T("شیفتِ چرخشی با الگوی «14/14» تعریف نشده — در فرم شیفت‌ها نوع را اقماری/چرخشی و الگو را ثبت کنید")</p>
+        }
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("شیفت")</th><th>@HrT.T("الگو")</th><th>@HrT.T("لنگرگاه فعلی")</th><th>@HrT.T("ثبت روز شروع")</th></tr></thead>
+                <tbody>
+                    @foreach (var s in shifts)
+                    {
+                        <tr>
+                            <td><strong>@s.Name</strong></td>
+                            <td><code>@s.CyclePattern</code></td>
+                            <td class="num">@(s.CycleAnchor is null ? "—" : Jalali.FmtFaLong(s.CycleAnchor.Value))</td>
+                            <td>
+                                <form method="post" action="/Shifts/SetAnchor" class="inline-form" data-ajax data-refresh>
+                                    <input type="hidden" name="id" value="@s.Id" />
+                                    <input name="cycleAnchor" type="date" value="@((s.CycleAnchor ?? DateTime.Today).ToString("yyyy-MM-dd"))" />
+                                    <button class="btn btn-sm">📅 @HrT.T("ثبت")</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h3>@HrT.T("شیت کارکرد/استراحت آینده")</h3>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("شیفت چرخشیِ دارای لنگرگاه نیست — بالا روز شروع چرخه را ثبت کنید")</p>
+        }
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("شیفت")</th>
+                        <th>@HrT.T("پرسنل")</th>
+                        @foreach (var d in dayList)
+                        {
+                            var isToday = d == DateTime.Today;
+                            <th class="@(isToday ? "col-today" : "")">@Jalali.Num(jalali.GetDayOfMonth(d))<br /><small>@Jalali.MonthName(jalali.GetMonth(d))[..3]</small></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td><strong>@r.ShiftName</strong><br /><small class="hint">@r.Pattern</small></td>
+                            <td class="num">@Jalali.Num(r.People)</td>
+                            @for (var i = 0; i < r.Cells.Count; i++)
+                            {
+                                <td class="@(dayList[i] == DateTime.Today ? "col-today" : "")">
+                                    <span class="badge @(r.Cells[i] ? "badge-ok" : "badge-warn")" title="@(r.Cells[i] ? HrT.T("کارکرد") : HrT.T("استراحت"))">@(r.Cells[i] ? HrT.T("کار") : HrT.T("است"))</span>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p class="hint">@HrT.T("محاسبه از روز شروع چرخه (لنگرگاه) و الگوی کار/استراحت انجام می‌شود — برای چرخش نوبت‌دارِ در حال اجرا، هر بار شروع دورهٔ جدید، لنگرگاه را به‌روزرسانی کنید.")</p>
+    </div>
+</div>

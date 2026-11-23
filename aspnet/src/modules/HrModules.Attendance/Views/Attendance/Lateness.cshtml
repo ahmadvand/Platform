@@ -1,0 +1,66 @@
+@{
+    // فاز ۱۳۱ (مورد ۱ ROADMAP-ADDITIONS) — گزارش تأخیر ماهانه با رتبه‌بندی
+    ViewData["Title"] = HrT.T("تأخیر ماهانه");
+    var rows = (List<LatenessRow>)Model;
+    var month = (string)ViewBag.Month;
+    var empCount = (int)ViewBag.EmpCount;
+    var totalMin = (int)ViewBag.TotalMin;
+    var totalDays = (int)ViewBag.TotalDays;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("گزارش تأخیر ماهانه")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("ماه شمسی")</label><input name="month" value="@month" placeholder="@HrT.T("1405/08")" /></div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("ماه:") <b>@Jalali.ToPersianDigits(month)</b></span>
+            <span class="chip">@HrT.T("نفرات دارای تأخیر:") <b>@Jalali.Num(empCount)</b></span>
+            <span class="chip">@HrT.T("جمع روزهای تأخیر:") <b>@Jalali.Num(totalDays)</b></span>
+            <span class="chip">@HrT.T("جمع دقایق تأخیر:") <b>@Jalali.MinutesToHm(totalMin)</b></span>
+        </div>
+        <p class="hint">@HrT.T("رتبه‌بندی بر اساس جمع دقایق تأخیر در ماه؛ منبع داده همان دقایق تأخیر است که موتور کارکرد از اسکن دستگاه‌های حضور و غیاب محاسبه می‌کند. فقط پرسنل داخل محدودهٔ دسترسی شما نمایش داده می‌شود.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("رتبه")</th>
+                        <th>@HrT.T("کد")</th>
+                        <th>@HrT.T("نام")</th>
+                        <th>@HrT.T("واحد")</th>
+                        <th>@HrT.T("روزهای تأخیر")</th>
+                        <th>@HrT.T("جمع تأخیر")</th>
+                        <th>@HrT.T("میانگین روزانه")</th>
+                        <th>@HrT.T("بدترین روز")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int rank = 0; }
+                    @foreach (var r in rows)
+                    {
+                        rank++;
+                        <tr>
+                            <td class="num">
+                                <span class="badge @(rank <= 3 ? "badge-err" : "badge-mute")">@Jalali.Num(rank)</span>
+                            </td>
+                            <td class="num">@Jalali.ToPersianDigits(r.Code)</td>
+                            <td><strong>@r.Name</strong></td>
+                            <td>@r.Dept</td>
+                            <td class="num">@Jalali.Num(r.LateDays)</td>
+                            <td class="num"><b>@Jalali.MinutesToHm(r.TotalMin)</b></td>
+                            <td class="num">@Jalali.MinutesToHm((int)Math.Round(r.AvgMin))</td>
+                            <td class="num">@Jalali.MinutesToHm(r.MaxMin)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("در این ماه تأخیری ثبت نشده ✅")</p>
+        }
+    </div>
+</div>

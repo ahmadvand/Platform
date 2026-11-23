@@ -1,0 +1,209 @@
+@{
+    ViewData["Title"] = HrT.T("کارت‌های شناسایی");
+    var cards = (List<Card>)Model;
+    var counts = (Dictionary<string, int>)ViewBag.Counts;
+    var total = (int)ViewBag.Total;
+    var types = (string[])ViewBag.Types;
+    var statuses = (string[])ViewBag.Statuses;
+    var companies = (List<Company>)ViewBag.Companies;
+    // فاز ۱۱۴ — لیست کامل پرسنل حذف شد (انتخابگر جستجومحور /Ui/EmpSearch)
+    var status = (string?)ViewBag.Status;
+    var type = (string?)ViewBag.Type;
+    var curCo = (string?)ViewBag.Co;
+    var q = (string?)ViewBag.Q;
+    var sess = Me.Get()!;
+    var canManage = sess.Has("cards.issue") || sess.Has("cards.state");
+    int Cnt(string k) => counts.TryGetValue(k, out var v) ? v : 0;
+
+    string BadgeOf(string s) => s switch
+    {
+        "فعال" => "badge-ok",
+        "موقت" => "badge-info",
+        "آزاد" => "badge-mute",
+        "گمشده" => "badge-err",
+        "باطل" => "badge-warn",
+        _ => "badge-mute",
+    };
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("کارت‌های شناسایی")</h1>
+        <div class="page-sub">@HrT.F("{0} کارت شناسایی ثبت‌شده · توزیع وضعیت بر اساس {1} نوع کارت", Jalali.Num(total), Jalali.Num(types.Length))</div>
+    </div>
+</div>
+<div class="chips">
+    <span class="chip">@HrT.T("کل مخزن:") <b>@Jalali.Num(total)</b></span>
+    <span class="chip">@HrT.T("آزاد:") <b>@Jalali.Num(Cnt("آزاد"))</b></span>
+    <span class="chip">@HrT.T("فعال:") <b>@Jalali.Num(Cnt("فعال"))</b></span>
+    <span class="chip">@HrT.T("موقت:") <b>@Jalali.Num(Cnt("موقت"))</b></span>
+    <span class="chip">@HrT.T("گمشده:") <b>@Jalali.Num(Cnt("گمشده"))</b></span>
+    <span class="chip">@HrT.T("باطل:") <b>@Jalali.Num(Cnt("باطل"))</b></span>
+</div>
+
+<div class="card" style="margin:12px 0">
+    <form method="get" class="card-b" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <select name="status" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه وضعیت‌ها")</option>
+            @foreach (var s in statuses)
+            {
+                <option value="@s" selected="@(status == s)">@s (@Jalali.Num(Cnt(s)))</option>
+            }
+        </select>
+        <select name="type" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه انواع")</option>
+            @foreach (var t in types)
+            {
+                <option value="@t" selected="@(type == t)">@t</option>
+            }
+        </select>
+        <select name="co" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه شرکت‌ها")</option>
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+            }
+        </select>
+        <input name="q" value="@q" placeholder="@HrT.T("جستجوی شماره کارت / نام / کد پرسنلی…")" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px;min-width:220px" />
+        <button class="btn btn-sm">@HrT.T("جستجو")</button>
+        @if (!string.IsNullOrEmpty(status + type + curCo + q))
+        {
+            <a class="btn btn-sm" href="/Cards">@HrT.T("پاک‌کردن فیلترها")</a>
+        }
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("مخزن کارت‌ها") (@Jalali.Num(cards.Count))</h2>
+        <span class="hint">@HrT.T("چرخه کارت: ثبت در انبار → تخصیص به پرسنل → عودت / مفقودی / ابطال — اسکن با روش «کارت» از همین مخزن نگاشت می‌شود")</span></div>
+    <div class="table-wrap" style="max-height:480px">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("شماره کارت")</th><th>@HrT.T("نوع")</th><th>@HrT.T("دارنده")</th><th>@HrT.T("شرکت")</th><th>@HrT.T("وضعیت")</th><th>@HrT.T("صدور")</th><th>@HrT.T("انقضا")</th><th>@HrT.T("یادداشت")</th>@if (canManage){<th>@HrT.T("عملیات")</th>}</tr></thead>
+            <tbody>
+                @foreach (var c in cards)
+                {
+                    var expired = c.ExpiresAt is not null && c.ExpiresAt.Value < DateTime.Now;
+                    <tr>
+                        <td><b>@Jalali.ToPersianDigits(c.CardNo)</b></td>
+                        <td><span class="badge badge-info">@HrT.T(c.Type)</span></td>
+                        <td>@(c.Employee is null ? "—" : $"{c.Employee.FullName} ({Jalali.ToPersianDigits(c.Employee.PersonnelCode)})")</td>
+                        <td>@(c.Employee?.Company?.Name ?? "—")</td>
+                        <td>
+                            <span class="badge @BadgeOf(c.Status)">@HrT.T(c.Status)</span>
+                            @if (expired)
+                            {
+                                <span class="badge badge-err">@HrT.T("منقضی")</span>
+                            }
+                        </td>
+                        <td class="num">@Jalali.FmtLong(c.IssuedAt)</td>
+                        <td class="num">@(c.ExpiresAt is null ? HrT.T("بدون محدودیت") : Jalali.FmtLong(c.ExpiresAt.Value))</td>
+                        <td>@(c.Note ?? "—")</td>
+                        @if (canManage)
+                        {
+                            <td>
+                                <div class="btn-row" style="flex-wrap:wrap">
+                                    @if (c.Status is "فعال" or "موقت")
+                                    {
+                                        <form method="post" action="/Cards/Return" class="inline-form" data-ajax>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm">@HrT.T("↩ عودت")</button>
+                                        </form>
+                                        <form method="post" action="/Cards/MarkLost" class="inline-form" data-ajax data-confirm="@HrT.F("کارت «{0}» مفقود اعلام شود؟ اسکن آن رد خواهد شد.", c.CardNo)" data-danger="1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm btn-err">@HrT.T("🚫 مفقود")</button>
+                                        </form>
+                                    }
+                                    else if (c.Status is "گمشده" or "باطل")
+                                    {
+                                        if (c.EmployeeId is not null)
+                                        {
+                                            <form method="post" action="/Cards/Activate" class="inline-form" data-ajax>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@c.Id" />
+                                                <button class="btn btn-sm btn-ok">@HrT.T("✓ فعال‌سازی")</button>
+                                            </form>
+                                        }
+                                        if (c.Status == "گمشده")
+                                        {
+                                            <form method="post" action="/Cards/Void" class="inline-form" data-ajax>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@c.Id" />
+                                                <button class="btn btn-sm">@HrT.T("⊘ ابطال")</button>
+                                            </form>
+                                        }
+                                    }
+                                    @if (c.EmployeeId is null)
+                                    {
+                                        <form method="post" action="/Cards/Delete" class="inline-form" data-ajax data-confirm="@HrT.F("کارت «{0}» از مخزن حذف شود؟", c.CardNo)" data-danger="1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+                                            <button class="btn btn-sm">@HrT.T("🗑️ حذف")</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!cards.Any())
+        {
+            <div class="empty">@HrT.T("هیچ کارتی با این فیلترها یافت نشد")</div>
+        }
+    </div>
+</div>
+
+@if (canManage)
+{
+    <div class="card" style="margin-top:18px">
+        <div class="card-h"><h2>@HrT.T("ثبت کارت جدید در انبار")</h2><span class="hint">@HrT.T("کارتِ تازه «آزاد» ثبت می‌شود و پس از تخصیص فعال می‌گردد")</span></div>
+        <form method="post" action="/Cards/Create" class="card-b" data-ajax>
+            @Html.AntiForgeryToken()
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("شماره کارت *")</label><input name="cardNo" required placeholder="@HrT.T("مثلاً 0017-38-CA")" /></div>
+                <div class="fld"><label>@HrT.T("نوع کارت")</label>
+                    <select name="type">
+                        @foreach (var t in types)
+                        {
+                            <option value="@t">@t</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("یادداشت")</label><input name="note" placeholder="@HrT.T("اختیاری")" /></div>
+            </div>
+            <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت کارت")</button></div>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+        <div class="card-h"><h2>@HrT.T("تخصیص کارت به پرسنل")</h2><span class="hint">@HrT.T("کارت دائم بدون انقضا — کارت موقت با تعداد روز اعتبار (مثلاً کارت پیمانکار)")</span></div>
+        <form method="post" action="/Cards/Issue" class="card-b" data-ajax>
+            @Html.AntiForgeryToken()
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("کارت آزاد *")</label>
+                    <select name="id" required>
+                        @foreach (var c in cards.Where(x => x.Status == "آزاد"))
+                        {
+                            <option value="@c.Id">@Jalali.ToPersianDigits(c.CardNo) — @HrT.T(c.Type)</option>
+                        }
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("پرسنل *")</label>
+                    @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل (گروه‌بندی شرکت‌ها حذف شد؛
+                       واحد سازمانی در زیرنویس نتیجهٔ جستجو دیده می‌شود) *@
+                    <div class="emp-picker" data-name="employeeId" data-min="1"
+                         data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+                </div>
+                <div class="fld"><label>@HrT.T("اعتبار (روز — خالی = دائم)")</label><input type="number" name="days" min="1" placeholder="@HrT.T("مثلاً ۳۰ روز")" /></div>
+            </div>
+            <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("تخصیص کارت")</button></div>
+        </form>
+        @if (!cards.Any(x => x.Status == "آزاد"))
+        {
+            <div class="card-b"><div class="empty">@HrT.T("هیچ کارت آزادی در انبار نیست — ابتدا کارت جدید ثبت کنید")</div></div>
+        }
+    </div>
+}

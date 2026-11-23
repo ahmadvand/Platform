@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = HrT.T("شمارش اضطراری");
+    var muster = (List<(Zone Zone, int Count, List<(Employee Emp, string GateName, DateTime At)> People)>)ViewBag.Muster;
+    var total = (int)ViewBag.Total;
+}
+<div class="kpis">
+    <div class="kpi err"><div class="v">@Jalali.Num(total)</div><div class="l">@HrT.T("کل افراد داخل مناطق")</div></div>
+    <div class="kpi info"><div class="v">@Jalali.Num(muster.Count(z => z.Count > 0))</div><div class="l">@HrT.T("منطقه با حضور")</div></div>
+    <div class="kpi"><div class="v">@Jalali.ToPersianDigits(DateTime.Now.ToString("HH:mm:ss"))</div><div class="l">@HrT.T("زمان شمارش")</div></div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("🚨 شمارش اضطراری") (Muster)</h2>
+        <span class="hint">@HrT.T("افرادی که آخرین رویداد مجاز آن‌ها «ورود» بوده و هنوز خروج ثبت نکرده‌اند")</span>
+    </div>
+    <div class="card-b">
+        @foreach (var (zone, count, people) in muster)
+        {
+            <div style="margin-bottom:18px">
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+                    <strong style="font-size:13.5px">@zone.Name</strong>
+                    <span class="code" style="color:var(--ink-3);font-size:11px">@zone.Code</span>
+                    <span class="badge @(count > 0 ? "badge-warn" : "badge-mute")">@Jalali.Num(count) @HrT.T("نفر داخل")</span>
+                    @if (zone.AntiPassback)
+                    {
+                        <span class="badge badge-info">@HrT.T("آنت‌ی‌پس‌بک فعال")</span>
+                    }
+                </div>
+                @if (people.Count == 0)
+                {
+                    <div class="empty" style="padding:12px">@HrT.T("کسی داخل این منطقه نیست.")</div>
+                }
+                else
+                {
+                    <div class="table-wrap" style="max-height:none">
+                        <table class="tbl">
+                            <thead><tr><th>@HrT.T("کد")</th><th>@HrT.T("نام")</th><th>@HrT.T("گیت ورود")</th><th>@HrT.T("زمان ورود")</th></tr></thead>
+                            <tbody>
+                                @foreach (var (emp, gateName, at) in people)
+                                {
+                                    <tr>
+                                        <td class="num">@Jalali.ToPersianDigits(emp.PersonnelCode)</td>
+                                        <td>@emp.FullName</td>
+                                        <td>@gateName</td>
+                                        <td class="num">@Jalali.FmtFaLong(at)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

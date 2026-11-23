@@ -1,0 +1,160 @@
+@{
+    ViewData["Title"] = HrT.T("حقوق و دستمزد");
+    var runs = (List<PayrollRun>)ViewBag.Runs;
+    var run = (PayrollRun?)ViewBag.Run;
+    var companies = (List<Company>)ViewBag.Companies;
+    var companyId = (string?)ViewBag.CompanyId;
+    var canRunCreate = Me.Get()!.Has("payroll.runs.create");
+    var canRunFinalize = Me.Get()!.Has("payroll.runs.finalize");
+    var canRunDelete = Me.Get()!.Has("payroll.runs.delete");
+    var canExport = Me.Get()!.Has("reports.export") || Me.Get()!.Has("payroll.runs.export");
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("حقوق و دستمزد")</h1>
+        <div class="page-sub">@HrT.F("{0} دورهٔ حقوق ثبت‌شده · محاسبه و تدوین لیست", Jalali.Num(runs.Count))</div>
+    </div>
+</div>
+<div data-refresh-host>
+<div class="grid two-col" style="grid-template-columns:1fr 2fr">
+    <div>
+        @if (canRunCreate)
+        {
+            <div class="card">
+                <div class="card-h"><h2>@HrT.T("محاسبه لیست جدید")</h2></div>
+                <form method="post" action="/Payroll/Create" class="card-b" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <div class="fld" style="margin-bottom:10px"><label>@HrT.T("شرکت *")</label>
+                        <select name="companyId" required>
+                            @foreach (var c in companies)
+                            {
+                                <option value="@c.Id" selected="@(companyId == c.Id)">@c.Name</option>
+                            }
+                        </select>
+                        <div class="hint">@HrT.T("هر شرکت اقلام فرمول و پارامترهای سالانه مستقل خودش را دارد")</div>
+                    </div>
+                    <div class="fld" style="margin-bottom:10px"><label>@HrT.T("سال جلالی *")</label><input name="jYear" type="number" value="@ViewBag.DefaultY" required /></div>
+                    <div class="fld" style="margin-bottom:10px"><label>@HrT.T("ماه جلالی *")</label>
+                        <select name="jMonth">
+                            @for (int m = 1; m <= 12; m++)
+                            {
+                                <option value="@m" selected="@(m == (int)ViewBag.DefaultM)">@Jalali.MonthName(m)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld" style="margin-bottom:14px"><label>@HrT.T("یادداشت")</label><input name="note" /></div>
+                    <button class="btn btn-primary btn-block">@HrT.T("محاسبه و ایجاد لیست")</button>
+                    <div class="hint" style="margin-top:8px">@HrT.T("روش محاسبه (ماهانه/کارکردی) و منبع کارکرد از «تنظیمات محاسبه» هر شرکت خوانده می‌شود.")</div>
+                </form>
+            </div>
+        }
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("لیست‌های حقوق")</h2></div>
+            <div class="card-b" style="padding:8px">
+                @foreach (var r in runs)
+                {
+                    <a href="/Payroll?runId=@r.Id" style="display:block;padding:10px;border-radius:9px;margin-bottom:4px;background:@(ViewBag.RunId == r.Id ? "var(--info-bg)" : "transparent")">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                            <strong>@Jalali.MonthName(r.JMonth) @Jalali.ToPersianDigits(r.JYear)</strong>
+                            <span class="badge @(r.Status == "نهایی" ? "badge-ok" : "badge-warn")">@HrT.T(r.Status)</span>
+                        </div>
+                        <div style="color:var(--ink-2);font-size:11px;margin-top:3px">
+                            @HrT.F("{0} · {1} فیش · خالص: {2}", r.Company?.Name, Jalali.Num(r.EmployeeCount), Money.Fmt((decimal)r.TotalNet))
+                        </div>
+                    </a>
+                }
+                @if (!runs.Any())
+                {
+                    <div class="empty">@HrT.T("هنوز لیستی ایجاد نشده است")</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div>
+        @if (run is null)
+        {
+            <div class="card"><div class="card-b"><div class="empty">@HrT.T("برای مشاهده فیش‌ها، یک لیست حقوق انتخاب کنید")</div></div></div>
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-h">
+                    <h2>@HrT.F("فیش‌های حقوق — {0} {1} ({2})", Jalali.MonthName(run.JMonth), Jalali.ToPersianDigits(run.JYear), run.Status)</h2>
+                    <div class="btn-row">
+                        <a class="btn btn-primary" href="/Payroll/RunPdf?runId=@run.Id" target="_blank">@HrT.T("📄 PDF رسمی لیست")</a>
+                        @if (canExport)
+                        {
+                            <a class="btn btn-dark" href="/Payroll/Export?runId=@run.Id">@HrT.T("📊 خروجی اکسل")</a>
+                        }
+                        @if ((canRunFinalize || canRunDelete) && run.Status != "نهایی")
+                        {
+                            @if (canRunFinalize)
+                            {
+                            <form method="post" action="/Payroll/Finalize" class="inline-form" data-confirm="@(HrT.T("لیست نهایی شود؟ پس از آن قابل حذف نیست."))" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@run.Id" />
+                                <button class="btn btn-ok">@HrT.T("نهایی‌سازی")</button>
+                            </form>
+                            }
+                            @if (canRunDelete)
+                            {
+                            <form method="post" action="/Payroll/Delete" class="inline-form" data-confirm="@(HrT.T("لیست پیش‌نویس حذف شود؟"))" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@run.Id" />
+                                <button class="btn btn-err">@HrT.T("حذف")</button>
+                            </form>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="card-b">
+                    <div class="chips">
+                        <span class="chip">@HrT.T("شرکت:") <b>@run.Company?.Name</b></span>
+                        <span class="chip">@HrT.T("تعداد:") <b>@Jalali.Num(run.EmployeeCount)</b></span>
+                        <span class="chip">@HrT.T("جمع ناخالص:") <b>@Money.Fmt((decimal)run.TotalGross)</b></span>
+                        <span class="chip">@HrT.T("جمع خالص:") <b>@Money.Fmt((decimal)run.TotalNet)</b></span>
+                        <span class="chip">@HrT.T("ایجاد:") <b>@(run.CreatedBy ?? "—")</b></span>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th>@HrT.T("کد")</th><th>@HrT.T("نام")</th><th class="num">@HrT.T("پایه")</th><th class="num">@HrT.T("اضافه‌کاری")</th>
+                                <th class="num">@HrT.T("مزایا")</th><th class="num">@HrT.T("کسور غیبت")</th><th class="num">@HrT.T("بیمه")</th>
+                                <th class="num">@HrT.T("مالیات")</th><th class="num">@HrT.T("خالص")</th><th class="num">@HrT.T("کارکرد")</th><th class="num">@HrT.T("غیبت")</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in run.Payslips.OrderBy(x => x.Employee!.PersonnelCode))
+                            {
+                                <tr>
+                                    <td class="num">@Jalali.ToPersianDigits(p.Employee!.PersonnelCode)</td>
+                                    <td><strong>@p.Employee.FullName</strong></td>
+                                    <td class="num">@Money.Fmt(p.BaseSalary)</td>
+                                    <td class="num">@Money.Fmt(p.OvertimePay)</td>
+                                    <td class="num">@Money.Fmt(p.Allowances)</td>
+                                    <td class="num">@Money.Fmt(p.AbsentDeduct)</td>
+                                    <td class="num">@Money.Fmt(p.Insurance)</td>
+                                    <td class="num">@Money.Fmt(p.Tax)</td>
+                                    <td class="num"><strong>@Money.Fmt(p.NetPay)</strong></td>
+                                    <td class="num">@Jalali.MinutesToHm(p.WorkedMin)</td>
+                                    <td class="num">@Jalali.ToPersianDigits(p.AbsentDays.ToString())</td>
+                                    <td>
+                                        <div class="btn-row">
+                                            <a class="btn btn-sm" href="/Payroll/Slip?id=@p.Id" data-modal="/Payroll/Slip?id=@p.Id" data-modal-title="@(HrT.F("جزئیات فیش — {0}", p.Employee.FullName))">@HrT.T("🧾 اقلام")</a>
+                                            <a class="btn btn-sm" href="/Payroll/SlipPdf?id=@p.Id" target="_blank" title="@(HrT.T("فیش PDF رسمی"))">📄</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+</div>

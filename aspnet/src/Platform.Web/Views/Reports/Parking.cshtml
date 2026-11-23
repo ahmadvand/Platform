@@ -1,0 +1,122 @@
+@{
+    ViewData["Title"] = HrT.T("گزارش ورود/خروج خودروها");
+    var rows = (List<AttParkingRow>)ViewBag.Rows;
+    var co = ViewBag.Co as string;
+    var lotId = ViewBag.LotId as string;
+    var direction = ViewBag.Direction as string;
+    var result = ViewBag.Result as string;
+    var method = ViewBag.Method as string;
+    var canExport = Me.Get()!.Has("reports.export");
+    var qs = ViewBag.Qs as string ?? "";
+
+    // خلاصه در صفحه
+    var inCnt = rows.Count(r => r.Direction == "ورود");
+    var outCnt = rows.Count(r => r.Direction == "خروج");
+    var okCnt = rows.Count(r => r.Result == "مجاز");
+    var noCnt = rows.Count - okCnt;
+    var autoCnt = rows.Count(r => r.Method == "پلاک‌خوان");
+}
+<div class="card">
+    <div class="card-h"><h2>🚗 @HrT.T("گزارش ورود/خروج خودروها — کنترل پارکینگ")</h2><span class="hint">@HrT.T("شامل ثبت خودکار دوربین‌های پلاک‌خوان (ANPR) و ثبت‌های دستی/کارتی")</span></div>
+    <div class="card-b">
+        <form method="get" action="/Reports/Parking" class="toolbar">
+            <div class="fld">
+                <label>@HrT.T("شرکت")</label>
+                <select name="co">
+                    <option value="">@HrT.T("همه شرکت‌ها")</option>
+                    @foreach (var c in (List<Company>)ViewBag.Companies)
+                    {
+                        <option value="@c.Id" selected="@(co == c.Id)">@c.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld">
+                <label>@HrT.T("پارکینگ")</label>
+                <select name="lotId">
+                    <option value="">@HrT.T("همه پارکینگ‌ها")</option>
+                    @foreach (var l in (List<HrLotOption>)(ViewBag.Lots ?? new List<HrLotOption>()))
+                    {
+                        <option value="@l.Id" selected="@(lotId == l.Id)">@l.Name @(l.Company != null ? $"({l.Company})" : "")</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("از تاریخ")</label><input type="date" name="from" value="@ViewBag.From" /></div>
+            <div class="fld"><label>@HrT.T("تا تاریخ")</label><input type="date" name="to" value="@ViewBag.To" /></div>
+            <div class="fld">
+                <label>@HrT.T("جهت")</label>
+                <select name="direction">
+                    <option value="">@HrT.T("هر دو")</option>
+                    <option value="ورود" selected="@(direction == "ورود")">@HrT.T("ورود")</option>
+                    <option value="خروج" selected="@(direction == "خروج")">@HrT.T("خروج")</option>
+                </select>
+            </div>
+            <div class="fld">
+                <label>@HrT.T("نتیجه")</label>
+                <select name="result">
+                    <option value="">@HrT.T("همه")</option>
+                    <option value="مجاز" selected="@(result == "مجاز")">@HrT.T("مجاز")</option>
+                    <option value="غیرمجاز" selected="@(result == "غیرمجاز")">@HrT.T("غیرمجاز")</option>
+                </select>
+            </div>
+            <div class="fld">
+                <label>@HrT.T("روش ثبت")</label>
+                <select name="method">
+                    <option value="">@HrT.T("همه روش‌ها")</option>
+                    <option value="پلاک‌خوان" selected="@(method == "پلاک‌خوان")">@HrT.T("پلاک‌خوان (ثبت خودکار دوربین)")</option>
+                    <option value="کارت" selected="@(method == "کارت")">@HrT.T("کارت")</option>
+                    <option value="دستی" selected="@(method == "دستی")">@HrT.T("دستی")</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">@HrT.T("اعمال فیلتر")</button>
+            @if (canExport)
+            {
+                <a class="btn" href="/Reports/ParkingXlsx?@Html.Raw(qs)">⬇ @HrT.T("اکسل")</a>
+                <a class="btn" href="/Reports/ParkingPdf?@Html.Raw(qs)">⬇ PDF</a>
+            }
+        </form>
+    </div>
+</div>
+
+<div class="kpis">
+    <div class="kpi"><div class="v">@Jalali.Num(rows.Count)</div><div class="l">@HrT.T("کل رویدادها")</div></div>
+    <div class="kpi info"><div class="v">@Jalali.Num(inCnt)</div><div class="l">@HrT.T("ورود")</div></div>
+    <div class="kpi info"><div class="v">@Jalali.Num(outCnt)</div><div class="l">@HrT.T("خروج")</div></div>
+    <div class="kpi ok"><div class="v">@Jalali.Num(okCnt)</div><div class="l">@HrT.T("مجاز")</div></div>
+    <div class="kpi @(noCnt > 0 ? "err" : "info")"><div class="v">@Jalali.Num(noCnt)</div><div class="l">@HrT.T("غیرمجاز")</div></div>
+    <div class="kpi warn"><div class="v">@Jalali.Num(autoCnt)</div><div class="l">@HrT.T("خوانش خودکار پلاک")</div></div>
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@(HrT.F("ریز رویدادها ({0} رکورد — حداکثر ۵۰۰ در صفحه)", Jalali.Num(rows.Count)))</h2>
+        <span class="hint">@(HrT.F("بازه: {0} تا {1}", Jalali.FmtFa(Jalali.ParseDateKey((string)ViewBag.From)), Jalali.FmtFa(Jalali.ParseDateKey((string)ViewBag.To))))</span>
+    </div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("پلاک")</th><th>@HrT.T("صاحب خودرو")</th><th>@HrT.T("نوع")</th><th>@HrT.T("شرکت")</th><th>@HrT.T("پارکینگ")</th><th>@HrT.T("گیت")</th><th>@HrT.T("جهت")</th><th>@HrT.T("روش / دوربین")</th><th>@HrT.T("اطمینان")</th><th>@HrT.T("نتیجه")</th><th>@HrT.T("دلیل رد")</th></tr></thead>
+            <tbody>
+                @foreach (var r in rows)
+                {
+                    <tr>
+                        <td class="num" style="white-space:nowrap">@Jalali.Fmt(r.Time) — @Jalali.FmtTime(r.Time)</td>
+                        <td><strong>@r.Plate</strong></td>
+                        <td>@r.Owner</td>
+                        <td>@HrT.T(r.VehicleType)</td>
+                        <td>@r.Company</td>
+                        <td>@r.Lot</td>
+                        <td>@r.Gate</td>
+                        <td><span class="badge @(r.Direction == "ورود" ? "badge-info" : "badge-mute")">@HrT.T(r.Direction)</span></td>
+                        <td>@HrT.T(r.Method) @(string.IsNullOrEmpty(r.Camera) ? "" : $"({r.Camera})")</td>
+                        <td class="num">@(r.Confidence is null ? "—" : Jalali.Num(r.Confidence.Value) + "٪")</td>
+                        <td><span class="badge @(r.Result == "مجاز" ? "badge-ok" : "badge-err")">@HrT.T(r.Result)</span></td>
+                        <td>@(string.IsNullOrEmpty(r.Reason) ? "—" : r.Reason)</td>
+                    </tr>
+                }
+                @if (rows.Count == 0)
+                {
+                    <tr><td colspan="12"><div class="empty">@HrT.T("در این بازه رویداد ورود/خروج خودرویی ثبت نشده است.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

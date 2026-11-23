@@ -1,0 +1,54 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "winter landscape snow covered trees fog mist snowy forest"
+✅ Got 6 images
+{
+  "success": true,
+  "query": "winter landscape snow covered trees fog mist snowy forest",
+  "count": 6,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b00e0860404e.jpg",
+      "caption": "",
+      "source": "Picjumbo",
+      "original_width": "2210px",
+      "original_height": "1474px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/002629334a36.jpg",
+      "caption": "",
+      "source": "Motion Array",
+      "original_width": "1920px",
+      "original_height": "1282px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5548599590f9.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dbd5fdb27d81.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "1065px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/95768f424bf3.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1101px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/49c527b9c361.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "866px",
+      "original_height": "1390px"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "beautiful spring landscape with blooming cherry blossom trees and pink flowers meadow"
+✅ Got 6 images
+{
+  "success": true,
+  "query": "beautiful spring landscape with blooming cherry blossom trees and pink flowers meadow",
+  "count": 6,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/813d0fe09e49.jpg",
+      "caption": "",
+      "source": "Amazon.com",
+      "original_width": "894px",
+      "original_height": "894px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/60455a90ef2e.jpg",
+      "caption": "",
+      "source": "SoraNews24 —Japan News—",
+      "original_width": "1536px",
+      "original_height": "1152px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e6e09a31299f.jpg",
+      "caption": "",
+      "source": "Explore",
+      "original_width": "1600px",
+      "original_height": "902px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/69ea83f3dba0.jpg",
+      "caption": "",
+      "source": "DeviantArt",
+      "original_width": "1920px",
+      "original_height": "3426px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e1e7dc246652.jpeg",
+      "caption": "",
+      "source": "Falstaff",
+      "original_width": "2720px",
+      "original_height": "2040px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/68a5b69e98a1.jpg",
+      "caption": "",
+      "source": "European Best Destinations",
+      "original_width": "1190px",
+      "original_height": "790px"
+    }
+  ]
+}

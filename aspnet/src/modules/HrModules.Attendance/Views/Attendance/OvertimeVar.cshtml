@@ -1,0 +1,68 @@
+@{
+    // فاز ۱۳۲ (مورد ۳ ROADMAP-ADDITIONS) — واریانس اضافه‌کاری مجاز/واقعی
+    ViewData["Title"] = HrT.T("واریانس اضافه‌کاری");
+    var rows = (List<OvertimeVarRow>)Model;
+    var month = (string)ViewBag.Month;
+    var overCount = (int)ViewBag.OverCount;
+    var unusedCount = (int)ViewBag.UnusedCount;
+    var totalAllowed = (decimal)ViewBag.TotalAllowed;
+    var totalActual = (decimal)ViewBag.TotalActual;
+
+    string Fmt(decimal d) => d.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("واریانس اضافه‌کاری مجاز/واقعی")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("ماه شمسی")</label><input name="month" value="@month" placeholder="@HrT.T("1405/08")" /></div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("ماه:") <b>@Jalali.ToPersianDigits(month)</b></span>
+            <span class="chip">@HrT.T("جمع مجاز:") <b>@Fmt(totalAllowed)</b> @HrT.T("ساعت")</span>
+            <span class="chip">@HrT.T("جمع واقعی:") <b>@Fmt(totalActual)</b> @HrT.T("ساعت")</span>
+            <span class="chip">@HrT.T("کار بدون مجوز:") <b class="text-danger">@Jalali.Num(overCount)</b> @HrT.T("نفر")</span>
+            <span class="chip">@HrT.T("مجوز بلااستفاده:") <b>@Jalali.Num(unusedCount)</b> @HrT.T("نفر")</span>
+        </div>
+        <p class="hint">@HrT.T("«مجاز» از مجوزهای تأییدشدهٔ اضافه‌کاری/کار در تعطیل همان ماه و «واقعی» از دقایق اضافه‌کاری محاسبه‌شدهٔ موتور کارکرد می‌آید. واریانس مثبت یعنی پرسنل بیش از مجوز کار کرده (ریسک پرداخت)، منفی یعنی مجوز صادر شده ولی استفاده نشده. «خروج غیرمجاز» جزو اضافه‌کاری حساب نمی‌شود.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("کد")</th>
+                        <th>@HrT.T("نام")</th>
+                        <th>@HrT.T("واحد")</th>
+                        <th>@HrT.T("تعداد مجوز")</th>
+                        <th>@HrT.T("مجاز (ساعت)")</th>
+                        <th>@HrT.T("واقعی (ساعت)")</th>
+                        <th>@HrT.T("واریانس")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        var badge = r.VarianceHours > 0.05m ? "badge-err" : r.VarianceHours < -0.05m ? "badge-info" : "badge-ok";
+                        var label = r.VarianceHours > 0.05m ? HrT.T("بدون مجوز") : r.VarianceHours < -0.05m ? HrT.T("بلااستفاده") : HrT.T("مطابق");
+                        <tr>
+                            <td class="num">@Jalali.ToPersianDigits(r.Code)</td>
+                            <td><strong>@r.Name</strong></td>
+                            <td>@r.Dept</td>
+                            <td class="num">@Jalali.Num(r.PermitCount)</td>
+                            <td class="num">@Fmt(r.AllowedHours)</td>
+                            <td class="num">@Fmt(r.ActualHours)</td>
+                            <td class="num"><b>@(r.VarianceHours > 0 ? "+" : "")@Fmt(r.VarianceHours)</b></td>
+                            <td><span class="badge @badge">@label</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("در این ماه اضافه‌کاری مجاز یا واقعی ثبت نشده ✅")</p>
+        }
+    </div>
+</div>

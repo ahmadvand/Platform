@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    استودیو ترجمه (TranslationStudio) — ابزار ساخت «بستهٔ ترجمه» برای سامانه
+    ابزار عمومی است — بدون پیشوند HR (ترجمه به حضور و غیاب تعلق ندارد).
+    قالب بسته = همان ورودی «درون‌ریزی بستهٔ ترجمه» پنل ادمین سامانه (/Langs):
+      {"format":"hr-lang-pack","version":1,"code":"de","title":"Deutsch",
+       "dir":"ltr","entries":{"متن فارسی مبدأ":"ترجمه", ...}}
+    انتشار برای ویندوز (از لینوکس هم بیلد می‌شود): scripts/make-translation-studio.sh
+    ============================================================
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- بیلد از روی لینوکس (سندباکس) هم ممکن شود -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <NeutralLanguage>fa-IR</NeutralLanguage>
+    <AssemblyName>TranslationStudio</AssemblyName>
+    <RootNamespace>TranslationStudio</RootNamespace>
+    <Version>1.2.1</Version>
+    <FileVersion>1.2.1</FileVersion>
+    <InformationalVersion>1.2.1</InformationalVersion>
+    <Product>استودیو ترجمه</Product>
+    <Company>گروه توسعه سامانه‌های سازمانی</Company>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فونت وزیر (فارسی) جاسازی‌شده — هم‌الگو با LicenseStudio -->
+    <EmbeddedResource Include="Fonts\Vazirmatn-Regular.ttf" />
+    <EmbeddedResource Include="Fonts\Vazirmatn-Bold.ttf" />
+    <!-- فهرست مرجع ترجمه (فاز ۷۸b) — کلید=متن مبدأ فارسی، مقدار=مرجع انگلیسی؛
+         همگام با HrLang.DictEn سرور: scripts/extract-ref-lang.py آن را تولید می‌کند -->
+    <EmbeddedResource Include="Resources\ref-en.json" />
+  </ItemGroup>
+</Project>

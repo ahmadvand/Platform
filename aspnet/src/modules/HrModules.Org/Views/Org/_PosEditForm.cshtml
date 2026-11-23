@@ -1,0 +1,33 @@
+@{
+    var pos = (Position)ViewBag.Pos!;
+    var allDepts = (List<Department>)ViewBag.AllDepts;
+}
+<div data-modal-title="@(HrT.F("ویرایش پست — {0}", pos.Title))" hidden></div>
+<form method="post" action="/Org/EditPos" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@pos.Id" />
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("عنوان")</label><input name="title" value="@pos.Title" required /></div>
+        <div class="fld"><label>@HrT.T("کد")</label><input name="code" value="@pos.Code" required /></div>
+        <div class="fld"><label>@HrT.T("واحد (همان شرکت)")</label>
+            <select name="departmentId">
+                @foreach (var dd in allDepts)
+                {
+                    @if (dd.Id == pos.DepartmentId)
+                    {
+                        <option value="@dd.Id" selected>@dd.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@dd.Id">@dd.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("گروه شغلی")</label><input name="grade" value="@pos.Grade" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره تغییرات")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

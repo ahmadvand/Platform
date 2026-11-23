@@ -1,0 +1,44 @@
+/* ============================================================
+   فاز ۷۶ — بازنویسی‌های چپ‌به‌چپ (حالت انگلیسی، dir=ltr روی html)
+   ------------------------------------------------------------
+   تم اصلی (site.css) عمدتاً با خصوصیات منطقی (inset-inline-start،
+   margin-inline-start، ...) نوشته شده و با تغییر dir خودکار قرینه
+   می‌شود؛ اینجا فقط قواعد فیزیکیِ استثنا قرینه می‌شوند و رفتارهای
+   خاص فارسی/شمسی. با dir=ltr روی html بارگذاری می‌شود.
+   ============================================================ */
+
+/* برچسب راهنمای نقشهٔ سایت — از لبهٔ راست به چپ */
+.smap-hint { right: auto; left: 12px; }
+
+/* نشان وضعیت فرمول‌ساز روی کارت قالب */
+.fb-tpltag { left: auto; right: 8px; }
+
+/* نوار پیشرفت pjax — انیمیشن از چپ شروع شود */
+@keyframes pjaxbar {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(30%); }
+}
+
+/* آیکون جستجوی نوار بالایی: در RTL با inset قرار گرفته — منطقی است و خودکار قرینه می‌شود؛
+   فقط فاصلهٔ متنی placeholder و جداکنندهٔ breadcrumb درست بماند */
+.crumb-sep { margin: 0 4px; }
+
+/* کدها/پلاک‌ها/فرمول‌ها که با direction:ltr قفل شده‌اند در LTR هم همان‌طور درست‌اند — نیازی به تغییر نیست. */
+
+/* ============ فاز ۱۲۴ — هدر صفحه و بنرهای اعلان (توکن‌های مشترک همهٔ صفحات) ============ */
+.page-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 14px; }
+.page-h h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -.2px; color: var(--ink); }
+.page-sub { margin-top: 4px; font-size: 12px; color: var(--ink-3); line-height: 1.9; }
+.page-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.notice { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: var(--radius); font-size: 12.5px; line-height: 2; margin: 0 0 14px; border: 1px solid; }
+.notice .n-ic { font-size: 15px; line-height: 1.7; flex: none; }
+.notice-ok { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; }
+.notice-warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.notice-bad { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.notice .n-act { margin-inline-start: auto; align-self: center; white-space: nowrap; }
+
+/* ============ فاز ۱۲۴-ه — توکن ردیف کلید-مقدار پنل‌های جزئیات (الگوی lic-row تعمیم‌یافته) ============ */
+.kvs { display: grid; gap: 8px; }
+.kvr { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 8px 12px; border: 1px solid var(--line-soft); border-radius: 10px; font-size: 12.5px; line-height: 1.9; }
+.kvr .k { color: var(--ink-3); flex: none; }
+.kvr .v { color: var(--ink); font-weight: 600; text-align: end; word-break: break-word; }

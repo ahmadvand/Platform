@@ -1,0 +1,13 @@
+عکس‌های بستهٔ محافظ صفحهٔ چهارفصل — همگی «ساخته‌شده توسط دیگران» (دستور کاربر: عکس تولید نشود)
+جست‌وجو با سرویس image-search؛ لینک‌های OSS پایدار (z-cdn.chatglm.cn = بازمیزبانی سرویس جست‌وجو):
+
+بهار   spring-a.jpg ← https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e6e09a31299f.jpg
+       (منبع اصلی: Explore — کوه فوجی و درختان شکوفه)
+تابستان summer-b.jpg ← https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3b8bb8d0b41d.jpg
+       (منبع اصلی: Gardening Know How — باغ مرکبات سرسبز)
+پاییز  autumn-a.jpg ← https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/23136f287981.jpg
+       (منبع اصلی: Backyard Boss — پارک پاییزی با برگ‌های رنگارنگ)
+زمستان winter-a.jpg ← https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b00e0860404e.jpg
+       (منبع اصلی: Picjumbo — جنگل برفی با مه)
+
+نسخه‌های فشرده‌شده (عرض ۷۶۰، JPEG تدریجی) با compress.py تولید شده‌اند.

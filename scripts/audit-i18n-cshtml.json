@@ -1,0 +1,2082 @@
+[
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 11,
+  "text": "داخل سازمان"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 12,
+  "text": "خارج شده"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 13,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 14,
+  "text": "رد شده"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 36,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 78,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 83,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 96,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 104,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 112,
+  "text": "داخل سازمان"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/_VisitForm.cshtml",
+  "line": 22,
+  "text": "کارت ملی"
+ },
+ {
+  "file": "modules/Platform.Modules.Visitors/Views/Visitors/_VisitForm.cshtml",
+  "line": 25,
+  "text": "مهمان"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 3,
+  "text": "تنظیمات گیت‌وی"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 11,
+  "text": "هنوز گیت‌وی تنظیمات را دریافت نکرده است"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 13,
+  "text": "همین حالا"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 24,
+  "text": "● متصل"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 37,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 159,
+  "text": "پیش‌فرض"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 160,
+  "text": "پیش‌فرض"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 2,
+  "text": "دستگاه‌های تردد"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 30,
+  "text": "تعریف دستگاه جدید"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 46,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 51,
+  "text": "TCP پول مستقیم"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 69,
+  "text": "۰"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 72,
+  "text": "ترددهای ثبت‌شده روی دستگاه آفلاین — در انتظار دریافت دسته‌ای"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 92,
+  "text": "ری‌استارت دستگاه «@d.Name»؟"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 112,
+  "text": "پین (کد پرسنلی)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 122,
+  "text": "دریافت دسته‌ای @Jalali.Num(bc2) تردد صف‌شده در حافظه آفلاین «@d.Name»؟ زمان اصلی هر تردد حفظ می‌شود."
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 133,
+  "text": "ویرایش دستگاه — @d.Name"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 137,
+  "text": "⏸ توقف دستگاه"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 139,
+  "text": "توکن اتصال دستگاه جدید شود؟ (اتصال فعلی قطع و دوباره وصل می‌شود)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 202,
+  "text": "اجرا شد"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 2,
+  "text": "نمای زنده حراست"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 60,
+  "text": "شرکت"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 61,
+  "text": "محل نصب"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 62,
+  "text": "تردد امروز"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 63,
+  "text": "بدون سابقه اتصال"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Form.cshtml",
+  "line": 2,
+  "text": "ویرایش دستگاه"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/Form.cshtml",
+  "line": 16,
+  "text": "ویرایش دستگاه — {d.Name}"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 50,
+  "text": "مثال: ترمینال اثر انگشت ورودی اصلی"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 55,
+  "text": "تولید سریال جدید بر اساس برند و مدل"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 58,
+  "text": "(پیشنهاد خودکار)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 62,
+  "text": "مثال: ورودی اصلی سایت"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 66,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 67,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 72,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 73,
+  "text": "آفلاین"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 88,
+  "text": "پیش‌فرض گیت‌وی (4370)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 91,
+  "text": "پیش‌فرض گیت‌وی (0)"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 100,
+  "text": "ذخیره تغییرات"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 2,
+  "text": "داده‌های هویتی دستگاه‌ها"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 74,
+  "text": "آنلاین"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 100,
+  "text": "دریافت هویتی همه پرسنل «@d.Name»؟"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 214,
+  "text": "کاربر «@du.Name» از دستگاه «@du.Device?.Name» حذف شود؟"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 252,
+  "text": "({Jalali.Num(fp)} اثر انگشت، {Jalali.Num(fc)} چهره{(cd is null ? "
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 261,
+  "text": "{Jalali.Num(d.Users.Count)} کاربر"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 295,
+  "text": "{Jalali.Num(d.Users.Count)} کاربر"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 341,
+  "text": " — کیفیت {Jalali.Num(b.Quality.Value)}٪"
+ },
+ {
+  "file": "modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 408,
+  "text": "اجرا شد"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 18,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 19,
+  "text": "رد شده"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 59,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 111,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 163,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 208,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/_MissionForm.cshtml",
+  "line": 17,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/_LeaveForm.cshtml",
+  "line": 18,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Requests/_PermitForm.cshtml",
+  "line": 17,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Shifts/Index.cshtml",
+  "line": 50,
+  "text": "، "
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 11,
+  "text": "حاضر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 12,
+  "text": "تأخیر"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 13,
+  "text": "غایب"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 14,
+  "text": "مرخصی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 15,
+  "text": "مأموریت"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 16,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 17,
+  "text": "استعلاجی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 18,
+  "text": "ساعتی"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 19,
+  "text": "بدون‌حقوق"
+ },
+ {
+  "file": "modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 39,
+  "text": "داخلی"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 21,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 94,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 412,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 417,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 422,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 428,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 437,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 538,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 547,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 586,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 589,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 601,
+  "text": "/Parking?tab=events&result=مجاز"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 602,
+  "text": "/Parking?tab=events&result=غیرمجاز"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 626,
+  "text": "٪"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_GateForm.cshtml",
+  "line": 28,
+  "text": "راهبند"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_GateForm.cshtml",
+  "line": 31,
+  "text": "ورودی"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_CameraForm.cshtml",
+  "line": 30,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_ScanForm.cshtml",
+  "line": 18,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_ScanForm.cshtml",
+  "line": 21,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_VehicleForm.cshtml",
+  "line": 18,
+  "text": "سواری"
+ },
+ {
+  "file": "modules/Platform.Modules.Parking/Views/Parking/_PermitForm.cshtml",
+  "line": 26,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Holidays/Index.cshtml",
+  "line": 10,
+  "text": "شنبه"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 27,
+  "text": "رسمی"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 35,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 68,
+  "text": "مجرد"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 69,
+  "text": "متأهل"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/Index.cshtml",
+  "line": 42,
+  "text": "رسمی"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/Index.cshtml",
+  "line": 111,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/Import.cshtml",
+  "line": 140,
+  "text": " ، "
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_CreateForm.cshtml",
+  "line": 17,
+  "text": "رسمی"
+ },
+ {
+  "file": "modules/HrModules.Org/Views/Employees/_CreateForm.cshtml",
+  "line": 73,
+  "text": "مجرد"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Index.cshtml",
+  "line": 84,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Settings.cshtml",
+  "line": 23,
+  "text": "ماهانه"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Settings.cshtml",
+  "line": 24,
+  "text": "کارکردی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 48,
+  "text": "دپارتمان"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 55,
+  "text": "پست"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 62,
+  "text": "شیفت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 69,
+  "text": "پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 76,
+  "text": "استخدام"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 78,
+  "text": "رسمی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_SlipLines.cshtml",
+  "line": 4,
+  "text": "مزیت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_SlipLines.cshtml",
+  "line": 5,
+  "text": "کسور"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 12,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 13,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 177,
+  "text": "نهایی"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 14,
+  "text": "دپارتمان"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 15,
+  "text": "پست"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 16,
+  "text": "شیفت"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 17,
+  "text": "پرسنل"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 18,
+  "text": "استخدام"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 132,
+  "text": "مثال: دقیقه_اضافه_کاری / 60 * ساعتی * 1.4"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ParamForm.cshtml",
+  "line": 6,
+  "text": "پلکان_مالیات"
+ },
+ {
+  "file": "modules/HrModules.Payroll/Views/Payroll/_ParamForm.cshtml",
+  "line": 16,
+  "text": "حق_مسکن"
+ },
+ {
+  "file": "modules/HrModules.DeviceGateway/Views/DeviceGateway/Index.cshtml",
+  "line": 53,
+  "text": "خاموش"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 69,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 71,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 99,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 172,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 205,
+  "text": "ورود"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 208,
+  "text": "کارت"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 220,
+  "text": "/Access?tab=events&result=مجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 221,
+  "text": "/Access?tab=events&result=غیرمجاز"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 523,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 527,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_GateForm.cshtml",
+  "line": 28,
+  "text": "درب برقی"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_GateForm.cshtml",
+  "line": 31,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_PermForm.cshtml",
+  "line": 26,
+  "text": "دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_ZoneForm.cshtml",
+  "line": 19,
+  "text": "عادی"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 11,
+  "text": "نرمال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 16,
+  "text": "باز دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 21,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 20,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 21,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 22,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 23,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 24,
+  "text": "باطل"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 30,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 31,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 32,
+  "text": "موقت"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 33,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 34,
+  "text": "باطل"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 98,
+  "text": "فعال"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 111,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 121,
+  "text": "گمشده"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 181,
+  "text": "آزاد"
+ },
+ {
+  "file": "modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 204,
+  "text": "آزاد"
+ },
+ {
+  "file": "Platform.Web/Views/Users/Perms.cshtml",
+  "line": 87,
+  "text": "مستقیم"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/Index.cshtml",
+  "line": 209,
+  "text": "hr.db یا C:\\HrData\\hr.db"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/Index.cshtml",
+  "line": 469,
+  "text": "نام شرکت شما"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 7,
+  "text": "برند و کنش‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 9,
+  "text": "رنگ اصلی *"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 10,
+  "text": "لینک‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 12,
+  "text": "منوی کناری"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 14,
+  "text": "پس‌زمینه منو *"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 15,
+  "text": "متن منو"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 17,
+  "text": "زمینه و کارت‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 19,
+  "text": "پس‌زمینه صفحه *"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 20,
+  "text": "کارت‌ها/فرم‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 22,
+  "text": "جدول — سطر و ستون"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 24,
+  "text": "سربرگ جدول (ستون‌ها) *"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 25,
+  "text": "سطر یک‌درمیان"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 26,
+  "text": "سطر هاور"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 28,
+  "text": "خط و متن"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 30,
+  "text": "حاشیه‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 31,
+  "text": "متن اصلی *"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 32,
+  "text": "متن ثانویه"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 34,
+  "text": "وضعیت‌ها"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 36,
+  "text": "موفق"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 37,
+  "text": "هشدار"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 38,
+  "text": "خطا"
+ },
+ {
+  "file": "Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 39,
+  "text": "اطلاع"
+ },
+ {
+  "file": "Platform.Web/Views/License/Index.cshtml",
+  "line": 101,
+  "text": "، "
+ },
+ {
+  "file": "Platform.Web/Views/Home/Index.cshtml",
+  "line": 137,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/Views/Home/Index.cshtml",
+  "line": 156,
+  "text": "بحرانی"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 13,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 14,
+  "text": "خروج"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 15,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 17,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 49,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 50,
+  "text": "خروج"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 57,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 58,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 65,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 66,
+  "text": "کارت"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 67,
+  "text": "دستی"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 110,
+  "text": "٪"
+ },
+ {
+  "file": "Platform.Web/Views/Reports/Custom.cshtml",
+  "line": 39,
+  "text": "حاضر"
+ },
+ {
+  "file": "Platform.Web/Views/Setup/Index.cshtml",
+  "line": 158,
+  "text": "localhost یا 192.168.1.10 یا SRV-HR"
+ },
+ {
+  "file": "Platform.Web/Views/Setup/Index.cshtml",
+  "line": 180,
+  "text": "hr.db یا C:\\HrData\\hr.db"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 11,
+  "text": "داخل سازمان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 12,
+  "text": "خارج شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 13,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 14,
+  "text": "رد شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 36,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 78,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 83,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 96,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 104,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/Index.cshtml",
+  "line": 112,
+  "text": "داخل سازمان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/_VisitForm.cshtml",
+  "line": 22,
+  "text": "کارت ملی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Visitors/Views/Visitors/_VisitForm.cshtml",
+  "line": 25,
+  "text": "مهمان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 3,
+  "text": "تنظیمات گیت‌وی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 11,
+  "text": "هنوز گیت‌وی تنظیمات را دریافت نکرده است"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 13,
+  "text": "همین حالا"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 24,
+  "text": "● متصل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 37,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 159,
+  "text": "پیش‌فرض"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Gateway/Index.cshtml",
+  "line": 160,
+  "text": "پیش‌فرض"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 2,
+  "text": "دستگاه‌های تردد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 30,
+  "text": "تعریف دستگاه جدید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 46,
+  "text": "آنلاین"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 51,
+  "text": "TCP پول مستقیم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 69,
+  "text": "۰"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 72,
+  "text": "ترددهای ثبت‌شده روی دستگاه آفلاین — در انتظار دریافت دسته‌ای"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 92,
+  "text": "ری‌استارت دستگاه «@d.Name»؟"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 112,
+  "text": "پین (کد پرسنلی)"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 122,
+  "text": "دریافت دسته‌ای @Jalali.Num(bc2) تردد صف‌شده در حافظه آفلاین «@d.Name»؟ زمان اصلی هر تردد حفظ می‌شود."
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 133,
+  "text": "ویرایش دستگاه — @d.Name"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 137,
+  "text": "⏸ توقف دستگاه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 139,
+  "text": "توکن اتصال دستگاه جدید شود؟ (اتصال فعلی قطع و دوباره وصل می‌شود)"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Index.cshtml",
+  "line": 202,
+  "text": "اجرا شد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 2,
+  "text": "نمای زنده حراست"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 60,
+  "text": "شرکت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 61,
+  "text": "محل نصب"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 62,
+  "text": "تردد امروز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/LiveView.cshtml",
+  "line": 63,
+  "text": "بدون سابقه اتصال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Form.cshtml",
+  "line": 2,
+  "text": "ویرایش دستگاه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/Form.cshtml",
+  "line": 16,
+  "text": "ویرایش دستگاه — {d.Name}"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 50,
+  "text": "مثال: ترمینال اثر انگشت ورودی اصلی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 55,
+  "text": "تولید سریال جدید بر اساس برند و مدل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 58,
+  "text": "(پیشنهاد خودکار)"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 62,
+  "text": "مثال: ورودی اصلی سایت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 66,
+  "text": "حضور و غیاب"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 67,
+  "text": "کنترل تردد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 72,
+  "text": "آنلاین"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 73,
+  "text": "آفلاین"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 88,
+  "text": "پیش‌فرض گیت‌وی (4370)"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 91,
+  "text": "پیش‌فرض گیت‌وی (0)"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Devices/_DeviceForm.cshtml",
+  "line": 100,
+  "text": "ذخیره تغییرات"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 2,
+  "text": "داده‌های هویتی دستگاه‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 74,
+  "text": "آنلاین"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 100,
+  "text": "دریافت هویتی همه پرسنل «@d.Name»؟"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 214,
+  "text": "کاربر «@du.Name» از دستگاه «@du.Device?.Name» حذف شود؟"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 252,
+  "text": "({Jalali.Num(fp)} اثر انگشت، {Jalali.Num(fc)} چهره{(cd is null ? "
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 261,
+  "text": "{Jalali.Num(d.Users.Count)} کاربر"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 295,
+  "text": "{Jalali.Num(d.Users.Count)} کاربر"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 341,
+  "text": " — کیفیت {Jalali.Num(b.Quality.Value)}٪"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Devices/Views/Biometrics/Index.cshtml",
+  "line": 408,
+  "text": "اجرا شد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 18,
+  "text": "تأیید شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 19,
+  "text": "رد شده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 59,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 111,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 163,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/Index.cshtml",
+  "line": 208,
+  "text": "در انتظار تأیید"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/_MissionForm.cshtml",
+  "line": 17,
+  "text": "داخلی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/_LeaveForm.cshtml",
+  "line": 18,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Requests/_PermitForm.cshtml",
+  "line": 17,
+  "text": "اضافه‌کاری"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Shifts/Index.cshtml",
+  "line": 50,
+  "text": "، "
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 11,
+  "text": "حاضر"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 12,
+  "text": "تأخیر"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 13,
+  "text": "غایب"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 14,
+  "text": "مرخصی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/Attendance/Index.cshtml",
+  "line": 15,
+  "text": "مأموریت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 16,
+  "text": "استحقاقی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 17,
+  "text": "استعلاجی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 18,
+  "text": "ساعتی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 19,
+  "text": "بدون‌حقوق"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Attendance/Views/SelfAtt/Requests.cshtml",
+  "line": 39,
+  "text": "داخلی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 21,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 94,
+  "text": "ورودی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 412,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 417,
+  "text": "نرمال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 422,
+  "text": "باز دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 428,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 437,
+  "text": "نرمال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 538,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 547,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 586,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 589,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 601,
+  "text": "/Parking?tab=events&result=مجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 602,
+  "text": "/Parking?tab=events&result=غیرمجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/Index.cshtml",
+  "line": 626,
+  "text": "٪"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_GateForm.cshtml",
+  "line": 28,
+  "text": "راهبند"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_GateForm.cshtml",
+  "line": 31,
+  "text": "ورودی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_CameraForm.cshtml",
+  "line": 30,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_ScanForm.cshtml",
+  "line": 18,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_ScanForm.cshtml",
+  "line": 21,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_VehicleForm.cshtml",
+  "line": 18,
+  "text": "سواری"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/Platform.Modules.Parking/Views/Parking/_PermitForm.cshtml",
+  "line": 26,
+  "text": "دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Holidays/Index.cshtml",
+  "line": 10,
+  "text": "شنبه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 27,
+  "text": "رسمی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 35,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 68,
+  "text": "مجرد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_EditForm.cshtml",
+  "line": 69,
+  "text": "متأهل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/Index.cshtml",
+  "line": 42,
+  "text": "رسمی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/Index.cshtml",
+  "line": 111,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/Import.cshtml",
+  "line": 140,
+  "text": " ، "
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_CreateForm.cshtml",
+  "line": 17,
+  "text": "رسمی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Org/Views/Employees/_CreateForm.cshtml",
+  "line": 73,
+  "text": "مجرد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Index.cshtml",
+  "line": 84,
+  "text": "نهایی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Settings.cshtml",
+  "line": 23,
+  "text": "ماهانه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Settings.cshtml",
+  "line": 24,
+  "text": "کارکردی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 48,
+  "text": "دپارتمان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 55,
+  "text": "پست"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 62,
+  "text": "شیفت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 69,
+  "text": "پرسنل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 76,
+  "text": "استخدام"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ItemForm.cshtml",
+  "line": 78,
+  "text": "رسمی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_SlipLines.cshtml",
+  "line": 4,
+  "text": "مزیت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_SlipLines.cshtml",
+  "line": 5,
+  "text": "کسور"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 12,
+  "text": "نهایی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 13,
+  "text": "نهایی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Bonus.cshtml",
+  "line": 177,
+  "text": "نهایی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 14,
+  "text": "دپارتمان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 15,
+  "text": "پست"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 16,
+  "text": "شیفت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 17,
+  "text": "پرسنل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 18,
+  "text": "استخدام"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/Items.cshtml",
+  "line": 132,
+  "text": "مثال: دقیقه_اضافه_کاری / 60 * ساعتی * 1.4"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ParamForm.cshtml",
+  "line": 6,
+  "text": "پلکان_مالیات"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Payroll/Views/Payroll/_ParamForm.cshtml",
+  "line": 16,
+  "text": "حق_مسکن"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.DeviceGateway/Views/DeviceGateway/Index.cshtml",
+  "line": 53,
+  "text": "خاموش"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 69,
+  "text": "نرمال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 71,
+  "text": "باز دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 99,
+  "text": "نرمال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 172,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 205,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 208,
+  "text": "کارت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 220,
+  "text": "/Access?tab=events&result=مجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 221,
+  "text": "/Access?tab=events&result=غیرمجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 523,
+  "text": "باز دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/Index.cshtml",
+  "line": 527,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_GateForm.cshtml",
+  "line": 28,
+  "text": "درب برقی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_GateForm.cshtml",
+  "line": 31,
+  "text": "دوطرفه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_PermForm.cshtml",
+  "line": 26,
+  "text": "دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_ZoneForm.cshtml",
+  "line": 19,
+  "text": "عادی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 11,
+  "text": "نرمال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 16,
+  "text": "باز دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Access/_DoorStateForm.cshtml",
+  "line": 21,
+  "text": "قفل دائم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 20,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 21,
+  "text": "موقت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 22,
+  "text": "آزاد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 23,
+  "text": "گمشده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 24,
+  "text": "باطل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 30,
+  "text": "آزاد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 31,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 32,
+  "text": "موقت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 33,
+  "text": "گمشده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 34,
+  "text": "باطل"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 98,
+  "text": "فعال"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 111,
+  "text": "گمشده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 121,
+  "text": "گمشده"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 181,
+  "text": "آزاد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/modules/HrModules.Access/Views/Cards/Index.cshtml",
+  "line": 204,
+  "text": "آزاد"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Users/Perms.cshtml",
+  "line": 87,
+  "text": "مستقیم"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/Index.cshtml",
+  "line": 209,
+  "text": "hr.db یا C:\\HrData\\hr.db"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/Index.cshtml",
+  "line": 469,
+  "text": "نام شرکت شما"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 7,
+  "text": "برند و کنش‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 9,
+  "text": "رنگ اصلی *"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 10,
+  "text": "لینک‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 12,
+  "text": "منوی کناری"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 14,
+  "text": "پس‌زمینه منو *"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 15,
+  "text": "متن منو"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 17,
+  "text": "زمینه و کارت‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 19,
+  "text": "پس‌زمینه صفحه *"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 20,
+  "text": "کارت‌ها/فرم‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 22,
+  "text": "جدول — سطر و ستون"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 24,
+  "text": "سربرگ جدول (ستون‌ها) *"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 25,
+  "text": "سطر یک‌درمیان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 26,
+  "text": "سطر هاور"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 28,
+  "text": "خط و متن"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 30,
+  "text": "حاشیه‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 31,
+  "text": "متن اصلی *"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 32,
+  "text": "متن ثانویه"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 34,
+  "text": "وضعیت‌ها"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 36,
+  "text": "موفق"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 37,
+  "text": "هشدار"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 38,
+  "text": "خطا"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Settings/PaletteForm.cshtml",
+  "line": 39,
+  "text": "اطلاع"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/License/Index.cshtml",
+  "line": 101,
+  "text": "، "
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Home/Index.cshtml",
+  "line": 137,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Home/Index.cshtml",
+  "line": 156,
+  "text": "بحرانی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 13,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 14,
+  "text": "خروج"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 15,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 17,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 49,
+  "text": "ورود"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 50,
+  "text": "خروج"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 57,
+  "text": "مجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 58,
+  "text": "غیرمجاز"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 65,
+  "text": "پلاک‌خوان"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 66,
+  "text": "کارت"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 67,
+  "text": "دستی"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Parking.cshtml",
+  "line": 110,
+  "text": "٪"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Reports/Custom.cshtml",
+  "line": 39,
+  "text": "حاضر"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Setup/Index.cshtml",
+  "line": 158,
+  "text": "localhost یا 192.168.1.10 یا SRV-HR"
+ },
+ {
+  "file": "Platform.Web/wwwroot/dl/source/aspnet/src/Platform.Web/Views/Setup/Index.cshtml",
+  "line": 180,
+  "text": "hr.db یا C:\\HrData\\hr.db"
+ }
+]

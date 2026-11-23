@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    استودیو ترجمه (HrTranslationStudio) — فاز ۷۹ (درخواست کاربر:
+    «نرم‌افزار کمکی مثل تولید مجوز، برای تولید بسته‌ای ترجمه برای زبان‌های مختلف»)
+    ============================================================
+    برنامهٔ مجزای مترجم: واژه‌نامهٔ مرجع (فارسی←انگلیسی، خروجی خود محصول) را
+    باز می‌کند، برای زبان هدف شبکهٔ ترجمه می‌سازد و «بستهٔ زبان» خروجی می‌دهد:
+        { "meta": { "code","name","dir","version","author" }, "strings": { … } }
+    بستهٔ خروجی فقط باید در پوشهٔ App_Data/i18n نصب سامانه کپی شود — بدون
+    ری‌استارت، زبان در سوییچر 🌐 و تنظیمات ظاهر می‌شود.
+    انتشار برای ویندوز (از لینوکس هم بیلد می‌شود):
+      dotnet publish + پارامترهای تک‌فایل (پوشهٔ scripts/make-translation-studio.sh)
+    ============================================================
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <NeutralLanguage>fa-IR</NeutralLanguage>
+    <AssemblyName>HrTranslationStudio</AssemblyName>
+    <RootNamespace>HrTranslationStudio</RootNamespace>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <Product>استودیو ترجمه</Product>
+    <Company>گروه توسعه سامانه‌های سازمانی</Company>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فونت وزیر (فارسی) جاسازی‌شده؛ در Program.cs با PrivateFontCollection بارگذاری می‌شود -->
+    <EmbeddedResource Include="Fonts\Vazirmatn-Regular.ttf" />
+    <EmbeddedResource Include="Fonts\Vazirmatn-Bold.ttf" />
+    <!-- واژه‌نامهٔ مرجع (کلیدهای فارسی + معادل انگلیسی محصول) کنار exe منتشر می‌شود -->
+    <None Include="base-i18n-reference.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

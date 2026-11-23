@@ -1,0 +1,99 @@
+@{
+    // فاز ۱۳۳ (مورد ۴ ROADMAP-ADDITIONS) — گزارش تردد وسایل نقلیه
+    ViewData["Title"] = HrT.T("تردد وسایل نقلیه");
+    var events = (List<ParkingEvent>)Model;
+    var f = (DateTime)ViewBag.F;
+    var t = (DateTime)ViewBag.T;
+    var lots = (List<ParkingLot>)ViewBag.Lots;
+    var lot = (string?)ViewBag.Lot;
+    var dir = (string?)ViewBag.Dir;
+    var result = (string?)ViewBag.Result;
+    var q = (string?)ViewBag.Q;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("گزارش تردد وسایل نقلیه")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("از")</label><input name="from" type="date" value="@f.ToString("yyyy-MM-dd")" /></div>
+            <div class="fld"><label>@HrT.T("تا")</label><input name="to" type="date" value="@t.AddDays(-1).ToString("yyyy-MM-dd")" /></div>
+            <div class="fld"><label>@HrT.T("پارکینگ")</label>
+                <select name="lot">
+                    <option value="">@HrT.T("همه")</option>
+                    @foreach (var l in lots)
+                    {
+                        <option value="@l.Id" selected="@(lot == l.Id)">@l.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("جهت")</label>
+                <select name="dir">
+                    <option value="">@HrT.T("همه")</option>
+                    @foreach (var d in new[] { "ورود", "خروج" })
+                    {
+                        <option value="@d" selected="@(dir == d)">@HrT.T(d)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("نتیجه")</label>
+                <select name="result">
+                    <option value="">@HrT.T("همه")</option>
+                    @foreach (var r in new[] { "مجاز", "غیرمجاز" })
+                    {
+                        <option value="@r" selected="@(result == r)">@HrT.T(r)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("پلاک / دارنده")</label><input name="q" value="@q" /></div>
+            <button class="btn btn-dark">@HrT.T("نمایش")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("ورود:") <b>@Jalali.Num(ViewBag.In)</b></span>
+            <span class="chip">@HrT.T("خروج:") <b>@Jalali.Num(ViewBag.Out)</b></span>
+            <span class="chip">@HrT.T("غیرمجاز:") <b class="text-danger">@Jalali.Num(ViewBag.Deny)</b></span>
+            <span class="chip">@HrT.T("جمع ردیف‌ها:") <b>@Jalali.Num(ViewBag.Total)@((int)ViewBag.Total >= 500 ? HrT.T(" (سقف نمایش)") : "")</b></span>
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("زمان")</th>
+                        <th>@HrT.T("پلاک")</th>
+                        <th>@HrT.T("دارنده")</th>
+                        <th>@HrT.T("گیت")</th>
+                        <th>@HrT.T("پارکینگ")</th>
+                        <th>@HrT.T("جهت")</th>
+                        <th>@HrT.T("روش")</th>
+                        <th>@HrT.T("نتیجه")</th>
+                        <th>@HrT.T("اطمینان")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in events)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtFaLong(e.Timestamp) — @Jalali.FmtTime(e.Timestamp)</td>
+                            <td><strong>@e.PlateText</strong></td>
+                            <td>@(e.Vehicle?.Employee?.FullName ?? "—")</td>
+                            <td>@e.Gate?.Name</td>
+                            <td>@e.Gate?.Lot?.Name</td>
+                            <td>@HrT.T(e.Direction)</td>
+                            <td>@HrT.T(e.Method)</td>
+                            <td>
+                                <span class="badge @(e.Result == "مجاز" ? "badge-ok" : "badge-err")">
+                                    @(e.Result == "مجاز" ? HrT.T("مجاز") : HrT.T("غیرمجاز") + (string.IsNullOrEmpty(e.Reason) ? "" : " — " + e.Reason))
+                                </span>
+                            </td>
+                            <td class="num">@(e.Confidence is null ? "—" : Jalali.Num(e.Confidence.Value) + "٪")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!events.Any())
+        {
+            <p class="hint">@HrT.T("در این بازه عبوری ثبت نشده")</p>
+        }
+    </div>
+</div>

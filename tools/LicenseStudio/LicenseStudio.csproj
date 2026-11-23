@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    استودیو مجوز نصب (LicenseStudio) — برنامهٔ مجزای تولیدکنندهٔ مجوز
+    ابزار عمومی است (وابسته به محصول خاص نیست — بدون پیشوند HR از نسخهٔ ۱.۵.۲)
+    فقط نزد تولیدکنندهٔ محصول اجرا می‌شود؛ کلید خصوصی (private.pem)
+    همراه برنامه نیست و باید جداگانه نگهداری شود (هرگز با مشتری منتشر نشود).
+    انتشار برای ویندوز (از لینوکس هم بیلد می‌شود):
+      dotnet publish + پارامترهای تک‌فایل (پوشهٔ scripts/make-studio.sh)
+    ============================================================
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- بیلد از روی لینوکس (سندباکس) هم ممکن شود -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <NeutralLanguage>fa-IR</NeutralLanguage>
+    <AssemblyName>LicenseStudio</AssemblyName>
+    <RootNamespace>LicenseStudio</RootNamespace>
+    <Version>1.7.1</Version>
+    <FileVersion>1.7.1</FileVersion>
+    <InformationalVersion>1.7.1</InformationalVersion>
+    <Product>استودیو مجوز نصب</Product>
+    <Company>گروه توسعه سامانه‌های سازمانی</Company>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فاز ۵۰ — فونت وزیر (فارسی) جاسازی‌شده؛ در Program.cs با PrivateFontCollection بارگذاری می‌شود -->
+    <EmbeddedResource Include="Fonts\Vazirmatn-Regular.ttf" />
+    <EmbeddedResource Include="Fonts\Vazirmatn-Bold.ttf" />
+  </ItemGroup>
+</Project>

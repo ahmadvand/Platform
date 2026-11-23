@@ -1,0 +1,94 @@
+@{
+    // فاز ۷۷ — پنل ادمین زبان‌ها: فهرست زبان‌ها + درون‌ریزی بستهٔ ترجمه + خروجی + فعال/غیرفعال/حذف
+    ViewData["Title"] = HrT.T("زبان‌ها و ترجمه");
+    var list = (List<Platform.Web.Services.HrLangStore.HrLangRow>)ViewBag.Langs;
+    var counts = (Dictionary<string, int>)ViewBag.Counts;
+    var canManage = (bool)ViewBag.CanManage;
+    string T(string fa) => HrT.T(fa);
+}
+<style>
+    .langs-tbl td { vertical-align: middle; }
+    .lang-flag { font-size: 16px; }
+    .lang-code { direction: ltr; font-family: var(--mono, monospace); font-size: 10.5px; color: var(--ink-3); }
+</style>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+    <h1 style="font-size:18px;margin:0">🌐 @T("زبان‌ها و ترجمه")</h1>
+    @if (canManage)
+    {
+        <a class="btn btn-primary" href="/Langs/ImportForm" data-modal="/Langs/ImportForm"
+           data-modal-title="@T("درون‌ریزی بستهٔ ترجمه")">📥 @T("درون‌ریزی بستهٔ ترجمه")</a>
+    }
+</div>
+
+<div class="card">
+    <div class="card-h">
+        <h2>@T("زبان‌های سامانه") (@HrT.Digits(list.Count.ToString()))</h2>
+    </div>
+    <div class="card-b">
+        <div class="table-wrap">
+            <table class="tbl langs-tbl">
+                <thead>
+                    <tr>
+                        <th>@T("زبان")</th>
+                        <th>@T("کد")</th>
+                        <th>@T("جهت")</th>
+                        <th>@T("تعداد ترجمه")</th>
+                        <th>@T("وضعیت")</th>
+                        <th>@T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var l in list)
+                    {
+                        counts.TryGetValue(l.Code, out var cnt);
+                        <tr>
+                            <td>
+                                <span class="lang-flag">@Html.Raw(HrFlags.Svg(l.Code, 16))</span>
+                                <strong>@l.Title</strong>
+                                @if (l.Code == "fa")
+                                {
+                                    <span class="badge badge-info" style="font-size:9.5px">@T("مبدأ")</span>
+                                }
+                                @if (l.IsDefault)
+                                {
+                                    <span class="badge badge-ok" style="font-size:9.5px">@T("پیش‌فرض")</span>
+                                }
+                            </td>
+                            <td><span class="lang-code">@l.Code</span></td>
+                            <td>@(l.Dir == "rtl" ? T("راست‌به‌چپ") : T("چپ‌به‌راست"))</td>
+                            <td class="num">@HrT.Digits(cnt.ToString())</td>
+                            <td>
+                                <span class="badge @(l.IsActive || l.Code == "fa" ? "badge-ok" : "badge-mute")">
+                                    @(l.IsActive || l.Code == "fa" ? T("فعال") : T("پنهان"))
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-row">
+                                    <a class="btn btn-sm" href="/Langs/Export?code=@l.Code" title="@T("قالب JSON — همان ورودی TranslationStudio")">📤 @T("خروجی بسته")</a>
+                                    @if (canManage && l.Code != "fa")
+                                    {
+                                        <form method="post" action="/Langs/Toggle" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@l.Id" />
+                                            <button class="btn btn-sm">@(l.IsActive ? T("پنهان") : T("فعال‌سازی"))</button>
+                                        </form>
+                                        <form method="post" action="/Langs/Delete" class="inline-form"
+                                              data-confirm="@T("همهٔ ترجمه‌های این زبان حذف شود؟ این عمل بازگشت‌پذیر نیست.")" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@l.Id" />
+                                            <button class="btn btn-sm btn-err">🗑️ @T("حذف")</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p style="color:var(--ink-3);font-size:11px;margin-top:12px;line-height:2">
+            💡 @T("زبان جدید = بستهٔ ترجمه را با برنامهٔ TranslationStudio بسازید (یا از زبان دیگری خروجی بگیرید و ویرایش کنید)، سپس با «درون‌ریزی بستهٔ ترجمه» همین‌جا اضافه کنید — بدون کپی دستی فایل و بدون ری‌استارت. ترجمه‌های کلیدهای جاافتاده به فارسی (مبدأ) برمی‌گردند.")
+        </p>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    ============================================================
+    Platform.Modules.Parking (فاز ۵۷) — ماژول پارکینگ (پلاک‌خوان) به‌صورت پروژهٔ جدا
+    ============
+    اولین ماژول سیستمی با «تفکیک فیزیکی کامل»: کنترلرها (Parking +
+    پل دوربین‌های ANPR)، سرویس موتور مجوز پارکینگ و همهٔ ویوها در همین
+    اسمبلی کامپایل می‌شوند.
+
+    بستهٔ مشتری بدون این ماژول:
+      dotnet publish -p:HrModuleParking=false
+    در این حالت DLL ماژول از خروجی حذف می‌شود (نه فقط خاموش — «نصب نیست»).
+
+    متعهد به: Platform.Core (پلتفرم مشترک) — وابستگی یک‌طرفه.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+    <!-- پشتیبانی صریح Razor برای MVC — بدون این، ویوها در اسمبلی کامپایل نمی‌شوند -->
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فاز ۶۱ — لایهٔ دیتای ماژول در پروژهٔ جدا (HrModules.X.Data) کامپایل می‌شود؛
+         این پروژه فقط کنترلر/ویو/سرویس است تا نوع‌ها دوبار تعریف نشوند (CS0433) -->
+    <Compile Remove="Data\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="Data\Platform.Modules.Parking.Data.csproj" />
+  </ItemGroup>
+
+</Project>

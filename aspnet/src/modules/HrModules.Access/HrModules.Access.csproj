@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    ============================================================
+    HrModules.Access (فاز ۵۸) — ماژول کنترل تردد، پروژهٔ جدا
+    ============
+    کنترلرها (مناطق و گیت‌ها، کارت‌های شناسایی)، موتور ارزیابی عبور
+    (AccessControl) و همهٔ ویوها در همین اسمبلی کامپایل می‌شوند.
+
+    بستهٔ مشتری بدون این ماژول:
+      dotnet publish -p:HrModuleAccess=false
+    در این حالت DLL ماژول از خروجی حذف می‌شود (نه فقط خاموش — «نصب نیست»).
+
+    متعهد به: Platform.Core (پلتفرم مشترک) — وابستگی یک‌طرفه.
+    AccessControl از AttEngine/DeviceOps پلتفرم مشترک استفاده می‌کند.
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+    <!-- پشتیبانی صریح Razor برای MVC — بدون این، ویوها در اسمبلی کامپایل نمی‌شوند -->
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فاز ۶۱ — لایهٔ دیتای ماژول در پروژهٔ جدا (HrModules.X.Data) کامپایل می‌شود؛
+         این پروژه فقط کنترلر/ویو/سرویس است تا نوع‌ها دوبار تعریف نشوند (CS0433) -->
+    <Compile Remove="Data\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="Data\HrModules.Access.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- کتابخانهٔ کلاس usingهای ضمنی Web SDK را ندارد (RCL)؛ نوع‌هایی که
+         AccessController به آن‌ها عادت داشت سراسری تعریف می‌شوند -->
+    <Using Include="Microsoft.AspNetCore.Hosting" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+</Project>

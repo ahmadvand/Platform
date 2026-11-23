@@ -1,0 +1,10 @@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using Platform.Web.Data
+@using Platform.Contracts
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@inject Platform.Web.Data.AppDbContext Db
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

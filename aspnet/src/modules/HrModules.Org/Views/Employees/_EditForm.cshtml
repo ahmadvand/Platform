@@ -1,0 +1,181 @@
+@{
+    var e = (Employee)Model;
+    var depts = (List<Department>)ViewBag.Depts;
+    var positions = (List<Position>)ViewBag.Positions;
+    var shifts = (IEnumerable<dynamic>)(ViewBag.Shifts ?? System.Linq.Enumerable.Empty<object>()); // فاز ۶۷
+    var devices = (List<string>)ViewBag.Devices;
+    var canLink = (bool)(ViewBag.CanLink ?? false);
+    var linkedUser = ViewBag.LinkedUser as User;
+    var freeUsers = ViewBag.FreeUsers as List<User> ?? new List<User>();
+}
+<div data-modal-title="@(HrT.F("ویرایش پرسنل — {0}", e.FullName))" hidden></div>
+    <form method="post" action="/Employees/Edit" data-ajax data-refresh>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@e.Id" />
+        <div class="form-grid">
+            <div class="fld"><label>@HrT.T("کد پرسنلی *")</label>
+                <input name="personnelCode" required value="@e.PersonnelCode" />
+                <div class="hint">@HrT.T("این کد همان «پین» ثبت‌شده روی دستگاه‌های تردد است — با احتیاط تغییر دهید")</div>
+            </div>
+            <div class="fld"><label>@HrT.T("نام *")</label><input name="firstName" required value="@e.FirstName" /></div>
+            <div class="fld"><label>@HrT.T("نام خانوادگی *")</label><input name="lastName" required value="@e.LastName" /></div>
+            <div class="fld"><label>@HrT.T("کد ملی *")</label><input name="nationalId" required maxlength="20" value="@e.NationalId" /></div>
+            <div class="fld"><label>@HrT.T("تلفن همراه")</label><input name="phone" value="@e.Phone" placeholder="0912..." /></div>
+            <div class="fld"><label>@HrT.T("ایمیل")</label><input name="email" type="email" value="@e.Email" /></div>
+            <div class="fld"><label>@HrT.T("نوع اشتغال")</label>
+                <select name="employmentType">
+                    @foreach (var t in new[] { "رسمی", "قراردادی", "پیمانکاری", "اقماری", "کارآموز" })
+                    {
+                        <option value="@t" selected="@(e.EmploymentType == t)">@HrT.T(t)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("وضعیت")</label>
+                <select name="status">
+                    @foreach (var t in new[] { "فعال", "غیرفعال", "تسویه‌شده" })
+                    {
+                        <option value="@t" selected="@(e.Status == t)">@HrT.T(t)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("واحد سازمانی")</label>
+                <select name="departmentId"><option value="">@HrT.T("— بدون واحد —")</option>
+                    @foreach (var d in depts)
+                    {
+                        <option value="@d.Id" selected="@(e.DepartmentId == d.Id)">@d.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("پست سازمانی")</label>
+                <select name="positionId"><option value="">@HrT.T("— بدون پست —")</option>
+                    @foreach (var p in positions)
+                    {
+                        <option value="@p.Id" selected="@(e.PositionId == p.Id)">@p.Title (@p.Department?.Name)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.T("شیفت")</label>
+                <select name="shiftId"><option value="">@HrT.T("— بدون شیفت —")</option>
+                    @foreach (var s in shifts)
+                    {
+                        <option value="@s.Id" selected="@(e.ShiftId == s.Id)">@s.Name (@s.StartTime–@s.EndTime)</option>
+                    }
+                </select>
+            </div>
+            <div class="fld"><label>@HrT.F("حقوق پایه ({0})", Money.CurTitle())</label><input name="baseSalary" type="number" step="1000" value="@(e.BaseSalary.ToString("0"))" /></div>
+            <div class="fld"><label>@HrT.T("وضعیت تأهل")</label>
+                <select name="maritalStatus">
+                    <option value="مجرد" selected="@(e.MaritalStatus == "مجرد")">@HrT.T("مجرد")</option>
+                    <option value="متأهل" selected="@(e.MaritalStatus == "متأهل")">@HrT.T("متأهل")</option>
+                </select>
+                <div class="hint">@HrT.T("ورودی فرمول حق تأهل/حق اولاد در حقوق")</div>
+            </div>
+            <div class="fld"><label>@HrT.T("تعداد فرزندان")</label><input name="childCount" type="number" min="0" max="12" value="@e.ChildCount" /></div>
+            <div class="fld"><label>@HrT.T("تاریخ استخدام")</label><input name="hireDate" type="date" value="@e.HireDate.ToString("yyyy-MM-dd")" /></div>
+            <div class="fld"><label>@HrT.T("پایان همکاری (اختیاری)")</label>
+                @if (e.EndDate is null)
+                {
+                    <input name="endDate" type="date" />
+                }
+                else
+                {
+                    <input name="endDate" type="date" value="@e.EndDate.Value.ToString("yyyy-MM-dd")" />
+                }
+            </div>
+            <div class="fld"><label>@HrT.T("سهمیه مرخصی سالانه (روز)")</label><input name="annualLeaveEnt" type="number" step="0.5" value="@(e.AnnualLeaveEnt.ToString("0.#"))" /></div>
+            <div class="fld"><label>@HrT.T("سهمیه مرخصی استعلاجی (روز)")</label><input name="sickLeaveEnt" type="number" step="0.5" value="@(e.SickLeaveEnt.ToString("0.#"))" /></div>
+            <div class="fld fld-full">
+                <label>@HrT.T("عکس پرسنل")</label>
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                    <img id="empPhotoPrev" src="@(e.PhotoPath ?? "")" alt="" onerror="this.style.display='none'"
+                         style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:var(--card);@(e.PhotoPath is null ? "display:none" : "")" />
+                    <div style="flex:1;min-width:220px">
+                        <input type="file" name="photoFile" accept=".png,.jpg,.jpeg,.webp"
+                               onchange="var p=document.getElementById('empPhotoPrev');if(this.files&&this.files[0]){p.src=URL.createObjectURL(this.files[0]);p.style.display='block'}" />
+                        <div class="hint">@HrT.T("PNG / JPG / WEBP — حداکثر ۲ مگابایت؛ در فهرست پرسنل، نمای زنده حراست و پرتال نمایش داده می‌شود")</div>
+                    </div>
+                    @if (e.PhotoPath is not null)
+                    {
+                        <label style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--err)">
+                            <input type="checkbox" name="removePhoto" value="true" /> @HrT.T("حذف عکس فعلی")
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+            <div class="hint" style="margin-bottom:8px">
+                @HrT.T("دستگاه‌های متصل به این پرسنل:")
+                @if (devices.Count == 0)
+                {
+                    <span>—</span>
+                }
+                else
+                {
+                    foreach (var d in devices)
+                    {
+                        <span class="badge badge-info">@d</span>
+                    }
+                }
+            </div>
+            <button class="btn btn-primary">@HrT.T("💾 ذخیره تغییرات")</button>
+            <button type="button" class="btn" data-close-modal data-goto="/Employees">@HrT.T("انصراف")</button>
+        </div>
+    </form>
+
+    @* حساب کاربری متصل — فرم مستقل (هم‌سطح فرم ویرایش، نه تودرتو) از همان اکشن /Users/LinkEmployee *@
+    @if (canLink)
+    {
+        <div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:12px">
+            <div style="font-weight:700;font-size:12.5px;margin-bottom:8px">@HrT.T("🔗 حساب کاربری متصل")</div>
+            @if (linkedUser is not null)
+            {
+                <div class="hint" style="margin-bottom:10px;line-height:1.9">
+                    @HrT.T("این پرسنل به کاربر") <span class="badge badge-info">@linkedUser.Username</span>
+                    @if (linkedUser.Roles.Any(ur => ur.Role?.Name == "employee"))
+                    {
+                        <span class="badge badge-ok">@HrT.T("پرسنل")</span>
+                    }
+                    @HrT.T("متصل است — ورود این شخص با کد پرسنلی مسدود است و باید با نام کاربری و رمز وارد شود.")
+                </div>
+                <form method="post" action="/Users/LinkEmployee" class="inline-form"
+                      data-confirm="@(HrT.F("اتصال «{0}» از پرسنل «{1}» قطع شود؟", linkedUser.Username, e.FullName))" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="userId" value="@linkedUser.Id" />
+                    <input type="hidden" name="employeeId" value="" />
+                    <button class="btn btn-sm btn-err">@HrT.T("قطع اتصال حساب")</button>
+                </form>
+            }
+            else if (freeUsers.Count > 0)
+            {
+                <form method="post" action="/Users/LinkEmployee" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="employeeId" value="@e.Id" />
+                    <div class="fld" style="margin-bottom:10px">
+                        <label>@HrT.T("اتصال به کاربر")</label>
+                        <select name="userId" required>
+                            <option value="">@HrT.T("— انتخاب کاربر بدون اتصال —")</option>
+                            @foreach (var u in freeUsers)
+                            {
+                                <option value="@u.Id">@u.Username — @u.FullName</option>
+                            }
+                        </select>
+                        <div class="hint">@HrT.F("{0} کاربر فعال بدون اتصال — برای ساخت حساب جدید از صفحه «کاربران و نقش‌ها» استفاده کنید", Jalali.Num(freeUsers.Count))</div>
+                    </div>
+                    <label style="display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:10px">
+                        <input type="checkbox" name="addEmployeeRole" value="true" checked />
+                        @HrT.T("افزودن نقش «پرسنل» برای دسترسی به پرتال من")
+                    </label>
+                    <button class="btn btn-sm btn-primary">@HrT.T("🔗 اتصال حساب کاربری")</button>
+                </form>
+            }
+            else
+            {
+                <div class="hint">@HrT.T("این پرسنل حساب کاربری ندارد و همه کاربران فعال به پرسنل دیگر متصل‌اند — حساب جدید را از صفحه «کاربران و نقش‌ها» بسازید.")</div>
+            }
+        </div>
+    }
+<script>
+    // بدون اسکریپت خاص — اعتبارسنجی native + ثبت AJAX با site.js
+</script>

@@ -1,0 +1,29 @@
+@{
+    // فاز ۱۱۴ — انتخاب پرسنل با جستجوی زندهٔ سرور (emp-picker) — مقیاس ده‌ها هزار نفر
+}
+<div data-modal-title="@HrT.T("درخواست مرخصی جدید")" hidden></div>
+<form method="post" action="/Requests/CreateLeave" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("پرسنل *")</label>
+            <div class="emp-picker" data-name="employeeId" data-min="1"
+                 data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type">
+                @foreach (var t in new[] { "استحقاقی", "استعلاجی", "بدون‌حقوق", "ساعتی", "زایمان" })
+                {
+                    <option value="@t">@HrT.T(t)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("از تاریخ *")</label><input name="fromDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" /></div>
+        <div class="fld"><label>@HrT.T("تا تاریخ *")</label><input name="toDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" /></div>
+        <div class="fld"><label>@HrT.T("تعداد روز")</label><input name="days" type="number" step="0.5" value="1" /></div>
+        <div class="fld fld-full"><label>@HrT.T("دلیل")</label><input name="reason" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت درخواست")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

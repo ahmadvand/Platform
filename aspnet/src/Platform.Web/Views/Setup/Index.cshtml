@@ -1,0 +1,613 @@
+@{
+    ViewData["Title"] = HrT.T("راه‌اندازی اولیه سامانه");
+    // فاز ۴۸ — حالت تعمیر + پیش‌پرکردن از پیکربندی مؤثر جاری
+    var isSqlite = string.Equals(ViewBag.CurProvider as string, "Sqlite", StringComparison.OrdinalIgnoreCase);
+    var repair = ViewBag.Repair == true;
+    var winAuth = ViewBag.CurWindowsAuth == true;
+    var startupError = ViewBag.StartupError as string;
+    var seedDemo = ViewBag.CurSeedDemo == null || (bool)ViewBag.CurSeedDemo;
+    // فاز ۶۲/۸۳ب — گام مجوز نصب: اجباری — سامانه فقط با مجوز معتبر راه‌اندازی می‌شود
+    var machineId = ViewBag.MachineId as string ?? "—";
+    var hasLicenseFile = ViewBag.HasLicenseFile == true;
+    // فاز ۷۶ — انتخاب زبان رابط کاربری در نصب اولیه
+    var curLang = (ViewBag.CurUiLanguage as string) ?? "fa";
+    // فاز ۸۱ — خوداتکای مجوز: وضعیت جفت‌کلید امضای این نصب
+    var hasSigningKey = ViewBag.HasSigningKey == true;
+    var signingFpr = ViewBag.SigningFpr as string;
+    // ترجمهٔ محلی — دیکشنری نبود = خودِ متن فارسی
+    string T(string fa) => HrT.T(fa);
+}
+<style>
+    /* ویزارد راه‌اندازی اولیه (فاز ۴۵) — استایل مستقل این صفحه */
+    .setup-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+        background: radial-gradient(1200px 600px at 85% -10%, rgba(99,102,241,.14), transparent 60%),
+                    radial-gradient(900px 500px at -10% 110%, rgba(20,184,166,.12), transparent 55%),
+                    var(--bg, #eef1f8); }
+    .setup-card { width: 100%; max-width: 760px; background: var(--surface, #fff); border: 1px solid var(--line, #e3e6f0);
+        border-radius: 20px; box-shadow: 0 24px 70px rgba(23,32,90,.14); overflow: hidden; }
+    .setup-head { padding: 26px 30px 20px; border-bottom: 1px solid var(--line, #e3e6f0); display: flex; gap: 14px; align-items: center; }
+    .setup-logo { width: 52px; height: 52px; border-radius: 15px; background: var(--grad-btn, linear-gradient(135deg,#6366f1,#4f46e5));
+        display: flex; align-items: center; justify-content: center; color: #fff; font-size: 25px; flex: none; }
+    .setup-head h1 { font-size: 18px; margin: 0 0 3px; }
+    .setup-head p { margin: 0; color: var(--ink-2, #667); font-size: 12.5px; line-height: 1.9; }
+    .setup-body { padding: 24px 30px 30px; }
+    .prov-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .prov-card { border: 1.5px solid var(--line, #e3e6f0); border-radius: 14px; padding: 14px 16px; cursor: pointer;
+        display: flex; gap: 11px; align-items: flex-start; transition: all .15s; background: var(--surface-2, #fafbff); }
+    .prov-card:hover { border-color: var(--accent, #6366f1); }
+    .prov-card.on { border-color: var(--accent, #6366f1); background: var(--accent-soft, rgba(99,102,241,.07));
+        box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    .prov-card input { margin-top: 4px; accent-color: var(--accent, #6366f1); }
+    .prov-card b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+    .prov-card span { font-size: 11.5px; color: var(--ink-2, #667); line-height: 1.8; display: block; }
+    .setup-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+    .setup-fields .fld label { font-size: 12px; color: var(--ink-2, #667); display: block; margin-bottom: 5px; }
+    .setup-fields .fld-full { grid-column: 1 / -1; }
+    .setup-fields input[type=text], .setup-fields input[type=password], .setup-fields input[type=number] {
+        width: 100%; border: 1px solid var(--line, #d8dcea); border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 13px;
+        background: var(--surface, #fff); color: var(--ink, #222); }
+    .setup-fields input:focus { outline: none; border-color: var(--accent, #6366f1); box-shadow: 0 0 0 3px rgba(99,102,241,.14); }
+    .auth-tabs { display: flex; gap: 8px; }
+    .auth-tab { flex: 1; text-align: center; border: 1.5px solid var(--line, #d8dcea); border-radius: 10px; padding: 8px 6px;
+        font-size: 12.5px; cursor: pointer; background: var(--surface, #fff); }
+    .auth-tab.on { border-color: var(--accent, #6366f1); color: var(--accent-deep, #4338ca); font-weight: 700; background: var(--accent-soft, rgba(99,102,241,.07)); }
+    .setup-check { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--ink-2, #556); }
+    /* فاز ۸۳ب — قاعده فقط برای چک‌باکس */
+    .setup-check input[type="checkbox"] { accent-color: var(--accent, #6366f1); width: 15px; height: 15px; }
+    .setup-actions { display: flex; gap: 10px; margin-top: 22px; align-items: center; flex-wrap: wrap; }
+    .setup-result { margin-top: 14px; border-radius: 12px; padding: 11px 14px; font-size: 12.5px; line-height: 1.9; display: none;
+        border: 1px solid; max-width: 100%; word-break: break-word; }
+    .setup-result.ok { display: block; background: rgba(5,150,105,.08); border-color: rgba(5,150,105,.3); color: #065f46; }
+    .setup-result.err { display: block; background: rgba(225,29,72,.07); border-color: rgba(225,29,72,.3); color: #9f1239; }
+    .setup-note { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line, #e3e6f0); color: var(--ink-3, #889); font-size: 11.5px; line-height: 2; }
+    /* فاز ۶۲ — گام مجوز نصب */
+    .lic-box { margin-top: 18px; border: 1px solid var(--line, #e3e6f0); border-radius: 14px; padding: 14px 16px; background: var(--surface-2, #fafbff); }
+    .lic-title { font-size: 13px; font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 7px; }
+    .lic-machine { display: flex; gap: 8px; align-items: center; margin: 10px 0; }
+    .lic-machine code { flex: 1; direction: ltr; text-align: left; font-family: monospace; font-size: 12.5px; background: var(--surface, #fff);
+        border: 1px dashed var(--line, #d8dcea); border-radius: 10px; padding: 9px 12px; user-select: all; }
+    .lic-machine button { flex: none; }
+    .lic-textarea { width: 100%; min-height: 84px; direction: ltr; text-align: left; font-family: monospace; font-size: 11.5px; line-height: 1.7;
+        border: 1px solid var(--line, #d8dcea); border-radius: 10px; padding: 9px 12px; font: inherit; background: var(--surface, #fff); resize: vertical; }
+    .lic-textarea:focus { outline: none; border-color: var(--accent, #6366f1); box-shadow: 0 0 0 3px rgba(99,102,241,.14); }
+    .lic-hint { font-size: 11px; color: var(--ink-3, #889); line-height: 2; margin-top: 6px; }
+    /* فاز ۸۳ — نمایش درست «انتخاب فایل مجوز» (دکمهٔ استایل‌دار به‌جای کنترل خام مرورگر) */
+    .lic-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .lic-file { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+    .lic-file-name { font-size: 11px; color: var(--ink-2, #556); direction: ltr; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-sm { font-size: 11.5px; padding: 6px 12px; border-radius: 9px; }
+    /* فاز ۷۶ — گام انتخاب زبان رابط کاربری */
+    .lang-flag { font-size: 20px; line-height: 1; flex: none; margin-top: 2px; }
+    /* فاز ۸۱/۸۲ — کادر ساخت جفت‌کلید امضای مجوز در ویزارد (صدور مجوز فقط با LicenseStudio) */
+    .si-box { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line, #e3e6f0); }
+    .si-title { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
+    .si-btns { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+    .si-status { font-size: 11.5px; color: var(--ink-2, #667); line-height: 1.9; word-break: break-word; }
+    .si-status.ok { color: #065f46; }
+    .si-status.err { color: #9f1239; }
+    .si-keybadge { display: inline-block; font-size: 10.5px; border-radius: 7px; padding: 2px 8px; margin-inline-start: 6px; }
+    .si-keybadge.on { background: rgba(5,150,105,.1); color: #065f46; }
+    .si-keybadge.off { background: rgba(100,116,139,.12); color: #64748b; }
+    /* فاز ۹۰ — ویزارد دومرحله‌ای: عمودی نشود (درخواست کاربر) */
+    .wiz-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .wiz-tab { flex: 1; display: flex; gap: 9px; align-items: center; justify-content: flex-start; text-align: start;
+        border: 1.5px solid var(--line, #d8dcea); border-radius: 12px; padding: 11px 14px; cursor: pointer;
+        font-size: 12.5px; font-weight: 700; color: var(--ink-2, #667); background: var(--surface, #fff); transition: all .15s; }
+    .wiz-tab .wiz-num { width: 24px; height: 24px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+        font-size: 11.5px; background: var(--line-soft, #eef0f7); color: var(--ink-2, #667); font-weight: 700; }
+    .wiz-tab small { display: block; font-weight: 400; font-size: 10.5px; color: var(--ink-3, #889); margin-top: 1px; }
+    .wiz-tab.on { border-color: var(--accent, #6366f1); color: var(--accent-deep, #4338ca); background: var(--accent-soft, rgba(99,102,241,.07)); box-shadow: 0 0 0 3px rgba(99,102,241,.10); }
+    .wiz-tab.on .wiz-num { background: var(--accent, #6366f1); color: #fff; }
+    .wiz-tab.done .wiz-num { background: #059669; color: #fff; }
+    /* فاز ۹۰ — کادر ورود کلید خصوصی موجود */
+    .si-import { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line, #e3e6f0); }
+    /* فاز ۹۱ — همهٔ المان‌های ویزارد با فونت «وزیر» (درخواست کاربر):
+       button/input/select/textarea/code به‌طور پیش‌فرض font-family را از والد به ارث نمی‌برند،
+       پس روی «تمام» عناصر این صفحه صریحاً وزیر اعمال می‌شود — سربرگ، برچسب، دکمه‌های گام،
+       فیلدها، کادر مجوز، textarea کلید خصوصی و دراپ‌داون‌ها. */
+    .setup-wrap, .setup-wrap h1, .setup-wrap p, .setup-wrap label, .setup-wrap span, .setup-wrap b, .setup-wrap small, .setup-wrap div {
+        font-family: Vazirmatn, Tahoma, sans-serif; }
+    .setup-wrap button, .setup-wrap input, .setup-wrap select, .setup-wrap textarea, .setup-wrap optgroup, .setup-wrap option {
+        font-family: Vazirmatn, Tahoma, sans-serif !important; }
+    .setup-wrap .lic-textarea, .setup-wrap .lic-machine code { font-family: Vazirmatn, Tahoma, sans-serif !important; }
+    @@media (max-width: 640px) { .prov-cards, .setup-fields { grid-template-columns: 1fr; } .setup-head { padding: 20px; } .setup-body { padding: 20px; } .wiz-tabs { flex-direction: column; } }
+</style>
+<div class="setup-wrap">
+    <div class="setup-card">
+        <div class="setup-head">
+            <div class="setup-logo">◈</div>
+            <div>
+                <h1>@T("راه‌اندازی اولیه سامانه")</h1>
+                <p>@T("برای شروع، اتصال به بانک اطلاعاتی را پیکربندی و فایل مجوز را وارد کنید — سامانه فقط با مجوز معتبر راه‌اندازی می‌شود.")</p>
+            </div>
+        </div>
+        <div class="setup-body">
+            @if (repair)
+            {
+                <div style="border:1px solid rgba(225,29,72,.35);background:rgba(225,29,72,.07);color:#9f1239;border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:12.5px;line-height:2">
+                    <b>@T("⚠ اتصال بانک داده در راه‌اندازی اولیه ناموفق بود")</b><br />
+                    @startupError<br />
+                    <span style="color:#6b7280">@T("پارامترهای زیر (برگرفته از تنظیمات فعلی) را اصلاح کنید و «ذخیره و راه‌اندازی» را بزنید؛ سامانه بدون ری‌استارت اصلاح و به حالت عادی برمی‌گردد.")</span>
+                </div>
+            }
+            <form id="setupForm">
+                @Html.AntiForgeryToken()
+
+                @* ---------- فاز ۹۰ ویزارد دومرحله‌ای ← فاز ۹۶ ویزارد «سه‌تبی» (درخواست کاربر:
+                     ۱) انتخاب زبان ۲) اطلاعات دیتابیس ۳) اطلاعات مجوز — هیچ چیزی حذف نشده،
+                     فقط جابجایی؛ ارتفاع هر پنل و کل صفحه کمتر می‌شود) ---------- *@
+                <div class="wiz-tabs" role="tablist">
+                    <button type="button" class="wiz-tab on" id="wizTab1" role="tab" aria-selected="true">
+                        <span class="wiz-num">@HrT.Digits("1")</span>
+                        <span>🌐 @T("انتخاب زبان")<small>@T("زبان رابط کاربری نصب")</small></span>
+                    </button>
+                    <button type="button" class="wiz-tab" id="wizTab2" role="tab" aria-selected="false">
+                        <span class="wiz-num">@HrT.Digits("2")</span>
+                        <span>🗄 @T("اطلاعات دیتابیس")<small>@T("نوع بانک و اتصال")</small></span>
+                    </button>
+                    <button type="button" class="wiz-tab" id="wizTab3" role="tab" aria-selected="false">
+                        <span class="wiz-num">@HrT.Digits("3")</span>
+                        <span>🔐 @T("اطلاعات مجوز")<small>@T("کلید امضا و فایل مجوز")</small></span>
+                    </button>
+                </div>
+
+                @* ==================== گام ۱ — انتخاب زبان ==================== *@
+                <div class="wiz-pane" id="wizPane1">
+                    @* ---------- فاز ۷۶ — انتخاب زبان رابط کاربری: همین انتخاب به‌عنوان زبان پیش‌فرض نصب ذخیره می‌شود.
+                       تغییر فوری: کوکی hr_lang ست و صفحه بازرندر می‌شود تا خود ویزارد هم به زبان انتخابی دیده شود. ---------- *@
+                    <div class="lic-box" style="margin-top:0;margin-bottom:18px" id="langBox">
+                    <div class="lic-title">🌐 @T("زبان رابط کاربری")</div>
+                    <div class="prov-cards" style="margin-bottom:8px">
+                        <label class="prov-card @(curLang != "en" ? "on" : "")" id="langFa">
+                            <input type="radio" name="uiLanguage" value="fa" checked="@(curLang != "en")" />
+                            <span class="lang-flag">@Html.Raw(HrFlags.Svg("fa", 22))</span>
+                            <span style="flex:1">
+                                <b>@HrT.T("فارسی")</b>
+                                <span>@T("زبان پیش‌فرض سامانه — چیدمان راست‌به‌چپ و تاریخ شمسی")</span>
+                            </span>
+                        </label>
+                        <label class="prov-card @(curLang == "en" ? "on" : "")" id="langEn">
+                            <input type="radio" name="uiLanguage" value="en" checked="@(curLang == "en")" />
+                            <span class="lang-flag">@Html.Raw(HrFlags.Svg("en", 22))</span>
+                            <span style="flex:1">
+                                <b>English</b>
+                                <span>@T("چیدمان چپ‌به‌راست با تاریخ میلادی — پوستهٔ ترجمه‌پذیر")</span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="lic-hint" style="margin:0">💡 @T("انتخاب زبان رابط کاربری — همین انتخاب به‌عنوان زبان پیش‌فرض این نصب ذخیره می‌شود.") @T("زبان رابط کاربری پس از نصب هم از نوار بالایی قابل تغییر است.")</div>
+                </div>
+
+                    @* ---------- اقدامات گام ۱ (زبان): ادامه به بانک داده ---------- *@
+                    <div class="setup-actions">
+                        <button type="button" class="btn btn-primary" id="btnToStep2">@T("ادامه به بانک داده ←")</button>
+                    </div>
+                </div>@* /wizPane1 (زبان) *@
+
+                @* ==================== گام ۲ — اطلاعات دیتابیس ==================== *@
+                <div class="wiz-pane" id="wizPane2" style="display:none">
+
+                <div class="prov-cards">
+                    <label class="prov-card @(isSqlite ? "" : "on")" id="provMssql">
+                        <input type="radio" name="provider" value="sqlserver" checked="@(!isSqlite)" />
+                        <span style="flex:1">
+                            <b>SQL Server</b>
+                            <span>@T("مناسب نصب سازمانی روی ویندوز سرور — چندکاربره و پرظرفیت")</span>
+                        </span>
+                    </label>
+                    <label class="prov-card @(isSqlite ? "on" : "")" id="provSqlite">
+                        <input type="radio" name="provider" value="sqlite" checked="@(isSqlite)" />
+                        <span style="flex:1">
+                            <b>SQLite</b>
+                            <span>@T("بدون نصب و پیکربندی — مناسب تست، نصب کوچک و تک‌کاربره")</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div id="mssqlFields" style="@(isSqlite ? "display:none" : "")">
+                    <div class="setup-fields">
+                        <div class="fld"><label>@T("آدرس سرور *")</label><input type="text" name="server" value="@ViewBag.CurServer" dir="ltr" placeholder="localhost یا 192.168.1.10 یا SRV-HR" /></div>
+                        @* فاز ۹۰ — پورت پیش‌فرض SQL Server (۱۴۳۳) در باکس (درخواست کاربر) *@
+                        <div class="fld"><label>@T("پورت")</label><input type="text" name="port" value="@(ViewBag.CurPort ?? "1433")" dir="ltr" placeholder="1433" /></div>
+                        <div class="fld"><label>@T("نام بانک اطلاعاتی *")</label><input type="text" name="database" value="@ViewBag.CurDb" dir="ltr" /></div>
+                        <div class="fld">
+                            <label>@T("نوع احراز هویت")</label>
+                            <div class="auth-tabs">
+                                <div class="auth-tab @(!winAuth ? "on" : "")" data-auth="sql">@T("کاربر SQL")</div>
+                                <div class="auth-tab @(winAuth ? "on" : "")" data-auth="windows">@T("ویندوز (Integrated)")</div>
+                            </div>
+                            <input type="hidden" name="authMode" id="authMode" value="@(winAuth ? "windows" : "sql")" />
+                        </div>
+                        <div class="fld" id="fUser" style="@(winAuth ? "display:none" : "")"><label>@T("نام کاربری SQL *")</label><input type="text" name="user" value="@ViewBag.CurUser" dir="ltr" autocomplete="off" /></div>
+                        <div class="fld" id="fPass" style="@(winAuth ? "display:none" : "")"><label>@T("رمز عبور SQL *")</label><input type="password" name="password" dir="ltr" autocomplete="new-password" /></div>
+                        <div class="fld fld-full" style="display:flex;gap:22px;flex-wrap:wrap;margin-top:2px">
+                            <label class="setup-check"><input type="checkbox" name="createIfMissing" checked /> @T("بانک اطلاعاتی در صورت نبود، خودکار ساخته شود")</label>
+                            <label class="setup-check"><input type="checkbox" name="ssl" /> @T("اتصال رمزنگاری‌شده SSL (در صورت فعال بودن روی سرور)")</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sqliteFields" style="@(!isSqlite ? "display:none" : "")">
+                    <div class="setup-fields">
+                        <div class="fld fld-full"><label>@T("مسیر فایل بانک")</label><input type="text" name="dbPath" value="@(ViewBag.CurDbPath ?? "hr.db")" dir="ltr" placeholder="hr.db یا C:\HrData\hr.db" /></div>
+                        <div class="fld fld-full" style="color:var(--ink-2,#667);font-size:11.5px;line-height:2">
+                            @T("مسیر نسبی نسبت به پوشه اجرای برنامه است. برای نصب سازمانی (سرویس ویندوز) مسیر مطلق مثل") <b dir="ltr">C:\HrData\hr.db</b> @T("توصیه می‌شود.")
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:14px">
+                    <label class="setup-check"><input type="checkbox" name="seedDemo" checked="@(seedDemo)" /> @T("ایجاد داده‌های نمایشی (پرسنل، دستگاه‌ها، پارکینگ و …) برای شروع سریع — بعداً قابل حذف است")</label>
+                </div>
+
+                    @* ---------- اقدامات گام ۲ (بانک داده): برگشت + تست اتصال + ادامه به مجوز ---------- *@
+                    <div class="setup-actions">
+                        <button type="button" class="btn" id="btnBackStep1">→ @T("بازگشت به زبان")</button>
+                        <button type="button" class="btn" id="btnTest" style="min-width:130px">@T("🔌 تست اتصال")</button>
+                        <button type="button" class="btn btn-primary" id="btnToStep3">@T("ادامه به مجوز ←")</button>
+                    </div>
+                </div>@* /wizPane2 (بانک داده) *@
+
+                @* ==================== گام ۳ — اطلاعات مجوز ==================== *@
+                <div class="wiz-pane" id="wizPane3" style="display:none">
+
+                <!-- فاز ۶۲/۸۳ب — گام مجوز نصب: اجباری — سامانه فقط با مجوز معتبر راه‌اندازی می‌شود.
+                     حالت «بدون قفل» و «دورهٔ آزمایشی» حذف شد (درخواست کاربر)؛ اجرای آزمایشی فقط
+                     یعنی مجوز دارای تاریخ انقضا که LicenseStudio صادر می‌کند. -->
+                <div class="lic-box" style="margin-top:0">
+                    <div class="lic-title">🔐 @T("مجوز نصب — لازم برای راه‌اندازی")</div>
+
+                    <!-- فاز ۸۲ — فقط «ساخت جفت‌کلید» در راه‌اندازی اولیه (درخواست کاربر):
+                         صدور مجوز از ویزارد حذف شد — مجوز فقط توسط LicenseStudio ساخته و امضا می‌شود
+                         تا قفل سخت‌افزاری قابل دورزدن نباشد؛ مدیر همین‌موقع کلید امضای نصب را
+                         می‌سازد و private.pem را نگه می‌دارد.
+                         فاز ۸۹ — جای کادرها عوض شد (درخواست کاربر): ابتدا «کلید امضا»، سپس «ورود مجوز». -->
+                    <div class="si-box" id="keyPairBox">
+                        <div class="si-title">🔑 @T("کلید امضای مجوز — ساخت جفت‌کلید در همین‌جا")</div>
+                        <div style="font-size:11.5px;color:var(--ink-2,#667);line-height:2;margin-bottom:8px">
+                            @T("صدور مجوز فقط با LicenseStudio انجام می‌شود؛ برای آن کار ابتدا کلید امضای این نصب لازم است. همین‌جا جفت‌کلید بسازید، فایل private.pem را دانلود و در محل امن نگه دارید و بعداً در LicenseStudio برای امضای فایل مجوز همین سرور استفاده کنید.")
+                        </div>
+                        <div class="si-keybadge @(hasSigningKey ? "on" : "off")" id="siKeyState">
+                            @(hasSigningKey ? T("جفت‌کلید موجود است") : T("جفت‌کلید ساخته نشده"))
+                        </div>
+                        @if (hasSigningKey && !string.IsNullOrEmpty(signingFpr))
+                        {
+                            <code style="direction:ltr;display:inline-block;font-size:11px;color:var(--ink-2,#667);margin-inline-start:6px" id="siFpr">@signingFpr</code>
+                        }
+                        <div class="si-btns">
+                            <button type="button" class="btn btn-sm btn-primary" id="btnGenKey">🔑 @T("ساخت جفت‌کلید")</button>
+                            <button type="button" class="btn btn-sm" id="btnDlKey" style="display:none">⬇ @T("دانلود کلید خصوصی (private.pem)")</button>
+                        </div>
+                        <div class="si-status" id="siStatus"></div>
+                        <div class="lic-hint" style="margin:6px 0 0">
+                            @T("⚠️ کلید خصوصی فقط یک‌بار در پاسخ ساخت، برای دانلود ارائه می‌شود — فایل private.pem را در محل امن نگه دارید؛ هرکس آن را داشته باشد می‌تواند برای این نصب مجوز بسازد. صدور و ثبت مجوز فقط از مسیر LicenseStudio ← صفحهٔ «مجوز نصب» انجام می‌شود.")
+                        </div>
+
+                        @* ---------- فاز ۹۰ — ورود کلید خصوصی ساخته‌شده در جای دیگر (درخواست کاربر:
+                             «چطور از private.pem که در جای دیگه ساختم استفاده کنم؟ امکان آپلود بذار») ----------
+                             کلید عمومی از دل فایل استخراج و مرجع پذیرش امضای این نصب می‌شود؛
+                             پس مجوزهای امضاشده با همان private.pem همین‌جا معتبرند. *@
+                        <div class="si-import">
+                            <div class="si-title">📥 @T("درج کلید خصوصی موجود (private.pem)")</div>
+                            <div style="font-size:11.5px;color:var(--ink-2,#667);line-height:2;margin-bottom:8px">
+                                @T("اگر private.pem را قبلاً در جای دیگری (LicenseStudio، LicenseGen یا نصب دیگر) ساخته‌اید، همین‌جا بارگذاری کنید — کلید عمومی از دل آن استخراج و مجوزهای امضاشده با همان کلید روی این نصب پذیرفته می‌شود.")
+                            </div>
+                            <div class="lic-row" style="margin-top:0">
+                                <label class="btn btn-sm lic-file" for="keyImportFile">📎 @T("انتخاب فایل private.pem")</label>
+                                <input type="file" id="keyImportFile" accept=".pem,.txt,.key" hidden="hidden" />
+                                <span class="lic-file-name" id="keyImportName">@T("فایلی انتخاب نشده است")</span>
+                                <button type="button" class="btn btn-sm btn-primary" id="btnImportKey" disabled>⬆ @T("ثبت کلید")</button>
+                            </div>
+                            <div class="lic-hint" style="margin:6px 0 0">@T("🔒 کلید خصوصی بارگذاری‌شده فقط رمزشده روی همین سرور ذخیره می‌شود و هرگز باز هم‌چنان که هست منتشر نمی‌گردد.")</div>
+                        </div>
+                    </div>
+
+                    <div id="licenseFields">
+                        <div class="lic-machine">
+                            <code id="machineId">@machineId</code>
+                            <button type="button" class="btn btn-sm" id="btnCopyMachine">📋 <span id="copyLbl">@T("کپی")</span></button>
+                        </div>
+                        <div class="lic-hint" style="margin:0 0 10px">
+                            @T("این") <b>@T("اثر انگشت سخت‌افزار سرور")</b> @T("را برای تولیدکنندهٔ نرم‌افزار بفرستید تا فایل مجوز (license.dat) صادر شود — سامانه بدون مجوز معتبر راه‌اندازی نمی‌شود.")
+                        </div>
+                        <textarea class="lic-textarea" name="licenseContent" id="licenseContent" placeholder="@T("محتوای فایل مجوز اینجا بچسبانید (payload.signature)")"></textarea>
+                        <div class="lic-row">
+                            @* فاز ۸۳ — دکمهٔ استایل‌دار به‌جای input[type=file] خام مرورگر (بدشکل بود) *@
+                            <label class="btn btn-sm lic-file" for="licenseFile">📎 @T("انتخاب فایل مجوز")</label>
+                            <input type="file" id="licenseFile" accept=".dat,.txt" hidden="hidden" />
+                            <span class="lic-file-name" id="licenseFileName">@T("فایلی انتخاب نشده است")</span>
+                            @if (hasLicenseFile)
+                            {
+                                <span style="font-size:11px;color:#065f46">@T("✓ فایل مجوزی از قبل روی این نصب ثبت شده است — در صورت ورود محتوای جدید، جایگزین می‌شود")</span>
+                            }
+                        </div>
+                        <div class="lic-hint">
+                            @T("💡 راه‌اندازی فقط با مجوز معتبر کامل می‌شود؛ بدون آن هیچ تنظیمی ذخیره نمی‌شود. اجرای آزمایشی هم فقط با مجوز ممکن است — کافی است LicenseStudio مجوزی با تاریخ انقضا صادر کند. مجوز بعداً هم از صفحهٔ «مجوز نصب» قابل ثبت است.")
+                        </div>
+                    </div>
+                </div>@* /lic-box (گام مجوز) *@
+
+                    @* ---------- اقدامات گام ۳: برگشت + ذخیره و راه‌اندازی ---------- *@
+                    <div class="setup-actions">
+                        <button type="button" class="btn" id="btnBackStep2">→ @T("بازگشت به بانک داده")</button>
+                        <button type="button" class="btn btn-primary" id="btnSave" style="min-width:170px" data-done="@T("✓ راه‌اندازی شد")">@T("ذخیره و راه‌اندازی ✓")</button>
+                        <span id="setupBusy" style="display:none;color:var(--ink-2,#667);font-size:12px">@T("⏳ در حال بررسی…")</span>
+                    </div>
+                </div>@* /wizPane3 (مجوز) *@
+
+                <div class="setup-result" id="setupResult"></div>
+
+                <div class="setup-note">
+                    @T("💡 پس از ذخیره، بانک اطلاعاتی به‌صورت خودکار ساخته و مقداردهی می‌شود (بدون نیاز به ری‌استارت برنامه) و به صفحه ورود می‌روید.")
+                    @T("حساب پیش‌فرض مدیر:") <b dir="ltr">admin / Admin@1234</b> — @T("تغییرات بعدی اتصال بانک از مسیر «تنظیمات سامانه ← پایگاه داده» امکان‌پذیر است.")
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    (function () {
+        var form = document.getElementById('setupForm');
+        var res = document.getElementById('setupResult');
+        var busy = document.getElementById('setupBusy');
+        var token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+        // فاز ۷۶ — پیام‌های JS از سمت سرور به زبان جاری رندر می‌شوند
+        var MSG_SERVER_ERR = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا در ارتباط با سرور: ")))';
+        var MSG_COPIED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کپی شد")))';
+        var MSG_COPY = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کپی")))';
+        // فاز ۸۱ — پیام‌های خوداتکای مجوز
+        var MSG_KEY_STATE_ON = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("جفت‌کلید موجود است")))';
+        var MSG_KEY_DONE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("جفت‌کلید ساخته شد — فایل private.pem را دانلود و در محل امن نگه دارید")))';
+        var MSG_KEY_FAIL = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ساخت جفت‌کلید ناموفق بود")))';
+        // فاز ۸۳ب — مجوز اجباری
+        var MSG_LIC_REQUIRED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("فایل مجوز وارد نشده است — راه‌اندازی فقط با مجوز ممکن است")))';
+        // فاز ۹۰ — پیام‌های ویزارد دومرحله‌ای + ورود کلید خصوصی
+        var MSG_IMPORT_FAIL = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ورود کلید ناموفق بود")))';
+        var MSG_IMPORT_OK = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کلید خصوصی وارد شد — مجوزهای امضاشده با این کلید از این پس پذیرفته می‌شود")))';
+        var MSG_NO_FILE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ابتدا فایل private.pem را انتخاب کنید")))';
+        var MSG_NO_FILE_LIC = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("فایلی انتخاب نشده است")))';
+
+        function show(ok, msg) {
+            res.className = 'setup-result ' + (ok ? 'ok' : 'err');
+            res.textContent = msg;
+            res.style.display = 'block';
+        }
+        function busyOn(on) {
+            busy.style.display = on ? 'inline' : 'none';
+            document.getElementById('btnTest').disabled = on;
+            document.getElementById('btnSave').disabled = on;
+        }
+        function post(url) {
+            var fd = new FormData(form);
+            return fetch(url, {
+                method: 'POST', body: fd, credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'RequestVerificationToken': token }
+            }).then(function (r) { return r.json(); });
+        }
+
+        // ---- فاز ۷۶ — انتخاب زبان: کوکی hr_lang ست و صفحه بازرندر می‌شود ----
+        // فاز ۹۲ (اصلاح اشکال کاربر) — سوییچ زبان ویزارد کار نمی‌کرد: نوشتن کوکی
+        // samesite=lax از جاوااسکریپت داخل iframe پیش‌نمایش بین‌سایتی توسط مرورگر
+        // نادیده گرفته می‌شد. اکنون مثل سوییچر صفحهٔ ورود از مسیر سروری /Ui/Lang
+        // استفاده می‌شود که کوکی را با سیاست درست (SameSite=None; Partitioned روی
+        // HTTPS) ست می‌کند. مقادیر تایپ‌شدهٔ فرم هم پیش از تعویض زبان در sessionStorage
+        // نگه داشته می‌شوند و پس از بازرندر برمی‌گردند (هیچ ورودی از بین نمی‌رود).
+        function formState() {
+            var o = {};
+            try { new FormData(form).forEach(function (v, k) { o[k] = (typeof v === 'string') ? v : ''; }); } catch (e) { }
+            return o;
+        }
+        function setLang(v) {
+            try { sessionStorage.setItem('setupStep1Form', JSON.stringify(formState())); } catch (e) { }
+            location.href = '/Ui/Lang?l=' + encodeURIComponent(v) + '&r=' + encodeURIComponent('/Setup');
+        }
+        var langFa = document.getElementById('langFa'), langEn = document.getElementById('langEn');
+        langFa.querySelector('input').addEventListener('change', function () { setLang('fa'); });
+        langEn.querySelector('input').addEventListener('change', function () { setLang('en'); });
+
+        // ---- تب پروایدر ----
+        var provM = document.getElementById('provMssql'), provS = document.getElementById('provSqlite');
+        function provChange() {
+            var v = form.querySelector('input[name=provider]:checked').value;
+            provM.classList.toggle('on', v === 'sqlserver');
+            provS.classList.toggle('on', v === 'sqlite');
+            document.getElementById('mssqlFields').style.display = v === 'sqlserver' ? '' : 'none';
+            document.getElementById('sqliteFields').style.display = v === 'sqlite' ? '' : 'none';
+            res.style.display = 'none';
+        }
+        provM.querySelector('input').addEventListener('change', provChange);
+        provS.querySelector('input').addEventListener('change', provChange);
+
+        // فاز ۹۲ — بازگرداندن مقادیر فرم پس از تعویض زبان (بعد از تعریف تب پروایدر تا
+        // نمایش فیلدها هم همگام شود و پیش از همگام‌سازی احراز هویت تا تب ویندوز/SQL درست تنظیم شود)
+        (function restoreFormState() {
+            var saved = null;
+            try { saved = JSON.parse(sessionStorage.getItem('setupStep1Form') || 'null'); } catch (e) { }
+            if (!saved) return;
+            var touched = false;
+            Object.keys(saved).forEach(function (k) {
+                var el = form.querySelector('[name="' + k.replace(/"/g, '\\"') + '"]');
+                if (!el) return;
+                touched = true;
+                if (el.type === 'radio') { if (el.value === saved[k]) el.checked = true; }
+                else if (el.type === 'checkbox') { el.checked = saved[k] === 'on' || saved[k] === 'true'; }
+                else { el.value = saved[k]; }
+            });
+            try { sessionStorage.removeItem('setupStep1Form'); } catch (e) { }
+            if (touched) provChange();
+        })();
+
+        // ---- تب احراز هویت ----
+        var authMode = document.getElementById('authMode');
+        document.querySelectorAll('.auth-tab').forEach(function (t) {
+            t.addEventListener('click', function () {
+                document.querySelectorAll('.auth-tab').forEach(function (x) { x.classList.remove('on'); });
+                t.classList.add('on');
+                authMode.value = t.getAttribute('data-auth');
+                var win = authMode.value === 'windows';
+                document.getElementById('fUser').style.display = win ? 'none' : '';
+                document.getElementById('fPass').style.display = win ? 'none' : '';
+            });
+        });
+
+        // فاز ۴۸ — همگام‌سازی وضعیت اولیه فرم با پیکربندی فعلی (حالت تعمیر)
+        if (authMode.value === 'windows') {
+            var wt = document.querySelector('.auth-tab[data-auth="windows"]');
+            if (wt) wt.click();
+        }
+
+        // ---- فاز ۶۲/۸۳ب — گام مجوز (اجباری): کپی اثر انگشت + خواندن فایل مجوز ----
+        document.getElementById('btnCopyMachine').addEventListener('click', function () {
+            var txt = document.getElementById('machineId').textContent.trim();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(txt);
+            } else {
+                var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta);
+                ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+            }
+            document.getElementById('copyLbl').textContent = '✓ ' + MSG_COPIED;
+            var b = this; setTimeout(function () { document.getElementById('copyLbl').textContent = '📋 ' + MSG_COPY; }, 1600);
+        });
+
+        document.getElementById('licenseFile').addEventListener('change', function () {
+            var f = this.files && this.files[0];
+            // فاز ۸۳ — نمایش نام فایل انتخاب‌شده کنار دکمهٔ استایل‌دار
+            var nameEl = document.getElementById('licenseFileName');
+            if (nameEl) nameEl.textContent = f ? f.name : '@T("فایلی انتخاب نشده است")';
+            if (!f) return;
+            var reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('licenseContent').value = String(reader.result || '').trim();
+            };
+            reader.readAsText(f);
+        });
+
+        // ---- فاز ۸۱/۸۲ — فقط ساخت جفت‌کلید امضا در همین ویزارد (صدور مجوز فقط با LicenseStudio) ----
+        var siPriv = '';
+        var siStatus = document.getElementById('siStatus');
+        function siShow(cls, msg) { siStatus.className = 'si-status ' + (cls || ''); siStatus.textContent = msg; }
+        function siPost(url, data) {
+            var fd = new FormData();
+            if (data) for (var k in data) fd.append(k, data[k]);
+            return fetch(url, {
+                method: 'POST', body: fd, credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'RequestVerificationToken': token }
+            }).then(function (r) { return r.json(); });
+        }
+        function siDownload(name, text) {
+            var blob = new Blob([text], { type: 'application/octet-stream' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = name;
+            document.body.appendChild(a); a.click();
+            setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400);
+        }
+        document.getElementById('btnGenKey').disabled = false;
+        document.getElementById('btnGenKey').addEventListener('click', function () {
+            var b = this; b.disabled = true; siShow('', '⏳ …');
+            siPost('/Setup/GenerateKeyPair')
+                .then(function (j) {
+                    if (!j.ok) { siShow('err', (j.message || MSG_KEY_FAIL)); return; }
+                    siPriv = j.privatePem || '';
+                    document.getElementById('btnDlKey').style.display = '';
+                    var st = document.getElementById('siKeyState');
+                    st.className = 'si-keybadge on'; st.textContent = MSG_KEY_STATE_ON;
+                    siShow('ok', '✓ ' + MSG_KEY_DONE + (j.fingerprint ? ' (' + j.fingerprint + ')' : ''));
+                })
+                .catch(function (e) { siShow('err', MSG_SERVER_ERR + e.message); })
+                .finally(function () { b.disabled = false; });
+        });
+        document.getElementById('btnDlKey').addEventListener('click', function () {
+            if (siPriv) siDownload('private.pem', siPriv);
+        });
+
+        // ---- فاز ۹۰ — ورود کلید خصوصی موجود (private.pem) ----
+        var keyImportFile = document.getElementById('keyImportFile');
+        var keyPem = '';
+        keyImportFile.addEventListener('change', function () {
+            var f = this.files && this.files[0];
+            var nameEl = document.getElementById('keyImportName');
+            if (nameEl) nameEl.textContent = f ? f.name : MSG_NO_FILE_LIC;
+            if (!f) { keyPem = ''; document.getElementById('btnImportKey').disabled = true; return; }
+            var reader = new FileReader();
+            reader.onload = function () {
+                keyPem = String(reader.result || '').trim();
+                document.getElementById('btnImportKey').disabled = !keyPem;
+            };
+            reader.readAsText(f);
+        });
+        document.getElementById('btnImportKey').addEventListener('click', function () {
+            if (!keyPem) { siShow('err', MSG_NO_FILE); return; }
+            var b = this; b.disabled = true; siShow('', '⏳ …');
+            siPost('/Setup/ImportKeyPair', { privatePem: keyPem })
+                .then(function (j) {
+                    if (!j.ok) { siShow('err', j.message || MSG_IMPORT_FAIL); return; }
+                    keyPem = ''; // امن — پس از ثبت، متن کلید از حافظهٔ صفحه پاک شود
+                    b.disabled = true;
+                    keyImportFile.value = '';
+                    var nameEl = document.getElementById('keyImportName');
+                    if (nameEl) nameEl.textContent = MSG_NO_FILE_LIC;
+                    var st = document.getElementById('siKeyState');
+                    st.className = 'si-keybadge on'; st.textContent = MSG_KEY_STATE_ON;
+                    var fprEl = document.getElementById('siFpr');
+                    if (fprEl) fprEl.textContent = j.fingerprint || '';
+                    else if (j.fingerprint) {
+                        var code = document.createElement('code');
+                        code.id = 'siFpr'; code.style.cssText = 'direction:ltr;display:inline-block;font-size:11px;color:var(--ink-2,#667);margin-inline-start:6px';
+                        code.textContent = j.fingerprint;
+                        st.insertAdjacentElement('afterend', code);
+                    }
+                    siShow('ok', '✓ ' + (j.message || MSG_IMPORT_OK));
+                })
+                .catch(function (e) { siShow('err', MSG_SERVER_ERR + e.message); })
+                .finally(function () { b.disabled = !keyPem; });
+        });
+
+        // ---- فاز ۹۰ — ویزارد دومرحله‌ای: سوییچ گام‌ها ----
+        // ---- فاز ۹۰ دومرحله‌ای ← فاز ۹۶ سه‌تبی: پنل‌ها و تب‌ها (هیچ عنصری حذف نشده — فقط جابجایی) ----
+        var panes = [1, 2, 3].map(function (n) { return document.getElementById('wizPane' + n); });
+        var tabs = [1, 2, 3].map(function (n) { return document.getElementById('wizTab' + n); });
+        function switchTab(n) {
+            [1, 2, 3].forEach(function (k) {
+                var on = k === n;
+                panes[k - 1].style.display = on ? '' : 'none';
+                tabs[k - 1].classList.toggle('on', on);
+                tabs[k - 1].setAttribute('aria-selected', on ? 'true' : 'false');
+                tabs[k - 1].classList.toggle('done', k < n); // گام‌های قبل تکمیل‌شده (برگشتنی‌اند)
+            });
+            res.style.display = 'none';
+            var card = document.querySelector('.setup-card');
+            if (card && card.scrollIntoView) card.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        }
+        document.getElementById('btnToStep2').addEventListener('click', function () { switchTab(2); });
+        document.getElementById('btnBackStep1').addEventListener('click', function () { switchTab(1); });
+        document.getElementById('btnToStep3').addEventListener('click', function () { switchTab(3); });
+        document.getElementById('btnBackStep2').addEventListener('click', function () { switchTab(2); });
+        tabs.forEach(function (tb, idx) { tb.addEventListener('click', function () { switchTab(idx + 1); }); });
+
+        document.getElementById('btnTest').addEventListener('click', function () {
+            busyOn(true); res.style.display = 'none';
+            post('/Setup/TestConnection')
+                .then(function (j) { show(j.ok, j.message); })
+                .catch(function (e) { show(false, MSG_SERVER_ERR + e.message); })
+                .finally(function () { busyOn(false); });
+        });
+
+        document.getElementById('btnSave').addEventListener('click', function () {
+            // فاز ۸۳ب — مجوز اجباری: پیش از ارسال، محتوای مجوز چک می‌شود
+            var licVal = (document.getElementById('licenseContent').value || '').trim();
+            if (!licVal) { show(false, MSG_LIC_REQUIRED); return; }
+            busyOn(true); res.style.display = 'none';
+            post('/Setup/Save')
+                .then(function (j) {
+                    show(j.ok, j.message || '');
+                    if (j.ok) {
+                        document.getElementById('btnSave').textContent = '✓ ' + document.getElementById('btnSave').getAttribute('data-done');
+                        setTimeout(function () { window.location.href = j.redirect || '/Auth/Login'; }, 900);
+                    } else busyOn(false);
+                })
+                .catch(function (e) { show(false, MSG_SERVER_ERR + e.message); busyOn(false); });
+        });
+    })();
+</script>
+}

@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en" data-cal="jalali" data-hijri="-1">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Settings | شرکت پتروشیمی پارس آسیا</title>
+    <link rel="icon" href="data:image/svg&#x2B;xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 100 100&#x27;%3E%3Ctext y=&#x27;0.9em&#x27; font-size=&#x27;88&#x27;%3E%E2%97%88%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/css/site.css?v=WC2WH42ihD9HVnj1lJ8wWHk2hwtPSgcvrZuWusC5Iiw" />
+        <link rel="stylesheet" href="/css/site-ltr.css?v=BaW4JmJQFEKQAXcfyPUpcJAlJWPXx905s5NjgN5N7OQ" />
+    <style id="palCss">:root{--accent:#14b8a6;--accent-2:#3ac3b4;--accent-deep:#119e8f;--accent-ink:#119e8f;--accent-soft:#e8f8f6;--accent-border:#bdebe6;--accent-3:#5acdc1;--accent-4:#109081;--accent-soft-text:#cbefeb;--accent-rgb:20,184,166;--grad-brand:linear-gradient(135deg, #3ac3b4 0%, #14b8a6 45%, #109081 100%);--grad-btn:linear-gradient(135deg, #14b8a6 0%, #119e8f 100%);--link:#0d9488;--sidebar:#17293a;--sidebar-2:#2e3e4e;--sidebar-rgb:23,41,58;--sidebar-line:127,137,147;--sidebar-text:#a9bccb;--sidebar-muted:#6f8191;--sidebar-title:#eaeef2;--bg:#eef2f6;--card:#ffffff;--card-rgb:255,255,255;--line:#e1e8ee;--line-soft:#eef2f6;--ink:#1b2833;--ink-rgb:27,40,51;--ink-2:#5e7181;--ink-3:#96a3ad;--ink-soft:#195053;--th-bg:#eff4f7;--row-alt:#f9fbfc;--row-hover:#eef6f5;--btn-hover-bg:#f1fbfa;--btn-hover-border:#cbefeb;--ok:#10b981;--ok-bg:#e2f7f0;--ok-border:#b7ead9;--warn:#f59e0b;--warn-bg:#fef3e2;--warn-border:#fce2b6;--err:#ef4444;--err-bg:#fde9e9;--err-border:#fac7c7;--info:#3b82f6;--info-bg:#e7f0fe;--info-border:#c4dafc;--scroll-thumb:#a6b2bd;--scroll-thumb-hover:#bac4cd;--overlay:rgba(23,41,58, .46);}</style>
+</head>
+<body>
+        <button type="button" class="sb-toggle" id="sbToggle" title="Show/hide menu" aria-label="Show or hide menu" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M9 5.5 15.5 12 9 18.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <aside class="sidebar">
+            <div class="brand">
+                    <div class="brand-logo">◈</div>
+                <div>
+                    <div class="brand-name">شرکت پتروشیمی پارس آسیا</div>
+                    <div class="brand-sub">Integrated Human Resources System</div>
+                </div>
+            </div>
+            <nav class="nav">
+                    <div class="nav-group">General</div>
+                        <a href="/" class="nav-item ">
+                            <span class="nav-ico">▦</span>
+                            <span>Dashboard</span>
+                        </a>
+                    <div class="nav-group">Human Resources</div>
+                        <a href="/Employees" class="nav-item ">
+                            <span class="nav-ico">👤</span>
+                            <span>Employees</span>
+                        </a>
+                        <a href="/Org" class="nav-item ">
+                            <span class="nav-ico">🏢</span>
+                            <span>Organization Chart</span>
+                        </a>
+                        <a href="/Shifts" class="nav-item ">
+                            <span class="nav-ico">🔁</span>
+                            <span>Shifts &amp; Rotations</span>
+                        </a>
+                        <a href="/Holidays" class="nav-item ">
+                            <span class="nav-ico">📅</span>
+                            <span>Public Holidays</span>
+                        </a>
+                    <div class="nav-group">Time &amp; Attendance</div>
+                        <a href="/Attendance/Exports" class="nav-item ">
+                            <span class="nav-ico">📤</span>
+                            <span>Traffic export template</span>
+                        </a>
+                        <a href="/Attendance" class="nav-item ">
+                            <span class="nav-ico">🕒</span>
+                            <span>Daily Attendance</span>
+                        </a>
+                        <a href="/Requests" class="nav-item ">
+                            <span class="nav-ico">📋</span>
+                            <span>Requests</span>
+                        </a>
+                    <div class="nav-group">Access Control &amp; Security</div>
+                        <a href="/Devices" class="nav-item ">
+                            <span class="nav-ico">🖥️</span>
+                            <span>Attendance Devices</span>
+                        </a>
+                        <a href="/DeviceGateway" class="nav-item ">
+                            <span class="nav-ico">🖧</span>
+                            <span>Device Gateway</span>
+                        </a>
+                        <a href="/Devices/LiveView" class="nav-item ">
+                            <span class="nav-ico">📡</span>
+                            <span>Security Live View</span>
+                        </a>
+                        <a href="/Access" class="nav-item ">
+                            <span class="nav-ico">🚪</span>
+                            <span>Zones &amp; Gates</span>
+                        </a>
+                        <a href="/Cards" class="nav-item ">
+                            <span class="nav-ico">💳</span>
+                            <span>ID Cards</span>
+                        </a>
+                        <a href="/Visitors" class="nav-item ">
+                            <span class="nav-ico">🎟</span>
+                            <span>Visitors</span>
+                        </a>
+                        <a href="/Biometrics" class="nav-item ">
+                            <span class="nav-ico">🧬</span>
+                            <span>Identity &amp; Biometric Data</span>
+                        </a>
+                    <div class="nav-group">Parking</div>
+                        <a href="/Parking" class="nav-item ">
+                            <span class="nav-ico">🅿️</span>
+                            <span>Parking Control</span>
+                        </a>
+                    <div class="nav-group">Payroll</div>
+                        <a href="/Payroll" class="nav-item ">
+                            <span class="nav-ico">💰</span>
+                            <span>Payroll Runs</span>
+                        </a>
+                        <a href="/Payroll/Items" class="nav-item ">
+                            <span class="nav-ico">🧮</span>
+                            <span>Pay Items Formula Builder</span>
+                        </a>
+                        <a href="/Payroll/Params" class="nav-item ">
+                            <span class="nav-ico">📐</span>
+                            <span>Annual Parameters</span>
+                        </a>
+                        <a href="/Payroll/Bonus" class="nav-item ">
+                            <span class="nav-ico">🎁</span>
+                            <span>Bonus &amp; Settlement</span>
+                        </a>
+                        <a href="/Payroll/Settings" class="nav-item ">
+                            <span class="nav-ico">⚙️</span>
+                            <span>Calculation Settings</span>
+                        </a>
+                    <div class="nav-group">Analytics &amp; Reports</div>
+                        <a href="/Reports" class="nav-item ">
+                            <span class="nav-ico">📊</span>
+                            <span>Analytical Report Builder</span>
+                        </a>
+                    <div class="nav-group">My Portal</div>
+                        <a href="/Self" class="nav-item ">
+                            <span class="nav-ico">🏠</span>
+                            <span>My Home</span>
+                        </a>
+                        <a href="/Self/Requests" class="nav-item ">
+                            <span class="nav-ico">📨</span>
+                            <span>My Requests</span>
+                        </a>
+                        <a href="/Self/Attendance" class="nav-item ">
+                            <span class="nav-ico">🕒</span>
+                            <span>My Attendance</span>
+                        </a>
+                        <a href="/Self/Payslips" class="nav-item ">
+                            <span class="nav-ico">💰</span>
+                            <span>My Payslips</span>
+                        </a>
+                    <div class="nav-group">System Administration</div>
+                        <a href="/Companies" class="nav-item ">
+                            <span class="nav-ico">🏛</span>
+                            <span>Companies</span>
+                        </a>
+                        <a href="/License" class="nav-item ">
+                            <span class="nav-ico">🧾</span>
+                            <span>Installation License</span>
+                        </a>
+                        <a href="/Users" class="nav-item ">
+                            <span class="nav-ico">🛡️</span>
+                            <span>Users &amp; Roles</span>
+                        </a>
+                        <a href="/Notifications" class="nav-item ">
+                            <span class="nav-ico">🔔</span>
+                            <span>Notifications</span>
+                        </a>
+                        <a href="/Gateway" class="nav-item ">
+                            <span class="nav-ico">🖧</span>
+                            <span>Gateway Settings</span>
+                        </a>
+                        <a href="/Settings" class="nav-item active">
+                            <span class="nav-ico">🎛️</span>
+                            <span>System Settings</span>
+                        </a>
+                        <a href="/Langs" class="nav-item ">
+                            <span class="nav-ico">🌐</span>
+                            <span>Languages &amp; Translation</span>
+                        </a>
+                        <a href="/Updates" class="nav-item ">
+                            <span class="nav-ico">⬆️</span>
+                            <span>System update</span>
+                        </a>
+                        <a href="/Audit" class="nav-item ">
+                            <span class="nav-ico">📜</span>
+                            <span>Audit Log</span>
+                        </a>
+            </nav>
+            <div class="sidebar-foot">
+                <div class="ver-chip">Version 2.7.10</div>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div class="tb-search-wrap">
+                    <input type="text" class="tb-search" id="tbSearch" placeholder="Search in data or…" autocomplete="off"
+                           role="combobox" aria-expanded="false" aria-controls="tbSearchMenu" aria-autocomplete="list" />
+                    <span class="tb-search-ico">🔍</span>
+                    <div class="tb-search-menu" id="tbSearchMenu" role="listbox" hidden></div>
+                </div>
+
+                    <div class="topbar-title" id="tbCrumb">
+                            <span class="crumb-group">System Administration</span>
+                                <span class="crumb-sep">/</span>
+                        <span class="crumb-page">System Settings</span>
+                    </div>
+
+                <div class="tb-datetime">
+                    <span class="tb-cal">📅</span>
+                    <strong>Mon, 09 Nov 2026</strong>
+                    <span class="tb-wd">Monday</span>
+                    <span class="clock" data-clock>12:34:10</span>
+                </div>
+
+                <div class="tb-actions">
+                        <a class="tb-ico-btn" href="/Settings" title="System Settings" aria-label="Settings">⚙️</a>
+                    <div class="tb-bell-wrap tb-lang-wrap">
+                        <button type="button" class="tb-ico-btn" id="tbLangBtn" title="UI language" aria-label="UI language" aria-haspopup="true" aria-expanded="false" aria-controls="tbLangMenu" style="display:inline-flex;align-items:center"><img class='hr-flag' src='/img/flags/gb.svg' alt='' height='16' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /></button>
+                        <div class="tb-lang-menu" id="tbLangMenu" hidden>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=fa&r=%2FSettings"><img class='hr-flag' src='/img/flags/ir.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> فارسی</a>
+                                <a class="tb-lang-item on" href="/Ui/Lang?l=en&r=%2FSettings"><img class='hr-flag' src='/img/flags/gb.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> English</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ar&r=%2FSettings"><img class='hr-flag' src='/img/flags/sa.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> العربية</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ka&r=%2FSettings"><img class='hr-flag' src='/img/flags/ge.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x10E5;&#x10D0;&#x10E0;&#x10D7;&#x10E3;&#x10DA;&#x10D8;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ky&r=%2FSettings"><img class='hr-flag' src='/img/flags/kg.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x41A;&#x44B;&#x440;&#x433;&#x44B;&#x437;&#x447;&#x430;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=prs&r=%2FSettings"><img class='hr-flag' src='/img/flags/af.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> دری</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=ps&r=%2FSettings"><img class='hr-flag' src='/img/flags/af.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> پښتو</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=tg&r=%2FSettings"><img class='hr-flag' src='/img/flags/tj.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> &#x422;&#x43E;&#x4B7;&#x438;&#x43A;&#x4E3;</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=tk&r=%2FSettings"><img class='hr-flag' src='/img/flags/tm.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> Türkmençe</a>
+                                <a class="tb-lang-item " href="/Ui/Lang?l=uz&r=%2FSettings"><img class='hr-flag' src='/img/flags/uz.svg' alt='' height='13' width='auto' style='border-radius:2px;box-shadow:0 0 0 1px rgba(15,23,42,.14);vertical-align:-2px;flex:none;display:inline-block;object-fit:contain' aria-hidden='true' focusable='false' loading='lazy' /> O&#x2BB;zbekcha</a>
+                                <a class="tb-lang-item" href="/Langs" style="border-top:1px dashed var(--line);color:var(--ink-2)">⚙️ Manage languages &#x2190;</a>
+                        </div>
+                    </div>
+                    <div class="tb-bell-wrap">
+                        <button type="button" class="tb-ico-btn tb-bell" id="tbBellBtn" title="Open alerts" aria-label="Alerts">
+                            🔔
+                                <span class="tb-badge">6</span>
+                        </button>
+                        <div class="tb-bell-menu" id="tbBellMenu" hidden>
+                            <div class="tb-bell-h">🔔 Open alerts (6)</div>
+                                    <a class="tb-bell-item tb-bell-link" href="/Cards" data-alert-id="9a21511d6c1d43e08323f96674ab2b11" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot "></span>
+                                        <div>
+                                            <div class="tb-bell-t">Lost card · 12:17</div>
+                                            <div class="tb-bell-m">کارت شماره VC-48213 به‌عنوان مفقود اعلام شد — ابطال گردید</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Visitors" data-alert-id="065f8e9bb8684b81a58f986df7216439" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">Expired permission · 12:17</div>
+                                            <div class="tb-bell-m">اعتبار قرارداد شرکت نگین تعمیرات صنعتی منقضی شده است (CTR-103)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Visitors" data-alert-id="621f7206414e4499af54bf430e134c60" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot "></span>
+                                        <div>
+                                            <div class="tb-bell-t">تأخیر خروج · 12:17</div>
+                                            <div class="tb-bell-m">مهمان «کوروش جهانگیری» بیش از ۸ ساعت داخل سایت است — بررسی خروج لازم است</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="92a1f03b517748799e7d253ef8828787" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">Unauthorized entry · 12:17</div>
+                                            <div class="tb-bell-m">تلاش ورود غیرمجاز توسط هومن مرادی در گیت اصلی ورودی (خارج از ساعات مجاز)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="f4fb2cd6b76e430eb79d38145aa0d388" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot high"></span>
+                                        <div>
+                                            <div class="tb-bell-t">Unauthorized entry · 12:17</div>
+                                            <div class="tb-bell-m">تلاش ورود غیرمجاز توسط سارا موسوی در درب واحد پلی‌اتیلن (خارج از ساعات مجاز)</div>
+                                        </div>
+                                    </a>
+                                    <a class="tb-bell-item tb-bell-link" href="/Access?tab=alerts" data-alert-id="1acc37f7728f4cdfa59fef07efb2ddcc" title="رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده">
+                                        <span class="tb-bell-dot crit"></span>
+                                        <div>
+                                            <div class="tb-bell-t">Unauthorized entry · 12:17</div>
+                                            <div class="tb-bell-m">تلاش خروج غیرمجاز توسط سعید قاسمی در درب واحد پلی‌اتیلن (فاقد مجوز دسترسی به این منطقه)</div>
+                                        </div>
+                                    </a>
+                            <a class="tb-bell-foot" href="/Notifications">View all notifications &#x2192;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tb-user-wrap">
+                    <button type="button" class="tb-profile" id="tbProfileBtn" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="tbUserMenu" title="User menu" aria-label="User menu">
+                            <div class="tb-av tb-av-txt">م</div>
+                        <div class="tb-pinfo">
+                            <div class="tb-pname">مدیر ارشد سیستم</div>
+                            <div class="tb-prole">Super Administrator</div>
+                        </div>
+                        <span class="tb-caret">▾</span>
+                    </button>
+                    <div class="tb-user-menu" id="tbUserMenu" hidden>
+                        <div class="tb-user-h">
+                                <div class="tb-av tb-av-txt">م</div>
+                            <div>
+                                <div class="tb-user-name">مدیر ارشد سیستم</div>
+                                <div class="tb-user-role">Super Administrator</div>
+                            </div>
+                        </div>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Photo" data-modal-title="My profile">
+                            <span class="tb-uico">🖼</span> My profile photo
+                        </button>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Password" data-modal-title="Change password">
+                            <span class="tb-uico">🔑</span> Change password
+                        </button>
+                        <div class="tb-user-sep"></div>
+                        <form method="post" action="/Auth/Logout" class="tb-user-logout">
+                            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                            <button type="submit" class="tb-user-item danger"><span class="tb-uico">🚪</span> Sign out</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <script type="application/json" id="tbNavIndex">[{"t":"General","items":[{"h":"/","ic":"\u25A6","l":"Dashboard"}]},{"t":"Human Resources","items":[{"h":"/Employees","ic":"\uD83D\uDC64","l":"Employees"},{"h":"/Org","ic":"\uD83C\uDFE2","l":"Organization Chart"},{"h":"/Shifts","ic":"\uD83D\uDD01","l":"Shifts \u0026 Rotations"},{"h":"/Holidays","ic":"\uD83D\uDCC5","l":"Public Holidays"}]},{"t":"Time \u0026 Attendance","items":[{"h":"/Attendance/Exports","ic":"\uD83D\uDCE4","l":"Traffic export template"},{"h":"/Attendance","ic":"\uD83D\uDD52","l":"Daily Attendance"},{"h":"/Requests","ic":"\uD83D\uDCCB","l":"Requests"}]},{"t":"Access Control \u0026 Security","items":[{"h":"/Devices","ic":"\uD83D\uDDA5\uFE0F","l":"Attendance Devices"},{"h":"/DeviceGateway","ic":"\uD83D\uDDA7","l":"Device Gateway"},{"h":"/Devices/LiveView","ic":"\uD83D\uDCE1","l":"Security Live View"},{"h":"/Access","ic":"\uD83D\uDEAA","l":"Zones \u0026 Gates"},{"h":"/Cards","ic":"\uD83D\uDCB3","l":"ID Cards"},{"h":"/Visitors","ic":"\uD83C\uDF9F","l":"Visitors"},{"h":"/Biometrics","ic":"\uD83E\uDDEC","l":"Identity \u0026 Biometric Data"}]},{"t":"Parking","items":[{"h":"/Parking","ic":"\uD83C\uDD7F\uFE0F","l":"Parking Control"}]},{"t":"Payroll","items":[{"h":"/Payroll","ic":"\uD83D\uDCB0","l":"Payroll Runs"},{"h":"/Payroll/Items","ic":"\uD83E\uDDEE","l":"Pay Items Formula Builder"},{"h":"/Payroll/Params","ic":"\uD83D\uDCD0","l":"Annual Parameters"},{"h":"/Payroll/Bonus","ic":"\uD83C\uDF81","l":"Bonus \u0026 Settlement"},{"h":"/Payroll/Settings","ic":"\u2699\uFE0F","l":"Calculation Settings"}]},{"t":"Analytics \u0026 Reports","items":[{"h":"/Reports","ic":"\uD83D\uDCCA","l":"Analytical Report Builder"}]},{"t":"My Portal","items":[{"h":"/Self","ic":"\uD83C\uDFE0","l":"My Home"},{"h":"/Self/Requests","ic":"\uD83D\uDCE8","l":"My Requests"},{"h":"/Self/Attendance","ic":"\uD83D\uDD52","l":"My Attendance"},{"h":"/Self/Payslips","ic":"\uD83D\uDCB0","l":"My Payslips"}]},{"t":"System Administration","items":[{"h":"/Companies","ic":"\uD83C\uDFDB","l":"Companies"},{"h":"/License","ic":"\uD83E\uDDFE","l":"Installation License"},{"h":"/Users","ic":"\uD83D\uDEE1\uFE0F","l":"Users \u0026 Roles"},{"h":"/Notifications","ic":"\uD83D\uDD14","l":"Notifications"},{"h":"/Gateway","ic":"\uD83D\uDDA7","l":"Gateway Settings"},{"h":"/Settings","ic":"\uD83C\uDF9B\uFE0F","l":"System Settings"},{"h":"/Langs","ic":"\uD83C\uDF10","l":"Languages \u0026 Translation"},{"h":"/Updates","ic":"\u2B06\uFE0F","l":"System update"},{"h":"/Audit","ic":"\uD83D\uDCDC","l":"Audit Log"}]}]</script>
+            </header>
+                <div class="lic-banner">&#x1F512; No installation license registered — the system only runs with a license <a href="/License">Manage installation license &#x2192;</a></div>
+            <div class="content">
+                <div class="chips">
+    <span class="chip">System Appearance and Branding Settings</span>
+    <span class="chip">Last edit: <b>18 آبان 1405</b></span>
+</div>
+
+<div class="card" style="margin-bottom:18px">
+    <div class="card-h">
+        <h2>⚙️ System Settings</h2>
+        <span class="hint">All settings in one form — navigate with the tabs; no setting has been removed</span>
+    </div>
+    <div class="card-b">
+        <div class="tabs" id="setTabs" role="tablist">
+            <a href="#tab-company" data-pane="tab-company" class="on" role="tab" aria-selected="true">🏢 Company &amp; logo</a>
+            <a href="#tab-locale" data-pane="tab-locale" role="tab" aria-selected="false">🌐 Language, calendar &amp; currency</a>
+            <a href="#tab-screensaver" data-pane="tab-screensaver" role="tab" aria-selected="false">🖥 Screen saver</a>
+            <a href="#tab-look" data-pane="tab-look" role="tab" aria-selected="false">🎨 Appearance &amp; color palette</a>
+            <a href="#tab-db" data-pane="tab-db" role="tab" aria-selected="false">🗄 Database</a>
+            <a href="#tab-mods" data-pane="tab-mods" role="tab" aria-selected="false">🧩 Modules</a>
+            <a href="#tab-about" data-pane="tab-about" role="tab" aria-selected="false">ℹ️ About system</a>
+        </div>
+
+        <form method="post" action="/Settings/SaveGeneral" enctype="multipart/form-data" id="generalForm">
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+
+            <div class="set-pane" id="tab-company">
+                <fieldset  style="border:0;padding:0;margin:0">
+                    <h3 class="set-sec">🏢 Installed company information</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+                        <div class="fld">
+                            <label>Company Display Name *</label>
+                            <input name="companyName" value="شرکت پتروشیمی پارس آسیا" required maxlength="150"
+                                   placeholder="For example: Pars Asia Petrochemical Company" />
+                        </div>
+                        <div class="fld">
+                            <label>Legal (Registered) Name</label>
+                            <input name="companyLegalName" maxlength="200" />
+                        </div>
+                        <div class="fld">
+                            <label>National ID / Economic Code</label>
+                            <input name="companyNationalId" maxlength="30" />
+                        </div>
+                        <div class="fld">
+                            <label>Phone</label>
+                            <input name="companyPhone" maxlength="30" />
+                        </div>
+                        <div class="fld">
+                            <label>Email</label>
+                            <input name="companyEmail" type="email" maxlength="120" />
+                        </div>
+                        <div class="fld">
+                            <label>Website</label>
+                            <input name="companyWebsite" maxlength="120" placeholder="example.com" />
+                        </div>
+                        <div class="fld" style="grid-column:1/-1">
+                            <label>Address</label>
+                            <input name="companyAddress" maxlength="300" />
+                        </div>
+                        <div class="fld" style="grid-column:1/-1">
+                            <label>Short Description (Below name on login page)</label>
+                            <input name="description" value="حضور و غیاب · کنترل تردد · ارباب رجوع" maxlength="150" />
+                        </div>
+                    </div>
+
+                    <h3 class="set-sec">🖼 Company Logo</h3>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+                            <div style="width:64px;height:64px;border-radius:14px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--ink-3)">◈</div>
+                            <div>
+                                <div style="font-weight:600">No logo registered</div>
+                                <div class="hint">Default marker &#x25C8; is used</div>
+                            </div>
+                    </div>
+                        <div class="fld" style="max-width:420px">
+                            <label>Change logo — select an image (PNG / JPG / WEBP / SVG — max 2 MB)</label>
+                            <input type="file" name="logoFile" accept=".png,.jpg,.jpeg,.webp,.svg" />
+                        </div>
+                        <div class="hint" style="margin-top:6px">No file selected = the current logo stays unchanged.</div>
+
+                        <div class="btn-row" style="margin-top:16px">
+                            <button class="btn btn-primary">💾 Save company &amp; logo settings</button>
+                        </div>
+                </fieldset>
+            </div>
+
+            <div class="set-pane" id="tab-locale" hidden>
+                <fieldset  style="border:0;padding:0;margin:0">
+                    <h3 class="set-sec">🌐 Default system language</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>Default language</label>
+                        <select name="lang" id="defLang">
+                                <option value="fa" selected="selected">فارسی</option>
+                                <option value="en">English</option>
+                                <option value="ar">العربية</option>
+                                <option value="ka">&#x10E5;&#x10D0;&#x10E0;&#x10D7;&#x10E3;&#x10DA;&#x10D8;</option>
+                                <option value="ky">&#x41A;&#x44B;&#x440;&#x433;&#x44B;&#x437;&#x447;&#x430;</option>
+                                <option value="prs">دری</option>
+                                <option value="ps">پښتو</option>
+                                <option value="tg">&#x422;&#x43E;&#x4B7;&#x438;&#x43A;&#x4E3;</option>
+                                <option value="tk">Türkmençe</option>
+                                <option value="uz">O&#x2BB;zbekcha</option>
+                        </select>
+                    </div>
+                    <div class="hint">Applies to users who have not picked a personal language yet and to the login page; each user can still change their own language from the top bar.</div>
+
+                    <h3 class="set-sec">🗓 System Calendar</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>Date display across the system</label>
+                        <select name="calendar">
+                            <option value="jalali" selected="selected">Jalali (Solar Hijri)</option>
+                            <option value="gregorian">Gregorian</option>
+                            <option value="hijri">Hijri (Lunar)</option>
+                        </select>
+                    </div>
+                    <div class="hint">Only how dates are displayed in lists, dashboards and reports changes; data and date keys stay untouched and attendance/holiday calculations follow their own rules.</div>
+
+                    <h3 class="set-sec">🌙 Hijri calendar day offset</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>Align lunar display with the country&#x27;s official calendar</label>
+                        <select name="hijriAdjust">
+                            <option value="2">2 days ahead</option>
+                            <option value="1">1 day ahead</option>
+                            <option value="0">No offset — exactly Umm al-Qura (Saudi)</option>
+                            <option value="-1" selected="selected">1 day behind — official Iran/Afghanistan (recommended)</option>
+                            <option value="-2">2 days behind</option>
+                        </select>
+                    </div>
+                    <div class="hint">The system&#x27;s lunar base is the Umm al-Qura calendar, which for current years usually runs one day ahead of the official lunar calendar of Iran/Afghanistan (local moon sighting); e.g. 15 Sha&#x27;ban appears one day behind the wall calendar when no offset is set. With “1 day behind”, the lunar display, the date picker and the export template all match the official calendar. Only the display changes; stored data stays untouched.</div>
+
+                    <h3 class="set-sec">💰 System display currency</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 14px;max-width:820px">
+                        <div class="fld">
+                            <label>Currency for all amounts (web, payslip, PDF and Excel)</label>
+                            <select name="currency" id="curSel">
+                                    <optgroup label="Currencies of the system languages&#x27; countries">
+                                            <option value="IRR" selected="selected">Iranian Rial (IRR)</option>
+                                            <option value="IRT">Iranian Toman (IRT)</option>
+                                            <option value="AFN">Afghan Afghani (AFN)</option>
+                                            <option value="GEL">Georgian Lari (GEL)</option>
+                                            <option value="KGS">Kyrgyzstani Som (KGS)</option>
+                                            <option value="UZS">Uzbekistani Som (UZS)</option>
+                                            <option value="TJS">Tajikistani Somoni (TJS)</option>
+                                            <option value="TMT">Turkmenistani Manat (TMT)</option>
+                                    </optgroup>
+                                    <optgroup label="Asia &amp; Middle East">
+                                            <option value="AZN">Azerbaijani Manat (AZN)</option>
+                                            <option value="TRY">Turkish Lira (TRY)</option>
+                                            <option value="AED">UAE Dirham (AED)</option>
+                                            <option value="SAR">Saudi Riyal (SAR)</option>
+                                            <option value="QAR">Qatari Riyal (QAR)</option>
+                                            <option value="KWD">Kuwaiti Dinar (KWD)</option>
+                                            <option value="BHD">Bahraini Dinar (BHD)</option>
+                                            <option value="OMR">Omani Rial (OMR)</option>
+                                            <option value="IQD">Iraqi Dinar (IQD)</option>
+                                            <option value="PKR">Pakistani Rupee (PKR)</option>
+                                            <option value="INR">Indian Rupee (INR)</option>
+                                            <option value="CNY">Chinese Yuan (CNY)</option>
+                                            <option value="RUB">Russian Ruble (RUB)</option>
+                                    </optgroup>
+                                    <optgroup label="World currencies">
+                                            <option value="USD">US Dollar (USD)</option>
+                                            <option value="EUR">Euro (EUR)</option>
+                                            <option value="GBP">British Pound (GBP)</option>
+                                            <option value="CHF">Swiss Franc (CHF)</option>
+                                            <option value="JPY">Japanese Yen (JPY)</option>
+                                            <option value="CAD">Canadian Dollar (CAD)</option>
+                                            <option value="AUD">Australian Dollar (AUD)</option>
+                                            <option value="SEK">Swedish Krona (SEK)</option>
+                                            <option value="NOK">Norwegian Krone (NOK)</option>
+                                    </optgroup>
+                            </select>
+                        </div>
+                        <div class="fld">
+                            <label>Display conversion rate (1 = no conversion)</label>
+                            <input name="currencyRate" id="curRate" dir="ltr" value="1" inputmode="decimal" />
+                        </div>
+                    </div>
+                    <div class="hint" style="margin-top:8px">
+                        The selected currency only changes how amounts are formatted: currency sign, thousands separators and the native digits of the current language — stored numbers and payroll calculations remain untouched.
+                        <b>The conversion rate is display-only as well.</b>
+                    </div>
+                    <div class="hint" id="curSugHint" style="margin-top:4px"></div>
+                        <div style="margin-top:10px;padding:10px 14px;border:1px dashed var(--line);border-radius:12px;display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
+                            <span class="hint">Live preview of the amount format:</span>
+                            <b id="curPreview" style="font-size:14px">1,234,568 IRR</b>
+                        </div>
+                        <div class="btn-row" style="margin-top:16px">
+                            <button class="btn btn-primary">💾 Save language, calendar &amp; currency</button>
+                        </div>
+                </fieldset>
+            </div>
+
+        <div class="set-pane" id="tab-screensaver" hidden>
+            <fieldset  style="border:0;padding:0;margin:0">
+                <h3 class="set-sec">🖥 Screen saver (matrix rain)</h3>
+                <div class="hint" style="margin-bottom:12px">
+                    After the configured idle time, a full-screen matrix-rain effect starts and shows the current clock. The first mouse move or key press wakes it up — in “require password” mode, waking up is only possible with the current signed-in user&#x27;s password.
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 14px;max-width:820px">
+                    <div class="fld">
+                        <label>Screen saver state</label>
+                        <select name="ssEnabled">
+                            <option value="true" selected="selected">On — runs after idle time</option>
+                            <option value="false">Off — never runs</option>
+                        </select>
+                    </div>
+                    <div class="fld">
+                        <label>Idle minutes before start (1–120)</label>
+                        <input type="number" name="ssMinutes" min="1" max="120" step="1" value="5" />
+                    </div>
+                    <div class="fld">
+                        <label>Wake up with password</label>
+                        <select name="ssRequirePassword">
+                            <option value="true" selected="selected">Yes — returning to normal requires the user&#x27;s password</option>
+                            <option value="false">No — collapses on first movement without password</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="hint" style="margin-top:8px">
+                    Security note: the screen saver is a display lock — after waking up, the same session continues and the password only re-verifies that user&#x27;s identity; for a full lock, sign the user out.
+                </div>
+                    <div class="btn-row" style="margin-top:16px">
+                        <button class="btn btn-primary">💾 Save screen saver settings</button>
+                    </div>
+            </fieldset>
+        </div>
+        </form>
+        <form id="resetLogoForm" method="post" action="/Settings/ResetLogo" style="display:contents">
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+        </form>
+
+        <div class="set-pane" id="tab-look" hidden>
+            <h3 class="set-sec">🖌 Quick Custom Color (Two Colors)</h3>
+            <div class="hint" style="margin-bottom:10px">
+                This is a compatibility layer for the previous phase: it only determines the main color and menu.
+                <b>If a palette from the library above is active, this setting will be ignored.</b>
+            </div>
+            <form method="post" action="/Settings/SavePalette">
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                <fieldset  style="border:0;padding:0;margin:0">
+                    <div class="palette-presets" style="margin-bottom:12px">
+                            <button type="button" class="palette-preset" data-accent="#6366f1" data-sidebar="#1b1746"
+                                    >
+                                <span class="dot" style="background:#6366f1"></span>
+                                <span class="dot" style="background:#1b1746"></span>
+                                نیلی درخشان (پیش‌فرض)
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#0d9488" data-sidebar="#0d242c"
+                                    >
+                                <span class="dot" style="background:#0d9488"></span>
+                                <span class="dot" style="background:#0d242c"></span>
+                                فیروزه‌ای سازمانی
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#1d4ed8" data-sidebar="#0b1e3f"
+                                    >
+                                <span class="dot" style="background:#1d4ed8"></span>
+                                <span class="dot" style="background:#0b1e3f"></span>
+                                آبی دریایی
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#16a34a" data-sidebar="#0c2216"
+                                    >
+                                <span class="dot" style="background:#16a34a"></span>
+                                <span class="dot" style="background:#0c2216"></span>
+                                سبز جنگل
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#7c3aed" data-sidebar="#1e1338"
+                                    >
+                                <span class="dot" style="background:#7c3aed"></span>
+                                <span class="dot" style="background:#1e1338"></span>
+                                بنفش سلطنتی
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#ea580c" data-sidebar="#2a1508"
+                                    >
+                                <span class="dot" style="background:#ea580c"></span>
+                                <span class="dot" style="background:#2a1508"></span>
+                                شفق نارنجی
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#db2777" data-sidebar="#2b0d1c"
+                                    >
+                                <span class="dot" style="background:#db2777"></span>
+                                <span class="dot" style="background:#2b0d1c"></span>
+                                سرخابی
+                            </button>
+                            <button type="button" class="palette-preset" data-accent="#475569" data-sidebar="#111827"
+                                    >
+                                <span class="dot" style="background:#475569"></span>
+                                <span class="dot" style="background:#111827"></span>
+                                گرافیت
+                            </button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px">
+                        <div class="fld">
+                            <label>Primary Color (Accent)</label>
+                            <div class="color-pair">
+                                <input type="color" name="accentColor" id="accentColor" value="#6366f1" />
+                                <code id="accentHex">#6366f1</code>
+                            </div>
+                        </div>
+                        <div class="fld">
+                            <label>Sidebar Color</label>
+                            <div class="color-pair">
+                                <input type="color" name="sidebarColor" id="sidebarColor" value="#1b1746" />
+                                <code id="sidebarHex">#1b1746</code>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="btn-row" style="gap:8px">
+                            <button class="btn btn-primary btn-sm">💾 Save Custom Color</button>
+                        </div>
+                </fieldset>
+            </form>
+
+            <h3 class="set-sec" style="margin-top:22px">🎨 System Color Palettes</h3>
+            <div class="hint" style="margin-bottom:10px">Each palette has 16 standard color roles — links, buttons, table header/row, menu, text, background, and status; all colors are flat without gradients</div>
+            <div data-refresh-host>
+                <div class="pal-grid">
+                        <div class="pal-card ">
+                            <div class="pal-head">
+                                <span class="pal-name">نیلی درخشان (پیش‌فرض)</span>
+                                    <span class="pal-tag builtin">Internal</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#6366f1;--sidebar:#1b1746;--sidebar-text:#c3c6ec;--link:#4f46e5;--th-bg:#f2f3fc;--row-alt:#f9f9fe;--line:#e3e5f3;--ink:#1d1e3a;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#6366f1" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#4f46e5" title="Links"></span>
+                                <span class="pal-sw" style="background:#1b1746" title="Menu"></span>
+                                <span class="pal-sw" style="background:#f2f3fc" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f9f9fe" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#1d1e3a" title="متن"></span>
+                                <span class="pal-sw" style="background:#059669" title="Success"></span>
+                                <span class="pal-sw" style="background:#d97706" title="Warning"></span>
+                                <span class="pal-sw" style="background:#e11d48" title="Error"></span>
+                                <span class="pal-sw" style="background:#0284c7" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                                        <input type="hidden" name="id" value="e52f0e77f5344416bc2daca36c486527" />
+                                        <button class="btn btn-primary btn-sm">Apply</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=e52f0e77f5344416bc2daca36c486527"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="pal-card ">
+                            <div class="pal-head">
+                                <span class="pal-name">آبی سازمانی (سبک BioTime)</span>
+                                    <span class="pal-tag builtin">Internal</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#1668dc;--sidebar:#14273f;--sidebar-text:#b8c7dd;--link:#1257b8;--th-bg:#eaf1fb;--row-alt:#f6f9fe;--line:#dbe4f1;--ink:#17212f;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#1668dc" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#1257b8" title="Links"></span>
+                                <span class="pal-sw" style="background:#14273f" title="Menu"></span>
+                                <span class="pal-sw" style="background:#eaf1fb" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f6f9fe" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#17212f" title="متن"></span>
+                                <span class="pal-sw" style="background:#059669" title="Success"></span>
+                                <span class="pal-sw" style="background:#d97706" title="Warning"></span>
+                                <span class="pal-sw" style="background:#e11d48" title="Error"></span>
+                                <span class="pal-sw" style="background:#0284c7" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                                        <input type="hidden" name="id" value="6de0137eea234515b660a62fd2f962c0" />
+                                        <button class="btn btn-primary btn-sm">Apply</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=6de0137eea234515b660a62fd2f962c0"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="pal-card ">
+                            <div class="pal-head">
+                                <span class="pal-name">سرمه‌ای امنیتی (سبک BioStar)</span>
+                                    <span class="pal-tag builtin">Internal</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#2f6fed;--sidebar:#1b2436;--sidebar-text:#b6c1d6;--link:#2556bd;--th-bg:#ecf0f7;--row-alt:#f7f9fc;--line:#dae0ea;--ink:#1a2233;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#2f6fed" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#2556bd" title="Links"></span>
+                                <span class="pal-sw" style="background:#1b2436" title="Menu"></span>
+                                <span class="pal-sw" style="background:#ecf0f7" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f7f9fc" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#1a2233" title="متن"></span>
+                                <span class="pal-sw" style="background:#059669" title="Success"></span>
+                                <span class="pal-sw" style="background:#d97706" title="Warning"></span>
+                                <span class="pal-sw" style="background:#e11d48" title="Error"></span>
+                                <span class="pal-sw" style="background:#0284c7" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                                        <input type="hidden" name="id" value="08a06d9fddaa4f94b7b768bc2706a17b" />
+                                        <button class="btn btn-primary btn-sm">Apply</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=08a06d9fddaa4f94b7b768bc2706a17b"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="pal-card ">
+                            <div class="pal-head">
+                                <span class="pal-name">سبز دسترسی</span>
+                                    <span class="pal-tag builtin">Internal</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#16a34a;--sidebar:#122a1c;--sidebar-text:#b3d2c0;--link:#15803d;--th-bg:#ebf6ef;--row-alt:#f6fbf8;--line:#d9e9e0;--ink:#14251c;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#16a34a" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#15803d" title="Links"></span>
+                                <span class="pal-sw" style="background:#122a1c" title="Menu"></span>
+                                <span class="pal-sw" style="background:#ebf6ef" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f6fbf8" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#14251c" title="متن"></span>
+                                <span class="pal-sw" style="background:#059669" title="Success"></span>
+                                <span class="pal-sw" style="background:#d97706" title="Warning"></span>
+                                <span class="pal-sw" style="background:#e11d48" title="Error"></span>
+                                <span class="pal-sw" style="background:#0284c7" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                                        <input type="hidden" name="id" value="e4e108625c0947dcb48e3fef6d302e2e" />
+                                        <button class="btn btn-primary btn-sm">Apply</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=e4e108625c0947dcb48e3fef6d302e2e"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="pal-card ">
+                            <div class="pal-head">
+                                <span class="pal-name">خاکستری صنعتی (سبک Hikvision)</span>
+                                    <span class="pal-tag builtin">Internal</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#40607a;--sidebar:#232b33;--sidebar-text:#b5bfc9;--link:#3a566e;--th-bg:#eef1f4;--row-alt:#f8fafb;--line:#dce1e6;--ink:#1d2630;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#40607a" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#3a566e" title="Links"></span>
+                                <span class="pal-sw" style="background:#232b33" title="Menu"></span>
+                                <span class="pal-sw" style="background:#eef1f4" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f8fafb" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#1d2630" title="متن"></span>
+                                <span class="pal-sw" style="background:#059669" title="Success"></span>
+                                <span class="pal-sw" style="background:#d97706" title="Warning"></span>
+                                <span class="pal-sw" style="background:#e11d48" title="Error"></span>
+                                <span class="pal-sw" style="background:#0284c7" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                                        <input type="hidden" name="id" value="ae43226718094db7b70f637205504bfc" />
+                                        <button class="btn btn-primary btn-sm">Apply</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=ae43226718094db7b70f637205504bfc"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="pal-card on">
+                            <div class="pal-head">
+                                <span class="pal-name">پارسان (قالب داشبورد مدرن)</span>
+                                    <span class="pal-tag">✓ Active</span>
+                            </div>
+                            <div class="pal-mini" style="--accent:#14b8a6;--sidebar:#17293a;--sidebar-text:#a9bccb;--link:#0d9488;--th-bg:#eff4f7;--row-alt:#f9fbfc;--line:#e1e8ee;--ink:#1b2833;--card:#ffffff">
+                                <div class="m-side" style="background:var(--sidebar)">Menu</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">Button</span>
+                                    <span class="m-link">Link</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">Alternating row</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:#14b8a6" title="Primary Color"></span>
+                                <span class="pal-sw" style="background:#0d9488" title="Links"></span>
+                                <span class="pal-sw" style="background:#17293a" title="Menu"></span>
+                                <span class="pal-sw" style="background:#eff4f7" title="Table header"></span>
+                                <span class="pal-sw" style="background:#f9fbfc" title="Alternating row"></span>
+                                <span class="pal-sw" style="background:#1b2833" title="متن"></span>
+                                <span class="pal-sw" style="background:#10b981" title="Success"></span>
+                                <span class="pal-sw" style="background:#f59e0b" title="Warning"></span>
+                                <span class="pal-sw" style="background:#ef4444" title="Error"></span>
+                                <span class="pal-sw" style="background:#3b82f6" title="Info"></span>
+                            </div>
+                            <div class="pal-acts">
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=986783797db14609b4f6c8b36d7537b1"
+                                            data-modal-title="Copy from internal palette">
+                                        Copy
+                                    </button>
+                            </div>
+                        </div>
+
+                        <div class="pal-card" style="justify-content:center;align-items:center;min-height:150px;border-style:dashed">
+                            <div style="font-size:26px;color:var(--ink-3)">＋</div>
+                            <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm"
+                                    data-modal-title="New Palette">Create New Palette</button>
+                            <div class="hint" style="text-align:center">16 color roles &#x2B; live preview</div>
+                        </div>
+                </div>
+
+                    <form method="post" action="/Settings/DetachPalette" data-ajax data-refresh style="margin-top:14px">
+                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                        <button class="btn btn-sm">↺ No Palette — Return to original software colors</button>
+                    </form>
+            </div>
+        </div>
+
+        <div class="set-pane" id="tab-db" hidden>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+                    <b style="font-size:13.5px">📊 Registered real information — active installation</b>
+                        <span class="badge badge-ok">✓ Live connection is up</span>
+                    <span class="badge">SQLite (فایلی)</span>
+                </div>
+                <table class="tbl kv">
+                    <tbody>
+                        <tr><td style="width:210px">Active database type</td><td><b>SQLite (فایلی)</b></td></tr>
+                        <tr><td>Configuration source</td><td>فایل پیکربندی (appsettings.json)</td></tr>
+                        <tr><td>Connection string (password masked)</td><td><code dir="ltr" style="font-size:11px;word-break:break-all">Data Source=hr.db</code></td></tr>
+                                <tr><td>Real database file path</td><td><code dir="ltr" style="font-size:11px;word-break:break-all">/home/z/my-project/aspnet/sc-run/hr.db</code></td></tr>
+                                <tr><td>Database file size</td><td>5 MB — Last write: 1405/08/18 - 12:25</td></tr>
+                                <tr><td>Journal mode</td><td dir="ltr" style="text-align:end">wal</td></tr>
+                                <tr><td>Database logical size</td><td>1289 pages × 4096 bytes  — free pages: 0</td></tr>
+                            <tr><td>Database engine version</td><td dir="ltr" style="text-align:end">SQLite 3.54.0</td></tr>
+                            <tr><td>Table count / total records</td><td><b>67</b> Table / <b>20,787</b> Records</td></tr>
+                    </tbody>
+                </table>
+                    <div style="margin-top:10px;font-size:12px;color:var(--ink-2)">Tables with the most records (counted live right now):</div>
+                    <div class="chips" style="margin-top:6px">
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">HrLangEntries</code> 18,930</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">AttendanceRecords</code> 350</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">PayslipLines</code> 341</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">RolePermissions</code> 209</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">DeviceBiometrics</code> 121</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">Permissions</code> 112</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">AccessEvents</code> 110</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">EmployeeBiometrics</code> 88</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">ParkingEvents</code> 64</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">AccessPermissions</code> 60</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">DeviceUsers</code> 46</span>
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">PayrollParameters</code> 38</span>
+                    </div>
+            </div>
+                <div class="callout" style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+                    ⚙️ System connection to database — set up on first run via &#x27;Setup Wizard&#x27; and can be changed from here anytime. After saving, the new database is automatically prepared (table creation &#x2B; initialization) and <b>No need to restart the application</b> Activated; previous bank data remains untouched.
+                </div>
+                <form id="dbForm" onsubmit="return false">
+                    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" />
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px">
+                        <label class="db-prov" style="display:flex;gap:7px;align-items:center;font-size:12.5px"><input type="radio" name="provider" value="sqlserver" checked /> SQL Server (Enterprise)</label>
+                        <label class="db-prov" style="display:flex;gap:7px;align-items:center;font-size:12.5px"><input type="radio" name="provider" value="sqlite" /> SQLite (File)</label>
+                    </div>
+                    <div id="dbMssql" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                        <div class="fld"><label>Server address</label><input name="server" value="localhost" dir="ltr" /></div>
+                        <div class="fld"><label>Port</label><input name="port" value="1433" dir="ltr" /></div>
+                        <div class="fld"><label>Bank Name</label><input name="database" value="HrAttendance" dir="ltr" /></div>
+                        <div class="fld"><label>Authentication Type</label>
+                            <select name="authMode" id="dbAuth"><option value="sql">SQL account</option><option value="windows">Windows (Integrated)</option></select>
+                        </div>
+                        <div class="fld db-sqlauth"><label>SQL Username</label><input name="user" value="sa" dir="ltr" /></div>
+                        <div class="fld db-sqlauth"><label>SQL Password</label><input name="password" type="password" dir="ltr" autocomplete="new-password" /></div>
+                        <div class="fld" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+                            <label style="display:flex;gap:6px;align-items:center;font-size:12px"><input type="checkbox" name="createIfMissing" checked /> Auto-create bank</label>
+                            <label style="display:flex;gap:6px;align-items:center;font-size:12px"><input type="checkbox" name="ssl" /> SSL</label>
+                        </div>
+                    </div>
+                    <div id="dbSqlite" style="display:none">
+                        <div class="fld" style="max-width:420px"><label>Database file path</label><input name="dbPath" value="hr.db" dir="ltr" placeholder="hr.db یا C:\HrData\hr.db" /></div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap">
+                        <button type="button" class="btn" id="dbTestBtn">🔌 Test Connection</button>
+                        <button type="button" class="btn btn-primary" id="dbSaveBtn" data-confirm="Apply database connection change? The new database will be automatically prepared and activated; current database data will remain untouched.">💾 Save and Apply Connection</button>
+                        <span id="dbBusy" style="display:none;color:var(--ink-2);font-size:12px">⏳ Checking…</span>
+                    </div>
+                    <div id="dbResult" style="display:none;margin-top:10px;border-radius:10px;padding:9px 13px;font-size:12.5px;line-height:1.9;border:1px solid"></div>
+                </form>
+        </div>
+
+        <div class="set-pane" id="tab-mods" hidden>
+            <p class="muted" style="margin:0 0 12px;font-size:12.5px;line-height:2">
+                Modules <b>Base</b> They are the backbone of the system and are always active; modules <b>System</b> can be turned on or off separately — disabling the module only hides its menu and pages and <b>Data will be preserved</b>.
+                List of allowed modules can be set in &#x27;Install License&#x27;; locked module with license cannot be turned on.
+            </p>
+            <div class="tbl-wrap">
+                <table class="tbl" id="modTable">
+                    <thead>
+                        <tr><th style="width:34px"></th><th>Module</th><th style="width:110px">Role</th><th>Description</th><th style="width:170px">Status</th></tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td style="font-size:18px">&#x1F6AA;</td>
+                                <td><b>کنترل تردد</b> <span class="muted" dir="ltr" style="font-size:11px">(access)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">مناطق و گیت‌ها، مجوزهای عبور، گروه‌های دسترسی و کارت‌های شناسایی</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="access" data-enabled="True"
+                                                data-title="کنترل تردد" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F552;</td>
+                                <td><b>حضور و غیاب</b> <span class="muted" dir="ltr" style="font-size:11px">(attendance)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">شیفت‌ها و نوبت‌کاری، تردد روزانه، درخواست‌های مرخصی/ماموریت/اضافه‌کار و اصلاحات و موتور محاسبهٔ کارکرد</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="attendance" data-enabled="True"
+                                                data-title="حضور و غیاب" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x2699;&#xFE0F;</td>
+                                <td><b>هستهٔ پلتفرم</b> <span class="muted" dir="ltr" style="font-size:11px">(core)</span></td>
+                                <td>                                        <span class="badge">Base</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">ورود و کاربران و نقش‌ها، شرکت‌ها، ویزارد راه‌اندازی و تنظیمات، حسابرسی، اعلان‌ها، گزارش‌ساز، پرتال «من»، مجوز نصب و پوستهٔ UI — بدون این هیچ ماژولی بالا نمی‌آید</td>
+                                <td>
+                                        <span class="badge badge-ok">Always active</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F5A5;&#xFE0F;</td>
+                                <td><b>تجهیزات و گیت‌وی</b> <span class="muted" dir="ltr" style="font-size:11px">(devices)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">دستگاه‌های تردد، داده‌های هویتی/بیومتریک، تنظیمات گیت‌وی و وب‌هوک‌ها — تغذیه‌کنندهٔ حضور، کنترل تردد و پارکینگ</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="devices" data-enabled="True"
+                                                data-title="تجهیزات و گیت‌وی" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F5A7;</td>
+                                <td><b>دروازهٔ دستگاه‌ها</b> <span class="muted" dir="ltr" style="font-size:11px">(gateway)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">پایش درون‌اپی دستگاه‌های تردد (poll TCP &#x2B; پل ADMS) و دوربین‌های پلاک‌خوان (پل ANPR &#x2B; حلقهٔ راهبند) — جایگزین سرویس ویندوزی مستقل</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="gateway" data-enabled="True"
+                                                data-title="دروازهٔ دستگاه‌ها" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F3E2;</td>
+                                <td><b>سازمان و پرسنل</b> <span class="muted" dir="ltr" style="font-size:11px">(org)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">چارت سازمانی، پرسنل، قراردادها و احکام، تعطیلات رسمی و ورود اکسل — پایهٔ مشترک همهٔ ماژول‌های سیستم</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="org" data-enabled="True"
+                                                data-title="سازمان و پرسنل" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F17F;&#xFE0F;</td>
+                                <td><b>پارکینگ (پلاک‌خوان)</b> <span class="muted" dir="ltr" style="font-size:11px">(parking)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">پارکینگ‌ها و دروازه‌ها، خودروها، مجوزهای عبور و رخدادهای ANPR</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="parking" data-enabled="True"
+                                                data-title="پارکینگ (پلاک‌خوان)" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F4B0;</td>
+                                <td><b>حقوق و دستمزد</b> <span class="muted" dir="ltr" style="font-size:11px">(payroll)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">فرمول‌ساز اقلام، پارامترهای سالانه، اجرای لیست حقوق، فیش حقوقی، عیدی و تسویه</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="payroll" data-enabled="True"
+                                                data-title="حقوق و دستمزد" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px">&#x1F39F;</td>
+                                <td><b>بازدیدکنندگان</b> <span class="muted" dir="ltr" style="font-size:11px">(visitors)</span></td>
+                                <td>                                        <span class="badge badge-info">System</span>
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">ارباب رجوع، کارت بازدید، پیمانکاران و هشدارهای امنیتی</td>
+                                <td>
+                                        <button type="button" class="btn btn-sm "
+                                                data-mod-toggle="visitors" data-enabled="True"
+                                                data-title="بازدیدکنندگان" >
+                                            Active — Turn Off
+                                        </button>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <span id="modAf" style="display:none"><input name="__RequestVerificationToken" type="hidden" value="CfDJ8IOqd8ke4LJNlE4jmKch_l-FYMRLtGzi-6tKStEE8JXOEAQH2a7sItLmKdvHA7tZ0z2PDg02PvBEAZbE-dsQihOtCqwM0_36VMmZ4qwtsNdLht-j4Vfj41pr_Ds9W4WngvNiMnoZ-bZUI3kxas8I-xXm1sgADRO-xSHpGqs9osVJaje0TCHMLA7CjPgcOtWUXw" /></span>
+        </div>
+
+        <div class="set-pane" id="tab-about" hidden>
+            <table class="tbl kv">
+                <tbody>
+                    <tr><td>Product</td><td>سامانه یکپارچه منابع انسانی</td></tr>
+                    <tr><td>Version</td><td><b>2.7.10</b></td></tr>
+                    <tr><td>Manufacturer</td><td>گروه توسعه سامانه‌های سازمانی</td></tr>
+                        <tr><td>Copyright</td><td>حق نشر © گروه توسعه سامانه‌های سازمانی</td></tr>
+                    <tr><td>Creation time</td><td>18 آبان 1405 — 10:36</td></tr>
+                    <tr><td>Execution time</td><td>ASP.NET Core 8 / .NET 8.0.33</td></tr>
+                </tbody>
+            </table>
+            <div class="hint" style="margin-top:10px">
+                Version and manufacturer are injected at software &quot;build time&quot;; example:
+                <code style="direction:ltr;display:inline-block">dotnet publish -p:AppVersion=2.1.0 -p:VendorName="Your Company Name"</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            </div>
+            <footer class="foot">
+                شرکت پتروشیمی پارس آسیا — Version 2.7.10 · Vendor: گروه توسعه سامانه‌های سازمانی
+            </footer>
+        </main>
+    <script>window.__hrL10n = {" \u0627\u0632 \u062A\u0628\u200C\u0647\u0627\u06CC \u0633\u0645\u062A \u0631\u0627\u0633\u062A (\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u060C \u062A\u0648\u0627\u0628\u0639\u060C \u0627\u0642\u0644\u0627\u0645\u060C \u0639\u0645\u0644\u06AF\u0631\u0647\u0627\u060C \u0639\u062F\u062F/\u0645\u062A\u0646\u060C \u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627) \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u0627 \u0645\u0648\u0633 \u0631\u0648\u06CC \u0628\u0648\u0645 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0641\u0642\u0637 \u0631\u0648\u06CC \u0622\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0628\u0647 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0627\u0636\u0627\u0641\u0647 \u0634\u0648\u062F.":" \u0627\u0632 \u062A\u0628\u200C\u0647\u0627\u06CC \u0633\u0645\u062A \u0631\u0627\u0633\u062A (\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u060C \u062A\u0648\u0627\u0628\u0639\u060C \u0627\u0642\u0644\u0627\u0645\u060C \u0639\u0645\u0644\u06AF\u0631\u0647\u0627\u060C \u0639\u062F\u062F/\u0645\u062A\u0646\u060C \u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627) \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u0627 \u0645\u0648\u0633 \u0631\u0648\u06CC \u0628\u0648\u0645 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0641\u0642\u0637 \u0631\u0648\u06CC \u0622\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0628\u0647 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0627\u0636\u0627\u0641\u0647 \u0634\u0648\u062F."," \u0628\u0632\u0631\u06AF\u062A\u0631 \u0627\u0632 ":" greater than "," \u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC ":" greater than or equal to "," \u0628\u0647\u200C\u062A\u0648\u0627\u0646 ":" to the power of "," \u0628\u0647\u200C\u0639\u0644\u0627\u0648\u0647 ":" plus "," \u062A\u0631\u062A\u06CC\u0628 \u0645\u062D\u0627\u0633\u0628\u0647 \u0645\u062B\u0644 \u0631\u06CC\u0627\u0636\u06CC \u0627\u0633\u062A\u061B \u0628\u0631\u0627\u06CC \u0627\u0648\u0644\u0648\u06CC\u062A \u0627\u0632 \u00AB( \u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632\u00BB \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u06A9\u0646\u06CC\u062F. \u0628\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u062C\u0627\u0628\u0647\u200C\u062C\u0627 \u0648 \u0628\u0627 \u2715 \u062D\u0630\u0641 \u06A9\u0646\u06CC\u062F (\u0627\u0646\u062F\u0627\u062E\u062A\u0646 \u0628\u0644\u0648\u06A9 \u0631\u0648\u06CC \u067E\u0627\u0644\u062A \u0647\u0645 \u062D\u0630\u0641 \u0645\u06CC\u200C\u06A9\u0646\u062F).":" \u062A\u0631\u062A\u06CC\u0628 \u0645\u062D\u0627\u0633\u0628\u0647 \u0645\u062B\u0644 \u0631\u06CC\u0627\u0636\u06CC \u0627\u0633\u062A\u061B \u0628\u0631\u0627\u06CC \u0627\u0648\u0644\u0648\u06CC\u062A \u0627\u0632 \u00AB( \u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632\u00BB \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u06A9\u0646\u06CC\u062F. \u0628\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u062C\u0627\u0628\u0647\u200C\u062C\u0627 \u0648 \u0628\u0627 \u2715 \u062D\u0630\u0641 \u06A9\u0646\u06CC\u062F (\u0627\u0646\u062F\u0627\u062E\u062A\u0646 \u0628\u0644\u0648\u06A9 \u0631\u0648\u06CC \u067E\u0627\u0644\u062A \u0647\u0645 \u062D\u0630\u0641 \u0645\u06CC\u200C\u06A9\u0646\u062F)."," \u062A\u0642\u0633\u06CC\u0645 \u0628\u0631 ":" divided by "," \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9\u200C\u0647\u0627\u06CC \u0639\u062F\u062F/\u0645\u062A\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0642\u062F\u0627\u0631\u0634\u0627\u0646 \u0648\u06CC\u0631\u0627\u06CC\u0634 \u0634\u0648\u062F\u061B \u062F\u06A9\u0645\u0647\u0654 \u00AB\uFF0B\u00BB \u062F\u0627\u062E\u0644 \u0647\u0631 \u062A\u0627\u0628\u0639 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062C\u062F\u06CC\u062F \u0645\u06CC\u200C\u0622\u0648\u0631\u062F.":" \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9\u200C\u0647\u0627\u06CC \u0639\u062F\u062F/\u0645\u062A\u0646 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0642\u062F\u0627\u0631\u0634\u0627\u0646 \u0648\u06CC\u0631\u0627\u06CC\u0634 \u0634\u0648\u062F\u061B \u062F\u06A9\u0645\u0647\u0654 \u00AB\uFF0B\u00BB \u062F\u0627\u062E\u0644 \u0647\u0631 \u062A\u0627\u0628\u0639 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062C\u062F\u06CC\u062F \u0645\u06CC\u200C\u0622\u0648\u0631\u062F."," \u0636\u0631\u0628\u062F\u0631 ":" times "," \u0641\u0631\u0645\u0648\u0644 \u0645\u062A\u0646\u06CC \u0632\u0646\u062F\u0647 \u0633\u0627\u062E\u062A\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u062E\u0637 \u00AB\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC\u00BB \u0645\u0639\u0646\u06CC \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0646\u0634\u0627\u0646 \u0645\u06CC\u200C\u062F\u0647\u062F \u0648 \u0627\u06AF\u0631 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0628\u0627\u0634\u062F \u062E\u0637\u0627\u06CC \u062F\u0642\u06CC\u0642 \u0647\u0645\u0627\u0646\u200C\u062C\u0627 \u0645\u06CC\u200C\u0622\u06CC\u062F. \u0627\u0634\u062A\u0628\u0627\u0647 \u06A9\u0631\u062F\u06CC\u062F\u061F \u00AB\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A\u00BB \u2014 \u062D\u062A\u06CC \u00AB\u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646\u00BB \u0647\u0645 \u0628\u0631\u06AF\u0634\u062A\u200C\u067E\u0630\u06CC\u0631 \u0627\u0633\u062A.":" \u0641\u0631\u0645\u0648\u0644 \u0645\u062A\u0646\u06CC \u0632\u0646\u062F\u0647 \u0633\u0627\u062E\u062A\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u062E\u0637 \u00AB\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC\u00BB \u0645\u0639\u0646\u06CC \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0646\u0634\u0627\u0646 \u0645\u06CC\u200C\u062F\u0647\u062F \u0648 \u0627\u06AF\u0631 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0628\u0627\u0634\u062F \u062E\u0637\u0627\u06CC \u062F\u0642\u06CC\u0642 \u0647\u0645\u0627\u0646\u200C\u062C\u0627 \u0645\u06CC\u200C\u0622\u06CC\u062F. \u0627\u0634\u062A\u0628\u0627\u0647 \u06A9\u0631\u062F\u06CC\u062F\u061F \u00AB\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A\u00BB \u2014 \u062D\u062A\u06CC \u00AB\u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646\u00BB \u0647\u0645 \u0628\u0631\u06AF\u0634\u062A\u200C\u067E\u0630\u06CC\u0631 \u0627\u0633\u062A."," \u0645\u062E\u0627\u0644\u0641 ":" differs from "," \u0645\u0633\u0627\u0648\u06CC ":" equals "," \u0645\u0646\u0647\u0627 ":" minus "," \u06A9\u0648\u0686\u06A9\u062A\u0631 \u0627\u0632 ":" less than "," \u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC ":" less than or equal to ","\u0027\u06A9\u062F\u0027":"\u0027code\u0027","( {0} ) \u0648 ( {1} )":"( {0} ) AND ( {1} )","( {0} ) \u06CC\u0627 ( {1} )":"( {0} ) OR ( {1} )","\u002B \u0639\u062F\u062F":"\u002B Number","\u002B \u0645\u062A\u0646 \u0027\u2026\u0027":"\u002B Text \u0027\u2026\u0027","{0} \u06AF\u0631\u062F \u0634\u062F\u0647":"{0} rounded","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0627 {1} \u0631\u0642\u0645 \u0627\u0639\u0634\u0627\u0631":"{0} rounded to {1} decimal places","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u0628\u0627\u0644\u0627":"{0} rounded up","{0} \u06AF\u0631\u062F \u0634\u062F\u0647 \u0628\u0647 \u067E\u0627\u06CC\u06CC\u0646":"{0} rounded down","\u060C ":", ","\u061F \u0631\u0627\u0647\u0646\u0645\u0627":"? Help","\u061F \u0631\u0627\u0647\u0646\u0645\u0627\u06CC \u0633\u0631\u06CC\u0639 \u0641\u0631\u0645\u0648\u0644\u200C\u0633\u0627\u0632":"? Formula builder quick help","\u0622\u0631\u06AF\u0648\u0645\u0627\u0646":"Argument","\u0627\u0631\u0633\u0627\u0644 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F: ":"Submission failed: ","\u0627\u0632 \u067E\u0627\u0631\u0627\u0645\u062A\u0631 \u00AB\u067E\u0644\u06A9\u0627\u0646_\u0645\u0627\u0644\u06CC\u0627\u062A\u00BB \u0634\u0631\u06A9\u062A":"From the company\u0027s \u00ABtax_bracket\u00BB parameter","\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u0627\u0632 \u0645\u062C\u0648\u0632 \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647":"Overtime from approved leave request","\u0627\u0636\u0627\u0641\u0647\u200C\u06A9\u0627\u0631\u06CC \u06F1\u066B\u06F4 \u0628\u0631\u0627\u0628\u0631":"Overtime \u00D71.4","\u0627\u0641\u0632\u0648\u062F\u0646 \u0622\u0631\u06AF\u0648\u0645\u0627\u0646":"Add argument","\u0627\u0642\u0644\u0627\u0645":"Items","\u0627\u0646\u062C\u0627\u0645 \u0634\u062F":"Done","\u0627\u0646\u0635\u0631\u0627\u0641":"Cancel","\u0627\u06AF\u0631 ( {0} ) \u0622\u0646\u06AF\u0627\u0647 {1} \u0648\u06AF\u0631\u0646\u0647 {2}":"if ( {0} ) then {1} else {2}","\u0627\u06CC\u0631\u0627\u0646":"Iran","\u0627\u06CC\u0646 \u0639\u0645\u0644\u06CC\u0627\u062A \u062D\u0633\u0627\u0633 \u0627\u0633\u062A":"This operation is sensitive","\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F":"this unit","\u0627\u06CC\u0646 \u0648\u0627\u062D\u062F \u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645\u06CC \u0646\u062F\u0627\u0631\u062F\u061B \u0632\u06CC\u0631\u0645\u062C\u0645\u0648\u0639\u0647\u200C\u0647\u0627 \u0648 \u067E\u0631\u0633\u0646\u0644 \u0622\u0646\u200C\u0647\u0627 \u0647\u0645\u0631\u0627\u0647 \u0648\u0627\u062D\u062F \u0645\u06CC\u200C\u0622\u06CC\u0646\u062F.":"This unit has no direct employees; its sub-units and staff move along with it.","\u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC \u0641\u0631\u0645 \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F \u2014 ":"Failed to load form \u2014 ","\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647 \u062A\u0642\u0633\u06CC\u0645":"Modulo","\u0628\u0627\u0642\u06CC\u0645\u0627\u0646\u062F\u0647\u0654 {0} \u0628\u0631 {1}":"remainder of {0} over {1}","\u0628\u0631\u0627\u06CC \u0627\u06CC\u0646 \u0634\u0631\u06A9\u062A \u0647\u0646\u0648\u0632 \u0642\u0644\u0645\u06CC \u062A\u0639\u0631\u06CC\u0641 \u0646\u0634\u062F\u0647 \u2014 \u0628\u0627 \u00AB\u0642\u0644\u0645 \u062C\u062F\u06CC\u062F\u00BB \u0627\u0648\u0644\u06CC\u0646 \u0642\u0644\u0645 \u0631\u0627 \u0628\u0633\u0627\u0632\u06CC\u062F.":"No items defined for this company yet \u2014 create the first one with \u00ABnew item\u00BB.","\u0628\u0631\u0627\u06CC \u0642\u0644\u0645\u200C\u0647\u0627\u06CC \u062C\u0645\u0639\u200C\u0628\u0646\u062F\u06CC":"For summary items","\u0628\u0632\u0631\u06AF\u062A\u0631":"Greater than","\u0628\u0632\u0631\u06AF\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC":"Greater than or equal","\u0628\u0633\u062A\u0646":"Close","\u0628\u0644\u0647\u060C \u0627\u0646\u062C\u0627\u0645 \u0628\u062F\u0647":"Yes, do it","\u0628\u0644\u0648\u06A9":"Block","\u0628\u0644\u0648\u06A9 \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F:":"Add a block:","\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0631\u0627 \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u06CC\u0646\u062C\u0627 \u0628\u06A9\u0634\u06CC\u062F \u2014 \u06CC\u0627 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u067E\u0627\u0644\u062A \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F":"Drag blocks from the palette here \u2014 or just click a palette block","\u0628\u06CC\u0634\u06CC\u0646\u0647\u0654 {0}":"maximum of {0}","\u0628\u06CC\u0645\u0647 \u0633\u0647\u0645 \u067E\u0631\u0633\u0646\u0644 (\u06F7\u066A)":"Insurance \u2014 employee share (7%)","\u062A\u0623\u06CC\u06CC\u062F":"Confirm","\u062A\u0623\u06CC\u06CC\u062F \u0639\u0645\u0644\u06CC\u0627\u062A":"Confirm action","\u062A\u0642\u0633\u06CC\u0645":"Divide","\u062A\u0648\u0627\u0628\u0639":"Functions","\u062A\u0648\u0627\u0646":"Power","\u062A\u06A9\u0645\u06CC\u0644 \u0627\u06CC\u0646 \u0641\u06CC\u0644\u062F \u0627\u0644\u0632\u0627\u0645\u06CC \u0627\u0633\u062A":"This field is required","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644":"Move without employees","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0647\u0645\u0631\u0627\u0647 \u067E\u0631\u0633\u0646\u0644":"Move with employees","\u062C\u0627\u0628\u062C\u0627\u06CC\u06CC \u0648\u0627\u062D\u062F \u0633\u0627\u0632\u0645\u0627\u0646\u06CC":"Move organizational unit","\u062C\u0633\u062A\u062C\u0648\u2026":"Search\u2026","\u062C\u0645\u0639":"Total","\u062D\u0630\u0641 \u0628\u0644\u0648\u06A9":"Delete block","\u062D\u0642 \u0627\u0648\u0644\u0627\u062F":"Child allowance","\u062D\u0642 \u0634\u0628\u200C\u06A9\u0627\u0631\u06CC (\u06F2\u06F5\u066A)":"Night-shift allowance (25%)","\u062E\u0627\u0644\u0635 \u067E\u0631\u062F\u0627\u062E\u062A\u06CC \u062A\u0627 \u0627\u06CC\u0646 \u0642\u0644\u0645":"Net paid up to this line","\u062E\u0637\u0627":"Error","\u062F\u0631 \u062D\u0627\u0644 \u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC\u2026":"Loading\u2026","\u062F\u0631 \u062D\u0627\u0644 \u062C\u0633\u062A\u062C\u0648\u2026":"Searching\u2026","\u062F\u0631 \u062D\u0627\u0644\u062A \u00AB\u0628\u062F\u0648\u0646 \u067E\u0631\u0633\u0646\u0644\u00BB\u060C \u0627\u06CC\u0646 {0} \u0646\u0641\u0631 \u062F\u0631 \u00AB{1}\u00BB \u0628\u0627\u0642\u06CC \u0645\u06CC\u200C\u0645\u0627\u0646\u0646\u062F.":"In \u00ABwithout employees\u00BB mode, these {0} employees remain in \u00AB{1}\u00BB.","\u062F\u0648\u0627\u0632\u062F\u0647\u0645 \u067E\u0627\u06CC\u0647 \u00D7 \u0646\u0633\u0628\u062A \u0631\u0648\u0632\u0647\u0627\u06CC \u062E\u062F\u0645\u062A \u0633\u0627\u0644":"Base \u00F7 12 \u00D7 service-days ratio","\u0631\u0634\u062A\u0647 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A \u2014 \u0639\u0644\u0627\u0645\u062A \u0027 \u062C\u0627 \u0627\u0641\u062A\u0627\u062F\u0647":"Unterminated string \u2014 missing \u0027 quote","\u0631\u0648\u06CC \u062F\u0631\u0622\u0645\u062F \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647\u0654 \u0647\u0645\u06CC\u0646 \u0645\u0627\u0647":"On this month\u0027s insurable income","\u0636\u0631\u0628":"Multiply","\u0639\u0628\u0627\u0631\u062A \u0627\u0636\u0627\u0641\u0647 \u067E\u0633 \u0627\u0632 \u067E\u0627\u06CC\u0627\u0646 \u0641\u0631\u0645\u0648\u0644: \u00AB{0}\u00BB":"Extra expression after end of formula: \u00AB{0}\u00BB","\u0639\u0628\u0627\u0631\u062A \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u00AB{0}\u00BB":"Invalid expression: \u00AB{0}\u00BB","\u0639\u062F\u062F \u00AB{0}\u00BB \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A":"Invalid number \u00AB{0}\u00BB","\u0639\u062F\u062F \u0628\u0631\u0627\u06CC \u0636\u0631\u0627\u06CC\u0628 (\u0645\u062B\u0644 \u0646\u0631\u062E \u06F1\u066B\u06F4) \u0648 \u0645\u062A\u0646 \u0628\u0631\u0627\u06CC \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062A\u0627\u0628\u0639 \u0642\u0644\u0645(\u0027\u06A9\u062F\u0027) \u0627\u0633\u062A\u0641\u0627\u062F\u0647 \u0645\u06CC\u200C\u0634\u0648\u062F.":"Numbers are for coefficients (e.g. rate 1.4); text is for the item(\u0027code\u0027) function argument.","\u0639\u062F\u062F \u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u2014 \u0641\u0642\u0637 \u0631\u0642\u0645 \u0648 \u0646\u0642\u0637\u0647":"Invalid number \u2014 digits and dot only","\u0639\u062F\u062F/\u0645\u062A\u0646":"Number/text","\u0639\u0645\u0644\u06AF\u0631\u0647\u0627":"Operators","\u0639\u06CC\u062F\u06CC \u0628\u0647\u200C\u0646\u0633\u0628\u062A \u06A9\u0627\u0631\u06A9\u0631\u062F":"New-year bonus by service ratio","\u0641\u0631\u0627\u062E\u0648\u0627\u0646\u06CC {0}({1})":"call {0}({1})","\u0641\u0631\u0645":"Form","\u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635 \u0627\u0633\u062A \u2014 \u0627\u0646\u062A\u0647\u0627\u06CC \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0645\u0646\u062A\u0638\u0631\u0647":"Incomplete formula \u2014 unexpected end","\u0641\u0631\u0645\u0648\u0644: ":"Formula: ","\u0641\u0647\u0645\u06CC\u062F\u0645\u060C \u0634\u0631\u0648\u0639 \u0645\u06CC\u200C\u06A9\u0646\u0645":"Got it, let\u0027s start","\u0642\u0627\u0644\u0628 \u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"Invalid value format","\u0642\u062F\u0631\u0645\u0637\u0644\u0642 {0}":"absolute value of {0}","\u0645\u0623\u0645\u0648\u0631\u06CC\u062A \u0631\u0648\u0632\u0627\u0646\u0647":"Daily mission","\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC":"Progressive tax","\u0645\u0627\u0644\u06CC\u0627\u062A \u067E\u0644\u06A9\u0627\u0646\u06CC {0}":"progressive tax {0}","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 {0}":"item amount {0}","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB":"Item amount \u00AB{0}\u00BB","\u0645\u0628\u0644\u063A \u0642\u0644\u0645 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644\u200C\u0647\u0627\u06CC \u0642\u0628\u0644\u06CC":"Item amount \u00AB{0}\u00BB from previous items","\u0645\u062A\u063A\u06CC\u0631 \u0632\u0645\u06CC\u0646\u0647 \u2014 \u0634\u0631\u062D \u062F\u0631 \u06A9\u0627\u0631\u062A \u00AB\u0645\u062A\u063A\u06CC\u0631\u0647\u0627\u00BB":"Context variable \u2014 described in the \u00ABvariables\u00BB card","\u0645\u062A\u063A\u06CC\u0631\u0647\u0627":"Variables","\u0645\u062A\u0646 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A":"Text is empty","\u0645\u062B\u0644\u0627\u064B 1.4":"e.g. 1.4","\u0645\u062D\u0644 \u0642\u0628\u0644\u06CC":"previous location","\u0645\u0633\u0627\u0648\u06CC":"Equal","\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u0642\u0644 \u0645\u062C\u0627\u0632 \u06A9\u0645\u062A\u0631 \u0627\u0633\u062A":"Value is below the allowed minimum","\u0645\u0642\u062F\u0627\u0631 \u0627\u0632 \u062D\u062F\u0627\u06A9\u062B\u0631 \u0645\u062C\u0627\u0632 \u0628\u06CC\u0634\u062A\u0631 \u0627\u0633\u062A":"Value is above the allowed maximum","\u0645\u0642\u062F\u0627\u0631 \u062E\u0627\u0631\u062C \u0627\u0632 \u06AF\u0627\u0645 \u0645\u062C\u0627\u0632 \u0627\u0633\u062A":"Value skips the allowed step","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u0628\u0644\u0646\u062F \u0627\u0633\u062A":"Value is too long","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u062E\u06CC\u0644\u06CC \u06A9\u0648\u062A\u0627\u0647 \u0627\u0633\u062A":"Value is too short","\u0645\u0642\u062F\u0627\u0631 \u0648\u0627\u0631\u062F\u0634\u062F\u0647 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"Invalid value","\u0645\u0642\u062F\u0627\u0631\u0647\u0627 \u0631\u0627 \u0628\u062F\u0647\u06CC\u062F:":"Enter the values:","\u0645\u0642\u0635\u062F":"Destination","\u0645\u0646\u0641\u06CC ({0})":"negative ({0})","\u0645\u0646\u0647\u0627":"Subtract","\u0646\u0627\u0645\u0633\u0627\u0648\u06CC":"Not equal","\u0646\u062A\u06CC\u062C\u0647\u200C\u0627\u06CC \u06CC\u0627\u0641\u062A \u0646\u0634\u062F":"No results found","\u0646\u0631\u062E \u0631\u0627 \u0628\u0627 \u06A9\u0644\u06CC\u06A9 \u0631\u0648\u06CC \u0628\u0644\u0648\u06A9 \u0639\u062F\u062F \u0645\u06CC\u200C\u062A\u0648\u0627\u0646\u06CC\u062F \u0639\u0648\u0636 \u06A9\u0646\u06CC\u062F":"Change the rate by clicking the number block","\u0646\u0631\u062E \u0631\u0648\u0632\u0627\u0646\u0647 \u00D7 \u0631\u0648\u0632\u0647\u0627\u06CC \u0645\u0623\u0645\u0648\u0631\u06CC\u062A":"Daily rate \u00D7 mission days","\u0646\u0634\u0627\u0646\u06CC \u0627\u06CC\u0645\u06CC\u0644 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"Invalid email address","\u0646\u0634\u0627\u0646\u06CC \u0648\u0628 \u0645\u0639\u062A\u0628\u0631 \u0646\u06CC\u0633\u062A":"Invalid URL","\u0646\u0642\u06CC\u0636":"Negation","\u0646\u0642\u06CC\u0636 ({0})":"NOT ({0})","\u0646\u0645\u0648\u0646\u0647\u200C\u0647\u0627":"Templates","\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u0645\u0632\u0627\u06CC\u0627 \u2014 \u063A\u06CC\u0631\u0645\u0633\u062A\u0645\u0631 \u0645\u0634\u0645\u0648\u0644 \u0628\u06CC\u0645\u0647":"Suggested type: benefit \u2014 non-recurring, insurable","\u0646\u0648\u0639 \u067E\u06CC\u0634\u0646\u0647\u0627\u062F\u06CC: \u06A9\u0633\u0648\u0631":"Suggested type: deduction","\u0647\u0631 \u062F\u0642\u06CC\u0642\u0647 \u062A\u0623\u062E\u06CC\u0631 = \u0646\u0631\u062E \u0633\u0627\u0639\u062A\u06CC \u00F7 \u06F6\u06F0":"Each late minute = hourly rate \u00F7 60","\u0648 \u0645\u0646\u0637\u0642\u06CC \u2014 \u0647\u0631 \u062F\u0648 \u0634\u0631\u0637":"Logical AND \u2014 both conditions","\u0648\u0627\u062D\u062F \u00AB{0}\u00BB \u0628\u0647 \u00AB{1}\u00BB \u0645\u0646\u062A\u0642\u0644 \u0634\u0648\u062F\u061F\\n\u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645 \u0627\u06CC\u0646 \u0648\u0627\u062D\u062F: {2} \u0646\u0641\u0631\\n":"\u0648\u0627\u062D\u062F \u00AB{0}\u00BB \u0628\u0647 \u00AB{1}\u00BB \u0645\u0646\u062A\u0642\u0644 \u0634\u0648\u062F\u061F\\n\u067E\u0631\u0633\u0646\u0644 \u0645\u0633\u062A\u0642\u06CC\u0645 \u0627\u06CC\u0646 \u0648\u0627\u062D\u062F: {2} \u0646\u0641\u0631\\n","\u0648\u0642\u062A\u06CC \u0645\u0628\u0646\u0627\u06CC \u0634\u0631\u06A9\u062A \u00AB\u0645\u062C\u0648\u0632\u0647\u0627\u06CC \u062A\u0623\u06CC\u06CC\u062F\u0634\u062F\u0647\u00BB \u0627\u0633\u062A":"When the company basis is \u00ABapproved requests\u00BB","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0627\u0632":"Open paren","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647":"Close paren","\u067E\u0631\u0627\u0646\u062A\u0632 \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A":"Unclosed parenthesis","\u067E\u0631\u0627\u0646\u062A\u0632 \u062A\u0627\u0628\u0639 \u00AB{0}\u00BB \u0628\u0633\u062A\u0647 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A":"Function \u00AB{0}\u00BB parenthesis not closed","\u0686\u06CC\u062F\u0645\u0627\u0646 \u0631\u0627 \u062A\u0646\u0638\u06CC\u0645 \u06A9\u0646\u06CC\u062F:":"Arrange the layout:","\u0686\u06CC\u0632\u06CC \u0628\u0631\u0627\u06CC \u0628\u0631\u06AF\u0634\u062A \u0646\u06CC\u0633\u062A \u2014 \u0647\u0645\u06CC\u0646 \u062D\u0627\u0644\u0627 \u0686\u06CC\u0632\u06CC \u062D\u0630\u0641 \u06CC\u0627 \u0627\u0636\u0627\u0641\u0647 \u0646\u06A9\u0631\u062F\u0647\u200C\u0627\u06CC\u062F":"Nothing to undo \u2014 nothing has been added or removed yet","\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631 \u063A\u06CC\u0631\u0645\u062C\u0627\u0632 \u00AB{0}\u00BB \u062F\u0631 \u0641\u0631\u0645\u0648\u0644":"Illegal character \u00AB{0}\u00BB in formula","\u06A9\u062F \u0642\u0644\u0645 \u2014 \u0645\u062B\u0644\u0627\u064B masken":"item code \u2014 e.g. masken","\u06A9\u0633\u0631 \u062A\u0623\u062E\u06CC\u0631 (\u062F\u0642\u06CC\u0642\u0647\u200C\u0627\u06CC)":"Late deduction (per minute)","\u06A9\u0633\u0631 \u063A\u06CC\u0628\u062A":"Absence deduction","\u06A9\u0633\u0631 \u0645\u0631\u062E\u0635\u06CC \u0628\u062F\u0648\u0646 \u062D\u0642\u0648\u0642":"Unpaid-leave deduction","\u06A9\u0644\u06CC\u06A9 \u06CC\u0627 \u06A9\u0634\u06CC\u062F\u0646 \u0631\u0648\u06CC \u0628\u0648\u0645 = \u0627\u0641\u0632\u0648\u062F\u0646 \u0642\u0627\u0644\u0628 (\u0628\u0644\u0648\u06A9\u200C\u0647\u0627 \u0628\u0639\u062F \u0627\u0632 \u0622\u0646 \u0642\u0627\u0628\u0644 \u0648\u06CC\u0631\u0627\u06CC\u0634\u200C\u0627\u0646\u062F)":"Click or drag onto the canvas = add the template (blocks stay editable afterwards)","\u06A9\u0645\u06CC\u0646\u0647\u0654 {0}":"minimum of {0}","\u06A9\u0646\u062A\u0631\u0644 \u0648 \u0630\u062E\u06CC\u0631\u0647:":"Check \u0026 save:","\u06A9\u0648\u0686\u06A9\u062A\u0631":"Less than","\u06A9\u0648\u0686\u06A9\u062A\u0631 \u06CC\u0627 \u0645\u0633\u0627\u0648\u06CC":"Less than or equal","\u06AF\u0631\u0648\u0647\u200C\u0628\u0646\u062F\u06CC":"Grouping","\u06CC\u0627 \u0645\u0646\u0637\u0642\u06CC \u2014 \u06CC\u06A9\u06CC \u0627\u0632 \u0634\u0631\u0637\u200C\u0647\u0627":"Logical OR \u2014 either condition","\u06F3\u066A \u062D\u0642\u0648\u0642 \u067E\u0627\u06CC\u0647 \u0628\u0647\u200C\u0627\u0632\u0627\u06CC \u0647\u0631 \u0641\u0631\u0632\u0646\u062F":"3% of base salary per child","\u21A9\uFE0F \u0628\u0631\u06AF\u0634\u062A":"\u21A9\uFE0F Undo","\u23F3 \u062F\u0633\u062A\u0648\u0631 \u00AB{0}\u00BB \u0628\u0647 \u062F\u0633\u062A\u06AF\u0627\u0647 \u00AB{1}\u00BB \u062A\u062D\u0648\u06CC\u0644 \u0634\u062F \u2014 \u062F\u0631 \u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u062C\u0631\u0627\u2026":"\u23F3 Command \u00AB{0}\u00BB delivered to device \u00AB{1}\u00BB \u2014 awaiting execution\u2026","\u26A0 {0} \u062A\u0627\u0628\u0639\u060C \u0622\u0631\u06AF\u0648\u0645\u0627\u0646 \u062E\u0627\u0644\u06CC \u062F\u0627\u0631\u062F \u2014 \u062C\u0627\u06CC \u062E\u0627\u0644\u06CC \u0641\u0639\u0644\u0627\u064B \u06F0 \u062D\u0633\u0627\u0628 \u0645\u06CC\u200C\u0634\u0648\u062F\u061B \u0622\u0646 \u0631\u0627 \u067E\u0631 \u06A9\u0646\u06CC\u062F":"\u26A0 {0} function(s) have empty arguments \u2014 empty slots count as 0 for now; please fill them","\u26A0\uFE0F \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0646\u0627\u0645\u0648\u0641\u0642 \u0628\u0648\u062F":"\u26A0\uFE0F \u00AB{0}\u00BB failed on \u00AB{1}\u00BB","\u2705 \u00AB{0}\u00BB \u0631\u0648\u06CC \u00AB{1}\u00BB \u0627\u062C\u0631\u0627 \u0634\u062F":"\u2705 \u00AB{0}\u00BB executed on \u00AB{1}\u00BB","\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC":"\u270D\uFE0F Manual writing","\u270D\uFE0F \u0646\u0648\u0634\u062A\u0646 \u062F\u0633\u062A\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0631\u0627\u06CC \u0628\u0627\u0632\u06AF\u0634\u062A \u0628\u0647 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u060C \u062F\u06A9\u0645\u0647\u0654 \u00AB\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC\u00BB \u0631\u0627 \u0628\u0632\u0646\u06CC\u062F":"\u270D\uFE0F Manual formula writing \u2014 to return to the visual builder, press the \u00AB\uD83E\uDDE9 Visual builder\u00BB button","\u2714 \u0641\u0631\u0645\u0648\u0644 \u0622\u0645\u0627\u062F\u0647 \u0627\u0633\u062A \u2014 \u0628\u0627 \u0630\u062E\u06CC\u0631\u0647\u0654 \u0642\u0644\u0645\u060C \u0627\u0639\u062A\u0628\u0627\u0631\u0633\u0646\u062C\u06CC \u0646\u0647\u0627\u06CC\u06CC \u062E\u0648\u062F\u06A9\u0627\u0631 \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u0634\u0648\u062F":"\u2714 Formula is ready \u2014 final validation runs automatically when the item is saved","\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0627\u062F\u0627\u0645\u0647 \u062F\u0647\u06CC\u062F":"\u2716 {0} \u2014 continue in manual mode","\u2716 {0} \u2014 \u062F\u0631 \u062D\u0627\u0644\u062A \u0646\u0648\u0634\u062A\u0646 \u0628\u0645\u0627\u0646\u06CC\u062F \u06CC\u0627 \u0641\u0631\u0645\u0648\u0644 \u0631\u0627 \u0627\u0635\u0644\u0627\u062D \u06A9\u0646\u06CC\u062F":"\u2716 {0} \u2014 stay in manual mode or fix the formula","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: ":"\uD83D\uDCAC In plain words: ","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u0641\u0631\u0645\u0648\u0644 \u0647\u0646\u0648\u0632 \u062E\u0627\u0644\u06CC \u0627\u0633\u062A \u2014 \u0628\u0644\u0648\u06A9\u06CC \u0627\u0632 \u067E\u0627\u0644\u062A \u0627\u0636\u0627\u0641\u0647 \u06A9\u0646\u06CC\u062F \u062A\u0627 \u0645\u0639\u0646\u06CC\u200C\u0627\u0634 \u0631\u0627 \u0647\u0645\u06CC\u0646\u200C\u062C\u0627 \u0628\u0628\u06CC\u0646\u06CC\u062F.":"\uD83D\uDCAC In plain words: the formula is still empty \u2014 add a block from the palette to see its meaning here.","\uD83D\uDCAC \u0628\u0647 \u0641\u0627\u0631\u0633\u06CC: \u2716 \u0641\u0631\u0645\u0648\u0644 \u0646\u0627\u0642\u0635/\u0646\u0627\u0645\u0639\u062A\u0628\u0631 \u0627\u0633\u062A \u2014 ":"\uD83D\uDCAC In plain words: \u2716 incomplete/invalid formula \u2014 ","\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC":"\uD83E\uDDE9 Visual builder","\uD83E\uDDE9 \u0633\u0627\u0632\u0646\u062F\u0647\u0654 \u0628\u0635\u0631\u06CC \u0641\u0631\u0645\u0648\u0644 \u2014 \u0628\u0644\u0648\u06A9 \u0631\u0627 \u0628\u06A9\u0634\u06CC\u062F \u0648 \u062F\u0631 \u0628\u0648\u0645 \u0631\u0647\u0627 \u06A9\u0646\u06CC\u062F (\u06CC\u0627 \u0641\u0642\u0637 \u06A9\u0644\u06CC\u06A9 \u06A9\u0646\u06CC\u062F)":"\uD83E\uDDE9 Visual formula builder \u2014 drag a block onto the canvas (or just click it)","\uD83E\uDDF9 \u067E\u0627\u06A9 \u06A9\u0631\u062F\u0646":"\uD83E\uDDF9 Clear"}</script>
+    <script src="/js/site.js?v=NpwEqiYxmuUaD2Q8K-ZhOgJZ50muHuWh_kZF407knHA"></script>
+    <script src="/js/formula-builder.js?v=br1JN-rgMTjHSmq5k8CKqCdayQyExGOj0hTYNAlnVXc"></script> 
+        <script src="/js/hr-screensaver.js?v=PsXU-XhilMLuZNiXfallOJf0a2NrYlcvA3n6Hbxqc0o" data-ss-enabled="True" data-ss-minutes="5" data-ss-require-pass="True"></script>
+    <div id="pageScripts">
+        
+<script>
+    // ---------- فاز ۹۱ — زبانه‌های فرم واحد تنظیمات (با به‌خاطرسپاری تب فعال) ----------
+    (function () {
+        var tabs = document.querySelectorAll('#setTabs a');
+        if (!tabs.length) return;
+        function activate(id, save) {
+            tabs.forEach(function (a) {
+                var on = a.getAttribute('data-pane') === id;
+                a.classList.toggle('on', on);
+                a.setAttribute('aria-selected', on ? 'true' : 'false');
+                var pane = document.getElementById(a.getAttribute('data-pane'));
+                if (pane) pane.hidden = !on;
+            });
+            if (save) { try { sessionStorage.setItem('hr_setTab', id); } catch (e) { } }
+        }
+        tabs.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                activate(a.getAttribute('data-pane'), true);
+            });
+        });
+        var last = null;
+        try { last = sessionStorage.getItem('hr_setTab'); } catch (e) { }
+        if (last && document.getElementById(last)) activate(last, false);
+    })();
+
+    // ---------- فاز ۹۱ — پیش‌نمایش زندهٔ ارز + پیشنهاد ارز بر اساس زبان ----------
+    (function () {
+        var sel = document.getElementById('curSel'), rate = document.getElementById('curRate');
+        if (!sel) return;
+        var prev = document.getElementById('curPreview');
+        var sugHint = document.getElementById('curSugHint');
+        var lang = document.getElementById('defLang');
+        // کاتالوگ ارز برای پیش‌نمایش سمت کاربر (نشان + جهت پیشوند)
+        var CURS = [{"code":"IRR","sym":"\u0631\u06CC\u0627\u0644","prefix":false},{"code":"IRT","sym":"\u062A\u0648\u0645\u0627\u0646","prefix":false},{"code":"AFN","sym":"\u060B","prefix":false},{"code":"GEL","sym":"\u20BE","prefix":false},{"code":"KGS","sym":"\u0441\u043E\u043C","prefix":false},{"code":"UZS","sym":"so\u02BBm","prefix":false},{"code":"TJS","sym":"\u0441\u043C\u043D","prefix":false},{"code":"TMT","sym":"TMT","prefix":false},{"code":"AZN","sym":"\u20BC","prefix":false},{"code":"TRY","sym":"\u20BA","prefix":false},{"code":"AED","sym":"\u062F.\u0625","prefix":false},{"code":"SAR","sym":"\uFDFC","prefix":false},{"code":"QAR","sym":"\uFDFC","prefix":false},{"code":"KWD","sym":"\u062F.\u0643","prefix":false},{"code":"BHD","sym":"\u062F.\u0628","prefix":false},{"code":"OMR","sym":"\uFDFC","prefix":false},{"code":"IQD","sym":"\u0639.\u062F","prefix":false},{"code":"PKR","sym":"\u20A8","prefix":false},{"code":"INR","sym":"\u20B9","prefix":false},{"code":"CNY","sym":"\u00A5","prefix":false},{"code":"RUB","sym":"\u20BD","prefix":false},{"code":"USD","sym":"$","prefix":true},{"code":"EUR","sym":"\u20AC","prefix":true},{"code":"GBP","sym":"\u00A3","prefix":true},{"code":"CHF","sym":"Fr","prefix":true},{"code":"JPY","sym":"\u00A5","prefix":true},{"code":"CAD","sym":"C$","prefix":true},{"code":"AUD","sym":"A$","prefix":true},{"code":"SEK","sym":"kr","prefix":false},{"code":"NOK","sym":"kr","prefix":false}];
+        var SUG = [{"code":"fa","sug":"IRR"},{"code":"en","sug":"USD"},{"code":"ar","sug":"IRR"},{"code":"ka","sug":"GEL"},{"code":"ky","sug":"KGS"},{"code":"prs","sug":"AFN"},{"code":"ps","sug":"AFN"},{"code":"tg","sug":"TJS"},{"code":"tk","sug":"TMT"},{"code":"uz","sug":"UZS"}];
+        var SUG_TITLES = {"IRR":"Iranian Rial","IRT":"Iranian Toman","AFN":"Afghan Afghani","GEL":"Georgian Lari","KGS":"Kyrgyzstani Som","UZS":"Uzbekistani Som","TJS":"Tajikistani Somoni","TMT":"Turkmenistani Manat","AZN":"Azerbaijani Manat","TRY":"Turkish Lira","AED":"UAE Dirham","SAR":"Saudi Riyal","QAR":"Qatari Riyal","KWD":"Kuwaiti Dinar","BHD":"Bahraini Dinar","OMR":"Omani Rial","IQD":"Iraqi Dinar","PKR":"Pakistani Rupee","INR":"Indian Rupee","CNY":"Chinese Yuan","RUB":"Russian Ruble","USD":"US Dollar","EUR":"Euro","GBP":"British Pound","CHF":"Swiss Franc","JPY":"Japanese Yen","CAD":"Canadian Dollar","AUD":"Australian Dollar","SEK":"Swedish Krona","NOK":"Norwegian Krone"};
+        var rtl = document.documentElement.getAttribute('dir') !== 'ltr';
+        function symOf(code) {
+            for (var i = 0; i < CURS.length; i++) if (CURS[i].code === code) return CURS[i];
+            return null;
+        }
+        function fmtPreview() {
+            if (!prev) return;
+            var c = symOf(sel.value) || { sym: '', prefix: false };
+            var r = parseFloat((rate.value || '1').replace(',', '.')) || 1;
+            var v = 1234567.5 * r;
+            var s = v.toLocaleString(rtl ? 'fa-IR' : 'en-US', { maximumFractionDigits: 2 });
+            prev.textContent = c.prefix ? (c.sym + ' ' + s) : (s + ' ' + c.sym);
+        }
+        function sugUpdate() {
+            if (!sugHint || !lang) return;
+            var code = '';
+            for (var i = 0; i < SUG.length; i++) if (SUG[i].code === lang.value) code = SUG[i].sug;
+            var title = SUG_TITLES[code] || code;
+            sugHint.textContent = 'Suggested currency for this language:' + ' ' + title;
+        }
+        // کاربر زبان را عوض کرد و ارز را هنوز دستی تغییر نداده = ارز پیشنهادی خودکار
+        var curTouched = false;
+        sel.addEventListener('change', function () { curTouched = true; fmtPreview(); });
+        rate.addEventListener('input', fmtPreview);
+        if (lang) lang.addEventListener('change', function () {
+            sugUpdate();
+            if (!curTouched) {
+                var code = '';
+                for (var i = 0; i < SUG.length; i++) if (SUG[i].code === lang.value) code = SUG[i].sug;
+                if (code && symOf(code)) { sel.value = code; fmtPreview(); }
+            }
+        });
+        fmtPreview(); sugUpdate();
+    })();
+
+    // به‌روزرسانی زنده بلوک پالت سراسری پس از اعمال/جدا کردن/ویرایش پالت فعال با AJAX —
+    // سرور CSS تازه را در پاسخ برمی‌گرداند و همین‌جا تگ استایل head (palCss) تعویض می‌شود.
+    document.addEventListener('hraj:refresh', function (e) {
+        var j = e.detail || {};
+        if (typeof j.css !== 'string') return;
+        var el = document.getElementById('palCss');
+        if (el) el.textContent = j.css;
+    });
+
+    // ---------- پایگاه داده (فاز ۴۵) — تست/ذخیره اتصال با همان موتور ویزارد ----------
+    (function () {
+        var MSG_ERR_PREFIX = 'Error:';
+        var MSG_DB_CONFIRM = 'Apply the new database connection?\nThe new database is prepared and activated automatically; the current database\u0027s data remains untouched.';
+        var MSG_DB_CONFIRM_OK = 'Yes, Apply';
+        var MSG_SEND_FAILED = 'Sending failed:';
+        var form = document.getElementById('dbForm');
+        if (!form) return;
+        var res = document.getElementById('dbResult'), busy = document.getElementById('dbBusy');
+        var saveBtn = document.getElementById('dbSaveBtn'), testBtn = document.getElementById('dbTestBtn');
+        function show(ok, msg) {
+            res.style.display = 'block';
+            res.style.background = ok ? 'rgba(5,150,105,.08)' : 'rgba(225,29,72,.07)';
+            res.style.borderColor = ok ? 'rgba(5,150,105,.3)' : 'rgba(225,29,72,.3)';
+            res.style.color = ok ? '#065f46' : '#9f1239';
+            res.textContent = msg;
+        }
+        function on(on) {
+            busy.style.display = on ? 'inline' : 'none';
+            saveBtn.disabled = on; testBtn.disabled = on;
+        }
+        function post(url) {
+            return fetch(url, { method: 'POST', body: new FormData(form), credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(function (r) { return r.json(); });
+        }
+        // تب پروایدر + فیلدهای احراز ویندوز
+        var auth = document.getElementById('dbAuth');
+        form.querySelectorAll('input[name=provider]').forEach(function (r) {
+            r.addEventListener('change', function () {
+                var sq = form.querySelector('input[name=provider]:checked').value === 'sqlite';
+                document.getElementById('dbMssql').style.display = sq ? 'none' : '';
+                document.getElementById('dbSqlite').style.display = sq ? '' : 'none';
+                res.style.display = 'none';
+            });
+        });
+        if (auth) auth.addEventListener('change', function () {
+            var win = auth.value === 'windows';
+            form.querySelectorAll('.db-sqlauth').forEach(function (f) { f.style.display = win ? 'none' : ''; });
+        });
+        testBtn.addEventListener('click', function () {
+            on(true); res.style.display = 'none';
+            post('/Settings/TestDatabase')
+                .then(function (j) { show(j.ok, j.message); })
+                .catch(function (e) { show(false, MSG_ERR_PREFIX + ' ' + e.message); })
+                .finally(function () { on(false); });
+        });
+        // دکمه ذخیره با data-confirm کار می‌کند — submit واقعی را نمی‌خواهیم؛ کلیک را دستی می‌گیریم
+        saveBtn.removeAttribute('data-confirm');
+        saveBtn.addEventListener('click', function () {
+            window.uiConfirm({
+                message: MSG_DB_CONFIRM,
+                danger: true, okText: MSG_DB_CONFIRM_OK
+            }).then(function (ok) {
+                if (!ok) return;
+                on(true); res.style.display = 'none';
+                post('/Settings/SaveDatabase')
+                    .then(function (j) {
+                        show(j.ok, j.message || '');
+                        if (j.ok) setTimeout(function () { window.location.reload(); }, 1200);
+                    })
+                    .catch(function (e) { show(false, MSG_ERR_PREFIX + ' ' + e.message); })
+                    .finally(function () { on(false); });
+            });
+        });
+    })();
+
+    // ---------- ماژول‌های سامانه (فاز ۵۴) — فعال/غیرفعال با AJAX + تأیید ----------
+    (function () {
+        var MSG_MOD_OFF = 'Turn off module \u00AB{0}\u00BB?\nIts menu and pages are hidden immediately; data is preserved.';
+        var MSG_MOD_ON = 'Turn on module \u0022{0}\u0022?';
+        var MSG_MOD_OFF_OK = 'Yes, Turn Off';
+        var MSG_MOD_ON_OK = 'Yes, Turn On';
+        var MSG_ERR = 'Error';
+        var table = document.getElementById('modTable');
+        var tok = document.querySelector('#modAf input[name="__RequestVerificationToken"]');
+        if (!table || !tok) return;
+        table.querySelectorAll('[data-mod-toggle]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var code = btn.getAttribute('data-mod-toggle');
+                var cur = btn.getAttribute('data-enabled') === 'True';
+                var title = btn.getAttribute('data-title') || code;
+                window.uiConfirm({
+                    message: (cur ? MSG_MOD_OFF : MSG_MOD_ON).replace('{0}', title),
+                    danger: cur,
+                    okText: cur ? MSG_MOD_OFF_OK : MSG_MOD_ON_OK
+                }).then(function (ok) {
+                    if (!ok) return;
+                    btn.disabled = true;
+                    var fd = new FormData();
+                    fd.append('code', code);
+                    fd.append('enabled', cur ? 'false' : 'true');
+                    fd.append('__RequestVerificationToken', tok.value);
+                    fetch('/Settings/ToggleModule', { method: 'POST', body: fd, credentials: 'same-origin',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (j) {
+                            if (j.ok) { window.location.reload(); }
+                            else { btn.disabled = false; window.toast(j.message || MSG_ERR, 'err'); }
+                        })
+                        .catch(function (e) { btn.disabled = false; window.toast(MSG_SEND_FAILED + ' ' + e.message, 'err'); });
+                });
+            });
+        });
+    })();
+
+    // انتخاب رنگ سریع (لایه سازگاری) — پرکردن رنگ‌نماها
+    // فاز ۸۷: واگذاری رویداد روی document (input + change با capture) — پس از
+    // pjax/data-refresh اتصال‌ها زنده می‌مانند و مرورگرهای change-only هم پوشش داده می‌شوند.
+    (function () {
+        if (window.__quickColorBound) return;
+        window.__quickColorBound = true;
+        var MAP = { accentColor: 'accentHex', sidebarColor: 'sidebarHex' };
+        function apply(inp) {
+            if (!inp || !(inp instanceof HTMLInputElement)) return;
+            var hexId = MAP[inp.id];
+            if (!hexId) return;
+            var hex = document.getElementById(hexId);
+            if (hex) hex.textContent = inp.value;
+        }
+        ['input', 'change'].forEach(function (evt) {
+            document.addEventListener(evt, function (e) { apply(e.target); }, true);
+        });
+        // پرست‌های آماده — واگذارشده (کلیک روی هر .palette-preset در هر ناحیهٔ تازه‌رندرشده)
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest('.palette-preset');
+            if (!b) return;
+            var acc = document.getElementById('accentColor'),
+                sid = document.getElementById('sidebarColor');
+            if (!acc || !sid) return;
+            acc.value = b.getAttribute('data-accent') || acc.value;
+            sid.value = b.getAttribute('data-sidebar') || sid.value;
+            apply(acc); apply(sid);
+        });
+    })();
+</script>
+
+    </div>
+</body>
+</html>

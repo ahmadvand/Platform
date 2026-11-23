@@ -1,0 +1,14 @@
+@* فاز ۵۸ — همان usingهای _ViewImports هاست؛ فضانام‌ها بدون تغییر مانده‌اند
+   (انواع پلتفرم از Platform.Core، کد ماژول از همین اسمبلی تأمین می‌شود).
+   Layout در زمان اجرا از هاست پیدا می‌شود (_Layout) — همان پوستهٔ سراسری. *@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using Platform.Web.Data
+@using HrModules.Payroll.Domain
+@using HrModules.Payroll.Data
+@using Platform.Contracts
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

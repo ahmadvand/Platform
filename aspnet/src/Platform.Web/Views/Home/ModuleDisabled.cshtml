@@ -1,0 +1,29 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("ماژول در دسترس نیست");
+    var m = ViewBag.Module as Platform.Web.Modules.HrModule;
+    // فاز ۵۷ — دو وضعیت: «خاموش» (DLL هست، مدیر خاموش کرده) و «نصب‌نشده» (DLL در بسته نیست)
+    var installed = (bool)(ViewBag.Installed ?? true);
+}
+<div class="card" style="max-width:560px;margin:60px auto;text-align:center">
+    <div class="card-b" style="padding:40px">
+        <div style="font-size:40px;margin-bottom:10px">@(m?.Icon ?? "🧩")</div>
+        @if (installed)
+        {
+            <h2 style="margin-bottom:8px">@(HrT.F("ماژول «{0}» غیرفعال است", m?.Title ?? HrT.T("درخواستی")))</h2>
+            <p style="color:var(--ink-2);font-size:13px;line-height:2">
+                @HrT.T("این بخش توسط مدیر سامانه خاموش شده است؛ منو و صفحه‌های آن پنهان است.")
+                @HrT.T("داده‌های این ماژول محفوظ می‌مانند و با فعال‌سازی دوباره از «تنظیمات سامانه → ماژول‌های سامانه» همه‌چیز همان‌طور که بود در دسترس قرار می‌گیرد.")
+            </p>
+        }
+        else
+        {
+            <h2 style="margin-bottom:8px">@(HrT.F("ماژول «{0}» در این نسخه نصب نشده است", m?.Title ?? HrT.T("درخواستی")))</h2>
+            <p style="color:var(--ink-2);font-size:13px;line-height:2">
+                @(HrT.F("این بستهٔ نصب، ماژول «{0}» را شامل نمی‌شود؛ منو و صفحه‌های آن وجود ندارد.", m?.Title))
+                @HrT.T("برای افزودن این قابلیت، با تأمین‌کنندهٔ سامانه تماس بگیرید تا بستهٔ شامل این ماژول (یا مجوز جدید با فهرست ماژول‌ها) ارائه شود. نصب بستهٔ جدید داده‌های فعلی را دست‌نخورده نگه می‌دارد.")
+            </p>
+        }
+        <a href="/" class="btn btn-primary" style="margin-top:16px">@HrT.T("بازگشت به داشبورد")</a>
+    </div>
+</div>

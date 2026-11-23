@@ -1,0 +1,383 @@
+@inject Platform.Web.Services.ICurrentUser Me
+@inject Platform.Web.Services.SettingsService SettingsSvc
+@inject Platform.Web.Services.LicenseService LicSvc
+@inject Platform.Web.Modules.ModuleStateService ModSvc
+@inject Platform.Web.Data.AppDbContext DbSs
+@{
+    var sess = Me.Get();
+    var now = DateTime.Now;
+    var jal = Platform.Web.Services.Jalali.ToJalali(now);
+    var ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var act = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    // تنظیمات برندینگ/پالت (فاز ۳۱ و ۳۲) — شرکت نصب‌شده، لوگو و رنگ‌های سراسری
+    var appSet = await SettingsSvc.GetSafeAsync();
+    var activePal = await SettingsSvc.GetActivePaletteAsync();
+    var cssOverride = activePal is not null
+        ? Platform.Web.Services.SettingsService.BuildPaletteCss(activePal)
+        : Platform.Web.Services.SettingsService.BuildCssOverrides(appSet);
+    var logoSrc = string.IsNullOrEmpty(appSet.LogoPath) ? null : appSet.LogoPath + "?v=" + appSet.UpdatedAt.Ticks;
+
+    bool Has(string p) => sess?.Has(p) ?? false;
+
+    // فاز ۵۱ — آیتم فعال منو: آیتم بدون اکشن (Index) فقط برای Index کنترلر فعال می‌شود،
+    // نه همهٔ اکشن‌ها (قبلاً روی هر زیرصفحهٔ همان کنترلر هم روشن می‌شد)؛ آیتم با اکشن مشخص
+    // فقط تطبیق دقیق. اصلاح نهایی مسیرهای فرعی (مثل ItemEdit) با updateNavActive در site.js
+    // انجام می‌شود تا پس از pjax هم منو همیشه درست بماند.
+    string Active(string c, string? a = null) =>
+        ctrl == c && (a is not null ? act == a : act is "Index" or "") ? "active" : "";
+
+    // فاز ۵۳ — breadcrumb واقعی در نوار بالا (درخواست کاربر: «شماره ۲ باید در محل کادر قرمز ۳ باشد»):
+    // «گروه منو / عنوان صفحه» بین کمبوباکس جستجو و تاریخ‌ساعت می‌نشیند.
+    // (محاسبهٔ crumbGroup پس از تعریف nav در پایین‌تر انجام می‌شود)
+    var crumbTitle = ViewData["Title"] as string ?? "";
+
+    // فاز ۴۶ — بنر هشدار مجوز (فاز ۸۳ب: همیشه فعال است، مگر وضعیت «مجوز معتبر» باشد)
+    var licBanner = LicSvc.BannerText;
+
+    // فاز ۴۵ — نوار بالایی مرجع: عکس پروفایل، زنگ اعلان، جستجو، تاریخ/ساعت
+    var myPhoto = sess is null ? null : await SettingsSvc.GetUserPhotoAsync(sess.Id);
+    // فاز ۹۰ — آیتم‌های زنگ شناسه + نشانی صفحهٔ مربوطه هم دارند (کلیک‌پذیری)
+    var bell = sess is null
+        ? (0, new List<(string Id, string Severity, string Type, string Message, string Time, string Url)>())
+        : await SettingsSvc.GetBellAsync();
+
+    // فاز ۵۴ — رجیستری ماژول‌ها: منو از Modules/ModuleCatalog ساخته می‌شود (همان گروه‌ها و
+    // همان ترتیب قبلی)؛ آیتم‌های ماژولِ خاموش حذف می‌شوند (سوئیچ در «تنظیمات سامانه»،
+    // سقف از مجوز نصب). فیلتر مجوز مثل قبل در حلقهٔ رندر پایین‌تر اعمال می‌شود.
+    var nav = Platform.Web.Modules.ModuleCatalog.BuildNav(code => ModSvc.Enabled(code));
+
+    // فاز ۷۶ — چندزبانه: گروه‌ها/برچسب‌های منو و ایندکس جستجو با زبان جاری رندر می‌شوند
+    // (دیکشنری نبود = خودِ متن فارسی — fallback امن). جهت/زبان تگ html هم پویاست.
+    string T(string fa) => HrT.T(fa);
+    var curPath = Context.Request.Path + Context.Request.QueryString;
+
+    // فاز ۴۶ — ایندکس صفحه‌های مجاز کاربر برای کمبوباکس جستجوی سراسری
+    // (همان آیتم‌های فیلترشدهٔ سایدبار؛ pjax آن را همراه topbar تعویض می‌کند)
+    var navIndexJson = System.Text.Json.JsonSerializer.Serialize(nav
+        .Select(g => new { t = T(g.Group), items = g.Items.Where(i => Has(i.Perm))
+                .Select(i => new { h = i.Href, ic = i.Icon, l = T(i.Label) }).ToArray() })
+        .Where(x => x.items.Length > 0).ToArray());
+
+    // فاز ۵۳ — گروه منوی صفحهٔ جاری برای breadcrumb (باید پس از تعریف nav باشد)
+    // فاز ۱۱۸ — صفحه‌های فرعی خارج از منو (مثل /Employees/Import یا /Attendance/Exports) هم
+    // گروه درست می‌گیرند: اگر تطابق دقیق Ctrl+Act نبود، فقط با Ctrl مطابقت داده می‌شود.
+    var crumbGroup = "";
+    if (sess is not null)
+    {
+        foreach (var grp in nav)
+        {
+            foreach (var i in grp.Items)
+            {
+                if (!Has(i.Perm)) continue;
+                var actMatch = string.IsNullOrEmpty(i.Act) ? (act is "Index" or "") : act == i.Act;
+                if (i.Ctrl == ctrl && actMatch) { crumbGroup = grp.Group; break; }
+            }
+            if (crumbGroup != "") break;
+        }
+        if (crumbGroup == "")
+        {
+            foreach (var grp in nav)
+            {
+                if (grp.Items.Any(i => i.Ctrl == ctrl && Has(i.Perm))) { crumbGroup = grp.Group; break; }
+            }
+        }
+    }
+}
+<!DOCTYPE html>
+@* فاز ۷۶ — جهت و زبان سند از زبان جاری (کوکی کاربر یا زبان نصب اولیه) *@
+@* فاز ۸۹ — data-lang/data-cal: مرجع JS سمت مرورگر برای ارقام بومی و پیکر تاریخ تقویمی
+   (زبان جاری + نوع تقویم نمایشی ادمین). lang تگ html هم کد واقعی زبان (prs/ps/ka/…) شد.
+   فاز ۹۶ — data-hijri: جبران روز تقویم قمری (پیکر تاریخ قمری با تنظیمات ادمین یکی می‌شود) *@
+<html lang="@HrT.Cur" dir="@(HrT.Rtl ? "rtl" : "ltr")" data-lang="@HrT.Cur" data-cal="@Platform.Web.Services.Jalali.DisplayModeKey" data-hijri="@Platform.Web.Services.Jalali.HijriAdjustDays">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] is null ? appSet.CompanyName : ViewData["Title"] + " | " + appSet.CompanyName)</title>
+    <link rel="icon" href="@(logoSrc ?? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='88'%3E%E2%97%88%3C/text%3E%3C/svg%3E")" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @if (!HrT.Rtl)
+    {
+        @* فاز ۷۶ — حالت LTR (انگلیسی): قرینه‌سازی قواعد فیزیقی باقی‌مانده *@
+        <link rel="stylesheet" href="~/css/site-ltr.css" asp-append-version="true" />
+    }
+    @* پالت ادمین (فاز ۳۱ و ۳۲) — پس از site.css تزریق می‌شود و متغیرهای رنگ کل نرم‌افزار را بازنویسی می‌کند.
+       تگ همیشه رندر می‌شود تا پس از اعمال/جدا کردن پالت با AJAX هم بلافاصله به‌روز شود (شناسه palCss). *@
+    <style id="palCss">@Html.Raw(cssOverride)</style>
+</head>
+<body>
+    @if (sess is not null)
+    {
+        @* فاز ۵۳ — جمع‌کنندهٔ منو روی خود منو (درخواست کاربر: «☰ نباید در نوار باشد؛ جمع‌کننده روی خود منو باشد»):
+           دکمهٔ ثابت روی لبهٔ بیرونی سایدبار؛ بعد از جمع‌شدن در همان نقطه کنار لبه می‌ماند تا منو دوباره باز شود.
+           خارج از main است تا pjax آن را تعویض نکند (اتصال یک‌باره در site.js؛ وضعیت در localStorage). *@
+        <button type="button" class="sb-toggle" id="sbToggle" title="@T("نمایش/پنهان‌سازی منو")" aria-label="@T("نمایش یا پنهان‌سازی منو")" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M9 5.5 15.5 12 9 18.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <aside class="sidebar">
+            <div class="brand">
+                @if (logoSrc is not null)
+                {
+                    <img class="brand-logo-img" src="@logoSrc" alt="@T("لوگو")" />
+                }
+                else
+                {
+                    <div class="brand-logo">◈</div>
+                }
+                <div>
+                    <div class="brand-name">@appSet.CompanyName</div>
+                    <div class="brand-sub">@T("سامانه یکپارچه منابع انسانی")</div>
+                </div>
+            </div>
+            <nav class="nav">
+                @foreach (var grp in nav)
+                {
+                    var items = grp.Items.Where(i => Has(i.Perm)).ToArray();
+                    if (items.Length == 0) continue;
+                    @* فاز ۱۳۰ — گروه جمع‌شو/بازشو: عنوان = دکمهٔ تاگل + فلش چرخان؛
+                       وضعیت باز/بسته در localStorage (site.js) و گروهِ صفحهٔ فعال همیشه باز می‌ماند *@
+                    <section class="nav-sec" data-nav-key="@grp.Group">
+                        <button type="button" class="nav-group" aria-expanded="true">
+                            <span>@T(grp.Group)</span>
+                            <span class="nav-chev" aria-hidden="true">▾</span>
+                        </button>
+                        <div class="nav-items">
+                            <div class="nav-items-in">
+                                @foreach (var i in items)
+                                {
+                                    <a href="@i.Href" class="nav-item @Active(i.Ctrl, string.IsNullOrEmpty(i.Act) ? null : i.Act)">
+                                        <span class="nav-ico">@Html.Raw(i.Icon)</span>
+                                        <span>@T(i.Label)</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </section>
+                }
+            </nav>
+            @* فاز ۵۲ — کاربر از منوی کناری حذف شد؛ پروفایل/خروج به دراپ‌داون کاربر در نوار بالایی منتقل شد *@
+            <div class="sidebar-foot">
+                @* فاز ۱۲۵ — کارت «سرو محلی منتخب» پایین سایدبار (طرح Figma صفحهٔ ۶):
+                   نشانی واقعی سرور از اتصال جاری؛ لوکال‌هاست/بی‌نشانی = «شبکهٔ داخلی».
+                   زمان همگام‌سازی = زمان رندر سرور (دیتای جعلی نیست). *@
+                @{
+                    var lip = Context.Connection.LocalIpAddress?.ToString();
+                    var isLocal = string.IsNullOrEmpty(lip) || lip!.StartsWith("127.") || lip == "::1";
+                }
+                <div class="sb-host">
+                    <div class="sb-host-t"><span class="sb-host-dot"></span>@T("سرو محلی منتخب")</div>
+                    <div class="sb-host-ip">🌐 @(isLocal ? T("شبکهٔ داخلی") : lip)</div>
+                    <div class="sb-host-sy">🔄 @T("همگام‌سازی") @HrT.Digits(DateTime.Now.ToString("HH:mm"))</div>
+                </div>
+                <div class="ver-chip">@T("نسخه") @HrT.Digits(Platform.Web.Services.BuildInfo.Version)</div>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                @* ---------- فاز ۴۵ + بازآرایی فاز ۵۰ مطابق قالب مرجع: جستجو در منتهی‌الیه راست،
+                   خوشهٔ پروفایل/اعلان/تنظیمات/تاریخ‌ساعت از سمت چپ شروع می‌شود (dir=rtl پس اولین فرزند = راست) ----------
+                   ترتیب DOM (راست ← چپ): جستجو، تاریخ‌ساعت، تنظیمات+اعلان، پروفایل، عنوان، ☰ ---------- *@
+                @* کمبوباکس جستجوی سراسری (فاز ۴۶) — صفحه‌ها از ایندکس محلی + نتایج زنده از /Home/Search *@
+                <div class="tb-search-wrap">
+                    <input type="text" class="tb-search" id="tbSearch" placeholder="@T("جستجو در اطلاعات و یا …")" autocomplete="off"
+                           role="combobox" aria-expanded="false" aria-controls="tbSearchMenu" aria-autocomplete="list" />
+                    <span class="tb-search-ico">🔍</span>
+                    <div class="tb-search-menu" id="tbSearchMenu" role="listbox" hidden></div>
+                </div>
+
+                @* فاز ۵۳ — breadcrumb در محل کادر قرمز ۳ قالب مرجع: «گروه / عنوان صفحه» *@
+                @if (crumbGroup != "" || crumbTitle != "")
+                {
+                    <div class="topbar-title" id="tbCrumb">
+                        @if (crumbGroup != "")
+                        {
+                            <span class="crumb-group">@T(crumbGroup)</span>
+                            @if (crumbTitle != "")
+                            {
+                                <span class="crumb-sep">/</span>
+                            }
+                        }
+                        <span class="crumb-page">@crumbTitle</span>
+                    </div>
+                }
+
+                <div class="tb-datetime">
+                    <span class="tb-cal">📅</span>
+                    <strong>@HrT.TopDate(now)</strong>
+                    <span class="tb-wd">@HrT.TopWeekday(now)</span>
+                    <span class="clock" data-clock>@now.ToString("HH:mm:ss")</span>
+                </div>
+
+                <div class="tb-actions">
+                    @if (Has("settings.view"))
+                    {
+                        <a class="tb-ico-btn" href="/Settings" title="@T("تنظیمات سامانه")" aria-label="@T("تنظیمات")">⚙️</a>
+                    }
+                    @* فاز ۷۶ — سوئیچر زبان رابط کاربری (کوکی hr_lang — بازگشت به همین صفحه) *@
+                    <div class="tb-bell-wrap tb-lang-wrap">
+                        <button type="button" class="tb-ico-btn" id="tbLangBtn" title="@T("زبان رابط کاربری")" aria-label="@T("زبان رابط کاربری")" aria-haspopup="true" aria-expanded="false" aria-controls="tbLangMenu" style="display:inline-flex;align-items:center">@Html.Raw(HrFlags.Svg(HrT.Cur, 16))</button>
+                        <div class="tb-lang-menu" id="tbLangMenu" hidden>
+                            @* فاز ۷۷ — زبان‌های پویا از DB (fa همیشه اول) + پیوند مدیریت برای ادمین *@
+                            @foreach (var L in HrT.MenuLanguages())
+                            {
+                                <a class="tb-lang-item @(HrT.Cur == L.Code ? "on" : "")" href="/Ui/Lang?l=@L.Code&r=@System.Net.WebUtility.UrlEncode(curPath)">@Html.Raw(HrFlags.Svg(L.Code, 13)) @L.Title</a>
+                            }
+                            @if (Has("settings.view"))
+                            {
+                                <a class="tb-lang-item" href="/Langs" style="border-top:1px dashed var(--line);color:var(--ink-2)">⚙️ @T("مدیریت زبان‌ها ←")</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="tb-bell-wrap">
+                        <button type="button" class="tb-ico-btn tb-bell" id="tbBellBtn" title="@T("هشدارهای باز")" aria-label="@T("هشدارها")">
+                            🔔
+                            @if (bell.Item1 > 0)
+                            {
+                                <span class="tb-badge">@HrT.Digits(bell.Item1.ToString())</span>
+                            }
+                        </button>
+                        <div class="tb-bell-menu" id="tbBellMenu" hidden>
+                            <div class="tb-bell-h">🔔 @T("هشدارهای باز") (@HrT.Digits(bell.Item1.ToString()))</div>
+                            @if (bell.Item2.Count == 0)
+                            {
+                                <div class="tb-bell-empty">@T("هشدار بازی وجود ندارد ✓")</div>
+                            }
+                            else
+                            {
+                                @* فاز ۹۰ — آیتم‌ها کلیک‌پذیر: کلیک → ثبت «خوانده‌شده» (ReadAlert) + هدایت به صفحهٔ
+                                   مربوطهٔ همان هشدار؛ از فهرست هشدارهای باز خارج می‌شود. *@
+                                @foreach (var (id, sev, type, msg, time, url) in bell.Item2)
+                                {
+                                    <a class="tb-bell-item tb-bell-link" href="@url" data-alert-id="@id" title="@T("رفتن به صفحهٔ مربوطه و علامت‌گذاری به‌عنوان خوانده‌شده")">
+                                        <span class="tb-bell-dot @(sev == "بحرانی" ? "crit" : sev == "بالا" ? "high" : "")"></span>
+                                        <div>
+                                            @* فاز ۹۱ — نوع هشدار (کلید بستهٔ مشخص) ترجمه می‌شود؛ متن پیام، دادهٔ تولیدشده است *@
+                                            <div class="tb-bell-t">@HrT.T(type) · @time</div>
+                                            <div class="tb-bell-m">@msg</div>
+                                        </div>
+                                    </a>
+                                }
+                            }
+                            <a class="tb-bell-foot" href="/Notifications">@T("مشاهده همه اعلان‌ها ←")</a>
+                        </div>
+                    </div>
+                </div>
+
+                @* فاز ۵۲ — منوی کاربر: کلیک روی نام/آواتار → دراپ‌داون (پروفایل من، تغییر رمز، خروج)؛
+                   عکس پروفایل کاربر در هدر (آواتار) و سربرگ همین دراپ‌داون نمایش داده می‌شود *@
+                <div class="tb-user-wrap">
+                    <button type="button" class="tb-profile" id="tbProfileBtn" aria-haspopup="true" aria-expanded="false"
+                            aria-controls="tbUserMenu" title="@T("منوی کاربر")" aria-label="@T("منوی کاربر")">
+                        @if (!string.IsNullOrEmpty(myPhoto))
+                        {
+                            <img class="tb-av" src="@myPhoto" alt="" />
+                        }
+                        else
+                        {
+                            <div class="tb-av tb-av-txt">@Platform.Web.Services.Jalali.ToPersianDigits(sess.FullName.Trim()[..1])</div>
+                        }
+                        <div class="tb-pinfo">
+                            <div class="tb-pname">@sess.FullName</div>
+                            <div class="tb-prole">@(sess.IsSuperadmin ? T("مدیر ارشد سیستم") : T("کاربر سامانه"))</div>
+                        </div>
+                        <span class="tb-caret">▾</span>
+                    </button>
+                    <div class="tb-user-menu" id="tbUserMenu" hidden>
+                        <div class="tb-user-h">
+                            @if (!string.IsNullOrEmpty(myPhoto))
+                            {
+                                <img class="tb-av" src="@myPhoto" alt="" />
+                            }
+                            else
+                            {
+                                <div class="tb-av tb-av-txt">@Platform.Web.Services.Jalali.ToPersianDigits(sess.FullName.Trim()[..1])</div>
+                            }
+                            <div>
+                                <div class="tb-user-name">@sess.FullName</div>
+                                <div class="tb-user-role">@(sess.IsSuperadmin ? T("مدیر ارشد سیستم") : sess.Username)</div>
+                            </div>
+                        </div>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Photo" data-modal-title="@T("پروفایل من")">
+                            <span class="tb-uico">🖼</span> @T("عکس پروفایل من")
+                        </button>
+                        <button type="button" class="tb-user-item" data-modal="/Account/Password" data-modal-title="@T("تغییر رمز عبور")">
+                            <span class="tb-uico">🔑</span> @T("تغییر رمز عبور")
+                        </button>
+                        <div class="tb-user-sep"></div>
+                        <form method="post" action="/Auth/Logout" class="tb-user-logout">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="tb-user-item danger"><span class="tb-uico">🚪</span> @T("خروج از حساب")</button>
+                        </form>
+                    </div>
+                </div>
+
+                @* فاز ۵۳ — ☰ از نوار حذف شد؛ جمع‌کننده روی خود سایدبار (sbToggle در ابتدای body) *@
+
+                @* ایندکس صفحه‌ها برای کمبوباکس جستجو (فاز ۴۶) — داخل main تا با pjax همگام بماند *@
+                <script type="application/json" id="tbNavIndex">@Html.Raw(navIndexJson)</script>
+            </header>
+            @if (licBanner is not null)
+            {
+                <div class="lic-banner">@licBanner <a href="/License">@T("مدیریت مجوز نصب ←")</a></div>
+            }
+            <div class="content">
+                @if (TempData["ToastOk"] is string okMsg)
+                {
+                    <div class="toast toast-ok" data-toast>@okMsg</div>
+                }
+                @if (TempData["ToastErr"] is string errMsg)
+                {
+                    <div class="toast toast-err" data-toast>@errMsg</div>
+                }
+                @RenderBody()
+            </div>
+            <footer class="foot">
+                @appSet.CompanyName — @T("نسخه") @HrT.Digits(Platform.Web.Services.BuildInfo.Version) · @T("تولیدکننده:") @Platform.Web.Services.BuildInfo.Vendor
+            </footer>
+        </main>
+    }
+    else
+    {
+        @RenderBody()
+    }
+    @* فاز ۹۲ — رشته‌های JS (site.js/formula-builder.js) با دیکشنری سرور ترجمه می‌شوند؛
+       کلید = رشتهٔ فارسی مبدأ، مقدار = ترجمهٔ زبان فعلی (HrT.T) — کلید غایب = فارسی (رفتار امن) *@
+    <script>window.__hrL10n = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Platform.Web.Services.HrL10n.Dict()))</script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/formula-builder.js" asp-append-version="true"></script> @* فاز ۴۴ — سازندهٔ بصری فرمول *@
+    <script src="~/js/emp-picker.js" asp-append-version="true"></script> @* فاز ۱۰۴/۱۱۴ — انتخابگر جستجومحور پرسنل (مقیاس ده‌ها هزار نفر) *@
+    @if (sess is not null)
+    {
+        @* فاز ۹۶ — محافظ صفحهٔ باران ماتریکس + بیدارسازی با رمز (درخواست کاربر) — فقط برای کاربر واردشده؛
+           پیکربندی از تنظیمات سامانه (وضعیت/دقایق بی‌حرکتی/الزام رمز) روی body رندر می‌شود.
+           فاز ۱۰۰ (رفع اشکال کاربر: «اسکرین‌سیور کلاً فعال نمی‌شود») — بولین‌های Razor به‌صورت
+           "True"/"False" رندر می‌شدند ولی JS فقط "true" را می‌پذیرفت → اسکریپت همیشه بی‌کار می‌شد.
+           اکنون صریحاً lowercase رندر می‌شود. فاز ۱۰۰ — دقیقه می‌تواند ۰ باشد (فعال‌شدن چندثانیه‌ای)
+           فاز ۱۰۲ (رفع دورزدن رمز با رفرش — درخواست کاربر) — پرچم قفل سرورسمت (ScreensaverLock،
+           کلید = هش کوکی hr_at): وقتی محافظ فعال شده باشد و کاربر هنوز رمز نزده باشد، هر بارگذاری
+           کامل صفحه (F5/تب جدید/ناوبری) با data-ss-start-locked="true" رندر می‌شود تا محافظ بلافاصله
+           قفل شود و رمز بخواهد؛ برداشتن پرچم فقط پس از تأیید رمز در VerifyWakePassword رخ می‌دهد.
+           فاز ۱۰۳ (درخواست کاربر) — نام شرکت + نام سامانه کنار تاریخ/ساعت گوشهٔ پایین-چپ
+           (data-ss-company از تنظیمات شرکت، data-ss-system نام سامانه).
+           فاز ۱۰۵ (درخواست کاربر) — اگر «بستهٔ محافظ صفحه» فعال باشد (درون‌ریزی اسکرین‌سیور آماده)،
+           data-ss-package=true رندر می‌شود تا JS محافظ به‌جای باران داخلی، iframe سندباکس‌شدهٔ
+           /Settings/ScreensaverRuntime را تمام‌صفحه نشان دهد (کد بسته ایزوله از کوکی/DOM/شبکه). *@
+        var ssStartLocked = Platform.Web.Services.ScreensaverLock.IsLocked(Context.Request.Cookies[Platform.Web.Services.JwtService.AccessCookie]);
+        var ssHasPackage = appSet.ScreenSaverEnabled
+            && await DbSs.SsPackages.AsNoTracking().AnyAsync(p => p.IsActive);
+        <script src="~/js/hr-screensaver.js" asp-append-version="true"
+                data-ss-enabled="@(appSet.ScreenSaverEnabled ? "true" : "false")"
+                data-ss-minutes="@Math.Clamp(appSet.ScreenSaverMinutes, 0, 120)"
+                data-ss-seconds="@Math.Clamp(appSet.ScreenSaverSeconds, 0, 59)"
+                data-ss-require-pass="@(appSet.ScreenSaverRequirePassword ? "true" : "false")"
+                data-ss-start-locked="@(ssStartLocked ? "true" : "false")"
+                data-ss-package="@(ssHasPackage ? "true" : "false")"
+                data-ss-company="@appSet.CompanyName"
+                data-ss-system="@T("سامانه یکپارچه منابع انسانی")"></script>
+    }
+    @* اسکریپت‌های صفحه در ظرف مشخص — ناوبری AJAX (pjax) می‌تواند بدون رفرش سایدبار، تعویضشان کند *@
+    <div id="pageScripts">
+        @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</body>
+</html>

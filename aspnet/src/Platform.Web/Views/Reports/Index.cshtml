@@ -1,0 +1,100 @@
+@{
+    ViewData["Title"] = HrT.T("گزارش‌ساز و تحلیل");
+    var trend = (List<AttMonthPoint>)ViewBag.Trend;
+    var depts = (List<AttDeptKpi>)ViewBag.DeptKpis;
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("گزارش‌ساز و تحلیل")</h1>
+        <div class="page-sub">@HrT.F("روند حضور {0} ماه اخیر · شاخص {1} واحد سازمانی", Jalali.Num(trend.Count), Jalali.Num(depts.Count))</div>
+    </div>
+</div>
+}
+<div class="card">
+    <div class="card-h">
+        <h2>📈 @HrT.T("روند ماهانه حضور/غیبت/تأخیر — ۶ ماه اخیر")</h2>
+        <a class="btn btn-sm" href="/Reports/AnalyticsPdf">@HrT.T("دانلود PDF تحلیلی ماه جاری")</a>
+    </div>
+    <div class="card-b">
+        <div class="chart-box"><canvas id="trendChart"></canvas></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>🏢 @HrT.F("KPI واحدهای سازمانی — {0}", ViewBag.Period)</h2><span class="hint">@HrT.T("نرخ حضور = روزهای حاضر ÷ (حاضر + غایب)")</span></div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("واحد سازمانی")</th><th>@HrT.T("پرسنل فعال")</th><th>@HrT.T("روز حاضر")</th><th>@HrT.T("غایب")</th><th>@HrT.T("مرخصی/مأموریت")</th><th>@HrT.T("مجموع تأخیر")</th><th>@HrT.T("مجموع اضافه‌کاری")</th><th>@HrT.T("نرخ حضور")</th></tr></thead>
+            <tbody>
+                @foreach (var d in depts)
+                {
+                    <tr>
+                        <td><b>@d.Dept</b></td>
+                        <td class="num">@Jalali.Num(d.Headcount)</td>
+                        <td class="num">@Jalali.Num(d.Present)</td>
+                        <td class="num">@(d.Absent > 0 ? Jalali.Num(d.Absent) : "—")</td>
+                        <td class="num">@Jalali.Num(d.Present + d.Absent)</td>
+                        <td class="num">@Jalali.MinutesToHm(d.LateMinutes)</td>
+                        <td class="num">@Jalali.MinutesToHm(d.OvertimeMinutes)</td>
+                        <td>
+                            <span class="badge @(d.AttendanceRate >= 90 ? "badge-ok" : d.AttendanceRate >= 75 ? "badge-warn" : "badge-err")">
+                                @Jalali.Num((decimal)d.AttendanceRate)٪
+                            </span>
+                        </td>
+                    </tr>
+                }
+                @if (depts.Count == 0)
+                {
+                    <tr><td colspan="8"><div class="empty">@HrT.T("داده‌ای برای این دوره یافت نشد.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>🧮 @HrT.T("گزارش سفارشی چندبعدی")</h2><span class="hint">@HrT.T("فیلتر واحد/پرسنل/بازه/وضعیت + خروجی اکسل")</span></div>
+    <div class="card-b">
+        <a class="btn btn-primary" href="/Reports/Custom">@HrT.T("ساخت گزارش سفارشی")</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>🚗 @HrT.T("گزارش ورود/خروج خودروها — کنترل پارکینگ")</h2><span class="hint">@HrT.T("ثبت خودکار دوربین‌های پلاک‌خوان (ANPR) + ثبت‌های دستی/کارتی — خروجی PDF و اکسل")</span></div>
+    <div class="card-b">
+        <a class="btn btn-primary" href="/Reports/Parking">@HrT.T("مشاهده گزارش تردد خودروها")</a>
+    </div>
+</div>
+
+<script src="~/js/chart.umd.js"></script>
+<script>
+    (function () {
+        var trend = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(trend));
+        var MSG_PRESENT = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("روز حاضر")))';
+        var MSG_ABSENT = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("غایب")))';
+        var MSG_LEAVE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("مرخصی/مأموریت")))';
+        var MSG_LATE = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("دقیقه تأخیر")))';
+        var ctx = document.getElementById('trendChart');
+        if (!ctx) return;
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: trend.map(function (t) { return t.Label; }),
+                datasets: [
+                    { label: MSG_PRESENT, data: trend.map(function (t) { return t.Present; }), borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,.14)', fill: true, tension: .35, borderWidth: 2 },
+                    { label: MSG_ABSENT, data: trend.map(function (t) { return t.Absent; }), borderColor: '#f43f5e', backgroundColor: 'rgba(244,63,94,.10)', fill: true, tension: .35, borderWidth: 2 },
+                    { label: MSG_LEAVE, data: trend.map(function (t) { return t.Leave; }), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,.10)', fill: true, tension: .35, borderWidth: 2 },
+                    { label: MSG_LATE, data: trend.map(function (t) { return t.LateMinutes; }), borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.08)', fill: false, tension: .35, borderWidth: 2, borderDash: [6, 3], yAxisID: 'y1' },
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(148,163,184,.15)' } },
+                    y1: { position: 'left', beginAtZero: true, grid: { drawOnChartArea: false } },
+                }
+            }
+        });
+    })();
+</script>

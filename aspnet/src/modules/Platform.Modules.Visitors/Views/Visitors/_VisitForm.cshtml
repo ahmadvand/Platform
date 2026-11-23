@@ -1,0 +1,43 @@
+@{
+    var companies = (List<Company>)ViewBag.Companies;
+    var contractors = (List<Contractor>)ViewBag.Contractors;
+}
+<div data-modal-title="@HrT.T("درخواست بازدید جدید")" hidden></div>
+<form method="post" action="/Visitors/Create" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("شرکت میزبان *")</label>
+            <select name="companyId" required>
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id">@c.Name (@c.Code)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نام *")</label><input name="firstName" required /></div>
+        <div class="fld"><label>@HrT.T("نام خانوادگی *")</label><input name="lastName" required /></div>
+        <div class="fld"><label>@HrT.T("کد ملی *")</label><input name="nationalId" required maxlength="10" /></div>
+        <div class="fld"><label>@HrT.T("تلفن")</label><input name="phone" /></div>
+        <div class="fld"><label>@HrT.T("مدرک هویتی")</label>
+            <select name="idDocType"><option value="کارت ملی">@HrT.T("کارت ملی")</option><option value="گواهینامه">@HrT.T("گواهینامه")</option><option value="شناسنامه">@HrT.T("شناسنامه")</option><option value="پاسپورت">@HrT.T("پاسپورت")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type"><option value="مهمان">@HrT.T("مهمان")</option><option value="مراجع">@HrT.T("مراجع")</option><option value="پیمانکار">@HrT.T("پیمانکار")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("میزبان *")</label><input name="hostName" required /></div>
+        <div class="fld"><label>@HrT.T("واحد میزبان")</label><input name="hostDept" /></div>
+        <div class="fld fld-full"><label>@HrT.T("هدف بازدید *")</label><input name="purpose" required /></div>
+        <div class="fld"><label>@HrT.T("پیمانکار (در صورت تعلق)")</label>
+            <select name="contractorId"><option value="">@HrT.T("— ندارد —")</option>
+                @foreach (var c in contractors)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت درخواست")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Description>قراردادهای بین‌ماژولی — فاز ۶۱ (بدون وابستگی به EF/ASP.NET؛ فقط DTO و اینترفیس)</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- فاز ۶۳ — IHrModuleBootstrapper به WebApplication/IConfiguration نیاز دارد؛
+         مرجع فریم‌ورک مشترک فقط همین‌جا (قراردادها همچنان منطق اجرایی ندارند) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- فاز ۶۸ — قرارداد پلاگین (IHrDataModule) امضای ComposeModel(ModelBuilder) دارد؛
+         HrDbResolver هم پروایدرها را روی کانتکست‌های ماژول می‌نشاند (هر دو DLL در
+         خروجی نهایی از قبل با هاست حضور دارند) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+  </ItemGroup>
+</Project>

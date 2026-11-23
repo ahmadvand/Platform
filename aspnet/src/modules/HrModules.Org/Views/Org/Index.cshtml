@@ -1,0 +1,184 @@
+@inject Platform.Web.Data.AppDbContext Db
+@{
+    ViewData["Title"] = HrT.T("چارت سازمانی");
+    var company = (Company?)ViewBag.Company;
+    var companies = (List<Company>)ViewBag.Companies;
+    var positions = (List<Position>)ViewBag.Positions;
+    var canManage = Me.Get()!.Has("org.depts.manage") || Me.Get()!.Has("org.positions.manage");
+    var cid = company?.Id ?? "";
+
+    // واحدهای سازمانی فقط از شرکت انتخاب‌شده — چارت هر شرکت مستقل است
+    var allDepts = Db.Set<Department>().Include(d => d.Positions)
+        .Where(d => d.CompanyId == cid).OrderBy(d => d.Code).ToList();
+    // پرسنل بدون واحد سازمانی (مثلاً ساخته‌شده از دستگاه) باید فیلتر شود — کلید null در دیکشنری مجاز نیست
+    var empCounts = Db.Set<Employee>()
+        .Where(e => e.DepartmentId != null && e.CompanyId == cid)
+        .GroupBy(e => e.DepartmentId!)
+        .ToDictionary(g => g.Key, g => g.Count());
+
+    // نقشه فرزندان برای محاسبه نوادگان (فیلتر مقصدهای مجاز جابجایی) — ریشه‌ها ParentId=null دارند و کلید null در دیکشنری مجاز نیست
+    var childrenMap = allDepts.Where(d => d.ParentId != null).GroupBy(d => d.ParentId!).ToDictionary(g => g.Key, g => g.Select(x => x.Id).ToList());
+    HashSet<string> Descendants(string id)
+    {
+        var result = new HashSet<string>();
+        var stack = new List<string>(childrenMap.TryGetValue(id, out var kids) ? kids : new List<string>());
+        while (stack.Count > 0)
+        {
+            var cur = stack[^1];
+            stack.RemoveAt(stack.Count - 1);
+            if (result.Add(cur) && childrenMap.TryGetValue(cur, out var grand))
+                foreach (var g in grand) stack.Add(g);
+        }
+        return result;
+    }
+
+    // تخت‌سازی درخت با عمق — ریشه‌ها اول
+    var flat = new List<(Department D, int Depth)>();
+    void Walk(string? parent, int depth)
+    {
+        foreach (var d in allDepts.Where(x => x.ParentId == parent))
+        {
+            flat.Add((d, depth));
+            Walk(d.Id, depth + 1);
+        }
+    }
+    Walk(null, 0);
+
+    // پرسنل بدون واحد سازمانیِ همین شرکت — معمولاً از دستگاه‌ها ساخته شده‌اند و باید تکمیل شوند
+    var noDept = Db.Set<Employee>().Where(e => e.DepartmentId == null && e.CompanyId == cid).OrderBy(e => e.PersonnelCode).ToList();
+    var deptNames = allDepts.ToDictionary(x => x.Id, x => x.Name);
+    var canManageEmp = Me.Get()!.Has("employees.create") || Me.Get()!.Has("employees.edit") || Me.Get()!.Has("employees.delete");
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("چارت سازمانی")</h1>
+        <div class="page-sub">@HrT.F("{0} سمت سازمانی ثبت‌شده · ساختار واحدها و سمت‌ها", Jalali.Num(positions.Count))</div>
+    </div>
+</div>
+<div class="chips">
+    @foreach (var c in companies)
+    {
+        if (c.Id == cid)
+        {
+            <a class="chip chip-active" href="/Org?co=@c.Id" style="border-color:var(--primary);font-weight:700">🏢 @c.Name</a>
+        }
+        else
+        {
+            <a class="chip" href="/Org?co=@c.Id">🏢 @c.Name @(c.Active ? "" : HrT.T("(متوقف)"))</a>
+        }
+    }
+    <span class="chip" style="margin-inline-start:auto">@HrT.F("چارت این شرکت: {0} واحد · {1} پست", Jalali.Num(allDepts.Count), Jalali.Num(positions.Count))</span>
+</div>
+
+<div class="grid two-col" style="grid-template-columns:1.4fr 1fr" data-refresh-host>
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.F("{0} — ساختار سازمانی", company?.Name ?? HrT.T("شرکت"))</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Org/CreateDept?co=@cid" data-modal-title="@(HrT.F("واحد سازمانی جدید — {0}", company?.Name ?? ""))">@HrT.T("+ واحد جدید")</button>
+            }
+        </div>
+        <div class="card-b">
+            <ul class="tree">
+                @foreach (var (d, depth) in flat)
+                {
+                    var excluded = Descendants(d.Id);
+                    excluded.Add(d.Id);
+                    var moveTargets = allDepts.Where(x => !excluded.Contains(x.Id)).ToList();
+                    <li>
+                        <div class="tree-node" style="padding-inline-start:@(10 + depth * 22)px">
+                            @if (depth > 0)
+                            {
+                                <span style="color:var(--ink-3)">└</span>
+                            }
+                            <strong>@d.Name</strong>
+                            <span class="code">@d.Code</span>
+                            <span class="cnt">@HrT.F("{0} نفر · {1} پست", Jalali.Num(empCounts.GetValueOrDefault(d.Id)), Jalali.Num(d.Positions.Count))</span>
+                            @if (canManage)
+                            {
+                                <span style="display:inline-flex;gap:4px;margin-inline-start:8px;vertical-align:middle">
+                                    <button type="button" class="btn btn-sm" data-modal="/Org/EditDeptForm?id=@d.Id" data-modal-title="@(HrT.F("ویرایش واحد — {0}", d.Name))" title="@(HrT.T("ویرایش نام/کد"))">✎</button>
+                                    <button type="button" class="btn btn-sm" data-modal="/Org/MoveDeptForm?id=@d.Id" data-modal-title="@(HrT.F("انتقال واحد — {0}", d.Name))" title="@(HrT.T("انتقال به واحد دیگر"))">⇄</button>
+                                    <form method="post" action="/Org/DeleteDept" class="inline-form" data-confirm="@(HrT.F("حذف واحد «{0}»؟ — در صورت داشتن زیرمجموعه، پست یا پرسنل، حذف رد می‌شود", d.Name))" data-danger="1" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@d.Id" />
+                                        <button class="btn btn-sm btn-err" title="@(HrT.T("حذف"))">🗑️</button>
+                                    </form>
+                                </span>
+                            }
+                        </div>
+                    </li>
+                }
+                @if (flat.Count == 0)
+                {
+                    <li><div class="tree-node" style="color:var(--ink-3)">@HrT.T("برای این شرکت هنوز واحدی تعریف نشده است")</div></li>
+                }
+            </ul>
+        </div>
+        @if (noDept.Count > 0)
+        {
+            <div style="border-top:1px solid var(--line);padding:12px 18px">
+                <div style="margin-bottom:8px">
+                    <strong>@HrT.F("پرسنل بدون واحد سازمانی ({0} نفر)", Jalali.Num(noDept.Count))</strong>
+                    <span class="hint"> @HrT.T("— معمولاً از دستگاه‌ها ساخته شده‌اند؛ با «ویرایش پرسنل» واحد و پست آن‌ها را تعیین کنید")</span>
+                </div>
+                <div class="btn-row" style="gap:6px;flex-wrap:wrap">
+                    @foreach (var e in noDept)
+                    {
+                        @if (canManageEmp)
+                        {
+                            <a class="btn btn-sm" href="/Employees/Edit/@e.Id">@e.FullName (@Jalali.ToPersianDigits(e.PersonnelCode)) ✎</a>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warn">@e.FullName (@Jalali.ToPersianDigits(e.PersonnelCode))</span>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.F("پست‌های سازمانی ({0})", Jalali.Num(positions.Count))</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Org/CreatePos?co=@cid" data-modal-title="@(HrT.F("پست سازمانی جدید — {0}", company?.Name ?? ""))">@HrT.T("+ پست جدید")</button>
+            }
+        </div>
+        <div class="table-wrap" style="max-height:60vh">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("عنوان")</th><th>@HrT.T("کد")</th><th>@HrT.T("واحد")</th><th>@HrT.T("گروه")</th>@if (canManage) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var p in positions)
+                    {
+                        <tr>
+                            <td><strong>@p.Title</strong></td>
+                            <td class="num">@p.Code</td>
+                            <td>@p.Department?.Name</td>
+                            <td>@(p.Grade ?? "—")</td>
+                            @if (canManage)
+                            {
+                                <td style="white-space:nowrap">
+                                    <button type="button" class="btn btn-sm" data-modal="/Org/EditPosForm?id=@p.Id" data-modal-title="@(HrT.F("ویرایش پست — {0}", p.Title))" title="@(HrT.T("ویرایش پست"))">✎</button>
+                                    <form method="post" action="/Org/DeletePos" class="inline-form" data-confirm="@(HrT.F("حذف پست «{0}»؟ — در صورت داشتن پرسنل، حذف رد می‌شود", p.Title))" data-danger="1" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button class="btn btn-sm btn-err" title="@(HrT.T("حذف"))">🗑️</button>
+                                    </form>
+                                </td>
+                            }
+                        </tr>
+                    }
+                    @if (positions.Count == 0)
+                    {
+                        <tr><td colspan="5" style="color:var(--ink-3)">@HrT.T("برای این شرکت پستی تعریف نشده است")</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,268 @@
+@{
+    ViewData["Title"] = HrT.T("قالب برون‌بری تردد");
+    var templates = (List<HrModules.Attendance.Domain.AttendanceExportTemplate>)ViewBag.Templates;
+    var fields = ((string Key, string Fa, string Kind)[])ViewBag.Fields;
+    var dateFormats = ((string Key, string Fa)[])ViewBag.DateFormats;
+    var timeFormats = ((string Key, string Fa)[])ViewBag.TimeFormats;
+    var canManage = Me.Get()!.Has("attendance.records.manage");
+    // JSON دادهٔ ویرایشگر — فیلدها + قالب‌ها برای رندر داینامیک سمت کلاینت
+    var fieldsJson = System.Text.Json.JsonSerializer.Serialize(fields.Select(f => new { f.Key, Fa = HrT.T(f.Fa), kind = f.Kind }));
+    var dateJson = System.Text.Json.JsonSerializer.Serialize(dateFormats.Select(f => new { f.Key, Fa = HrT.T(f.Fa) }));
+    var timeJson = System.Text.Json.JsonSerializer.Serialize(timeFormats.Select(f => new { f.Key, Fa = HrT.T(f.Fa) }));
+    var fromDef = Jalali.DateKey(DateTime.Now.AddDays(-30));
+    var toDef = Jalali.DateKey(DateTime.Now);
+    string T(string fa) => HrT.T(fa);
+}
+<div data-refresh-host>
+<div class="grid two-col" style="grid-template-columns:1fr 1.6fr;align-items:start">
+    <div>
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("قالب‌های ذخیره‌شده")</h2></div>
+            <div class="card-b" style="padding:8px">
+                @foreach (var t in templates)
+                {
+                    var colsCount = 0;
+                    try { colsCount = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(t.ColumnsJson).GetArrayLength(); } catch { }
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border-bottom:1px solid var(--line)">
+                        <div style="min-width:0">
+                            <strong style="font-size:12.5px">@t.Name</strong>
+                            <div style="color:var(--ink-3);font-size:10.5px">
+                                @HrT.F("{0} ستون", Jalali.ToPersianDigits(colsCount))
+                                @(t.Delimiter == "\t" ? " · Tab" : $" · «{t.Delimiter}»")
+                                @(t.IncludeHeader ? "" : " · " + HrT.T("بدون سرستون"))
+                                @if (!string.IsNullOrWhiteSpace(t.Note))
+                                {
+                                    <span> — @t.Note</span>
+                                }
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:6px;flex:none">
+                            @if (canManage)
+                            {
+                                <button type="button" class="btn btn-sm" data-edit="@t.Id" data-name="@t.Name" data-note="@t.Note" data-cols="@t.ColumnsJson" data-delim="@(t.Delimiter == "\t" ? "tab" : t.Delimiter)" data-header="@t.IncludeHeader">✎ @HrT.T("ویرایش")</button>
+                                <form method="post" action="/Attendance/DeleteTemplate" class="inline-form" data-ajax data-refresh data-confirm="@(HrT.F("حذف قالب «{0}»؟", t.Name))">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@t.Id" />
+                                    <button class="btn btn-sm btn-err">@HrT.T("حذف")</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+                @if (!templates.Any())
+                {
+                    <div class="empty">@HrT.T("هنوز قالبی ساخته نشده — از ویرایشگر کنار، قالب اول را بسازید")</div>
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("برون‌بری تاریخچهٔ تردد با قالب")</h2></div>
+            <div class="card-b">
+                <div class="fld"><label>@HrT.T("قالب *")</label>
+                    <select id="expTemplate">
+                        <option value="">— @HrT.T("انتخاب قالب") —</option>
+                        @foreach (var t in templates)
+                        {
+                            <option value="@t.Id">@t.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("از تاریخ")</label><input type="date" id="expFrom" value="@fromDef" /></div>
+                    <div class="fld"><label>@HrT.T("تا تاریخ")</label><input type="date" id="expTo" value="@toDef" /></div>
+                </div>
+                <div class="hint">@HrT.T("خروجی CSV با کدگذاری UTF-8 (سازگار با Excel) طبق ستون‌ها و قالب تاریخ/زمانِ قالب انتخابی — شامل قالب لینوکسی (Linux timestamp)، شمسی، میلادی و قمری. بازه پیش‌فرض ۳۰ روز اخیر است.")</div>
+                <div style="margin-top:12px"><a class="btn btn-primary btn-block" id="btnExport" href="#">📤 @HrT.T("دریافت فایل برون‌بری")</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-h"><h2 id="editorTitle">@HrT.T("قالب جدید")</h2></div>
+        <div class="card-b">
+            <input type="hidden" id="tplId" value="" />
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("نام قالب *")</label><input id="tplName" maxlength="100" placeholder="@(HrT.T("مثلاً قالب نرم‌افزار انبار"))" /></div>
+                <div class="fld"><label>@HrT.T("یادداشت (اختیاری)")</label><input id="tplNote" maxlength="380" placeholder="@(HrT.T("مقصد یا توضیح قالب"))" /></div>
+            </div>
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("جداکنندهٔ فایل")</label>
+                    <select id="tplDelim">
+                        <option value=",">,@HrT.T(" (کاما)")</option>
+                        <option value=";">;@HrT.T(" (نقطه‌ویرگول)")</option>
+                        <option value="tab">@HrT.T("تب (Tab)")</option>
+                        <option value="|">|</option>
+                    </select>
+                </div>
+                <div class="fld"><label>@HrT.T("سطر سرستون")</label>
+                    <select id="tplHeader">
+                        <option value="true">@HrT.T("داشته باشد")</option>
+                        <option value="false">@HrT.T("بدون سرستون")</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3 class="set-sec" style="margin-top:10px">🧱 @HrT.T("ستون‌های خروجی")</h3>
+            <div class="hint" style="margin-bottom:8px">
+                @HrT.T("برای هر ستون تاریخ/زمان، قالب نمایشی را انتخاب کنید: لینوکسی (Linux timestamp)، شمسی، میلادی، قمری یا ISO — چون نرم‌افزارهای مختلف فرمت‌های مختلفی می‌خواهند. متن سرستون را هم می‌توانید سفارشی کنید.")
+            </div>
+            <div id="colRows" style="display:flex;flex-direction:column;gap:8px"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn btn-sm" id="btnAddCol">＋ @HrT.T("افزودن ستون")</button>
+                @if (canManage)
+                {
+                    <button type="button" class="btn btn-sm btn-primary" id="btnSaveTpl">💾 @HrT.T("ذخیرهٔ قالب")</button>
+                    <button type="button" class="btn btn-sm" id="btnResetTpl">↺ @HrT.T("قالب جدید")</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@section Scripts {
+<script>
+    (function () {
+        // فاز ۱۲۲ — رفع مرگ کامل اسکریپت صفحه: JavaScriptEncoder.Encode رشتهٔ escapeشده
+        // را «بدون کوتیشن دور» برمی‌گرداند؛ ریختن مستقیم آن در var خطای سینتکس JS می‌ساخت
+        // و همهٔ دکمه‌ها (افزودن ستون/ذخیره/قالب جدید/دریافت) را می‌کشت. الگوی درست =
+        // کوتیشن تکی دور مقدار (خود Encode کوتیشن/بک‌اسلش را escape می‌کند) + JSON.parse.
+        var FIELDS = JSON.parse('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(fieldsJson))');
+        var DATEF = JSON.parse('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(dateJson))');
+        var TIMEF = JSON.parse('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(timeJson))');
+        var kindOf = {}; FIELDS.forEach(function (f) { kindOf[f.Key] = f.kind; });
+        var T_NEW = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("قالب جدید")))';
+        var T_EDIT = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ویرایش قالب: {0}")))';
+        var MSG_NO_NAME = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("نام قالب الزامی است")))';
+        var MSG_NO_COLS = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("حداقل یک ستون لازم است")))';
+        var MSG_NO_TPL = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ابتدا قالب را انتخاب کنید")))';
+        var MSG_SAVED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("قالب ذخیره شد")))';
+        var MSG_SERVER_ERR = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا در ارتباط با سرور: ")))';
+
+        var rows = document.getElementById('colRows');
+
+        function opt(list, sel) {
+            return list.map(function (o) {
+                return '<option value="' + o.Key + '"' + (o.Key === sel ? ' selected' : '') + '>' + o.Fa + '</option>';
+            }).join('');
+        }
+        function addRow(col) {
+            col = col || { f: 'personnelCode', fmt: '', h: '' };
+            var div = document.createElement('div');
+            div.className = 'tpl-col';
+            div.style.cssText = 'display:grid;grid-template-columns:1.3fr 1.3fr 1fr auto;gap:8px;align-items:end';
+            div.innerHTML =
+                '<div class="fld" style="margin:0"><label>@HrT.T("فیلد")</label><select class="c-f">' + opt(FIELDS, col.f) + '</select></div>' +
+                '<div class="fld" style="margin:0"><label>@HrT.T("قالب تاریخ/زمان")</label><select class="c-fmt"></select></div>' +
+                '<div class="fld" style="margin:0"><label>@HrT.T("سرستون سفارشی")</label><input class="c-h" maxlength="60" value="' + (col.h || '').replace(/"/g, '&quot;') + '" placeholder="@HrT.T("پیش‌فرض")" /></div>' +
+                '<button type="button" class="btn btn-sm btn-err c-del" title="@HrT.T("حذف ستون")">✕</button>';
+            rows.appendChild(div);
+            syncFmt(div, col.fmt);
+            div.querySelector('.c-f').addEventListener('change', function () { syncFmt(div, ''); });
+            div.querySelector('.c-del').addEventListener('click', function () { div.remove(); });
+        }
+        function syncFmt(div, sel) {
+            var f = div.querySelector('.c-f').value;
+            var kind = kindOf[f];
+            var box = div.querySelector('.c-fmt');
+            var list = kind === 'date' ? DATEF : kind === 'datetime' ? TIMEF : [];
+            box.innerHTML = list.length ? opt(list, sel || (kind === 'date' ? 'iso' : 'hhmm')) : '';
+            var wrap = box.closest('.fld');
+            box.disabled = !list.length;
+            if (wrap) wrap.style.opacity = list.length ? '1' : '.55';
+        }
+
+        function resetEditor() {
+            document.getElementById('tplId').value = '';
+            document.getElementById('tplName').value = '';
+            document.getElementById('tplNote').value = '';
+            document.getElementById('tplDelim').value = ',';
+            document.getElementById('tplHeader').value = 'true';
+            document.getElementById('editorTitle').textContent = T_NEW;
+            rows.textContent = '';
+            // قالب پیشنهادی پیش‌فرض: کد پرسنلی، تاریخ (شمسی)، ورود، خروج
+            addRow({ f: 'personnelCode', fmt: '', h: '' });
+            addRow({ f: 'date', fmt: 'jalali', h: '' });
+            addRow({ f: 'checkin', fmt: 'hhmm', h: '' });
+            addRow({ f: 'checkout', fmt: 'hhmm', h: '' });
+        }
+
+        function collectCols() {
+            var out = [];
+            rows.querySelectorAll('.tpl-col').forEach(function (div) {
+                out.push({ f: div.querySelector('.c-f').value, fmt: div.querySelector('.c-fmt').value, h: div.querySelector('.c-h').value });
+            });
+            return out;
+        }
+
+        document.getElementById('btnAddCol').addEventListener('click', function () { addRow(); });
+        document.getElementById('btnResetTpl').addEventListener('click', resetEditor);
+        resetEditor();
+
+        // ویرایش قالب ذخیره‌شده
+        document.querySelectorAll('[data-edit]').forEach(function (b) {
+            b.addEventListener('click', function () {
+                document.getElementById('tplId').value = b.getAttribute('data-edit');
+                document.getElementById('tplName').value = b.getAttribute('data-name') || '';
+                document.getElementById('tplNote').value = b.getAttribute('data-note') || '';
+                document.getElementById('tplDelim').value = b.getAttribute('data-delim') || ',';
+                document.getElementById('tplHeader').value = b.getAttribute('data-header') === 'false' ? 'false' : 'true';
+                document.getElementById('editorTitle').textContent = T_EDIT.replace('{0}', b.getAttribute('data-name') || '');
+                rows.textContent = '';
+                var cols = [];
+                try { cols = JSON.parse(b.getAttribute('data-cols') || '[]'); } catch (e) { }
+                (cols.length ? cols : [{ f: 'personnelCode' }]).forEach(addRow);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        function token() {
+            var el = document.querySelector('input[name="__RequestVerificationToken"]');
+            return el ? el.value : '';
+        }
+        document.getElementById('btnSaveTpl').addEventListener('click', function () {
+            if (!document.getElementById('tplName').value.trim()) { alert(MSG_NO_NAME); return; }
+            var cols = collectCols();
+            if (!cols.length) { alert(MSG_NO_COLS); return; }
+            var btn = this; btn.disabled = true;
+            var fd = new FormData();
+            fd.append('id', document.getElementById('tplId').value);
+            fd.append('name', document.getElementById('tplName').value);
+            fd.append('note', document.getElementById('tplNote').value);
+            fd.append('columns', JSON.stringify(cols));
+            fd.append('delimiter', document.getElementById('tplDelim').value);
+            fd.append('includeHeader', document.getElementById('tplHeader').value);
+            fd.append('__RequestVerificationToken', token());
+            fetch('/Attendance/SaveTemplate', {
+                method: 'POST', credentials: 'same-origin', body: fd,
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'RequestVerificationToken': token() }
+            }).then(function (r) { return r.json(); }).then(function (j) {
+                btn.disabled = false;
+                if (j && j.ok) { location.reload(); }
+                else alert((j && j.message) || MSG_NO_COLS);
+            }).catch(function () { btn.disabled = false; alert(MSG_SERVER_ERR); });
+        });
+
+        // برون‌بری — GET دانلود
+        // فاز ۱۲۳-ب — لایهٔ شمسی‌سازی سامانه (site.js) input[type=date] را به متن شمسی تبدیل
+        // می‌کند و مقدار ISO را در hidden هم‌نام (el._hrHidden) نگه می‌دارد؛ خواندن .valueِ
+        // خود input، متنِ شمسی می‌دهد و بازهٔ خروجی خالی می‌شد. همیشه از hidden می‌خوانیم.
+        function dateVal(id) {
+            var el = document.getElementById(id);
+            if (!el) return '';
+            if (el._hrHidden && el._hrHidden.value) return el._hrHidden.value;
+            return el.value || '';
+        }
+        document.getElementById('btnExport').addEventListener('click', function (e) {
+            e.preventDefault();
+            var id = document.getElementById('expTemplate').value;
+            if (!id) { alert(MSG_NO_TPL); return; }
+            var from = dateVal('expFrom');
+            var to = dateVal('expTo');
+            var url = '/Attendance/ExportByTemplate?id=' + encodeURIComponent(id) +
+                '&from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
+            location.href = url;
+        });
+    })();
+</script>
+}

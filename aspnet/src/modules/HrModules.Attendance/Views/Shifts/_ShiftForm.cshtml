@@ -1,0 +1,65 @@
+@{
+    var s = (Shift)Model;
+    var isEdit = ViewBag.IsEdit is true;
+}
+<div data-modal-title="@(isEdit ? HrT.F("ویرایش شیفت — {0}", s.Name) : HrT.T("تعریف شیفت جدید"))" hidden></div>
+<form method="post" action="@(isEdit ? $"/Shifts/Edit/{s.Id}" : "/Shifts/Create")" id="shiftForm" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld fld-full"><label>@HrT.T("نام شیفت *")</label>
+            <input name="name" required minlength="2" value="@s.Name" placeholder="@HrT.T("مثال: نوبت دوم (عصر)")" />
+        </div>
+        <div class="fld"><label>@HrT.T("شرکت *")</label>
+            <select name="companyId" required>
+                @foreach (var c in (List<Company>)ViewBag.Companies!)
+                {
+                    <option value="@c.Id" selected="@(s.CompanyId == c.Id)">@c.Name</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نوع شیفت *")</label>
+            <select name="type" id="fType">
+                @foreach (var t in Platform.Web.Controllers.ShiftsController.ShiftTypes)
+                {
+                    <option value="@t" selected="@(s.Type == t)">@HrT.T(t)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("وضعیت")</label>
+            <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                <input type="checkbox" name="active" value="true" checked="@s.Active" /> @HrT.T("شیفت فعال باشد")
+            </label>
+        </div>
+        <div class="fld"><label>@HrT.T("ساعت شروع *")</label>
+            <input name="startTime" id="fStart" type="time" required value="@s.StartTime" dir="ltr" />
+        </div>
+        <div class="fld"><label>@HrT.T("ساعت پایان *")</label>
+            <input name="endTime" id="fEnd" type="time" required value="@s.EndTime" dir="ltr" />
+            <div class="hint">@HrT.T("پایان ≤ شروع → شیفت از نیمه‌شب عبور می‌کند (شیفت شب)")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("استراحت (دقیقه)")</label>
+            <input name="breakMinutes" id="fBreak" type="number" min="0" max="480" value="@s.BreakMinutes" />
+            <div class="hint">@HrT.T("از کارکرد خالص کسر می‌شود")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("رواداری دیرکرد (دقیقه)")</label>
+            <input name="toleranceLate" id="fTol" type="number" min="0" max="120" value="@s.ToleranceLate" />
+            <div class="hint">@HrT.T("تأخیر کمتر از این مقدار دیرکرد حساب نمی‌شود")</div>
+        </div>
+        <div class="fld" id="fldCycle" style="@(s.Type == "اقماری" || s.Type == "چرخشی" ? "" : "display:none")"><label>@HrT.T("الگوی چرخش (روزکار/استراحت)")</label>
+            <input name="cyclePattern" id="fCycle" value="@s.CyclePattern" placeholder="14/14" dir="ltr" />
+            <div class="hint">@HrT.T("مثل 14/14 یا 21/7 یا 28/28 — برای اقماری الزامی است")</div>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@(isEdit ? HrT.T("ذخیره تغییرات") : HrT.T("ثبت شیفت"))</button>
+        <button type="button" class="btn" data-close-modal data-goto="/Shifts">@HrT.T("انصراف")</button>
+    </div>
+</form>
+<script>
+    (function () {
+        var t = document.getElementById('fType'), cyc = document.getElementById('fldCycle');
+        t.addEventListener('change', function () {
+            cyc.style.display = (t.value === 'اقماری' || t.value === 'چرخشی') ? '' : 'none';
+        });
+    })();
+</script>

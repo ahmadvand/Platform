@@ -1,0 +1,967 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("تنظیمات سامانه");
+    var s = (Platform.Web.Domain.AppSettings)ViewBag.S;
+    // فاز ۱۰۵ — بسته‌های محافظ صفحه (لیست تب محافظ صفحه)
+    var packages = (System.Collections.Generic.List<Platform.Web.Domain.SsPackage>?)ViewBag.SsPackages ?? new();
+    var presets = ((string Name, string Accent, string Sidebar)[])ViewBag.Presets;
+    var canManage = (bool)ViewBag.CanManage;
+    var palettes = (IEnumerable<Platform.Web.Domain.ColorPalette>)ViewBag.Palettes;
+    var activePaletteId = (string?)ViewBag.ActivePaletteId;
+    var logoSrc = string.IsNullOrEmpty(s.LogoPath) ? null : s.LogoPath + "?v=" + s.UpdatedAt.Ticks;
+    // فاز ۹۱ — فرم واحد تنظیمات: گروه‌های ارز برای select (کاتالوگ Money)
+    var curGroups = new (string Title, string[] Codes)[]
+    {
+        (HrT.T("ارز کشورهای زبان‌های سامانه"), new[]{"IRR","IRT","AFN","GEL","KGS","UZS","TJS","TMT"}),
+        (HrT.T("آسیا و خاورمیانه"), new[]{"AZN","TRY","AED","SAR","QAR","KWD","BHD","OMR","IQD","PKR","INR","CNY","RUB"}),
+        (HrT.T("ارزهای جهانی"), new[]{"USD","EUR","GBP","CHF","JPY","CAD","AUD","SEK","NOK"}),
+    };
+    var usedCodes = new HashSet<string>();
+    foreach (var g in curGroups) foreach (var c in g.Codes) usedCodes.Add(c);
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("تنظیمات سامانه")</h1>
+        <div class="page-sub">@HrT.F("عمومی، ظاهر و پوسته، امنیت و پشتیبان‌گیری · {0} پوستهٔ آماده", Jalali.Num(presets.Length))</div>
+    </div>
+</div>
+<div class="chips">
+    <span class="chip">@HrT.T("تنظیمات ظاهر و برندینگ سامانه")</span>
+    <span class="chip">@HrT.T("آخرین ویرایش:") <b>@Jalali.FmtFa(s.UpdatedAt)</b></span>
+    @if (!canManage)
+    {
+        <span class="chip">@HrT.T("حالت فقط-مشاهده")</span>
+    }
+</div>
+
+@if (!canManage)
+{
+    <div class="toast toast-err" data-toast>@HrT.T("برای ویرایش تنظیمات دسترسی کافی ندارید (فقط مشاهده — مجوز لازم: settings.manage).")</div>
+}
+
+@* ==================== فاز ۹۱ — فرم واحد تنظیمات (درخواست کاربر) ====================
+   همهٔ تنظیمات در «یک فرم» با زبانه‌ها؛ به‌جای کارت‌های جدا برای تقویم/ارز/زبان.
+   هیچ قابلیتی حذف نشده — محتوای کارت‌های قبلی عیناً داخل زبانه‌هاست. ==================== *@
+<div class="card" style="margin-bottom:18px">
+    <div class="card-h">
+        <h2>⚙️ @HrT.T("تنظیمات سامانه")</h2>
+        <span class="hint">@HrT.T("همهٔ تنظیمات سامانه در این صفحه با زبانه‌ها دسته‌بندی شده‌اند — از بالای فرم زبانهٔ مورد نظر را انتخاب کنید")</span>
+    </div>
+    <div class="card-b">
+        <div class="tabs" id="setTabs" role="tablist">
+            <a href="#tab-company" data-pane="tab-company" class="on" role="tab" aria-selected="true">🏢 @HrT.T("شرکت و لوگو")</a>
+            <a href="#tab-locale" data-pane="tab-locale" role="tab" aria-selected="false">🌐 @HrT.T("زبان، تقویم و ارز")</a>
+            <a href="#tab-screensaver" data-pane="tab-screensaver" role="tab" aria-selected="false">🖥 @HrT.T("محافظ صفحه")</a>
+            <a href="#tab-look" data-pane="tab-look" role="tab" aria-selected="false">🎨 @HrT.T("ظاهر و پالت رنگی")</a>
+            <a href="#tab-db" data-pane="tab-db" role="tab" aria-selected="false">🗄 @HrT.T("پایگاه داده")</a>
+            <a href="#tab-mods" data-pane="tab-mods" role="tab" aria-selected="false">🧩 @HrT.T("ماژول‌ها")</a>
+            <a href="#tab-about" data-pane="tab-about" role="tab" aria-selected="false">ℹ️ @HrT.T("درباره سامانه")</a>
+        </div>
+
+        @* ---------- فرم واحد: تب «شرکت و لوگو» + تب «زبان، تقویم و ارز» — یک POST واحد ---------- *@
+        <form method="post" action="/Settings/SaveGeneral" enctype="multipart/form-data" id="generalForm">
+            @Html.AntiForgeryToken()
+
+            @* ============ تب ۱ — شرکت و لوگو (کارت‌های قبلی «اطلاعات شرکت» + «لوگو») ============ *@
+            <div class="set-pane" id="tab-company">
+                <fieldset @(canManage ? null : Html.Raw("disabled")) style="border:0;padding:0;margin:0">
+                    <h3 class="set-sec">🏢 @HrT.T("اطلاعات شرکت نصب‌شده")</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 14px">
+                        <div class="fld">
+                            <label>@HrT.T("نام نمایشی شرکت") *</label>
+                            <input name="companyName" value="@s.CompanyName" required maxlength="150"
+                                   placeholder="@HrT.T("مثلاً شرکت پتروشیمی پارس آسیا")" />
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("نام حقوقی (ثبتی)")</label>
+                            <input name="companyLegalName" value="@s.CompanyLegalName" maxlength="200" />
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("شناسه ملی / کد اقتصادی")</label>
+                            <input name="companyNationalId" value="@s.CompanyNationalId" maxlength="30" />
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("تلفن")</label>
+                            <input name="companyPhone" value="@s.CompanyPhone" maxlength="30" />
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("ایمیل")</label>
+                            <input name="companyEmail" type="email" value="@s.CompanyEmail" maxlength="120" />
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("وب‌سایت")</label>
+                            <input name="companyWebsite" value="@s.CompanyWebsite" maxlength="120" placeholder="example.com" />
+                        </div>
+                        <div class="fld" style="grid-column:1/-1">
+                            <label>@HrT.T("نشانی")</label>
+                            <input name="companyAddress" value="@s.CompanyAddress" maxlength="300" />
+                        </div>
+                        <div class="fld" style="grid-column:1/-1">
+                            <label>@HrT.T("توضیح کوتاه (زیر نام در صفحه ورود)")</label>
+                            <input name="description" value="@s.Description" maxlength="150" />
+                        </div>
+                    </div>
+
+                    <h3 class="set-sec">🖼 @HrT.T("لوگوی شرکت")</h3>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+                        @if (logoSrc is not null)
+                        {
+                            <img src="@logoSrc" alt="@HrT.T("لوگو")" style="width:64px;height:64px;border-radius:14px;object-fit:contain;background:var(--card);padding:4px;border:1px solid var(--line)" />
+                            <div>
+                                <div style="font-weight:600">@HrT.T("لوگوی ثبت‌شده")</div>
+                                <div class="hint">@HrT.T("در سایدبار، صفحه ورود و عنوان مرورگر نمایش داده می‌شود")</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="width:64px;height:64px;border-radius:14px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--ink-3)">◈</div>
+                            <div>
+                                <div style="font-weight:600">@HrT.T("لوگویی ثبت نشده")</div>
+                                <div class="hint">@HrT.T("نشان پیش‌فرض ◈ استفاده می‌شود")</div>
+                            </div>
+                        }
+                    </div>
+                    @if (canManage)
+                    {
+                        <div class="fld" style="max-width:420px">
+                            <label>@HrT.T("تغییر لوگو — انتخاب تصویر (PNG / JPG / WEBP / SVG — حداکثر ۲ مگابایت)")</label>
+                            <input type="file" name="logoFile" accept=".png,.jpg,.jpeg,.webp,.svg" />
+                        </div>
+                        <div class="hint" style="margin-top:6px">@HrT.T("بدون انتخاب فایل = لوگوی فعلی دست‌نخورده می‌ماند.")</div>
+                        if (logoSrc is not null)
+                        {
+                            <div style="margin-top:8px">
+                                <button type="submit" form="resetLogoForm" class="btn btn-err btn-sm" data-confirm="@HrT.T("لوگو حذف شود و نشان پیش‌فرض ◈ جایگزین شود؟")">🗑️ @HrT.T("حذف لوگو و بازگشت به نشان پیش‌فرض")</button>
+                            </div>
+                        }
+                    }
+
+                    @if (canManage)
+                    {
+                        <div class="btn-row" style="margin-top:16px">
+                            <button class="btn btn-primary">💾 @HrT.T("ذخیرهٔ تنظیمات شرکت و لوگو")</button>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+
+            @* ============ تب ۲ — زبان، تقویم و ارز (کارت‌های قبلی «زبان» + «تقویم» + ارز جدید فاز ۹۱) ============ *@
+            <div class="set-pane" id="tab-locale" hidden>
+                <fieldset @(canManage ? null : Html.Raw("disabled")) style="border:0;padding:0;margin:0">
+                    <h3 class="set-sec">🌐 @HrT.T("زبان پیش‌فرض سامانه")</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>@HrT.T("زبان پیش‌فرض")</label>
+                        <select name="lang" id="defLang">
+                            @foreach (var L in HrT.MenuLanguages())
+                            {
+                                <option value="@L.Code" selected="@(L.Code == (string)ViewBag.DefaultLang)">@L.Title</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="hint">@HrT.T("برای کاربرانی که هنوز زبان شخصی انتخاب نکرده‌اند و برای صفحهٔ ورود اعمال می‌شود؛ هر کاربر همچنان از نوار بالایی زبان خودش را می‌تواند عوض کند.")</div>
+
+                    <h3 class="set-sec">🗓 @HrT.T("نوع تقویم سامانه")</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>@HrT.T("نمایش تاریخ‌ها در کل سامانه")</label>
+                        <select name="calendar">
+                            <option value="jalali" selected="@(s.Calendar == "jalali")">@HrT.T("شمسی (جلالی)")</option>
+                            <option value="gregorian" selected="@(s.Calendar == "gregorian")">@HrT.T("میلادی (گرگوری)")</option>
+                            <option value="hijri" selected="@(s.Calendar == "hijri")">@HrT.T("قمری (هجری قمری)")</option>
+                        </select>
+                    </div>
+                    <div class="hint">@HrT.T("نحوهٔ نمایش تاریخ‌ها در لیست‌ها، داشبورد و گزارش‌ها عوض می‌شود؛ داده‌ها و کلیدهای تاریخ دست‌نخورده می‌مانند و محاسبات حضور/تعطیلات طبق قواعد خودش ادامه می‌یابد.")</div>
+
+                    <h3 class="set-sec">🌙 @HrT.T("جبران روز تقویم قمری")</h3>
+                    <div class="fld" style="max-width:380px">
+                        <label>@HrT.T("تطبیق نمایش قمری با تقویم رسمی کشور")</label>
+                        <select name="hijriAdjust">
+                            <option value="2" selected="@(s.HijriAdjust == 2)">@HrT.T("۲ روز جلوتر")</option>
+                            <option value="1" selected="@(s.HijriAdjust == 1)">@HrT.T("۱ روز جلوتر")</option>
+                            <option value="0" selected="@(s.HijriAdjust == 0)">@HrT.T("بدون جبران — دقیقاً ام‌القری (عربستان)")</option>
+                            <option value="-1" selected="@(s.HijriAdjust == -1)">@HrT.T("۱ روز عقب‌تر — رسمی ایران/افغانستان (پیشنهادی)")</option>
+                            <option value="-2" selected="@(s.HijriAdjust == -2)">@HrT.T("۲ روز عقب‌تر")</option>
+                        </select>
+                    </div>
+                    <div class="hint">@HrT.T("مبنای قمریِ سامانه تقویم «ام‌القری» است که برای سال‌های جاری معمولاً یک روز جلوتر از تقویم قمری رسمی ایران/افغانستان (رؤیت هلال محلی) است؛ مثلاً ۱۵ شعبان در نمایش بدون جبران یک روز عقب‌تر از تقویم دیواری دیده می‌شود. با «۱ روز عقب‌تر» نمایش قمری، date picker و قالب برون‌بری همه با تقویم رسمی یکی می‌شوند. فقط نمایش عوض می‌شود؛ داده‌ها دست‌نخورده می‌مانند.")</div>
+
+                    <h3 class="set-sec">💰 @HrT.T("ارز نمایشی سامانه")</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 14px;max-width:820px">
+                        <div class="fld">
+                            <label>@HrT.T("واحد پول همهٔ مبالغ (وب، فیش، PDF و اکسل)")</label>
+                            <select name="currency" id="curSel">
+                                @foreach (var g in curGroups)
+                                {
+                                    <optgroup label="@g.Title">
+                                        @foreach (var code in g.Codes)
+                                        {
+                                            var c = Money.Find(code)!;
+                                            <option value="@c.Code" selected="@(c.Code == s.Currency)">@(HrT.Rtl ? c.Fa : c.En) (@c.Code)</option>
+                                        }
+                                    </optgroup>
+                                }
+                                @* ارزهای ذخیره‌شدهٔ قدیمی که در گروه‌ها نیستند (امنیت در برابر تغییر کاتالوگ) *@
+                                @if (!usedCodes.Contains(s.Currency))
+                                {
+                                    var cc = Money.Find(s.Currency);
+                                    if (cc is not null)
+                                    {
+                                        <optgroup label="@HrT.T("سایر")">
+                                            <option value="@cc.Code" selected="true">@(HrT.Rtl ? cc.Fa : cc.En) (@cc.Code)</option>
+                                        </optgroup>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("نرخ تبدیل نمایشی (۱ = بدون تبدیل)")</label>
+                            <input name="currencyRate" id="curRate" dir="ltr" value="@(string.IsNullOrWhiteSpace(s.CurrencyRate) ? "1" : s.CurrencyRate)" inputmode="decimal" />
+                        </div>
+                    </div>
+                    <div class="hint" style="margin-top:8px">
+                        @HrT.T("ارز انتخابی فقط «قالب‌بندی نمایش» مبالغ است: نشان ارز، جداکنندهٔ هزارگان و ارقام بومی زبان جاری — اعداد ذخیره‌شده و محاسبات حقوق دست‌نخورده می‌مانند.")
+                        <b>@HrT.T("نرخ تبدیل نیز فقط نمایشی است.")</b>
+                    </div>
+                    <div class="hint" id="curSugHint" style="margin-top:4px"></div>
+                    @if (canManage)
+                    {
+                        <div style="margin-top:10px;padding:10px 14px;border:1px dashed var(--line);border-radius:12px;display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
+                            <span class="hint">@HrT.T("پیش‌نمایش زندهٔ قالب مبلغ:")</span>
+                            <b id="curPreview" style="font-size:14px">@Money.Fmt(1234567.5m)</b>
+                        </div>
+                    }
+                    @if (canManage)
+                    {
+                        <div class="btn-row" style="margin-top:16px">
+                            <button class="btn btn-primary">💾 @HrT.T("ذخیرهٔ زبان، تقویم و ارز")</button>
+                        </div>
+                    }
+                </fieldset>
+            </div>
+
+        @* ============ تب ۲ب — محافظ صفحه (فاز ۹۶ — درخواست کاربر: اسکرین‌سیور + ورود رمز برای بازگشت) ============ *@
+        <div class="set-pane" id="tab-screensaver" hidden>
+            <fieldset @(canManage ? null : Html.Raw("disabled")) style="border:0;padding:0;margin:0">
+                <h3 class="set-sec">🖥 @HrT.T("محافظ صفحه (باران ماتریکس)")</h3>
+                <div class="hint" style="margin-bottom:12px">
+                    @HrT.T("پس از بی‌حرکتیِ تعیین‌شده، افکت باران ماتریکس تمام‌صفحه روشن می‌شود و ساعت جاری را نشان می‌دهد. با اولین حرکت ماوس یا فشردن کلید، محافظ بیدار می‌شود — در حالت «ورود رمز»، بیدارسازی فقط با رمز همان کاربرِ واردشده ممکن است.")
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 14px;max-width:820px">
+                    <div class="fld">
+                        <label>@HrT.T("وضعیت محافظ صفحه")</label>
+                        <select name="ssEnabled">
+                            <option value="true" selected="@(s.ScreenSaverEnabled)">@HrT.T("روشن — پس از بی‌حرکتی اجرا شود")</option>
+                            <option value="false" selected="@(!s.ScreenSaverEnabled)">@HrT.T("خاموش — هرگز اجرا نشود")</option>
+                        </select>
+                    </div>
+                    <div class="fld">
+                        <label>@HrT.T("دقایق بی‌حرکتی تا اجرا (۰ تا ۱۲۰ — صفر = فقط ثانیه)")</label>
+                        <input type="number" name="ssMinutes" min="0" max="120" step="1" value="@s.ScreenSaverMinutes" />
+                    </div>
+                    <div class="fld">
+                        <label>@HrT.T("ثانیه‌های بی‌حرکتی تا اجرا (۰ تا ۵۹)")</label>
+                        <input type="number" name="ssSeconds" min="0" max="59" step="1" value="@s.ScreenSaverSeconds" />
+                    </div>
+                    <div class="fld">
+                        <label>@HrT.T("بیدارسازی با رمز")</label>
+                        <select name="ssRequirePassword">
+                            <option value="true" selected="@(s.ScreenSaverRequirePassword)">@HrT.T("بله — بازگشت به حالت عادی فقط با ورود رمز کاربر")</option>
+                            <option value="false" selected="@(!s.ScreenSaverRequirePassword)">@HrT.T("خیر — با اولین حرکت بدون رمز جمع شود")</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="hint" style="margin-top:8px">
+                    @HrT.T("اجرای چندثانیه‌ای: برای آزمایش سریع، دقیقه را ۰ بگذارید و فقط ثانیه را تنظیم کنید (مثلاً ۰ دقیقه و ۱۰ ثانیه). کمینهٔ مجموع ۵ ثانیه است — مقدارهای کمتر به ۵ ثانیه گرد می‌شوند.")
+                </div>
+                <div class="hint" style="margin-top:8px">
+                    @HrT.T("نکتهٔ امنیتی: محافظ صفحه یک قفل نمایشی است — پس از بیدارسازی، نشست همان کاربر ادامه می‌یابد و رمز فقط هویت همان کاربر دوباره تأیید می‌شود؛ برای قفل کامل، کاربر را از سامانه خارج کنید.")
+                </div>
+                @if (canManage)
+                {
+                    <div class="btn-row" style="margin-top:16px">
+                        <button class="btn btn-primary">💾 @HrT.T("ذخیرهٔ تنظیمات محافظ صفحه")</button>
+                    </div>
+                    @* ---------- فاز ۱۰۴ — برون‌بری/درون‌ریزی تنظیمات محافظ صفحه (درخواست کاربر) ----------
+                       فرم درون‌ریزی خارج از فرم واحد است (فرم تو در تو ممنوع) و فایل/دکمه با اتریبیوت form=
+                       به آن وصل‌اند — همان الگوی «حذف لوگو»؛ برون‌بری لینک GET ساده است. ---------- *@
+                    <div class="btn-row" style="margin-top:10px">
+                        <a class="btn" href="/Settings/ExportScreensaver">⬇️ @HrT.T("برون‌بری تنظیمات محافظ صفحه (JSON)")</a>
+                        <input type="file" name="file" form="ssImportForm" accept=".json,application/json"
+                               style="max-width:300px" aria-label="@HrT.T("فایل بستهٔ تنظیمات")" />
+                        <button type="submit" form="ssImportForm" class="btn"
+                                data-confirm="@HrT.T("تنظیمات فعلی محافظ صفحه با محتوای فایل جایگزین شود؟")">⬆️ @HrT.T("درون‌ریزی از فایل")</button>
+                    </div>
+                    <div class="hint" style="margin-top:6px">
+                        @HrT.T("برون‌بری: تنظیمات جاری محافظ صفحه (وضعیت، دقیقه، ثانیه، بیدارسازی با رمز) به‌صورت فایل JSON دانلود می‌شود؛ درون‌ریزی: فایل برون‌بری‌شده را بارگذاری کنید تا همان تنظیمات روی این نصب اعمال شود — مثلاً برای یکسان‌سازی چند نصب.")
+                    </div>
+
+                    @* ---------- فاز ۱۰۵ — بسته‌های محافظ صفحه: انتقال «خودِ اسکرین‌سیور» (درخواست کاربر) ----------
+                       «یکی یه اسکرین‌سیور نوشته و من می‌خوام اونو داشته باشم» — هر بسته = کد JS + CSS یک محافظ
+                       بصری + متادیتا + تنظیمات همراهش در یک فایل JSON. امنیت: کد هر بسته فقط در iframe
+                       سندباکس‌شدهٔ ایزوله (بدون کوکی/نشست/DOM سامانه و بدون دسترسی شبکه) اجرا می‌شود. ---------- *@
+                    <h3 class="set-sec" style="margin-top:22px">🎁 @HrT.T("بسته‌های محافظ صفحه — انتقال خودِ اسکرین‌سیور")</h3>
+                    <div class="hint" style="margin-bottom:10px">
+                        <b>@HrT.T("امنیت:")</b> @HrT.T("کد هر بسته در یک لایهٔ سندباکس ایزوله اجرا می‌شود — بدون دسترسی به کوکی، نشست، صفحه یا شبکهٔ سامانه؛ با این حال فقط بسته‌های مورد اعتماد را درون‌ریزی کنید. پس از درون‌ریزی، بسته خودکار فعال می‌شود.")
+                    </div>
+                    <div style="max-width:820px">
+                        @* ردیف محافظ داخلی *@
+                        <div class="btn-row" style="justify-content:space-between;border:1px solid var(--border,#e3e5f3);border-radius:10px;padding:8px 12px;margin-bottom:8px;background:rgba(127,127,127,.05)">
+                            <span>
+                                🌧 <b>@HrT.T("باران ماتریکس (محافظ داخلی)")</b>
+                                <span class="hint" style="display:inline">— @HrT.T("بستهٔ پیش‌فرض سامانه: نویسه‌های باران از زبان جاری، فونت وزیرمتن")</span>
+                                @if (packages.Count == 0 || !packages.Any(p => p.IsActive))
+                                {
+                                    <b style="color:var(--accent,#6366f1)">✅ @HrT.T("فعال")</b>
+                                }
+                            </span>
+                            <span class="btn-row" style="margin:0">
+                                @if (packages.Any(p => p.IsActive))
+                                {
+                                    <button type="submit" form="ssPkgActBuiltin" class="btn">🌧 @HrT.T("بازگشت به محافظ داخلی")</button>
+                                }
+                                <a class="btn" href="/Settings/ExportScreensaverPackage">⬇️ @HrT.T("برون‌بری بسته")</a>
+                            </span>
+                        </div>
+                        @foreach (var p in packages)
+                        {
+                            <div class="btn-row" style="justify-content:space-between;border:1px solid var(--border,#e3e5f3);border-radius:10px;padding:8px 12px;margin-bottom:8px">
+                                <span>
+                                    🎨 <b>@p.Name</b>
+                                    @if (!string.IsNullOrWhiteSpace(p.Version))
+                                    {
+                                        <span class="hint" style="display:inline">— @HrT.T("نسخه") @p.Version</span>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(p.Author))
+                                    {
+                                        <span class="hint" style="display:inline">— @HrT.T("سازنده"): @p.Author</span>
+                                    }
+                                    <span class="hint" style="display:inline">— @HrT.F("{0} کیلوبایت", HrT.Num((int)Math.Ceiling(p.SizeBytes / 1024.0))) · SHA-256: @(p.Sha256.Length > 12 ? p.Sha256[..12] : p.Sha256) · @HrT.Digits(p.ImportedAt.ToString("yyyy-MM-dd HH:mm"))</span>
+                                    @if (p.IsActive)
+                                    {
+                                        <b style="color:var(--accent,#6366f1)">✅ @HrT.T("فعال")</b>
+                                    }
+                                </span>
+                                <span class="btn-row" style="margin:0">
+                                    @if (!p.IsActive)
+                                    {
+                                        <button type="submit" form="ssPkgAct_@p.Id" class="btn">✅ @HrT.T("فعال‌سازی")</button>
+                                    }
+                                    <a class="btn" href="/Settings/ExportScreensaverPackage?id=@p.Id">⬇️ @HrT.T("برون‌بری بسته")</a>
+                                    <button type="submit" form="ssPkgDel_@p.Id" class="btn"
+                                            data-confirm="@HrT.F("بستهٔ «{0}» حذف شود؟ اگر بستهٔ فعال باشد، سامانه به محافظ داخلی بازمی‌گردد.", p.Name)">🗑 @HrT.T("حذف")</button>
+                                </span>
+                            </div>
+                        }
+                    </div>
+                    @* فرم‌های فعال‌سازی/حذف هر بسته بیرون از فرم واحدند (فرم تو در تو ممنوع) — در انتهای صفحه *@
+                    <div class="btn-row" style="margin-top:12px">
+                        <input type="file" name="file" form="ssPkgImportForm" accept=".json,application/json"
+                               style="max-width:300px" aria-label="@HrT.T("فایل بستهٔ محافظ صفحه (*.json)")" />
+                        <label style="display:inline-flex;align-items:center;gap:6px">
+                            <input type="checkbox" name="applySettings" value="true" form="ssPkgImportForm" checked />
+                            @HrT.T("اعمال تنظیمات همراه بسته")
+                        </label>
+                        <button type="submit" form="ssPkgImportForm" class="btn btn-primary"
+                                data-confirm="@HrT.T("بستهٔ محافظ صفحه از فایل درون‌ریزی و فعال شود؟ کد بسته در لایهٔ سندباکس ایزوله اجرا می‌شود.")">⬆️ @HrT.T("درون‌ریزی بستهٔ محافظ صفحه")</button>
+                    </div>
+                    <div class="hint" style="margin-top:6px">
+                        @HrT.T("قالب بسته: فایل JSON با format=hr-screensaver-package شامل meta (نام/سازنده/نسخه/توضیح)، code (js/css) و settings اختیاری — نمونهٔ آماده: دکمهٔ «برون‌بری بسته» روی ردیف محافظ داخلی را بزنید.")
+                    </div>
+                }
+            </fieldset>
+        </div>
+        </form>
+        @* فرم جدا برای «حذف لوگو» — دکمه‌اش با form= در تب ۱ است (فرم تو در تو ممنوع) *@
+        <form id="resetLogoForm" method="post" action="/Settings/ResetLogo" style="display:contents">
+            @Html.AntiForgeryToken()
+        </form>
+
+        @* فرم جدا برای «درون‌ریزی تنظیمات محافظ صفحه» (فاز ۱۰۴) — فایل/دکمه‌اش با form= در تب محافظ صفحه است (فرم تو در تو ممنوع) *@
+        <form id="ssImportForm" method="post" action="/Settings/ImportScreensaver" enctype="multipart/form-data" style="display:contents">
+            @Html.AntiForgeryToken()
+        </form>
+
+        @* فرم‌های بسته‌های محافظ صفحه (فاز ۱۰۵) — همه بیرون از فرم واحد؛ دکمه‌ها با form= به آن‌ها وصل‌اند.
+           ssPkgActBuiltin = بازگشت به محافظ داخلی (id=0)؛ برای هر بسته یک فرم فعال‌سازی و یک فرم حذف. *@
+        <form id="ssPkgImportForm" method="post" action="/Settings/ImportScreensaverPackage" enctype="multipart/form-data" style="display:contents">
+            @Html.AntiForgeryToken()
+        </form>
+        <form id="ssPkgActBuiltin" method="post" action="/Settings/ActivateScreensaverPackage" style="display:contents">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="0" />
+        </form>
+        @foreach (var p in packages)
+        {
+            <form id="ssPkgAct_@p.Id" method="post" action="/Settings/ActivateScreensaverPackage" style="display:contents">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@p.Id" />
+            </form>
+            <form id="ssPkgDel_@p.Id" method="post" action="/Settings/DeleteScreensaverPackage" style="display:contents">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@p.Id" />
+            </form>
+        }
+
+        @* ============ تب ۳ — ظاهر و پالت (کارت‌های قبلی «پالت‌های رنگی» + «رنگ سفارشی سریع») ============ *@
+        <div class="set-pane" id="tab-look" hidden>
+            <h3 class="set-sec">🖌 @HrT.T("رنگ سفارشی سریع (دو رنگ)")</h3>
+            <div class="hint" style="margin-bottom:10px">
+                @HrT.T("این لایه فقط رنگ اصلی و منو را تعیین می‌کند.")
+                <b>@HrT.T("اگر پالتی از کتابخانه بالا فعال باشد، این تنظیم نادیده گرفته می‌شود.")</b>
+            </div>
+            <form method="post" action="/Settings/SavePalette">
+                @Html.AntiForgeryToken()
+                <fieldset @(canManage ? null : Html.Raw("disabled")) style="border:0;padding:0;margin:0">
+                    <div class="palette-presets" style="margin-bottom:12px">
+                        @foreach (var p in presets)
+                        {
+                            <button type="button" class="palette-preset" data-accent="@p.Accent" data-sidebar="@p.Sidebar"
+                                    @(canManage ? null : Html.Raw("disabled"))>
+                                <span class="dot" style="background:@p.Accent"></span>
+                                <span class="dot" style="background:@p.Sidebar"></span>
+                                @p.Name
+                            </button>
+                        }
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px">
+                        <div class="fld">
+                            <label>@HrT.T("رنگ اصلی (تأکیدی)")</label>
+                            <div class="color-pair">
+                                <input type="color" name="accentColor" id="accentColor" value="@(s.AccentColor ?? "#6366f1")" />
+                                <code id="accentHex">@(s.AccentColor ?? "#6366f1")</code>
+                            </div>
+                        </div>
+                        <div class="fld">
+                            <label>@HrT.T("رنگ سایدبار")</label>
+                            <div class="color-pair">
+                                <input type="color" name="sidebarColor" id="sidebarColor" value="@(s.SidebarColor ?? "#1b1746")" />
+                                <code id="sidebarHex">@(s.SidebarColor ?? "#1b1746")</code>
+                            </div>
+                        </div>
+                    </div>
+                    @if (canManage)
+                    {
+                        <div class="btn-row" style="gap:8px">
+                            <button class="btn btn-primary btn-sm">💾 @HrT.T("ذخیره رنگ سفارشی")</button>
+                        </div>
+                    }
+                </fieldset>
+            </form>
+            @if (canManage && (s.AccentColor is not null || s.SidebarColor is not null))
+            {
+                <form method="post" action="/Settings/SavePalette" style="margin-top:8px">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="reset" value="1" />
+                    <button class="btn btn-err btn-sm">↺ @HrT.T("پاک کردن رنگ سفارشی")</button>
+                </form>
+            }
+
+            <h3 class="set-sec" style="margin-top:22px">🎨 @HrT.T("پالت‌های رنگی سامانه")</h3>
+            <div class="hint" style="margin-bottom:10px">@HrT.T("هر پالت ۱۶ نقش رنگی استاندارد دارد — لینک‌ها، دکمه‌ها، سربرگ/سطر جدول، منو، متن، پس‌زمینه و وضعیت‌ها؛ همه رنگ‌ها تخت و بدون گرادیان")</div>
+            <div data-refresh-host>
+                <div class="pal-grid">
+                    @foreach (var p in palettes)
+                    {
+                        var isActive = activePaletteId == p.Id;
+                        <div class="pal-card @(isActive ? "on" : "")">
+                            <div class="pal-head">
+                                <span class="pal-name">@p.Name</span>
+                                @if (isActive)
+                                {
+                                    <span class="pal-tag">✓ @HrT.T("فعال")</span>
+                                }
+                                else if (p.IsBuiltIn)
+                                {
+                                    <span class="pal-tag builtin">@HrT.T("داخلی")</span>
+                                }
+                            </div>
+                            <div class="pal-mini" style="--accent:@p.PrimaryColor;--sidebar:@p.SidebarColor;--sidebar-text:@p.SidebarTextColor;--link:@p.LinkColor;--th-bg:@p.TableHeaderColor;--row-alt:@p.RowAltColor;--line:@p.BorderColor;--ink:@p.TextColor;--card:@p.SurfaceColor">
+                                <div class="m-side" style="background:var(--sidebar)">@HrT.T("منو")</div>
+                                <div class="m-main" style="background:var(--card)">
+                                    <span class="m-btn">@HrT.T("دکمه")</span>
+                                    <span class="m-link">@HrT.T("لینک")</span>
+                                    <div style="margin-top:3px;border-top:6px solid var(--th-bg);border-bottom:1px solid var(--line)"></div>
+                                    <div style="background:var(--row-alt);color:var(--ink);border-bottom:1px solid var(--line);padding:1px 3px">@HrT.T("سطر یک‌درمیان")</div>
+                                </div>
+                            </div>
+                            <div class="pal-swatches">
+                                <span class="pal-sw" style="background:@p.PrimaryColor" title="@HrT.T("رنگ اصلی")"></span>
+                                <span class="pal-sw" style="background:@p.LinkColor" title="@HrT.T("لینک‌ها")"></span>
+                                <span class="pal-sw" style="background:@p.SidebarColor" title="@HrT.T("منو")"></span>
+                                <span class="pal-sw" style="background:@p.TableHeaderColor" title="@HrT.T("سربرگ جدول")"></span>
+                                <span class="pal-sw" style="background:@p.RowAltColor" title="@HrT.T("سطر یک‌درمیان")"></span>
+                                <span class="pal-sw" style="background:@p.TextColor" title="@HrT.T("متن")"></span>
+                                <span class="pal-sw" style="background:@p.SuccessColor" title="@HrT.T("موفق")"></span>
+                                <span class="pal-sw" style="background:@p.WarningColor" title="@HrT.T("هشدار")"></span>
+                                <span class="pal-sw" style="background:@p.DangerColor" title="@HrT.T("خطا")"></span>
+                                <span class="pal-sw" style="background:@p.InfoColor" title="@HrT.T("اطلاع")"></span>
+                            </div>
+                            <div class="pal-acts">
+                                @if (canManage && !isActive)
+                                {
+                                    <form method="post" action="/Settings/ApplyPalette" data-ajax data-refresh style="display:contents">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button class="btn btn-primary btn-sm">@HrT.T("اعمال")</button>
+                                    </form>
+                                }
+                                @if (canManage)
+                                {
+                                    <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm?id=@p.Id"
+                                            data-modal-title="@(p.IsBuiltIn ? HrT.T("کپی از پالت داخلی") : HrT.T("ویرایش پالت"))">
+                                        @(p.IsBuiltIn ? HrT.T("کپی") : HrT.T("ویرایش"))
+                                    </button>
+                                    if (!p.IsBuiltIn)
+                                    {
+                                        <form method="post" action="/Settings/DeletePalette" data-ajax data-refresh
+                                              data-confirm="@HrT.F("پالت «{0}» حذف شود؟ این عملیات بازگشت‌پذیر نیست.", p.Name)"
+                                              data-danger="1" style="display:contents">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button class="btn btn-err btn-sm">@HrT.T("حذف")</button>
+                                        </form>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (canManage)
+                    {
+                        <div class="pal-card" style="justify-content:center;align-items:center;min-height:150px;border-style:dashed">
+                            <div style="font-size:26px;color:var(--ink-3)">＋</div>
+                            <button type="button" class="btn btn-sm" data-modal="/Settings/PaletteForm"
+                                    data-modal-title="@HrT.T("پالت جدید")">@HrT.T("پالت جدید بسازید")</button>
+                            <div class="hint" style="text-align:center">@HrT.T("۱۶ نقش رنگی + پیش‌نمایش زنده")</div>
+                        </div>
+                    }
+                </div>
+
+                @if (canManage && activePaletteId is not null)
+                {
+                    <form method="post" action="/Settings/DetachPalette" data-ajax data-refresh style="margin-top:14px">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-sm">↺ @HrT.T("بدون پالت — بازگشت به رنگ‌های اصلی نرم‌افزار")</button>
+                    </form>
+                }
+            </div>
+        </div>
+
+        @* ============ تب ۴ — پایگاه داده (کارت قبلی، عیناً) ============ *@
+        <div class="set-pane" id="tab-db" hidden>
+            @* ===== فاز ۹۴ — اطلاعات واقعی اتصال جاری (خوانده‌شدهٔ زنده از نصب فعال — برای همهٔ بینندگان) ===== *@
+            @{
+                var dbi = (Platform.Web.Controllers.SettingsController.DbStatus)ViewBag.DbInfo;
+            }
+            <div style="border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+                    <b style="font-size:13.5px">📊 @HrT.T("اطلاعات واقعی ثبت‌شده — نصب فعال")</b>
+                    @if (dbi.Connected)
+                    {
+                        <span class="badge badge-ok">✓ @HrT.T("اتصال زنده برقرار است")</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-err">✗ @HrT.T("اتصال برقرار نیست")</span>
+                    }
+                    <span class="badge">@dbi.ProviderFa</span>
+                </div>
+                @if (!dbi.Connected && !string.IsNullOrWhiteSpace(dbi.ConnectError))
+                {
+                    <div class="toast toast-err" style="margin-bottom:8px">@HrT.T("خطای اتصال:") @dbi.ConnectError</div>
+                }
+                <table class="tbl kv">
+                    <tbody>
+                        <tr><td style="width:210px">@HrT.T("نوع بانک فعال")</td><td><b>@dbi.ProviderFa</b></td></tr>
+                        <tr><td>@HrT.T("منبع پیکربندی")</td><td>@dbi.Source</td></tr>
+                        <tr><td>@HrT.T("رشتهٔ اتصال (رمز پوشانده شده)")</td><td><code dir="ltr" style="font-size:11px;word-break:break-all">@dbi.CsMasked</code></td></tr>
+                        @if (dbi.Connected)
+                        {
+                            @if (!string.IsNullOrWhiteSpace(dbi.FilePath))
+                            {
+                                <tr><td>@HrT.T("مسیر واقعی فایل بانک")</td><td><code dir="ltr" style="font-size:11px;word-break:break-all">@dbi.FilePath</code></td></tr>
+                                <tr><td>@HrT.T("حجم فایل بانک")</td><td>@dbi.FileSize@(string.IsNullOrWhiteSpace(dbi.FileModified) ? "" : " — " + HrT.T("آخرین نوشتن: ") + dbi.FileModified)</td></tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(dbi.Server) && dbi.Server != "—")
+                            {
+                                <tr><td>@HrT.T("سرور / نام بانک")</td><td dir="ltr" style="text-align:end">@dbi.Server@(dbi.DatabaseName != "—" ? " / " + dbi.DatabaseName : "")</td></tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(dbi.DbSize))
+                            {
+                                <tr><td>@HrT.T("حجم بانک")</td><td>@dbi.DbSize</td></tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(dbi.JournalMode))
+                            {
+                                <tr><td>@HrT.T("حالت ژورنال")</td><td dir="ltr" style="text-align:end">@dbi.JournalMode</td></tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(dbi.PagesInfo))
+                            {
+                                <tr><td>@HrT.T("حجم منطقی بانک")</td><td>@dbi.PagesInfo @HrT.T("— صفحات آزاد:") @dbi.FreePages</td></tr>
+                            }
+                            <tr><td>@HrT.T("نسخهٔ موتور بانک")</td><td dir="ltr" style="text-align:end">@dbi.EngineVersion</td></tr>
+                            <tr><td>@HrT.T("تعداد جدول‌ها / مجموع رکوردها")</td><td><b>@HrT.Digits(dbi.TableCount.ToString())</b> @HrT.T("جدول") / <b>@HrT.Digits(dbi.TotalRows.ToString("N0"))</b> @HrT.T("رکورد")</td></tr>
+                        }
+                    </tbody>
+                </table>
+                @if (dbi.Connected && dbi.TopTables.Count > 0)
+                {
+                    <div style="margin-top:10px;font-size:12px;color:var(--ink-2)">@HrT.T("پررکوردترین جدول‌ها (شمارش واقعی همین الان):")</div>
+                    <div class="chips" style="margin-top:6px">
+                        @foreach (var t in dbi.TopTables)
+                        {
+                            <span class="chip"><code dir="ltr" style="font-size:10.5px">@t.Key</code> @HrT.Digits(t.Value.ToString("N0"))</span>
+                        }
+                    </div>
+                }
+            </div>
+            @if (canManage)
+            {
+                <div class="callout" style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+                    ⚙️ @HrT.T("اتصال سامانه به بانک اطلاعاتی — در نخستین اجرا از طریق «ویزارد راه‌اندازی» تنظیم شده و از همین‌جا هم هر وقت بخواهید قابل تغییر است. پس از ذخیره، بانک جدید به‌صورت خودکار آماده (ساخت جدول‌ها + مقداردهی) و") <b>@HrT.T("بدون نیاز به ری‌استارت برنامه")</b> @HrT.T("فعال می‌شود؛ داده‌های بانک قبلی دست‌نخورده می‌مانند.")
+                </div>
+                <form id="dbForm" onsubmit="return false">
+                    @Html.AntiForgeryToken()
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px">
+                        <label class="db-prov" style="display:flex;gap:7px;align-items:center;font-size:12.5px"><input type="radio" name="provider" value="sqlserver" checked /> @HrT.T("SQL Server (سازمانی)")</label>
+                        <label class="db-prov" style="display:flex;gap:7px;align-items:center;font-size:12.5px"><input type="radio" name="provider" value="sqlite" /> @HrT.T("SQLite (فایلی)")</label>
+                    </div>
+                    <div id="dbMssql" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                        <div class="fld"><label>@HrT.T("آدرس سرور")</label><input name="server" value="localhost" dir="ltr" /></div>
+                        <div class="fld"><label>@HrT.T("پورت")</label><input name="port" value="1433" dir="ltr" /></div>
+                        <div class="fld"><label>@HrT.T("نام بانک")</label><input name="database" value="HrAttendance" dir="ltr" /></div>
+                        <div class="fld"><label>@HrT.T("نوع احراز")</label>
+                            <select name="authMode" id="dbAuth"><option value="sql">@HrT.T("کاربر SQL")</option><option value="windows">@HrT.T("ویندوز (Integrated)")</option></select>
+                        </div>
+                        <div class="fld db-sqlauth"><label>@HrT.T("نام کاربری SQL")</label><input name="user" value="sa" dir="ltr" /></div>
+                        <div class="fld db-sqlauth"><label>@HrT.T("رمز عبور SQL")</label><input name="password" type="password" dir="ltr" autocomplete="new-password" /></div>
+                        <div class="fld" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+                            <label style="display:flex;gap:6px;align-items:center;font-size:12px"><input type="checkbox" name="createIfMissing" checked /> @HrT.T("ساخت خودکار بانک")</label>
+                            <label style="display:flex;gap:6px;align-items:center;font-size:12px"><input type="checkbox" name="ssl" /> SSL</label>
+                        </div>
+                    </div>
+                    <div id="dbSqlite" style="display:none">
+                        <div class="fld" style="max-width:420px"><label>@HrT.T("مسیر فایل بانک")</label><input name="dbPath" value="hr.db" dir="ltr" placeholder="hr.db یا C:\HrData\hr.db" /></div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap">
+                        <button type="button" class="btn" id="dbTestBtn">🔌 @HrT.T("تست اتصال")</button>
+                        <button type="button" class="btn btn-primary" id="dbSaveBtn" data-confirm="@HrT.T("تغییر اتصال بانک داده اعمال شود؟ بانک جدید به‌صورت خودکار آماده و فعال می‌شود؛ داده‌های بانک فعلی دست‌نخورده می‌مانند.")">💾 @HrT.T("ذخیره و اعمال اتصال")</button>
+                        <span id="dbBusy" style="display:none;color:var(--ink-2);font-size:12px">⏳ @HrT.T("در حال بررسی…")</span>
+                    </div>
+                    <div id="dbResult" style="display:none;margin-top:10px;border-radius:10px;padding:9px 13px;font-size:12.5px;line-height:1.9;border:1px solid"></div>
+                </form>
+            }
+            else
+            {
+                <div style="color:var(--ink-2);font-size:12.5px">@HrT.T("اطلاعات واقعی اتصال جاری در کارت «اطلاعات واقعی ثبت‌شده» بالا برای همهٔ بینندگان نمایش داده می‌شود؛ تغییر اتصال فقط برای دارندگان دسترسی مدیریت تنظیمات فعال است — نوع فعال:") <b>@ViewBag.DbKind</b></div>
+            }
+        </div>
+
+        @* ============ تب ۵ — ماژول‌ها (کارت قبلی، عیناً) ============ *@
+        <div class="set-pane" id="tab-mods" hidden>
+            <p class="muted" style="margin:0 0 12px;font-size:12.5px;line-height:2">
+                @HrT.T("ماژول‌های") <b>@HrT.T("پایه")</b> @HrT.T("ستون فقرات سامانه‌اند و همیشه فعال‌اند؛ ماژول‌های") <b>@HrT.T("سیستم")</b> @HrT.T("را می‌توانید جدا از هم خاموش یا روشن کنید — خاموش‌کردن ماژول فقط منو و صفحه‌هایش را پنهان می‌کند و") <b>@HrT.T("داده‌ها محفوظ می‌مانند")</b>.
+                @HrT.T("فهرست ماژول‌های مجاز می‌تواند در «مجوز نصب» تعیین شود؛ ماژول قفل‌شده با مجوز، قابل روشن‌شدن نیست.")
+            </p>
+            <div class="tbl-wrap">
+                <table class="tbl" id="modTable">
+                    <thead>
+                        <tr><th style="width:34px"></th><th>@HrT.T("ماژول")</th><th style="width:110px">@HrT.T("نقش")</th><th>@HrT.T("شرح")</th><th style="width:170px">@HrT.T("وضعیت")</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in (IEnumerable<dynamic>)ViewBag.Modules)
+                        {
+                            <tr>
+                                <td style="font-size:18px">@m.Icon</td>
+                                <td><b>@m.Title</b> <span class="muted" dir="ltr" style="font-size:11px">(@m.Code)</span></td>
+                                <td>@if (m.IsCore)
+                                    {
+                                        <span class="badge">@HrT.T("پایه")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-info">@HrT.T("سیستم")</span>
+                                    }
+                                </td>
+                                <td class="muted" style="font-size:12px;line-height:1.9">@m.Description</td>
+                                <td>
+                                    @if (m.IsCore)
+                                    {
+                                        <span class="badge badge-ok">@HrT.T("همیشه فعال")</span>
+                                    }
+                                    else if (!m.Installed)
+                                    {
+                                        <span class="badge" title="@HrT.T("این ماژول در این بسته نصب نیست (بیلد مشتری بدون آن) — برای افزودن، بستهٔ شامل ماژول را نصب کنید")">⭘ @HrT.T("نصب نشده در این نسخه")</span>
+                                    }
+                                    else if (m.LicenseLocked)
+                                    {
+                                        <span class="badge badge-warn" title="@HrT.T("این ماژول در مجوز نصب فعال نشده است — برای افزودن آن، مجوز جدید با فهرست ماژول‌ها دریافت کنید")">🔒 @HrT.T("قفل با مجوز")</span>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-sm @(m.Enabled ? "" : "btn-primary")"
+                                                data-mod-toggle="@m.Code" data-enabled="@m.Enabled"
+                                                data-title="@m.Title" @(canManage ? null : "disabled")>
+                                            @(m.Enabled ? HrT.T("فعال است — خاموش کن") : HrT.T("غیرفعال است — روشن کن"))
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (!canManage)
+            {
+                <div class="hint" style="margin-top:10px">@HrT.T("برای تغییر وضعیت ماژول‌ها دسترسی «settings.manage» لازم است.")</div>
+            }
+            <span id="modAf" style="display:none">@Html.AntiForgeryToken()</span>
+        </div>
+
+        @* ============ تب ۶ — درباره (کارت قبلی، عیناً) ============ *@
+        <div class="set-pane" id="tab-about" hidden>
+            <table class="tbl kv">
+                <tbody>
+                    <tr><td>@HrT.T("محصول")</td><td>@Platform.Web.Services.BuildInfo.Product</td></tr>
+                    <tr><td>@HrT.T("نسخه")</td><td><b>@Platform.Web.Services.Jalali.ToPersianDigits(Platform.Web.Services.BuildInfo.Version)</b></td></tr>
+                    <tr><td>@HrT.T("تولیدکننده")</td><td>@Platform.Web.Services.BuildInfo.Vendor</td></tr>
+                    @if (!string.IsNullOrEmpty(Platform.Web.Services.BuildInfo.Copyright))
+                    {
+                        <tr><td>@HrT.T("حق نشر")</td><td>@Platform.Web.Services.BuildInfo.Copyright</td></tr>
+                    }
+                    <tr><td>@HrT.T("زمان ساخت")</td><td>@Platform.Web.Services.BuildInfo.BuildTimeFa</td></tr>
+                    <tr><td>@HrT.T("زمان اجرا")</td><td>ASP.NET Core 8 / .NET @Platform.Web.Services.Jalali.ToPersianDigits(Platform.Web.Services.BuildInfo.RuntimeVersion)</td></tr>
+                </tbody>
+            </table>
+            @if (s.UpdatedBy is not null)
+            {
+                <div class="hint" style="margin-top:6px">@HrT.T("آخرین ویرایش تنظیمات:") @s.UpdatedBy — @Platform.Web.Services.Jalali.FmtFa(s.UpdatedAt)</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // ---------- فاز ۹۱ — زبانه‌های فرم واحد تنظیمات (با به‌خاطرسپاری تب فعال) ----------
+    (function () {
+        var tabs = document.querySelectorAll('#setTabs a');
+        if (!tabs.length) return;
+        function activate(id, save) {
+            tabs.forEach(function (a) {
+                var on = a.getAttribute('data-pane') === id;
+                a.classList.toggle('on', on);
+                a.setAttribute('aria-selected', on ? 'true' : 'false');
+                var pane = document.getElementById(a.getAttribute('data-pane'));
+                if (pane) pane.hidden = !on;
+            });
+            if (save) { try { sessionStorage.setItem('hr_setTab', id); } catch (e) { } }
+        }
+        tabs.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                activate(a.getAttribute('data-pane'), true);
+            });
+        });
+        var last = null;
+        try { last = sessionStorage.getItem('hr_setTab'); } catch (e) { }
+        // فاز ۱۰۴ — اولویت با هش آدرس (عمق‌پیوندی مثل /Settings#tab-screensaver پس از درون‌ریزی)
+        var h = (location.hash || '').slice(1);
+        if (h && Array.prototype.some.call(tabs, function (a) { return a.getAttribute('data-pane') === h; })) last = h;
+        if (last && document.getElementById(last)) activate(last, false);
+    })();
+
+    // ---------- فاز ۹۱ — پیش‌نمایش زندهٔ ارز + پیشنهاد ارز بر اساس زبان ----------
+    (function () {
+        var sel = document.getElementById('curSel'), rate = document.getElementById('curRate');
+        if (!sel) return;
+        var prev = document.getElementById('curPreview');
+        var sugHint = document.getElementById('curSugHint');
+        var lang = document.getElementById('defLang');
+        // کاتالوگ ارز برای پیش‌نمایش سمت کاربر (نشان + جهت پیشوند)
+        var CURS = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Money.Catalog.Select(c => new { c.Code, c.Sym, c.Prefix }),
+            new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+        var SUG = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            HrT.MenuLanguages().Select(l => new { code = l.Code, sug = Money.SuggestForLang(l.Code) })));
+        var SUG_TITLES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Money.Catalog.ToDictionary(c => c.Code, c => HrT.Rtl ? c.Fa : c.En)));
+        var rtl = document.documentElement.getAttribute('dir') !== 'ltr';
+        function symOf(code) {
+            for (var i = 0; i < CURS.length; i++) if (CURS[i].code === code) return CURS[i];
+            return null;
+        }
+        function fmtPreview() {
+            if (!prev) return;
+            var c = symOf(sel.value) || { sym: '', prefix: false };
+            var r = parseFloat((rate.value || '1').replace(',', '.')) || 1;
+            var v = 1234567.5 * r;
+            var s = v.toLocaleString(rtl ? 'fa-IR' : 'en-US', { maximumFractionDigits: 2 });
+            prev.textContent = c.prefix ? (c.sym + ' ' + s) : (s + ' ' + c.sym);
+        }
+        function sugUpdate() {
+            if (!sugHint || !lang) return;
+            var code = '';
+            for (var i = 0; i < SUG.length; i++) if (SUG[i].code === lang.value) code = SUG[i].sug;
+            var title = SUG_TITLES[code] || code;
+            sugHint.textContent = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ارز پیشنهادی این زبان:")))' + ' ' + title;
+        }
+        // کاربر زبان را عوض کرد و ارز را هنوز دستی تغییر نداده = ارز پیشنهادی خودکار
+        var curTouched = false;
+        sel.addEventListener('change', function () { curTouched = true; fmtPreview(); });
+        rate.addEventListener('input', fmtPreview);
+        if (lang) lang.addEventListener('change', function () {
+            sugUpdate();
+            if (!curTouched) {
+                var code = '';
+                for (var i = 0; i < SUG.length; i++) if (SUG[i].code === lang.value) code = SUG[i].sug;
+                if (code && symOf(code)) { sel.value = code; fmtPreview(); }
+            }
+        });
+        fmtPreview(); sugUpdate();
+    })();
+
+    // به‌روزرسانی زنده بلوک پالت سراسری پس از اعمال/جدا کردن/ویرایش پالت فعال با AJAX —
+    // سرور CSS تازه را در پاسخ برمی‌گرداند و همین‌جا تگ استایل head (palCss) تعویض می‌شود.
+    document.addEventListener('hraj:refresh', function (e) {
+        var j = e.detail || {};
+        if (typeof j.css !== 'string') return;
+        var el = document.getElementById('palCss');
+        if (el) el.textContent = j.css;
+    });
+
+    // ---------- پایگاه داده (فاز ۴۵) — تست/ذخیره اتصال با همان موتور ویزارد ----------
+    (function () {
+        var MSG_ERR_PREFIX = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا:")))';
+        var MSG_DB_CONFIRM = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("تغییر اتصال بانک داده اعمال شود؟\nبانک جدید به‌صورت خودکار آماده و فعال می‌شود؛ داده‌های بانک فعلی دست‌نخورده می‌مانند.")))';
+        var MSG_DB_CONFIRM_OK = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("بله، اعمال کن")))';
+        var MSG_SEND_FAILED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ارسال ناموفق بود:")))';
+        var form = document.getElementById('dbForm');
+        if (!form) return;
+        var res = document.getElementById('dbResult'), busy = document.getElementById('dbBusy');
+        var saveBtn = document.getElementById('dbSaveBtn'), testBtn = document.getElementById('dbTestBtn');
+        function show(ok, msg) {
+            res.style.display = 'block';
+            res.style.background = ok ? 'rgba(5,150,105,.08)' : 'rgba(225,29,72,.07)';
+            res.style.borderColor = ok ? 'rgba(5,150,105,.3)' : 'rgba(225,29,72,.3)';
+            res.style.color = ok ? '#065f46' : '#9f1239';
+            res.textContent = msg;
+        }
+        function on(on) {
+            busy.style.display = on ? 'inline' : 'none';
+            saveBtn.disabled = on; testBtn.disabled = on;
+        }
+        function post(url) {
+            return fetch(url, { method: 'POST', body: new FormData(form), credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(function (r) { return r.json(); });
+        }
+        // تب پروایدر + فیلدهای احراز ویندوز
+        var auth = document.getElementById('dbAuth');
+        form.querySelectorAll('input[name=provider]').forEach(function (r) {
+            r.addEventListener('change', function () {
+                var sq = form.querySelector('input[name=provider]:checked').value === 'sqlite';
+                document.getElementById('dbMssql').style.display = sq ? 'none' : '';
+                document.getElementById('dbSqlite').style.display = sq ? '' : 'none';
+                res.style.display = 'none';
+            });
+        });
+        if (auth) auth.addEventListener('change', function () {
+            var win = auth.value === 'windows';
+            form.querySelectorAll('.db-sqlauth').forEach(function (f) { f.style.display = win ? 'none' : ''; });
+        });
+        testBtn.addEventListener('click', function () {
+            on(true); res.style.display = 'none';
+            post('/Settings/TestDatabase')
+                .then(function (j) { show(j.ok, j.message); })
+                .catch(function (e) { show(false, MSG_ERR_PREFIX + ' ' + e.message); })
+                .finally(function () { on(false); });
+        });
+        // دکمه ذخیره با data-confirm کار می‌کند — submit واقعی را نمی‌خواهیم؛ کلیک را دستی می‌گیریم
+        saveBtn.removeAttribute('data-confirm');
+        saveBtn.addEventListener('click', function () {
+            window.uiConfirm({
+                message: MSG_DB_CONFIRM,
+                danger: true, okText: MSG_DB_CONFIRM_OK
+            }).then(function (ok) {
+                if (!ok) return;
+                on(true); res.style.display = 'none';
+                post('/Settings/SaveDatabase')
+                    .then(function (j) {
+                        show(j.ok, j.message || '');
+                        if (j.ok) setTimeout(function () { window.location.reload(); }, 1200);
+                    })
+                    .catch(function (e) { show(false, MSG_ERR_PREFIX + ' ' + e.message); })
+                    .finally(function () { on(false); });
+            });
+        });
+    })();
+
+    // ---------- ماژول‌های سامانه (فاز ۵۴) — فعال/غیرفعال با AJAX + تأیید ----------
+    (function () {
+        var MSG_MOD_OFF = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ماژول «{0}» خاموش شود؟\nمنو و صفحه‌های آن بلافاصله پنهان می‌شود؛ داده‌ها محفوظ می‌مانند.")))';
+        var MSG_MOD_ON = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ماژول «{0}» روشن شود؟")))';
+        var MSG_MOD_OFF_OK = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("بله، خاموش کن")))';
+        var MSG_MOD_ON_OK = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("بله، روشن کن")))';
+        var MSG_ERR = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("خطا")))';
+        var table = document.getElementById('modTable');
+        var tok = document.querySelector('#modAf input[name="__RequestVerificationToken"]');
+        if (!table || !tok) return;
+        table.querySelectorAll('[data-mod-toggle]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var code = btn.getAttribute('data-mod-toggle');
+                var cur = btn.getAttribute('data-enabled') === 'True';
+                var title = btn.getAttribute('data-title') || code;
+                window.uiConfirm({
+                    message: (cur ? MSG_MOD_OFF : MSG_MOD_ON).replace('{0}', title),
+                    danger: cur,
+                    okText: cur ? MSG_MOD_OFF_OK : MSG_MOD_ON_OK
+                }).then(function (ok) {
+                    if (!ok) return;
+                    btn.disabled = true;
+                    var fd = new FormData();
+                    fd.append('code', code);
+                    fd.append('enabled', cur ? 'false' : 'true');
+                    fd.append('__RequestVerificationToken', tok.value);
+                    fetch('/Settings/ToggleModule', { method: 'POST', body: fd, credentials: 'same-origin',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (j) {
+                            if (j.ok) { window.location.reload(); }
+                            else { btn.disabled = false; window.toast(j.message || MSG_ERR, 'err'); }
+                        })
+                        .catch(function (e) { btn.disabled = false; window.toast(MSG_SEND_FAILED + ' ' + e.message, 'err'); });
+                });
+            });
+        });
+    })();
+
+    // انتخاب رنگ سریع (لایه سازگاری) — پرکردن رنگ‌نماها
+    // فاز ۸۷: واگذاری رویداد روی document (input + change با capture) — پس از
+    // pjax/data-refresh اتصال‌ها زنده می‌مانند و مرورگرهای change-only هم پوشش داده می‌شوند.
+    (function () {
+        if (window.__quickColorBound) return;
+        window.__quickColorBound = true;
+        var MAP = { accentColor: 'accentHex', sidebarColor: 'sidebarHex' };
+        function apply(inp) {
+            if (!inp || !(inp instanceof HTMLInputElement)) return;
+            var hexId = MAP[inp.id];
+            if (!hexId) return;
+            var hex = document.getElementById(hexId);
+            if (hex) hex.textContent = inp.value;
+        }
+        ['input', 'change'].forEach(function (evt) {
+            document.addEventListener(evt, function (e) { apply(e.target); }, true);
+        });
+        // پرست‌های آماده — واگذارشده (کلیک روی هر .palette-preset در هر ناحیهٔ تازه‌رندرشده)
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest('.palette-preset');
+            if (!b) return;
+            var acc = document.getElementById('accentColor'),
+                sid = document.getElementById('sidebarColor');
+            if (!acc || !sid) return;
+            acc.value = b.getAttribute('data-accent') || acc.value;
+            sid.value = b.getAttribute('data-sidebar') || sid.value;
+            apply(acc); apply(sid);
+        });
+    })();
+</script>
+}

@@ -1,0 +1,707 @@
+@{
+    ViewData["Title"] = HrT.T("کنترل تردد");
+    var tab = (string)ViewBag.Tab;
+    var zones = (List<Zone>)ViewBag.Zones;
+    var perms = (List<AccessPermission>)ViewBag.Perms;
+    var events = (List<AccessEvent>)ViewBag.Events;
+    var alerts = (List<SecurityAlert>)ViewBag.Alerts;
+    // فاز ۱۱۴ — لیست کامل پرسنل حذف شد (انتخابگر جستجومحور /Ui/EmpSearch)
+    var resultFilter = (string?)ViewBag.ResultFilter;
+    var groups = (List<AccessGroup>)(ViewBag.Groups ?? new List<AccessGroup>());
+    var canManage = Me.Get()!.Has("access.zones.manage") || Me.Get()!.Has("access.gates.manage") || Me.Get()!.Has("access.perms.manage") || Me.Get()!.Has("access.alerts.manage") || Me.Get()!.Has("access.scan");
+    var companies = (List<Company>)(ViewBag.Companies ?? new List<Company>());
+    var curCo = (string?)ViewBag.Co;
+}
+<div class="chips">
+    <form method="get" style="display:inline-flex;gap:6px;align-items:center">
+        <input type="hidden" name="tab" value="@tab" />
+        <select name="co" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px">
+            <option value="">@HrT.T("همه شرکت‌ها")</option>
+            @foreach (var c in companies)
+            {
+                <option value="@c.Id" selected="@(curCo == c.Id)">@c.Name</option>
+            }
+        </select>
+    </form>
+</div>
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("کنترل تردد")</h1>
+        <div class="page-sub">@HrT.F("{0} منطقه · {1} قانون دسترسی · {2} رویداد اخیر", Jalali.Num(zones.Count), Jalali.Num(perms.Count), Jalali.Num(events.Count))</div>
+    </div>
+</div>
+<div class="tabs">
+    <a href="/Access?tab=zones" class="@(tab == "zones" ? "on" : "")">@HrT.T("مناطق و گیت‌ها") (@Jalali.Num(zones.Count))</a>
+    <a href="/Access?tab=groups" class="@(tab == "groups" ? "on" : "")">@HrT.T("گروه‌های دسترسی") (@Jalali.Num(groups.Count))</a>
+    <a href="/Access?tab=perms" class="@(tab == "perms" ? "on" : "")">@HrT.T("مجوزهای دسترسی") (@Jalali.Num(perms.Count))</a>
+    <a href="/Access?tab=events" class="@(tab == "events" ? "on" : "")">@HrT.T("رویدادها") (@Jalali.Num(events.Count))</a>
+    <a href="/Access?tab=alerts" class="@(tab == "alerts" ? "on" : "")">@HrT.T("هشدارها") (@Jalali.Num(alerts.Count(a => !a.Resolved && !a.Expired)) @HrT.T("باز"))</a>
+    <a href="/Access?tab=traffic" class="@(tab == "traffic" ? "on" : "")">@HrT.T("📊 تحلیل تردد")</a>
+    <a href="/Access?tab=map" class="@(tab == "map" ? "on" : "")">@HrT.T("🗺 نقشه سایت")</a>
+    <a href="/Access/Muster" class="">@HrT.T("🚨 شمارش اضطراری")</a>
+</div>
+
+<div data-refresh-host>
+@if (tab == "zones")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("مناطق امنیتی و گیت‌ها")</h2>
+            @if (canManage)
+            {
+                <div class="btn-row">
+                    <button class="btn btn-primary" data-modal="/Access/CreateZone" data-modal-title="@HrT.T("منطقه امنیتی جدید")">@HrT.T("+ منطقه")</button>
+                    <button class="btn btn-dark" data-modal="/Access/CreateGate" data-modal-title="@HrT.T("گیت جدید")">@HrT.T("+ گیت")</button>
+                </div>
+            }
+        </div>
+        <div class="card-b">
+            @foreach (var z in zones)
+            {
+                <div style="margin-bottom:16px">
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+                        <strong style="font-size:13.5px">@z.Name</strong>
+                        <span class="code" style="color:var(--ink-3);font-size:11px">@z.Code</span>
+                        <span class="badge badge-mute" style="font-size:10.5px">🏢 @(z.Company?.Name ?? "—")</span>
+                        <span class="badge @(z.RiskLevel switch { "فوق‌حساس" => "badge-crit", "حساس" => "badge-warn", _ => "badge-mute" })">@HrT.T(z.RiskLevel)</span>
+                        @if (z.AntiPassback)
+                        {
+                            <span class="badge badge-info">@HrT.T("آنت‌ی‌پس‌بک فعال")</span>
+                        }
+                        @if (z.TwoFactor)
+                        {
+                            <span class="badge badge-warn">@HrT.T("🔐 دومرحله‌ای اختیاری فعال") (@Jalali.Num(z.TwoFactorWindowSec) @HrT.T("ثانیه"))</span>
+                        }
+                        @if (z.Gates.Any(g => g.DoorState != "نرمال"))
+                        {
+                            <span class="badge badge-crit">@HrT.T("⚠ حالت اضطراری:") @Jalali.Num(z.Gates.Count(g => g.DoorState == "باز دائم")) @HrT.T("باز دائم /") @Jalali.Num(z.Gates.Count(g => g.DoorState == "قفل دائم")) @HrT.T("قفل دائم")</span>
+                        }
+                        @if (canManage)
+                        {
+                            <form method="post" action="/Access/ToggleAntiPassback" class="inline-form" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@z.Id" />
+                                <button class="btn btn-sm">@(z.AntiPassback ? HrT.T("غیرفعال‌سازی APB") : HrT.T("فعال‌سازی APB"))</button>
+                            </form>
+                            <form method="post" action="/Access/ToggleTwoFactor" class="inline-form" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@z.Id" />
+                                <button class="btn btn-sm">@(z.TwoFactor ? HrT.T("خاموش‌کردن دوعاملی") : HrT.T("🔐 دوعاملی (اختیاری)"))</button>
+                            </form>
+                            @if (z.TwoFactor)
+                            {
+                                <form method="post" action="/Access/SetTwoFactorWindow" class="inline-form" data-ajax data-refresh style="display:inline-flex;gap:4px;align-items:center">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@z.Id" />
+                                    <input type="number" name="windowSec" value="@z.TwoFactorWindowSec" min="5" max="600" style="width:70px;padding:4px 8px" title="@HrT.T("پنجره دومرحله‌ای (ثانیه)")" />
+                                    <button class="btn btn-sm">@HrT.T("ثانیه")</button>
+                                </form>
+                            }
+                            <form method="post" action="/Access/EmergencyOpen" class="inline-form" data-ajax data-refresh data-confirm="@HrT.F("تخلیه اضطراری منطقه «{0}»؟ همه درب‌های فعال باز می‌مانند و هشدار بحرانی ثبت می‌شود.", z.Name)" data-danger="1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="zoneId" value="@z.Id" />
+                                <button class="btn btn-sm btn-err">@HrT.T("🚨 تخلیه اضطراری")</button>
+                            </form>
+                            @if (z.Gates.Any(g => g.DoorState != "نرمال"))
+                            {
+                                <form method="post" action="/Access/RestoreNormal" class="inline-form" data-ajax data-refresh>
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="zoneId" value="@z.Id" />
+                                    <button class="btn btn-sm btn-ok">@HrT.T("↩ بازگشت به نرمال")</button>
+                                </form>
+                            }
+                        }
+                    </div>
+                    @if (z.Description is not null)
+                    {
+                        <div style="color:var(--ink-2);font-size:11.5px;margin-bottom:6px">@z.Description</div>
+                    }
+                    <div class="btn-row">
+                        @foreach (var g in z.Gates)
+                        {
+                            <span class="chip">
+                                <b>@g.Name</b> · @HrT.T(g.Type) · @HrT.T(g.Direction)
+                                <span class="badge @(g.Status == "فعال" ? "badge-ok" : g.Status == "خراب" ? "badge-err" : "badge-mute")">@HrT.T(g.Status)</span>
+                                <span class="badge @(g.DoorState switch { "باز دائم" => "badge-warn", "قفل دائم" => "badge-crit", _ => "badge-mute" })">🔒 @HrT.T(g.DoorState)</span>
+                                @(g.Device is null ? "" : " · " + g.Device.Name)
+                                @if (!string.IsNullOrEmpty(g.ScheduleDays) || !string.IsNullOrEmpty(g.ScheduleFrom))
+                                {
+                                    <span class="badge badge-info">⏰ @g.ScheduleFrom–@g.ScheduleTo @(string.IsNullOrEmpty(g.ScheduleDays) ? HrT.T("همه روزها") : HrT.F("روزهای {0}", g.ScheduleDays))</span>
+                                }
+                                @if (canManage)
+                                {
+                                    <button class="btn btn-sm" data-modal="/Access/GateScheduleForm?id=@g.Id" data-modal-title="@HrT.F("برنامه زمانی گیت — {0}", g.Name)">@HrT.T("برنامه زمانی")</button>
+                                    <button class="btn btn-sm" data-modal="/Access/DoorStateForm?id=@g.Id" data-modal-title="@HrT.F("حالت درب — {0}", g.Name)">@HrT.T("حالت درب")</button>
+                                }
+                            </span>
+                        }
+                        @if (!z.Gates.Any())
+                        {
+                            <span class="chip">@HrT.T("بدون گیت")</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else if (tab == "perms")
+{
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("مجوزهای دسترسی") (@Jalali.Num(perms.Count))</h2>
+            @if (canManage)
+            {
+                <button class="btn btn-primary" data-modal="/Access/CreatePerm" data-modal-title="@HrT.T("افزودن مجوز دسترسی")">@HrT.T("+ مجوز جدید")</button>
+            }
+        </div>
+        <div class="table-wrap" style="max-height:62vh">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("شخص")</th><th>@HrT.T("منطقه")</th><th>@HrT.T("نوع")</th><th>@HrT.T("روزها")</th><th>@HrT.T("ساعت")</th><th>@HrT.T("اعتبار")</th><th>@HrT.T("وضعیت")</th>@if (canManage) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var p in perms)
+                    {
+                        <tr>
+                            <td><strong>@(p.Employee?.FullName ?? (p.VisitorId != null && ViewBag.VisitorNames is Dictionary<string, string> vn1 && vn1.TryGetValue(p.VisitorId, out var vn1v) ? vn1v : null) ?? "—")</strong></td>
+                            <td>@p.Zone?.Name</td>
+                            <td><span class="badge badge-mute">@HrT.T(p.Type)</span></td>
+                            <td class="num">@Jalali.ToPersianDigits(p.Days ?? HrT.T("همه"))</td>
+                            <td class="num">@Jalali.ToPersianDigits((p.TimeFrom ?? "--:--") + " - " + (p.TimeUntil ?? "--:--"))</td>
+                            <td class="num">@(p.ValidUntil is null ? HrT.T("بدون محدودیت") : Jalali.Fmt(p.ValidUntil.Value))</td>
+                            <td><span class="badge @(p.Status == "فعال" ? "badge-ok" : "badge-mute")">@HrT.T(p.Status)</span></td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    <form method="post" action="/Access/TogglePerm" class="inline-form" data-ajax data-refresh>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button class="btn btn-sm @(p.Status == "فعال" ? "btn-err" : "btn-ok")">@(p.Status == "فعال" ? HrT.T("لغو") : HrT.T("فعال‌سازی"))</button>
+                                    </form>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "events")
+{
+    @if (canManage)
+    {
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("شبیه‌ساز اسکن گیت")</h2><span class="hint">@HrT.T("ارزیابی واقعی با موتور مجوز") (AC-02)</span></div>
+            <form method="post" action="/Access/Scan" class="card-b" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("کد پرسنلی *")</label><input name="personnelCode" required placeholder="1001" /></div>
+                    <div class="fld"><label>@HrT.T("گیت *")</label>
+                        <select name="gateId" required>
+                            @foreach (var z in zones)
+                            {
+                                foreach (var g in z.Gates)
+                                {
+                                    <option value="@g.Id">@g.Name (@z.Name)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("جهت")</label>
+                        <select name="direction"><option value="ورود">@HrT.T("ورود")</option><option value="خروج">@HrT.T("خروج")</option></select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("روش")</label>
+                        <select name="method"><option value="کارت">@HrT.T("کارت")</option><option value="اثر انگشت">@HrT.T("اثر انگشت")</option><option value="چهره">@HrT.T("چهره")</option><option value="QR">@HrT.T("QR")</option><option value="RFID">@HrT.T("RFID")</option></select>
+                    </div>
+                </div>
+                <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("اسکن")</button></div>
+            </form>
+        </div>
+    }
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("رویدادهای کنترل تردد (۱۰۰ مورد اخیر)")</h2>
+            <div class="btn-row">
+                <a class="btn btn-sm @(string.IsNullOrEmpty(resultFilter) ? "btn-dark" : "")" href="/Access?tab=events">@HrT.T("همه")</a>
+                <a class="btn btn-sm @(resultFilter == "مجاز" ? "btn-dark" : "")" href="/Access?tab=events&result=مجاز">@HrT.T("مجاز")</a>
+                <a class="btn btn-sm @(resultFilter == "غیرمجاز" ? "btn-dark" : "")" href="/Access?tab=events&result=غیرمجاز">@HrT.T("غیرمجاز")</a>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("شخص")</th><th>@HrT.T("گیت")</th><th>@HrT.T("منطقه")</th><th>@HrT.T("جهت")</th><th>@HrT.T("روش")</th><th>@HrT.T("نتیجه")</th><th>@HrT.T("دلیل")</th></tr></thead>
+                <tbody>
+                    @foreach (var e in events)
+                    {
+                        <tr>
+                            <td class="num">@Jalali.FmtLong(e.Timestamp)</td>
+                            <td><strong>@(e.Employee?.FullName ?? (e.VisitorId != null && ViewBag.VisitorNames is Dictionary<string, string> vn2 && vn2.TryGetValue(e.VisitorId, out var vn2v) ? vn2v : null) ?? "—")</strong></td>
+                            <td>@e.Gate?.Name</td>
+                            <td>@e.Gate?.Zone?.Name</td>
+                            <td>@HrT.T(e.Direction)</td>
+                            <td>@HrT.T(e.Method)</td>
+                            <td><span class="badge @(e.Result == "مجاز" ? "badge-ok" : "badge-err")">@HrT.T(e.Result)</span></td>
+                            <td>@(string.IsNullOrEmpty(e.Reason) ? "—" : HrT.T(e.Reason))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (tab == "groups")
+{
+    @if (canManage)
+    {
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("ایجاد گروه دسترسی")</h2><span class="hint">@HrT.T("گروه = پرسنل + گیت‌های مجاز با پنجره زمانی اختصاصی")</span></div>
+            <form method="post" action="/Access/CreateGroup" class="card-b" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld"><label>@HrT.T("شرکت مالک *")</label>
+                        <select name="companyId" required>
+                            @foreach (var c in companies)
+                            {
+                                <option value="@c.Id">@c.Name (@c.Code)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("نام گروه *")</label><input name="name" required placeholder="@HrT.T("مثلاً نگهبان‌های شیفت A")" /></div>
+                    <div class="fld fld-full"><label>@HrT.T("توضیح")</label><input name="note" /></div>
+                </div>
+                <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ایجاد گروه")</button></div>
+            </form>
+        </div>
+    }
+    @foreach (var g in groups)
+    {
+        <div class="card">
+            <div class="card-h">
+                <h2>👥 @g.Name <span class="badge badge-mute" style="font-size:10.5px;vertical-align:middle">🏢 @(g.Company?.Name ?? "—")</span></h2>
+                @if (canManage)
+                {
+                    <form method="post" action="/Access/DeleteGroup" class="inline-form" data-confirm="@HrT.T("حذف گروه؟ همه اعضا و گیت‌های متصل به آن از گروه خارج می‌شوند")" data-danger="1" data-ajax data-refresh>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@g.Id" />
+                        <button class="btn btn-sm btn-err">@HrT.T("حذف گروه")</button>
+                    </form>
+                }
+            </div>
+            <div class="card-b">
+                <div class="grid two-col">
+                    <div>
+                        <b style="font-size:12.5px">@HrT.T("اعضای گروه") (@Jalali.Num(g.Members.Count))</b>
+                        <div class="table-wrap" style="max-height:260px;margin-top:8px">
+                            <table class="tbl">
+                                <tbody>
+                                    @foreach (var m in g.Members)
+                                    {
+                                        <tr>
+                                            <td class="num">@Jalali.ToPersianDigits(m.Employee?.PersonnelCode ?? "—")</td>
+                                            <td>@(m.Employee?.FullName ?? "—")</td>
+                                            @if (canManage)
+                                            {
+                                                <td>
+                                                    <form method="post" action="/Access/RemoveGroupMember" class="inline-form" data-ajax data-refresh>
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@m.Id" />
+                                                        <button class="btn btn-sm btn-err">@HrT.T("حذف")</button>
+                                                    </form>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                    @if (!g.Members.Any())
+                                    {
+                                        <tr><td><div class="empty" style="padding:10px">@HrT.T("عضوی ندارد.")</div></td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (canManage)
+                        {
+                            <form method="post" action="/Access/AddGroupMember" class="toolbar" style="margin-top:10px" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="groupId" value="@g.Id" />
+                                <div class="fld">
+                                    <label>@HrT.T("افزودن پرسنل")</label>
+                                    @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل *@
+                                    <div class="emp-picker" data-name="employeeId" data-min="1"
+                                         data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+                                </div>
+                                <button class="btn">@HrT.T("افزودن")</button>
+                            </form>
+                        }
+                    </div>
+                    <div>
+                        <b style="font-size:12.5px">@HrT.T("گیت‌های مجاز") (@Jalali.Num(g.Gates.Count))</b>
+                        <div class="table-wrap" style="max-height:260px;margin-top:8px">
+                            <table class="tbl">
+                                <thead><tr><th>@HrT.T("گیت")</th><th>@HrT.T("پنجره زمانی")</th><th></th></tr></thead>
+                                <tbody>
+                                    @foreach (var gg in g.Gates)
+                                    {
+                                        <tr>
+                                            <td>@(gg.Gate?.Name ?? "—")</td>
+                                            <td>@(string.IsNullOrEmpty(gg.TimeFrom) ? HrT.T("بدون محدودیت") : HrT.F("{0} تا {1} — {2}", gg.TimeFrom, gg.TimeUntil, gg.Days ?? HrT.T("همه روزها")))</td>
+                                            @if (canManage)
+                                            {
+                                                <td>
+                                                    <form method="post" action="/Access/RemoveGroupGate" class="inline-form" data-ajax data-refresh>
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@gg.Id" />
+                                                        <button class="btn btn-sm btn-err">@HrT.T("حذف")</button>
+                                                    </form>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                    @if (!g.Gates.Any())
+                                    {
+                                        <tr><td colspan="3"><div class="empty" style="padding:10px">@HrT.T("گیت‌مجازی ثبت نشده — بدون آن اعضای گروه از این گروه مجوز نمی‌گیرند.")</div></td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (canManage)
+                        {
+                            <form method="post" action="/Access/SetGroupGate" class="toolbar" style="margin-top:10px" data-ajax data-refresh>
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="groupId" value="@g.Id" />
+                                <div class="fld">
+                                    <label>@HrT.T("گیت")</label>
+                                    <select name="gateId" required>
+                                        <option value="" disabled selected>@HrT.T("— انتخاب گیت —")</option>
+                                        @foreach (var z in zones)
+                                        {
+                                            foreach (var gate in z.Gates)
+                                            {
+                                                <option value="@gate.Id">@gate.Name (@z.Name)</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="fld"><label>@HrT.T("روزها (خالی=همه)")</label><input name="days" placeholder="0,1,2,3,4" /></div>
+                                <div class="fld"><label>@HrT.T("از ساعت")</label><input type="time" name="timeFrom" /></div>
+                                <div class="fld"><label>@HrT.T("تا ساعت")</label><input type="time" name="timeUntil" /></div>
+                                <button class="btn">@HrT.T("ذخیره")</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (!groups.Any())
+    {
+        <div class="card"><div class="card-b"><div class="empty">@HrT.T("هنوز گروهی تعریف نشده است.")</div></div></div>
+    }
+}
+else if (tab == "traffic")
+{
+    var hourly = (int[])ViewBag.Hourly!;
+    var topGates = (IEnumerable<dynamic>)ViewBag.TopGates!;
+    var methods = (IEnumerable<dynamic>)ViewBag.Methods!;
+    int dirIn = ViewBag.DirIn ?? 0, dirOut = ViewBag.DirOut ?? 0;
+    int resOk = ViewBag.ResOk ?? 0, resNo = ViewBag.ResNo ?? 0;
+    int totalTraffic = ViewBag.TrafficTotal ?? 0;
+    int maxHour = Math.Max(1, hourly.Max());
+    var maxGate = Math.Max(1, topGates.Select(x => (int)x.Count).DefaultIfEmpty(0).Max());
+    var maxMethod = Math.Max(1, methods.Select(x => (int)x.Count).DefaultIfEmpty(0).Max());
+
+    <div class="chips">
+        <span class="chip">@HrT.T("رویدادهای ۳۰ روز اخیر:") <b>@Jalali.Num(totalTraffic)</b></span>
+        <span class="chip">@HrT.T("ورود:") <b>@Jalali.Num(dirIn)</b></span>
+        <span class="chip">@HrT.T("خروج:") <b>@Jalali.Num(dirOut)</b></span>
+        <span class="chip">@HrT.T("مجاز:") <b>@Jalali.Num(resOk)</b></span>
+        <span class="chip" style="color:var(--danger,#c0392b)">@HrT.T("غیرمجاز:") <b>@Jalali.Num(resNo)</b></span>
+        <a class="btn btn-sm btn-primary" href="/Access/TrafficPdf@(string.IsNullOrEmpty(curCo) ? "" : $"?co={curCo}")" style="margin-inline-start:auto">@HrT.T("📄 گزارش PDF به تفکیک دستگاه")</a>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+        <div class="card-h"><h2>@HrT.T("تراکم ساعتی تردد")</h2><span class="hint">@HrT.T("توزیع ۲۴ ساعته رویدادهای تردد — ساعات پرتردد برای مدیریت صف ورود")</span></div>
+        <div class="card-b">
+            <div style="display:flex;align-items:flex-end;gap:3px;height:160px">
+                @for (int h = 0; h < 24; h++)
+                {
+                    var pct = (int)Math.Round(hourly[h] * 100.0 / maxHour);
+                    <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%" title="@HrT.F("ساعت {0}: {1} رویداد", Jalali.Num(h), Jalali.Num(hourly[h]))">
+                        <div style="background:@(pct > 75 ? "var(--danger,#c0392b)" : pct > 40 ? "var(--warn,#d9a441)" : "var(--primary,#3b6ea5)");border-radius:4px 4px 0 0;height:@(Math.Max(pct, 2))%"></div>
+                    </div>
+                }
+            </div>
+            <div style="display:flex;gap:3px;margin-top:4px">
+                @for (int h = 0; h < 24; h++)
+                {
+                    <div style="flex:1;text-align:center;font-size:9px;color:var(--ink-3)">@Jalali.Num(h)</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:14px">
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("پرترددترین گیت‌ها")</h2><span class="hint">@HrT.T("۸ گیت نخست در ۳۰ روز اخیر")</span></div>
+            <div class="card-b">
+                @foreach (var g in topGates)
+                {
+                    var pct = (int)Math.Round(((int)g.Count) * 100.0 / maxGate);
+                    <div style="margin-bottom:10px">
+                        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+                            <span>@g.Gate</span><b class="num">@Jalali.Num(g.Count)</b>
+                        </div>
+                        <div style="height:8px;background:var(--line,#e5e7eb);border-radius:4px"><div style="height:8px;border-radius:4px;background:var(--primary,#3b6ea5);width:@pct%"></div></div>
+                    </div>
+                }
+                @if (!topGates.Any())
+                {
+                    <div class="empty">@HrT.T("رویدادی ثبت نشده است")</div>
+                }
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-h"><h2>@HrT.T("روش احراز هویت")</h2><span class="hint">@HrT.T("سهم هر روش از کل ترددها")</span></div>
+            <div class="card-b">
+                @foreach (var m in methods)
+                {
+                    var pct = (int)Math.Round(((int)m.Count) * 100.0 / maxMethod);
+                    <div style="margin-bottom:10px">
+                        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+                            <span>@HrT.T(m.Method)</span><b class="num">@Jalali.Num(m.Count)</b>
+                        </div>
+                        <div style="height:8px;background:var(--line,#e5e7eb);border-radius:4px"><div style="height:8px;border-radius:4px;background:var(--ok,#3f8f5f);width:@pct%"></div></div>
+                    </div>
+                }
+                @if (!methods.Any())
+                {
+                    <div class="empty">@HrT.T("رویدادی ثبت نشده است")</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else if (tab == "map")
+{
+    // نقشه سایت گرافیکی (فاز ۳۰) — جای‌گذاری گیت‌ها با کشیدن و رهاکردن + ذخیره خودکار
+    var mapGates = (List<Gate>)(ViewBag.MapGates ?? new List<Gate>());
+    var palette = new[] { "#6366f1", "#8b5cf6", "#06b6d4", "#f59e0b", "#ec4899", "#10b981", "#f43f5e", "#14b8a6" };
+    var mapZones = mapGates.Select(g => g.Zone).Where(z => z is not null).DistinctBy(z => z!.Id).ToList();
+    int unplacedIdx = 0;
+
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("🗺 نقشه سایت — جای‌گذاری گیت‌ها")</h2>
+            <div class="btn-row">
+                @if (canManage && mapGates.Count > 0)
+                {
+                    <button class="btn btn-sm btn-primary" id="mapSaveBtn">@HrT.T("💾 ذخیره جای‌گذاری")</button>
+                }
+                <span class="hint">@HrT.T("گیت‌ها را با ماوس بکشید و جابجا کنید — مختصات خودکار ذخیره می‌شود")</span>
+            </div>
+        </div>
+        <div class="card-b">
+            @if (!mapGates.Any())
+            {
+                <div class="empty">@HrT.T("گیت‌ای برای نمایش نیست — ابتدا از تب «مناطق و گیت‌ها» گیت تعریف کنید.")</div>
+            }
+            else
+            {
+                <div class="smap" id="smap">
+                    @for (int gi = 0; gi < mapGates.Count; gi++)
+                    {
+                        var g = mapGates[gi];
+                        var zIdx = mapZones.FindIndex(z => z!.Id == g.ZoneId);
+                        var color = palette[Math.Abs(zIdx) % palette.Length];
+                        // گیت بدون مختصات: جای پیش‌فرض آبشاری تا از همان‌جا قابل کشیدن باشد
+                        var x = g.MapX ?? (8 + (unplacedIdx % 5) * 18);
+                        var y = g.MapY ?? (12 + (unplacedIdx / 5) * 16);
+                        if (g.MapX is null) { unplacedIdx++; }
+                        var devOnline = g.DeviceId is not null && g.Device is not null && DeviceOps.IsOnline(g.Device);
+                        <div class="smap-gate" data-id="@g.Id"
+                             style="left:@(Math.Round(x, 2))%;top:@(Math.Round(y, 2))%;--zc:@color"
+                             title="@g.Name — @g.Zone?.Name @(g.Device is null ? "" : HrT.F("· دستگاه: {0} ({1})", g.Device.Name, devOnline ? HrT.T("آنلاین") : HrT.T("آفلاین")))">
+                            <span class="smap-dot @(g.Status == "فعال" ? "" : g.Status == "خراب" ? "smap-dot-bad" : "smap-dot-mute")"></span>
+                            <span class="smap-name">@g.Name</span>
+                            @if (g.DoorState == "باز دائم")
+                            {
+                                <span class="smap-flag" style="background:#fdf3dd;color:#b45309">🔓</span>
+                            }
+                            else if (g.DoorState == "قفل دائم")
+                            {
+                                <span class="smap-flag" style="background:#ffe9ee;color:#dc2648">🔒</span>
+                            }
+                            @if (g.DeviceId is not null)
+                            {
+                                <span class="smap-flag smap-flag-dev" title="@(devOnline ? HrT.T("دستگاه آنلاین") : HrT.T("دستگاه آفلاین"))">
+                                    <span class="dot @(devOnline ? "dot-on" : "dot-off")"></span>
+                                </span>
+                            }
+                        </div>
+                    }
+                    @if (!mapGates.Any(g => g.MapX is not null))
+                    {
+                        <div class="smap-hint">@HrT.T("گیت‌ها را از اینجا روی نقشه بکشید ↓")</div>
+                    }
+                </div>
+                <div class="smap-legend">
+                    @foreach (var z in mapZones)
+                    {
+                        var zIdx2 = mapZones.FindIndex(x => x!.Id == z!.Id);
+                        <span class="chip"><span class="smap-legend-swatch" style="background:@palette[Math.Abs(zIdx2) % palette.Length]"></span>
+                            @z!.Name · @Jalali.Num(mapGates.Count(g => g.ZoneId == z.Id)) @HrT.T("گیت")</span>
+                    }
+                    <span class="chip"><span class="dot dot-on"></span> @HrT.T("دستگاه آنلاین")</span>
+                    <span class="chip"><span class="dot dot-off"></span> @HrT.T("دستگاه آفلاین / بدون دستگاه")</span>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    var ttlDays = (int)ViewBag.TtlDays;
+    <div class="card">
+        <div class="card-h">
+            <h2>@HrT.T("انقضای خودکار هشدارها (TTL)")</h2>
+            <span class="hint">@HrT.T("پیش‌فرض: غیرفعال — هیچ هشداری خودبه‌خود بسته نمی‌شود؛ فقط اگر تنظیم کنید")</span>
+        </div>
+        <form method="post" action="/Access/SaveAlertTtl" class="card-b" data-ajax data-refresh style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            @Html.AntiForgeryToken()
+            <label style="font-size:12.5px;font-weight:500">@HrT.T("هشدارهای باز پس از")</label>
+            <input type="number" name="ttlDays" value="@ttlDays" min="0" max="365" style="width:90px;padding:6px 10px" />
+            <label style="font-size:12.5px;font-weight:500">@HrT.T("روز خودکار منقضی شود (صفر = غیرفعال)")</label>
+            <button class="btn btn-primary btn-sm">@HrT.T("ذخیره تنظیم")</button>
+            @if (ttlDays > 0)
+            {
+                <span class="badge badge-warn">@HrT.F("فعال: {0} روزه", Jalali.Num(ttlDays))</span>
+            }
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("هشدارهای امنیتی")</h2><span class="hint">@Jalali.Num(alerts.Count(a => !a.Resolved && !a.Expired)) @HrT.T("هشدار باز")</span></div>
+        <div class="table-wrap" style="max-height:66vh">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("زمان")</th><th>@HrT.T("نوع")</th><th>@HrT.T("شدت")</th><th>@HrT.T("پیام")</th><th>@HrT.T("منبع")</th><th>@HrT.T("وضعیت")</th>@if (canManage) { <th></th> }</tr></thead>
+                <tbody>
+                    @foreach (var a in alerts)
+                    {
+                        var isExpired = a.Expired && !a.Resolved;
+                        <tr style="@(a.Resolved ? "opacity:.55" : isExpired ? "opacity:.75" : "")">
+                            <td class="num">@Jalali.FmtLong(a.CreatedAt)</td>
+                            <td><strong>@HrT.T(a.Type)</strong></td>
+                            <td><span class="badge @(a.Severity switch { "بحرانی" => "badge-crit", "بالا" => "badge-err", "متوسط" => "badge-warn", _ => "badge-mute" })">@HrT.T(a.Severity)</span></td>
+                            <td style="white-space:normal;min-width:260px">@a.Message</td>
+                            <td>@a.Source</td>
+                            <td>
+                                @if (a.Resolved)
+                                {
+                                    <span class="badge badge-ok">@HrT.T("حل‌شده")</span>
+                                }
+                                else if (a.Expired)
+                                {
+                                    <span class="badge badge-mute">@HrT.T("منقضی (TTL)")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-err">@HrT.T("باز")</span>
+                                }
+                            </td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    @if (!a.Resolved && !a.Expired)
+                                    {
+                                        <form method="post" action="/Access/ResolveAlert" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@a.Id" />
+                                            <button class="btn btn-sm btn-ok">@HrT.T("حل شد")</button>
+                                        </form>
+                                        <form method="post" action="/Access/ExpireAlert" class="inline-form" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@a.Id" />
+                                            <button class="btn btn-sm">@HrT.T("منقضی کن")</button>
+                                        </form>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+</div>
+
+@section Scripts {
+@if (ViewBag.Tab == "map")
+{
+<script>
+// ---------- نقشه سایت: کشیدن/رهاکردن گیت‌ها + ذخیره خودکار (فاز ۳۰) ----------
+(function () {
+    var MSG_SAVED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ذخیره شد")))';
+    var MSG_SAVE_FAILED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("ذخیره جای‌گذاری ناموفق بود")))';
+    var map = document.getElementById('smap');
+    if (!map) return;
+    var canManage = @((Me.Get()!.Has("access.zones.manage") || Me.Get()!.Has("access.gates.manage") || Me.Get()!.Has("access.perms.manage") || Me.Get()!.Has("access.alerts.manage") || Me.Get()!.Has("access.scan")).ToString().ToLower());
+    var saveBtn = document.getElementById('mapSaveBtn');
+    var token = (document.querySelector('input[name="__RequestVerificationToken"]') || {}).value || '';
+
+    function collectPositions() {
+        var items = [];
+        map.querySelectorAll('.smap-gate').forEach(function (el) {
+            items.push({ id: el.getAttribute('data-id'), x: parseFloat(el.style.left), y: parseFloat(el.style.top) });
+        });
+        return items;
+    }
+
+    function save(silent) {
+        if (!canManage) return;
+        var body = new URLSearchParams();
+        body.append('positions', JSON.stringify(collectPositions()));
+        body.append('__RequestVerificationToken', token);
+        return fetch('/Access/SaveMap', {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: body,
+        }).then(function (r) { return r.json(); })
+          .then(function (j) { if (!silent) window.toast(j.message || MSG_SAVED, j.ok ? 'ok' : 'err'); })
+          .catch(function () { if (!silent) window.toast(MSG_SAVE_FAILED, 'err'); });
+    }
+
+    if (saveBtn) saveBtn.addEventListener('click', function () { save(false); });
+
+    if (!canManage) return; // فقط مشاهده
+
+    var drag = null;
+    map.addEventListener('pointerdown', function (e) {
+        var gate = e.target.closest('.smap-gate');
+        if (!gate) return;
+        e.preventDefault();
+        var rect = map.getBoundingClientRect();
+        drag = { el: gate, rect: rect, dx: e.clientX - rect.left - gate.offsetLeft, dy: e.clientY - rect.top - gate.offsetTop };
+        gate.classList.add('dragging');
+        gate.setPointerCapture(e.pointerId);
+    });
+    map.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        var x = e.clientX - drag.rect.left - drag.dx;
+        var y = e.clientY - drag.rect.top - drag.dy;
+        var pctX = Math.min(94, Math.max(0, x / drag.rect.width * 100));
+        var pctY = Math.min(92, Math.max(0, y / drag.rect.height * 100));
+        drag.el.style.left = pctX.toFixed(2) + '%';
+        drag.el.style.top = pctY.toFixed(2) + '%';
+    });
+    map.addEventListener('pointerup', function (e) {
+        if (!drag) return;
+        drag.el.classList.remove('dragging');
+        var el = drag.el;
+        drag = null;
+        save(true); // ذخیره بی‌صدای خودکار پس از هر رهاسازی
+    });
+})();
+</script>
+}
+}

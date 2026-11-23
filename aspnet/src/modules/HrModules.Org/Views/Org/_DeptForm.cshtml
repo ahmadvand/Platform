@@ -1,0 +1,25 @@
+@{
+    var company = (Company?)ViewBag.Company;
+    var allDepts = (List<Department>)ViewBag.AllDepts;
+}
+<div data-modal-title="@(HrT.F("واحد سازمانی جدید — {0}", company?.Name ?? ""))" hidden></div>
+<form method="post" action="/Org/CreateDept" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="companyId" value="@(company?.Id ?? "")" />
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام واحد *")</label><input name="name" required /></div>
+        <div class="fld"><label>@HrT.T("کد * (در این شرکت)")</label><input name="code" required placeholder="PRD-XYZ" /></div>
+        <div class="fld"><label>@HrT.T("واحد والد")</label>
+            <select name="parentId"><option value="">@HrT.T("— ریشه —")</option>
+                @foreach (var d in allDepts)
+                {
+                    <option value="@d.Id">@d.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.F("ایجاد واحد در «{0}»", company?.Name ?? "—")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

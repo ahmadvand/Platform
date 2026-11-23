@@ -1,0 +1,302 @@
+@{
+    // فاز ۷۷ — مودال درخت دسترسی‌های نقش:
+    //   • کاتالوگ دسترسی‌ها به‌صورت درخت (تجزیهٔ کلید با «.») — تیک هر نود به‌صورت پیش‌فرض
+    //     همهٔ زیرمجموعه‌هایش را هم تیک می‌زند؛ منوی راست‌کلیک/دکمهٔ ⋮ حالت‌های انتخاب:
+    //     همهٔ زیرمجموعه‌ها / زیرمجموعه‌های سطح اول / فقط همین / برداشتن تیک زیرمجموعه‌ها.
+    //   • کلیدهای ارثی از نقش والد: تیکِ قفل‌شده + نشان «ارثی» — قابل برداشتن نیستند
+    //     (برای کاهش دسترسی، نقش والد را ویرایش کنید).
+    //   • ذخیره فقط کلیدهای مستقیم همین نقش را می‌فرستد (SetRolePermissions).
+    var role = (Platform.Web.Domain.Role)ViewBag.Role!;
+    var perms = (List<Platform.Web.Domain.Permission>)ViewBag.Perms!;
+    var direct = (HashSet<string>)ViewBag.DirectKeys!;
+    var inherited = (HashSet<string>)ViewBag.InheritedKeys!;
+    var canEdit = Me.Get()!.Has("roles.edit");
+    // فاز ۹۵ — عنوان دسترسی‌ها از DB هم از HrT.T می‌گذرد (درخواست کاربر: «در درخت دسترسی‌ها
+    // مقادیری هست که حتی برای فارسی هم ترجمه نشده») و نودهای میانی درخت به‌جای سگمنتِ خامِ کلید
+    // (access/attendance/payroll/…) برچسب فارسی می‌گیرند — نقشهٔ پایین، قابل گسترش برای ماژول‌های آینده.
+    var items = perms.Select(p => new { k = p.Key, t = HrT.T(p.Title) }).ToList();
+    var segMap = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+        ["access"] = "کنترل تردد", ["access.alerts"] = "هشدارهای تردد", ["access.gates"] = "گیت‌های عبور",
+        ["access.groups"] = "گروه‌های دسترسی", ["access.map"] = "نقشهٔ مناطق", ["access.perms"] = "مجوزهای عبور",
+        ["access.zones"] = "مناطق", ["attendance"] = "حضور و غیاب", ["attendance.leaves"] = "مرخصی‌ها",
+        ["attendance.missions"] = "مأموریت‌ها", ["attendance.permits"] = "مجوزهای اضافه‌کاری",
+        ["attendance.records"] = "ترددها", ["attendance.requests"] = "درخواست‌ها", ["audit"] = "ممیزی",
+        ["biometrics"] = "بیومتریک", ["cards"] = "کارت‌های شناسایی", ["companies"] = "شرکت‌ها",
+        ["corrections"] = "اصلاحیه‌ها", ["dashboard"] = "داشبورد", ["devices"] = "دستگاه‌های تردد",
+        ["employees"] = "پرسنل", ["gateway"] = "دروازهٔ دستگاه‌ها", ["holidays"] = "تعطیلات",
+        ["notifications"] = "اعلان‌ها", ["org"] = "سازمان", ["org.depts"] = "واحدهای سازمانی",
+        ["org.positions"] = "پست‌های سازمانی", ["parking"] = "پارکینگ", ["parking.cameras"] = "دوربین‌های پلاک‌خوان",
+        ["parking.lots"] = "پارکینگ‌ها", ["parking.vehicles"] = "خودروها", ["payroll"] = "حقوق و دستمزد",
+        ["payroll.bonus"] = "عیدی و پاداش", ["payroll.items"] = "اقلام حقوق", ["payroll.params"] = "پارامترهای حقوق",
+        ["payroll.runs"] = "لیست‌های حقوق", ["reports"] = "گزارش‌ها", ["roles"] = "نقش‌ها",
+        ["self"] = "پرتال من", ["settings"] = "تنظیمات سامانه", ["shifts"] = "شیفت‌ها",
+        ["updates"] = "به‌روزرسانی", ["users"] = "کاربران", ["visitors"] = "ارباب رجوع و پیمانکاران",
+    };
+    var segT = segMap.ToDictionary(kv => kv.Key, kv => HrT.T(kv.Value));
+    var segJson = System.Text.Json.JsonSerializer.Serialize(segT);
+    var itemsJson = System.Text.Json.JsonSerializer.Serialize(items);
+    var directJson = System.Text.Json.JsonSerializer.Serialize(direct);
+    var inheritedJson = System.Text.Json.JsonSerializer.Serialize(inherited);
+    var parentTitle = role.ParentRole?.Title;
+    string T(string fa) => HrT.T(fa);
+}
+<div id="perm-tree-root" data-role="@role.Id" data-readonly="@(canEdit ? "0" : "1")">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+        <div style="font-size:12.5px">
+            <b>@role.Title</b>
+            @if (role.IsBuiltIn)
+            {
+                <span class="badge badge-mute" style="font-size:9.5px">@T("داخلی")</span>
+            }
+            @if (!string.IsNullOrEmpty(parentTitle))
+            {
+                <span class="badge badge-info" style="font-size:10px" title="@T("کلیدهای ارثی از همین نقش تیکِ قفل دارند")">🌳 @T("والد"): @parentTitle</span>
+            }
+        </div>
+        <div style="margin-inline-start:auto;display:flex;gap:8px;align-items:center">
+            <input type="search" id="perm-tree-filter" placeholder="@T("جستجوی کلید یا عنوان…")" style="min-width:190px;padding:5px 10px;border:1px solid var(--line);border-radius:9px;font-size:11.5px;font-family:inherit" />
+        </div>
+    </div>
+    <div id="perm-tree-stats" style="font-size:11px;color:var(--ink-3);margin-bottom:8px"></div>
+    <div style="max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:11px;padding:10px;background:var(--surface-2,#fafbff)">
+        <ul id="perm-tree" class="perm-tree" style="list-style:none;margin:0;padding:0"></ul>
+    </div>
+    <p style="color:var(--ink-3);font-size:10.5px;margin:8px 2px 0;line-height:1.9">
+        @T("تیک هر نود به‌صورت پیش‌فرض همهٔ زیرمجموعه‌هایش را هم برمی‌دارد؛ با راست‌کلیک (یا دکمهٔ ⋮) می‌توانید حالت انتخاب را عوض کنید.")
+    </p>
+    @if (canEdit)
+    {
+        <form method="post" action="/Users/SetRolePermissions" data-ajax data-refresh style="margin-top:10px">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="roleId" value="@role.Id" />
+            <input type="hidden" name="permKeys" id="permKeysHidden" value="@string.Join(',', direct)" />
+            <button class="btn btn-primary">@T("ذخیره دسترسی‌های نقش")</button>
+        </form>
+    }
+    else
+    {
+        <p style="color:var(--ink-3);font-size:11px;margin-top:10px">— @T("برای تغییر دسترسی‌ها کلید roles.edit لازم است")</p>
+    }
+</div>
+<style>
+    .perm-tree li { list-style: none; }
+    .perm-tree ul { list-style: none; margin: 0; padding-inline-start: 22px; border-inline-start: 1px dashed var(--line); }
+    .perm-node { display: flex; align-items: center; gap: 7px; padding: 2.5px 4px; border-radius: 8px; }
+    .perm-node:hover { background: rgba(99,102,241,.06); }
+    .perm-node code { font-family: var(--mono, monospace); font-size: 10px; color: var(--ink-3); direction: ltr; }
+    .perm-node .ttl { font-size: 11.5px; }
+    .perm-node .caret { border: none; background: none; cursor: pointer; width: 18px; color: var(--ink-3); font-size: 10px; padding: 0; }
+    .perm-node .menu-btn { border: 1px solid transparent; background: none; cursor: pointer; color: var(--ink-3); border-radius: 7px; padding: 0 5px; font-size: 12px; }
+    .perm-node .menu-btn:hover { border-color: var(--line); background: var(--card); }
+    .perm-inh { font-size: 9px; border-radius: 99px; padding: 1px 6px; background: rgba(99,102,241,.12); color: #4338ca; white-space: nowrap; }
+    .perm-cnt { font-size: 9.5px; color: var(--ink-3); }
+    #perm-ctxmenu { position: fixed; z-index: 9999; display: none; background: var(--card, #fff); border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 14px 40px rgba(23,32,90,.18); padding: 5px; min-width: 215px; }
+    #perm-ctxmenu button { display: block; width: 100%; text-align: start; border: none; background: none; padding: 7px 11px; font: inherit; font-size: 11.5px; border-radius: 8px; cursor: pointer; }
+    #perm-ctxmenu button:hover { background: var(--accent-soft, rgba(99,102,241,.1)); }
+    .perm-tree .hidden-by-filter { display: none; }
+</style>
+<script>
+    (function () {
+        var perms = @Html.Raw(itemsJson);
+        var SEG_T = @Html.Raw(segJson);
+        var inherited = new Set(@Html.Raw(inheritedJson));
+        var readonly = document.getElementById('perm-tree-root').getAttribute('data-readonly') === '1';
+        var ul = document.getElementById('perm-tree');
+
+        // ---------- ساخت درخت از کلیدها ----------
+        var root = { seg: '', full: '', title: null, real: false, children: [], parent: null };
+        var byPath = { '': root };
+        perms.forEach(function (p) {
+            var segs = p.k.split('.');
+            var path = '';
+            var node = root;
+            segs.forEach(function (s) {
+                path = path ? path + '.' + s : s;
+                if (!byPath[path]) {
+                    var nn = { seg: s, full: path, title: null, real: false, children: [], parent: node };
+                    byPath[path] = nn;
+                    node.children.push(nn);
+                }
+                node = byPath[path];
+            });
+            node.real = true; node.title = p.t;
+        });
+        // نود میانی بدون عنوان = عنوان سگمنت خودش
+        Object.keys(byPath).forEach(function (k) {
+            var n = byPath[k];
+            if (n.real) { n.dispTitle = n.title; n.dispKey = n.full; }
+            else { n.dispTitle = SEG_T[n.full] || n.seg; n.dispKey = n.full + '.*'; }
+        });
+
+        var state = {};          // full -> true/false
+        var directInit = @Html.Raw(directJson);
+        directInit.forEach(function (k) { state[k] = true; });
+        var menuTarget = null;
+
+        function childrenOf(n) { return n.children; }
+        function descendants(n) {
+            var out = [];
+            (function walk(x) { x.children.forEach(function (c) { out.push(c); walk(c); }); })(n);
+            return out;
+        }
+        function firstLevel(n) { return n.children.slice(); }
+        function isInherited(full) { return inherited.has(full); }
+        function isChecked(full) { return state[full] === true || inherited.has(full); }
+
+        function render() {
+            ul.innerHTML = '';
+            (function emit(node, host) {
+                node.children.forEach(function (c) { host.appendChild(nodeEl(c)); });
+            })(root, ul);
+            updateStats();
+            updateHidden();
+        }
+
+        function nodeEl(n) {
+            var li = document.createElement('li');
+            var row = document.createElement('div');
+            row.className = 'perm-node';
+            row.setAttribute('data-full', n.full);
+            row.setAttribute('data-real', n.real ? '1' : '0');
+            var hasKids = n.children.length > 0;
+            var caret = document.createElement('button');
+            caret.className = 'caret'; caret.type = 'button';
+            caret.textContent = hasKids ? '▾' : '·';
+            if (hasKids) {
+                caret.addEventListener('click', function () {
+                    var open = li.classList.toggle('collapsed');
+                    caret.textContent = open ? '▸' : '▾';
+                    Array.from(li.children).forEach(function (ch) { if (ch.tagName === 'UL') ch.style.display = open ? 'none' : ''; });
+                });
+            }
+            row.appendChild(caret);
+
+            var cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = isChecked(n.full);
+            cb.disabled = readonly || isInherited(n.full);
+            cb.setAttribute('data-full', n.full);
+            cb.addEventListener('change', function () {
+                // پیش‌فرض (تقاضای کاربر): تیک نود = تیک همهٔ زیرمجموعه‌ها؛ برداشتن تیک هم همین‌طور
+                descendants(n).forEach(function (d) { if (!isInherited(d.full)) state[d.full] = cb.checked; });
+                state[n.full] = cb.checked || isInherited(n.full);
+                syncChecks(); render();
+            });
+            row.appendChild(cb);
+
+            var lbl = document.createElement('span');
+            lbl.className = 'ttl'; lbl.textContent = n.dispTitle;
+            row.appendChild(lbl);
+            var code = document.createElement('code');
+            code.textContent = n.dispKey;
+            row.appendChild(code);
+            if (isInherited(n.full)) {
+                var inh = document.createElement('span');
+                inh.className = 'perm-inh';
+                inh.textContent = '↳ @T("ارثی")';
+                inh.title = '@T("این دسترسی از نقش والد ارث رسیده — از فرم ویرایش نقشِ والد قابل تغییر است")';
+                row.appendChild(inh);
+            }
+            var kidCount = descendants(n).filter(function (d) { return d.real; }).length;
+            if (kidCount > 0) {
+                var cnt = document.createElement('span');
+                cnt.className = 'perm-cnt';
+                cnt.textContent = '(' + kidCount + ')';
+                row.appendChild(cnt);
+            }
+
+            // منوی انتخاب (راست‌کلیک + دکمهٔ ⋮)
+            var mb = document.createElement('button');
+            mb.className = 'menu-btn'; mb.type = 'button'; mb.textContent = '⋮'; mb.title = '@T("حالت‌های انتخاب")';
+            mb.addEventListener('click', function (e) { e.stopPropagation(); openMenu(e, n); });
+            row.appendChild(mb);
+            row.addEventListener('contextmenu', function (e) { e.preventDefault(); openMenu(e, n); });
+            li.appendChild(row);
+
+            if (hasKids) {
+                var sub = document.createElement('ul');
+                n.children.forEach(function (c) { sub.appendChild(nodeEl(c)); });
+                li.appendChild(sub);
+            }
+            return li;
+        }
+
+        function syncChecks() {
+            ul.querySelectorAll('input[type=checkbox]').forEach(function (cb) {
+                var full = cb.getAttribute('data-full');
+                cb.checked = isChecked(full);
+            });
+        }
+
+        function updateStats() {
+            var d = 0, i = inherited.size;
+            Object.keys(state).forEach(function (k) { if (state[k] && byPath[k] && byPath[k].real && !inherited.has(k)) d++; });
+            var el = document.getElementById('perm-tree-stats');
+            el.textContent = '@T("دسترسی مستقیم")' + ': ' + d + '  ·  @T("ارثی از والد")' + ': ' + i;
+        }
+
+        function updateHidden() {
+            var h = document.getElementById('permKeysHidden');
+            if (!h) return;
+            var keys = Object.keys(state).filter(function (k) { return state[k] && byPath[k] && byPath[k].real; });
+            h.value = keys.join(',');
+        }
+
+        // ---------- منوی انتخاب ----------
+        var menu = document.createElement('div');
+        menu.id = 'perm-ctxmenu';
+        document.body.appendChild(menu);
+        function openMenu(e, n) {
+            e.preventDefault();
+            menuTarget = n;
+            menu.innerHTML = '';
+            var opts = [
+                ['✅ @T("انتخاب همهٔ زیرمجموعه‌ها")', function () { setBranch(n, true, descendants(n)); }],
+                ['1️⃣ @T("انتخاب زیرمجموعه‌های سطح اول")', function () {
+                    state[n.full] = true;
+                    firstLevel(n).forEach(function (c) { if (!isInherited(c.full)) state[c.full] = true; });
+                    render();
+                }],
+                ['☑️ @T("فقط همین مورد")', function () {
+                    descendants(n).forEach(function (d) { if (!isInherited(d.full)) state[d.full] = false; });
+                    state[n.full] = true;
+                    render();
+                }],
+                ['⬜ @T("برداشتن تیک از همهٔ زیرمجموعه‌ها")', function () { setBranch(n, false, descendants(n)); }],
+            ];
+            if (readonly) opts = [];
+            if (!opts.length) return;
+            opts.forEach(function (o) {
+                var b = document.createElement('button');
+                b.type = 'button'; b.textContent = o[0];
+                b.addEventListener('click', function () { o[1](); closeMenu(); });
+                menu.appendChild(b);
+            });
+            menu.style.display = 'block';
+            var x = Math.min(e.clientX, window.innerWidth - 240);
+            var y = Math.min(e.clientY, window.innerHeight - 190);
+            menu.style.left = x + 'px'; menu.style.top = y + 'px';
+        }
+        function setBranch(n, val, list) {
+            state[n.full] = val || isInherited(n.full);
+            list.forEach(function (d) { if (!isInherited(d.full)) state[d.full] = val; });
+            render();
+        }
+        function closeMenu() { menu.style.display = 'none'; }
+        document.addEventListener('click', closeMenu);
+        window.addEventListener('scroll', closeMenu, true);
+
+        // ---------- فیلتر جستجو ----------
+        document.getElementById('perm-tree-filter').addEventListener('input', function () {
+            var qv = this.value.trim().toLowerCase();
+            if (!qv) { ul.querySelectorAll('.hidden-by-filter').forEach(function (x) { x.classList.remove('hidden-by-filter'); }); return; }
+            ul.querySelectorAll('.perm-node').forEach(function (rowEl) {
+                var txt = rowEl.textContent.toLowerCase();
+                rowEl.classList.toggle('hidden-by-filter', txt.indexOf(qv) < 0);
+            });
+        });
+
+        render();
+    })();
+</script>

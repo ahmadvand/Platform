@@ -1,0 +1,177 @@
+@model Platform.Web.Domain.ColorPalette
+@{
+    // فرم ایجاد/ویرایش پالت (فاز ۳۲) — در پاپ‌آپ AJAX (partial=1) رندر می‌شود
+    var isNew = string.IsNullOrEmpty(Model.Id);
+    var roleGroups = new (string Title, (string Name, string Label, string Value, bool Required)[] Fields)[]
+    {
+        ("برند و کنش‌ها", new[]
+        {
+            ("primaryColor", "رنگ اصلی *", Model.PrimaryColor, true),
+            ("linkColor", "لینک‌ها", Model.LinkColor, false),
+        }),
+        ("منوی کناری", new[]
+        {
+            ("sidebarColor", "پس‌زمینه منو *", Model.SidebarColor, true),
+            ("sidebarTextColor", "متن منو", Model.SidebarTextColor, false),
+        }),
+        ("زمینه و کارت‌ها", new[]
+        {
+            ("pageBgColor", "پس‌زمینه صفحه *", Model.PageBgColor, true),
+            ("surfaceColor", "کارت‌ها/فرم‌ها", Model.SurfaceColor, false),
+        }),
+        ("جدول — سطر و ستون", new[]
+        {
+            ("tableHeaderColor", "سربرگ جدول (ستون‌ها) *", Model.TableHeaderColor, true),
+            ("rowAltColor", "سطر یک‌درمیان", Model.RowAltColor, false),
+            ("rowHoverColor", "سطر هاور", Model.RowHoverColor, false),
+        }),
+        ("خط و متن", new[]
+        {
+            ("borderColor", "حاشیه‌ها", Model.BorderColor, false),
+            ("textColor", "متن اصلی *", Model.TextColor, true),
+            ("mutedTextColor", "متن ثانویه", Model.MutedTextColor, false),
+        }),
+        ("وضعیت‌ها", new[]
+        {
+            ("successColor", "موفق", Model.SuccessColor, false),
+            ("warningColor", "هشدار", Model.WarningColor, false),
+            ("dangerColor", "خطا", Model.DangerColor, false),
+            ("infoColor", "اطلاع", Model.InfoColor, false),
+        }),
+    };
+}
+<form method="post" action="/Settings/SavePaletteFull" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div style="display:grid;grid-template-columns:1fr 220px;gap:14px;align-items:start">
+        <div>
+            <div class="fld" style="margin-bottom:12px">
+                <label>@HrT.T("نام پالت") *</label>
+                <input name="name" value="@Model.Name" required maxlength="100"
+                       placeholder="@HrT.T("مثلاً آبی سازمانی شعبه تهران")" />
+            </div>
+
+            @foreach (var grp in roleGroups)
+            {
+                <div style="margin-bottom:10px">
+                    <div style="font-size:11px;font-weight:700;color:var(--ink-2);margin-bottom:6px">@HrT.T(grp.Title)</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px">
+                        @foreach (var f in grp.Fields)
+                        {
+                            <div class="fld" title="@(f.Required ? HrT.T("الزامی") : HrT.T("خالی = از رنگ‌های پایه مشتق می‌شود"))">
+                                <label style="font-weight:400">@HrT.T(f.Label)</label>
+                                <div class="color-pair">
+                                    <input type="color" name="@f.Name" data-pal value="@f.Value" />
+                                    <code data-hex-for="@f.Name">@f.Value</code>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        @* ---------- پیش‌نمایش زنده ----------
+            فاز ۸۹ — رفع رگرسیون پایدار: متغیرهای CSS روی div درونی (palPreviewVars) تعریف
+            می‌شوند؛ به‌روزرسانی روی همین عنصر اعمال می‌شود نه والد — تعریف inline فرزند همیشه
+            بر ارث‌بری والد اولویت دارد و به همین دلیل تغییر رنگ در پیش‌نمایش بی‌اثر بود. ----------  *@
+        <div id="palPreview" style="position:sticky;top:10px">
+            <div style="font-size:11px;font-weight:700;color:var(--ink-2);margin-bottom:6px">@HrT.T("پیش‌نمایش زنده")</div>
+            <div id="palPreviewBox" style="border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:10.5px">
+                <div id="palPreviewVars" style="display:flex;height:210px;--accent:@Model.PrimaryColor;--accent-rgb:@Platform.Web.Services.SettingsService.RgbTriplet(Model.PrimaryColor);--link:@Model.LinkColor;--sidebar:@Model.SidebarColor;--sidebar-text:@Model.SidebarTextColor;--bg:@Model.PageBgColor;--card:@Model.SurfaceColor;--th-bg:@Model.TableHeaderColor;--row-alt:@Model.RowAltColor;--row-hover:@Model.RowHoverColor;--line:@Model.BorderColor;--ink:@Model.TextColor;--ink-2:@Model.MutedTextColor;--ok:@Model.SuccessColor;--warn:@Model.WarningColor;--err:@Model.DangerColor;--info:@Model.InfoColor">
+                    <div style="width:64px;background:var(--sidebar);color:var(--sidebar-text);padding:7px 6px;flex:none">
+                        <div style="width:18px;height:18px;border-radius:6px;background:var(--accent);margin-bottom:8px"></div>
+                        <div style="border-radius:4px;padding:2px 4px;margin-bottom:3px;background:rgba(255,255,255,.12);color:var(--sidebar-text)">@HrT.T("آیتم")</div>
+                        <div style="border-radius:4px;padding:2px 4px;margin-bottom:3px;background:rgba(var(--accent-rgb), .28)">@HrT.T("فعال")</div>
+                        <div style="border-radius:4px;padding:2px 4px">@HrT.T("آیتم")</div>
+                    </div>
+                    <div style="flex:1;background:var(--bg);padding:7px;min-width:0">
+                        <div style="background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px">
+                            <div style="display:flex;gap:4px;align-items:center;margin-bottom:5px">
+                                <span style="background:var(--accent);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700">@HrT.T("دکمه اصلی")</span>
+                                <span style="border:1px solid var(--line);border-radius:5px;padding:1px 7px;color:var(--ink-2)">@HrT.T("خنثی")</span>
+                                <a style="color:var(--link);font-weight:700;text-decoration:none">@HrT.T("لینک")</a>
+                            </div>
+                            <table style="width:100%;border-collapse:collapse;color:var(--ink)">
+                                <thead>
+                                    <tr style="background:var(--th-bg)">
+                                        <th style="text-align:right;padding:2px 5px;font-weight:700;border-bottom:1px solid var(--line)">@HrT.T("پرسنل")</th>
+                                        <th style="text-align:right;padding:2px 5px;font-weight:700;border-bottom:1px solid var(--line)">@HrT.T("وضعیت")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom:1px solid var(--line)">
+                                        <td style="padding:2px 5px">۱۰۰۱</td>
+                                        <td style="padding:2px 5px"><span style="background:var(--ok);color:#fff;border-radius:999px;padding:0 6px;font-size:9px">@HrT.T("مجاز")</span></td>
+                                    </tr>
+                                    <tr style="background:var(--row-alt);border-bottom:1px solid var(--line)">
+                                        <td style="padding:2px 5px">۱۰۰۲</td>
+                                        <td style="padding:2px 5px"><span style="background:var(--warn);color:#fff;border-radius:999px;padding:0 6px;font-size:9px">@HrT.T("در انتظار")</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:2px 5px">۱۰۰۳</td>
+                                        <td style="padding:2px 5px"><span style="background:var(--err);color:#fff;border-radius:999px;padding:0 6px;font-size:9px">@HrT.T("غیرمجاز")</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top:5px;color:var(--ink-2)">@HrT.T("متن ثانویه نمونه")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint" style="margin-top:8px">
+                @HrT.T("نقش‌های خالی در زمان ذخیره از رنگ‌های پایه مشتق می‌شوند (رنگ تخت — بدون گرادیان).")
+            </div>
+        </div>
+    </div>
+    <div class="btn-row" style="gap:8px">
+        <button class="btn btn-primary">💾 @(isNew ? HrT.T("ساخت پالت") : HrT.T("ذخیره تغییرات"))</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>
+
+<script>
+    // پیش‌نمایش زندهٔ پالت — فاز ۸۷ (بازنویسی مقاوم):
+    //  • رویدادها به‌صورت «واگذارشده» روی document گوش داده می‌شوند (input + change با capture)
+    //    ⇒ پس از refresh تکه‌ای فرم (data-refresh) یا بازشدن دوبارهٔ مودال، اتصال از بین نمی‌رود؛
+    //  • بعضی مرورگرها برای input[type=color] فقط change می‌فرستند — هر دو رویداد پوشش داده شد؛
+    //  • --accent-rgb هم هم‌زمان به‌روز می‌شود (آیتم فعال منو از rgba(var(--accent-rgb)) استفاده می‌کند)؛
+    //  • گارد __palPreviewBound از ثبت دوبارهٔ listener جلوگیری می‌کند.
+    (function () {
+        if (window.__palPreviewBound) return;
+        window.__palPreviewBound = true;
+        var NAME2VAR = {
+            primaryColor: '--accent', linkColor: '--link', sidebarColor: '--sidebar',
+            sidebarTextColor: '--sidebar-text', pageBgColor: '--bg', surfaceColor: '--card',
+            tableHeaderColor: '--th-bg', rowAltColor: '--row-alt', rowHoverColor: '--row-hover',
+            borderColor: '--line', textColor: '--ink', mutedTextColor: '--ink-2',
+            successColor: '--ok', warningColor: '--warn', dangerColor: '--err', infoColor: '--info'
+        };
+        function rgbTriplet(hex) {
+            var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec((hex || '').trim());
+            if (!m) return null;
+            return parseInt(m[1], 16) + ', ' + parseInt(m[2], 16) + ', ' + parseInt(m[3], 16);
+        }
+        function apply(inp) {
+            if (!inp || !(inp instanceof HTMLInputElement) || !inp.hasAttribute('data-pal')) return;
+            // فاز ۸۹ — متغیرها روی عنصر مالکِ تعریف‌ها (palPreviewVars = div درونی) ست می‌شوند؛
+            // پشتیبان: firstElementChild جعبهٔ پیش‌نمایش. ست‌کردن روی والد بی‌اثر بود چون
+            // تعریف inline فرزند بر مقدار ارث‌رسیده برتری دارد (ریشهٔ واقعی باگ).
+            var box = document.getElementById('palPreviewBox');
+            var vars = document.getElementById('palPreviewVars') || (box ? box.firstElementChild : null);
+            if (vars) {
+                var v = NAME2VAR[inp.name];
+                if (v) vars.style.setProperty(v, inp.value);
+                if (inp.name === 'primaryColor') {
+                    var rgb = rgbTriplet(inp.value);
+                    if (rgb) vars.style.setProperty('--accent-rgb', rgb);
+                }
+            }
+            var hex = document.querySelector('[data-hex-for="' + inp.name + '"]');
+            if (hex) hex.textContent = inp.value;
+        }
+        ['input', 'change'].forEach(function (evt) {
+            document.addEventListener(evt, function (e) { apply(e.target); }, true);
+        });
+    })();
+</script>

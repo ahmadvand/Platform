@@ -1,0 +1,43 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("درون‌ریزی داده");
+    var ent = (Platform.Web.Services.DataExchange.DataEntity)ViewBag.Entity;
+}
+<div class="chips">
+    <span class="chip">@HrT.F("درون‌ریزی «{0}»", HrT.T(ent.Title))</span>
+    <span class="chip">@HrT.T("کلید هم‌آوری:") <b>@(ent.BusinessKey ?? "Id")</b></span>
+    <a class="chip" href="/Data">@HrT.T("← بازگشت به هاب داده")</a>
+</div>
+
+<div class="grid two-col" style="grid-template-columns:1.4fr 1fr">
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("۱) آپلود فایل")</h2></div>
+        <form method="post" action="/Data/ImportPreview" class="card-b" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="entity" value="@ent.Key" />
+            <div class="fld">
+                <label>@HrT.T("فایل داده (xlsx / csv / json)")</label>
+                <input type="file" name="file" accept=".xlsx,.xls,.csv,.json" required />
+            </div>
+            <div class="hint" style="margin-top:8px">
+                @HrT.T("ستون‌های فایل باید نام ویژگی‌های سامانه باشند — ساده‌ترین راه: خروجی اکسل این جدول را از هاب بگیرید، داده‌های نرم‌افزار قبلی را داخل همان ستون‌ها بچینید و همین فایل را بیاورید.")
+                @if (ent.BusinessKey is not null)
+                {
+                    <b>@HrT.F("رکورد موجود با ستون «{0}» پیدا و ویرایش می‌شود؛ ردیف بدون آن، رکورد جدید می‌سازد.", ent.BusinessKey)</b>
+                }
+            </div>
+            <div class="btn-row" style="margin-top:12px">
+                <button class="btn btn-primary">🔎 @HrT.T("پیش‌نمایش و اعتبارسنجی")</button>
+            </div>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("۲) ستون‌های این خانوادهٔ داده")</h2><span class="hint">@HrT.F("{0} ستون", HrT.Num(ent.Columns.Length))</span></div>
+        <div class="card-b" style="max-height:420px;overflow:auto">
+            @foreach (var c in ent.Columns)
+            {
+                <div style="padding:4px 2px;border-bottom:1px dashed var(--line);font-size:12px" dir="ltr">@c</div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    ============================================================
+    HrModules.Org (فاز ۶۹) — ماژول سازمان و پرسنل، پروژهٔ جدا
+    ============
+    تا فاز ۶۸ این ماژول «پایهٔ توکار» بود و کدش در خود هاست (Platform.Web)
+    زندگی می‌کرد؛ از این فاز پلاگین حذف‌شدنی است: کنترلرها (Employees/Org/
+    Holidays)، ورود اکسل پرسنل و همهٔ ویوها در همین اسمبلی کامپایل می‌شوند و
+    مانیفست خودتوصیف (OrgUiModule) جای آن را به هاست اعلام می‌کند.
+
+    حذف ماژول (DLL کنار اپ نباشد):
+      • مسیرها/منو/مانیفست غایب — گیت مسیرها صفحهٔ دوستانه می‌دهد
+      • «نصب نیست» — نه خاموش؛ مثل بقیهٔ ماژول‌های سیستمی
+    (جدول‌های پرسنلی چون ستون فقرات دادهٔ پلتفرم‌اند در لایهٔ پایه می‌مانند.)
+
+    متعهد به: Platform.Core (پلتفرم مشترک) + قراردادها + هاست (یک‌طرفه)
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+    <!-- پشتیبانی صریح Razor برای MVC — بدون این، ویوها در اسمبلی کامپایل نمی‌شوند -->
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="..\..\Platform.Contracts\Platform.Contracts.csproj" />
+    <!-- فاز ۶۹ — MvcBase/سرویس‌های هاست (ExcelImport/AvatarUpload/LicenseService) —
+         جهت وابستگی یک‌طرفه: هاست هرگز به ماژول ارجاع ندارد -->
+    <ProjectReference Include="..\..\Platform.Web\Platform.Web.csproj" />
+  </ItemGroup>
+
+</Project>

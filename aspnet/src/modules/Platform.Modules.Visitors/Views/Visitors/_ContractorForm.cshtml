@@ -1,0 +1,27 @@
+@{
+    var companies = (List<Company>)ViewBag.Companies;
+}
+<div data-modal-title="@HrT.T("شرکت پیمانکار جدید")" hidden></div>
+<form method="post" action="/Visitors/CreateContractor" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("شرکتِ طرف قرارداد *")</label>
+            <select name="companyId" required>
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id">@c.Name (@c.Code)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نام شرکت *")</label><input name="name" required /></div>
+        <div class="fld"><label>@HrT.T("کد *")</label><input name="code" required placeholder="CTR-XXX" /></div>
+        <div class="fld"><label>@HrT.T("رابط")</label><input name="contactName" /></div>
+        <div class="fld"><label>@HrT.T("تلفن")</label><input name="phone" /></div>
+        <div class="fld"><label>@HrT.T("شماره قرارداد")</label><input name="contractNo" /></div>
+        <div class="fld"><label>@HrT.T("اعتبار تا")</label><input name="validUntil" type="date" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت پیمانکار")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

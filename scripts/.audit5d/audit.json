@@ -1,0 +1,443 @@
+[
+ {
+  "phase": "live",
+  "item": "داشبورد 200",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200"
+ },
+ {
+  "phase": "live",
+  "item": "Settings 200",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200"
+ },
+ {
+  "phase": "live",
+  "item": "tab-locale",
+  "where": "Settings",
+  "ok": true,
+  "detail": "فاز۹۱ فرم زبانه‌ای + زبان/تقویم/ارز"
+ },
+ {
+  "phase": "live",
+  "item": "tab-screensaver",
+  "where": "Settings",
+  "ok": true,
+  "detail": "فاز۹۵ اسکرین‌سیور تب"
+ },
+ {
+  "phase": "live",
+  "item": "ssMinutes",
+  "where": "Settings",
+  "ok": true,
+  "detail": "اسکرین‌سیور دقیقه"
+ },
+ {
+  "phase": "live",
+  "item": "ssSeconds",
+  "where": "Settings",
+  "ok": true,
+  "detail": "اسکرین‌سیور ثانیه ← لازمِ کاربر"
+ },
+ {
+  "phase": "live",
+  "item": "ssRequirePassword",
+  "where": "Settings",
+  "ok": true,
+  "detail": "اسکرین‌سیور رمز"
+ },
+ {
+  "phase": "live",
+  "item": "curSel",
+  "where": "Settings",
+  "ok": true,
+  "detail": "فاز۹۱ ارز سلکت"
+ },
+ {
+  "phase": "live",
+  "item": "اطلاعات واقعی ثبت‌شده",
+  "where": "Settings",
+  "ok": true,
+  "detail": "فاز۹۴ اطلاعات بانک"
+ },
+ {
+  "phase": "live",
+  "item": "tab-db",
+  "where": "Settings",
+  "ok": true,
+  "detail": "تب پایگاه داده"
+ },
+ {
+  "phase": "live",
+  "item": "آپشن‌های تقویم",
+  "where": "Settings",
+  "ok": true,
+  "detail": "opts=['jalali', 'gregorian', 'hijri'] cur=['jalali']"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Export/Employees",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200 size=9478"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Export/Attendance",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200 size=8653"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Employees/Import",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Employees/ImportTemplate",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Updates",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200 فاز۹۲ به‌روزرسانی بسته‌ای"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Notifications",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200 فاز۹۲ اعلان‌ها"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Ui/Lang?l=en&r=/",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200 فاز۹۳ گذر زبان"
+ },
+ {
+  "phase": "live",
+  "item": "GET /Holidays 200",
+  "where": "live",
+  "ok": true,
+  "detail": "code=200"
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی:data-cal",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": "cal=jalali"
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی ماه:فروردین",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی ماه:بهمن",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی ماه:اسفند",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی ماه:دی",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "هولی‌دی:چیپ تقویم نمایشی",
+  "where": "/Holidays",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "dl-center:Windows-Tools",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "dl-center:Docs-FA",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "dl-center:customer-FULL",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "dl-center:customer-MINIMAL",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "dl-center:source",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "بدون نسخهٔ کهنهٔ 2.7.9",
+  "where": "/dl/",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "دکمهٔ درون‌ریزی پرسنل",
+  "where": "/Employees",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "دکمهٔ برون‌ریزی اکسل پرسنل",
+  "where": "/Employees",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "دکمهٔ برون‌ریزی اکسل تردد",
+  "where": "/Attendance",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "درون‌ریزی بستهٔ ترجمه در پنل زبان",
+  "where": "/Langs",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "live",
+  "item": "برون‌ریزی بستهٔ ترجمه در پنل زبان",
+  "where": "/Langs",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۶ تقویم",
+  "where": "source",
+  "ok": true,
+  "detail": "5 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۶ فرمول‌ساز Undo",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۶ فرمول‌ساز به‌فارسی",
+  "where": "source",
+  "ok": true,
+  "detail": "7 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۷ زبان‌های ۷گانه",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۷ ImportEmbeddedLangPacks",
+  "where": "source",
+  "ok": true,
+  "detail": "1 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۸ IHostEnvironment",
+  "where": "source",
+  "ok": true,
+  "detail": "1 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۹ ارقام بومی",
+  "where": "source",
+  "ok": true,
+  "detail": "44 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۸۹ پیکر تاریخ",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۰ private.pem",
+  "where": "source",
+  "ok": true,
+  "detail": "6 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۰ زنگ اعلان",
+  "where": "source",
+  "ok": true,
+  "detail": "6 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۰ پورت 1433",
+  "where": "source",
+  "ok": true,
+  "detail": "6 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۱ ارز",
+  "where": "source",
+  "ok": true,
+  "detail": "3 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۲ HrL10n",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۲ hrT/hrF",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۳ updates.manage",
+  "where": "source",
+  "ok": true,
+  "detail": "4 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۳ پرچم SVG",
+  "where": "source",
+  "ok": true,
+  "detail": "6 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۳ LangSwitch",
+  "where": "source",
+  "ok": true,
+  "detail": "1 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۴ make-update-package.ps1",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۴ build-installer.ps1",
+  "where": "source",
+  "ok": true,
+  "detail": "5 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۴ MaskConnectionString",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۵ دراپ‌داون anchor",
+  "where": "source",
+  "ok": true,
+  "detail": "1 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۵ nowrap btn",
+  "where": "source",
+  "ok": true,
+  "detail": "7 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "اسکرین‌سیور js",
+  "where": "source",
+  "ok": true,
+  "detail": "2 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۷ تقویم تعطیلات DisplayMode",
+  "where": "source",
+  "ok": true,
+  "detail": "4 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "فاز۹۷ ماه‌های قمری",
+  "where": "source",
+  "ok": true,
+  "detail": "3 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "برون‌ریزی Export",
+  "where": "source",
+  "ok": true,
+  "detail": "13 فایل"
+ },
+ {
+  "phase": "src",
+  "item": "درون‌ریزی Import",
+  "where": "source",
+  "ok": true,
+  "detail": "4 فایل"
+ }
+]

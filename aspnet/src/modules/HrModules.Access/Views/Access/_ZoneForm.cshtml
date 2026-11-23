@@ -1,0 +1,37 @@
+@{
+    var companies = (List<Company>)ViewBag.Companies;
+}
+<div data-modal-title="@HrT.T("منطقه امنیتی جدید")" hidden></div>
+<form method="post" action="/Access/CreateZone" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("شرکت مالک *")</label>
+            <select name="companyId" required>
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id">@c.Name (@c.Code)</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("نام منطقه *")</label><input name="name" required /></div>
+        <div class="fld"><label>@HrT.T("کد *")</label><input name="code" required placeholder="Z-XX" /></div>
+        <div class="fld"><label>@HrT.T("سطح ریسک")</label>
+            <select name="riskLevel"><option value="عادی">@HrT.T("عادی")</option><option value="حساس">@HrT.T("حساس")</option><option value="فوق‌حساس">@HrT.T("فوق‌حساس")</option></select>
+        </div>
+        <div class="fld fld-full" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+            <label style="display:flex;gap:6px;align-items:center;font-weight:500;cursor:pointer">
+                <input type="checkbox" name="twofactor" value="true" style="width:auto" />
+                @HrT.T("احراز دومرحله‌ای (اختیاری — پیش‌فرض خاموش؛ کارت + اثر انگشت/چهره)")
+            </label>
+            <span style="display:inline-flex;gap:6px;align-items:center;font-size:11.5px;color:var(--ink-2)">
+                @HrT.T("پنجره (ثانیه):")
+                <input type="number" name="twoFactorWindow" value="30" min="5" max="600" style="width:80px;padding:4px 8px" />
+            </span>
+        </div>
+        <div class="fld fld-full"><label>@HrT.T("توضیح")</label><input name="description" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ایجاد منطقه")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

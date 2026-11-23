@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    فاز ۶۱ — لایهٔ دیتای مستقل ماژول Access
+    entityها + DbContext اختصاصی + پیاده‌سازی قراردادهای بین‌ماژولی این ماژول.
+    این لایه حتی وقتی «کنترلرهای» ماژول از بستهٔ مشتری حذف شده‌اند در هاست حضور دارد
+    (دادهٔ ماژول بخشی از پلتفرم است؛ رفتار بسته‌های FULL/MINIMAL عیناً مثل قبل).
+    ارتباط با ماژول‌های دیگر فقط از طریق Platform.Contracts — هیچ ارجاع بین ماژولی.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="..\..\..\Platform.Contracts\Platform.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- انواع پایه (Employee/Company/Device و…) در فضانام قدیمی خودشان — صفر تغییر در کدهای مصرفی -->
+    <Using Include="Platform.Web.Domain" />
+    <Using Include="Platform.Contracts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.11" />
+  </ItemGroup>
+
+</Project>

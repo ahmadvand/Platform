@@ -1,0 +1,139 @@
+@{
+    // فاز ۹۹ (بازسازی) — مرکز یکپارچهٔ درون‌ریزی/برون‌ریزی: همهٔ عملیات ورود/خروج داده در یک نگاه
+    // فاز ۱۲۲ — «اعلامی‌محور»: هر ماژول خانواده‌های دادهٔ خودش را به هسته اعلام می‌کند
+    // (IHrDataModule.DataExchange) و این صفحه فقط اعلامِ ماژول‌های «حاضر و فعال» را جدولی
+    // نشان می‌دهد — ماژول غایب/خاموش = هیچ ردیفی از او در این صفحه نیست.
+    ViewData["Title"] = HrT.T("مرکز درون‌ریزی و برون‌ریزی");
+    var langs = (List<Platform.Web.Services.HrLangStore.HrLangRow>)ViewBag.Langs;
+    var catalog = (List<Platform.Web.Services.DataExchange.DataEntity>)ViewBag.Catalog;
+    var sess = Me.Get();
+    bool Can(string p) => sess is not null && sess.Has(p);
+    var canPeople = Can("employees.import");
+    var canExport = Can("reports.export");
+    var canAtt = Can("attendance.view");
+    var canLangView = Can("settings.view");
+    var canLangManage = Can("settings.manage");
+    var canUpdates = Can("updates.manage");
+    string T(string fa) => HrT.T(fa);
+}
+@inject Platform.Web.Modules.ModuleStateService ModSvc
+<style>
+    /* فاز ۱۳۰-پ — حداقل عرض ستون 300→320: ردیف «select + برون‌ریزی» کارت بستهٔ زبان
+       (دراپ‌داون hr-dd ~129px + دکمه ~152px + گپ = ~289px) در 300px می‌شکست و دکمه
+       به خط دوم می‌افتاد و «ناهم‌تراز» دیده می‌شد؛ در 320px در یک خط می‌ماند. */
+    .dt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
+    .dt-card { display:flex; flex-direction:column; gap:10px; }
+    .dt-card .card-h { display:flex; align-items:center; gap:8px; }
+    .dt-card .card-h h2 { margin:0; font-size:15px; }
+    .dt-desc { color:var(--ink-2,#556); font-size:12.5px; line-height:1.9; margin:0; }
+    .dt-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:auto; }
+    .dt-inline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .dt-inline select { max-width:220px; }
+    /* فاز ۱۳۰-پ — قاعدهٔ سراسری «form > .btn {margin-top:16px}» (خط ۵۵۹ site.css — برای
+       فرم‌های عمودی) در این ردیف افقی، دکمهٔ برون‌ریزی را ۸px پایین‌تر از دراپ‌داون می‌اندازد؛
+       اینجا خنثی می‌شود تا دو عنصر با align-items:center واقعاً هم‌مرکز شوند. */
+    .dt-inline > .btn { margin-top: 0; }
+</style>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+    <h1 style="font-size:18px;margin:0">⇄ @T("مرکز درون‌ریزی و برون‌ریزی")</h1>
+</div>
+<div class="hint" style="margin-bottom:16px">
+    @T("همهٔ عملیات ورود و خروج دادهٔ سامانه در یک صفحه — هر کارت با دسترسی واقعی شما و حضورداشتن ماژولش رندر می‌شود و جدول پایین، اعلامِ خانواده‌های دادهٔ همهٔ ماژول‌های فعال است.")
+</div>
+
+<div class="dt-grid">
+    @* ============ کارت ۱ — پرسنل (فقط با ماژول سازمان و پرسنل) ============ *@
+    @if ((canPeople || canExport) && ModSvc.Enabled("org"))
+    {
+        <div class="card dt-card">
+            <div class="card-h"><span style="font-size:20px">👥</span><h2>@T("پرسنل")</h2></div>
+            <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+                <p class="dt-desc">@T("ورود گروهی پرسنل از فایل اکسل با پیش‌نمایش و اعتبارسنجی، و دریافت فهرست کامل پرسنل به‌صورت اکسل.")</p>
+                <div class="dt-actions">
+                    @if (canPeople)
+                    {
+                        <a class="btn btn-primary" href="/Employees/Import">📥 @T("درون‌ریزی اکسل پرسنل")</a>
+                        <a class="btn" href="/Employees/ImportTemplate">🧾 @T("دانلود قالب ورود گروهی")</a>
+                    }
+                    @if (canExport)
+                    {
+                        <a class="btn" href="/Export/Employees">📤 @T("برون‌ریزی اکسل پرسنل")</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ============ کارت ۲ — تردد (فقط با ماژول حضور و غیاب) ============ *@
+    @if ((canAtt || canExport) && ModSvc.Enabled("attendance"))
+    {
+        <div class="card dt-card">
+            <div class="card-h"><span style="font-size:20px">🕒</span><h2>@T("تردد روزانه")</h2></div>
+            <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+                <p class="dt-desc">@T("دریافت اکسل ترددِ امروز یا هر روز مشخص، و ساخت قالب‌های برون‌بری پیشرفته با ستون‌ها و قالب تاریخ/زمان دلخواه.")</p>
+                <div class="dt-actions">
+                    @if (canExport)
+                    {
+                        <a class="btn btn-primary" href="/Export/Attendance">📤 @T("برون‌ریزی اکسل تردد امروز")</a>
+                    }
+                    @if (canAtt)
+                    {
+                        <a class="btn" href="/Attendance/Exports">🧮 @T("قالب‌های برون‌بری پیشرفته تردد")</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ============ کارت ۳ — بستهٔ زبان (ماژول هسته — همیشه حاضر) ============ *@
+    @if (canLangView || canLangManage)
+    {
+        <div class="card dt-card">
+            <div class="card-h"><span style="font-size:20px">🌐</span><h2>@T("بستهٔ زبان")</h2></div>
+            <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+                <p class="dt-desc">@T("درون‌ریزی و برون‌ریزی بسته‌های ترجمهٔ رابط کاربری — پشتیبان‌گیری زبان‌ها و انتقال آن‌ها بین نصب‌ها.")</p>
+                <div class="dt-actions">
+                    @if (canLangView)
+                    {
+                        <form method="get" action="/Langs/Export" class="dt-inline">
+                            <select name="code">
+                                @foreach (var l in langs.Where(l => l.IsActive))
+                                {
+                                    <option value="@l.Code">@l.Title (@l.Code)</option>
+                                }
+                            </select>
+                            <button class="btn" type="submit">📤 @T("برون‌ریزی بستهٔ ترجمه")</button>
+                        </form>
+                    }
+                    @if (canLangManage)
+                    {
+                        <a class="btn btn-primary" href="/Langs/ImportForm" data-modal="/Langs/ImportForm"
+                           data-modal-title="@T("درون‌ریزی بستهٔ ترجمه")">📥 @T("درون‌ریزی بستهٔ ترجمه")</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ============ کارت ۴ — به‌روزرسانی و پشتیبان‌گیری (ماژول هسته) ============ *@
+    @if (canUpdates)
+    {
+        <div class="card dt-card">
+            <div class="card-h"><span style="font-size:20px">⬆️</span><h2>@T("به‌روزرسانی و پشتیبان‌گیری")</h2></div>
+            <div class="card-b" style="display:flex;flex-direction:column;gap:10px">
+                <p class="dt-desc">@T("پشتیبان‌گیری و بازیابی پایگاه داده و نصب به‌روزرسانی سامانه از بستهٔ منتشرشده.")</p>
+                <div class="dt-actions">
+                    <a class="btn btn-primary" href="/Updates">⬆️ @T("رفتن به صفحهٔ به‌روزرسانی")</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@* ============ جدول اعلامی ماژول‌ها — همهٔ خانواده‌های دادهٔ ماژول‌های حاضر و فعال ============ *@
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 10px">
+    <h2 style="font-size:16px;margin:0">🗄 @T("داده‌های ماژول‌ها — مهاجرت کامل")</h2>
+    <span class="hint">@T("هر خانواده فقط به اعلامِ ماژول مالکش اینجاست؛ ماژول حذف‌شده یا خاموش، ردیفی در این جدول ندارد")</span>
+</div>
+<partial name="_DataExchangeTable" model="catalog" />

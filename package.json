@@ -1,0 +1,14 @@
+{
+  "name": "hr-platform",
+  "version": "2.5.0",
+  "private": true,
+  "description": "HR Platform (ASP.NET Core 8) — dev server entry for the platform supervisor (start-web.sh جایگزین next dev است)",
+  "scripts": {
+    "dev": "bash scripts/start-web.sh",
+    "start": "bash scripts/start-web.sh",
+    "build": "cd aspnet && dotnet build Platform.sln"
+  },
+  "dependencies": {
+    "docx": "^9.15.1"
+  }
+}

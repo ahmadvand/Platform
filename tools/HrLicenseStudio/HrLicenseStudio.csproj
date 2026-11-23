@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ============================================================
+    استودیو مجوز نصب (HrLicenseStudio) — برنامهٔ مجزای تولیدکنندهٔ مجوز
+    فقط نزد تولیدکنندهٔ محصول اجرا می‌شود؛ کلید خصوصی (private.pem)
+    همراه برنامه نیست و باید جداگانه نگهداری شود (هرگز با مشتری منتشر نشود).
+    انتشار برای ویندوز (از لینوکس هم بیلد می‌شود):
+      dotnet publish + پارامترهای تک‌فایل (پوشهٔ scripts/make-studio.sh)
+    ============================================================
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- بیلد از روی لینوکس (سندباکس) هم ممکن شود -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <NeutralLanguage>fa-IR</NeutralLanguage>
+    <AssemblyName>HrLicenseStudio</AssemblyName>
+    <RootNamespace>HrLicenseStudio</RootNamespace>
+    <Version>1.6.0</Version>
+    <FileVersion>1.6.0</FileVersion>
+    <InformationalVersion>1.6.0</InformationalVersion>
+    <Product>استودیو مجوز نصب</Product>
+    <Company>گروه توسعه سامانه‌های سازمانی</Company>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- فاز ۵۰ — فونت وزیر (فارسی) جاسازی‌شده؛ در Program.cs با PrivateFontCollection بارگذاری می‌شود -->
+    <EmbeddedResource Include="Fonts\Vazirmatn-Regular.ttf" />
+    <EmbeddedResource Include="Fonts\Vazirmatn-Bold.ttf" />
+  </ItemGroup>
+</Project>

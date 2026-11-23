@@ -1,0 +1,59 @@
+@{
+    // فاز ۱۳۲ (مورد ۱۴ ROADMAP-ADDITIONS) — هشدار مهمانِ تاریخ‌گذشته
+    ViewData["Title"] = HrT.T("مهمان‌های تاریخ‌گذشته");
+    var rows = (List<VisitorOverdueRow>)Model;
+    var stillInside = (int)ViewBag.StillInside;
+    var cardNotReturned = (int)ViewBag.CardNotReturned;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("مهمان‌های تاریخ‌گذشته")</h2>
+        <span class="hint">@HrT.T("اعتبار کارت گذشته ولی وضعیت نهایی نشده")</span>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("هنوز داخل سازمان:") <b class="text-danger">@Jalali.Num(stillInside)</b></span>
+            <span class="chip">@HrT.T("کارت برنگشته:") <b>@Jalali.Num(cardNotReturned)</b></span>
+        </div>
+        <p class="hint">@HrT.T("«هنوز داخل سازمان» یعنی با گذشت اعتبار کارت، خروجی ثبت نشده و پرچم «داخل سازمان» پاک نشده — پذیرش باید وضعیت را با ثبت خروج نهایی کند؛ «کارت برنگشته» یعنی کارت ارباب‌رجوع بازمانده است و برای ورود مجدد قابل استفاده — باید عودت یا ابطال شود.")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("وضعیت رسیدگی")</th>
+                        <th>@HrT.T("کارت")</th>
+                        <th>@HrT.T("مهمان")</th>
+                        <th>@HrT.T("میزبان")</th>
+                        <th>@HrT.T("واحد میزبان")</th>
+                        <th>@HrT.T("شرکت")</th>
+                        <th>@HrT.T("اعتبار تا")</th>
+                        <th>@HrT.T("برگشت کارت")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in rows)
+                    {
+                        <tr>
+                            <td>
+                                <span class="badge @(r.StillInside ? "badge-err" : "badge-warn")">
+                                    @(r.StillInside ? HrT.T("هنوز داخل سازمان") : HrT.T("کارت برنگشته"))
+                                </span>
+                            </td>
+                            <td><strong>@r.CardNo</strong></td>
+                            <td>@r.Name</td>
+                            <td>@r.HostName</td>
+                            <td>@r.HostDept</td>
+                            <td>@r.Company</td>
+                            <td class="num">@Jalali.FmtFaLong(r.ValidUntil)</td>
+                            <td>@(r.CardReturned ? HrT.T("برگشته") : HrT.T("برنگشته"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!rows.Any())
+        {
+            <p class="hint">@HrT.T("مهمانِ تاریخ‌گذشته‌ای وجود ندارد ✅")</p>
+        }
+    </div>
+</div>

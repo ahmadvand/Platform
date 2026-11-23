@@ -1,0 +1,248 @@
+@{
+    ViewData["Title"] = HrT.T("مجوز نصب");
+    var info = (Platform.Web.Services.LicenseSnapshot)ViewBag.Info;
+    var canManage = (bool)ViewBag.CanManage;
+    var machineId = (string)ViewBag.MachineId;
+    var mode = (string)ViewBag.Mode;
+
+    // فاز ۷۸ — برچسب فارسی «حالت اجرای قفل» مؤثر: اولویت با انتخاب صریح صادرکنندهٔ مجوز (lockMode)
+    var lockModeLabel = info.LockMode == "lock"
+        ? HrT.T("قفل سخت — طبق مجوز")
+        : info.LockMode == "warn"
+            ? HrT.T("فقط هشدار — طبق مجوز")
+            : mode == "Strict"
+                ? HrT.T("فقط هشدار — طبق تنظیمات سرور (Strict)")
+                : HrT.T("آزاد — فقط نمایش وضعیت");
+
+    // نگاشت وضعیت به برچسب/رنگ فارسی
+    var (stateLabel, stateCss) = info.State switch
+    {
+        Platform.Web.Services.LicenseState.Valid => (HrT.T("فعال و معتبر"), "ok"),
+        Platform.Web.Services.LicenseState.Expired => (HrT.T("منقضی شده"), "err"),
+        Platform.Web.Services.LicenseState.WrongMachine => (HrT.T("مربوط به سرور دیگر"), "err"),
+        Platform.Web.Services.LicenseState.Invalid => (HrT.T("نامعتبر"), "err"),
+        _ => (HrT.T("ثبت نشده"), "err"),
+    };
+}
+<style>
+    /* صفحهٔ مجوز نصب (فاز ۴۶) — خوداتکا: هم داخل پوسته و هم در حالت قفل بدون نشست */
+    .lic-wrap { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 26px 16px; }
+    .lic-card { width: 100%; max-width: 720px; background: var(--surface, #fff); border: 1px solid var(--line, #e3e6f0);
+        border-radius: 20px; box-shadow: 0 24px 70px rgba(23,32,90,.12); overflow: hidden; }
+    .lic-head { padding: 24px 28px 18px; border-bottom: 1px solid var(--line, #e3e6f0); display: flex; gap: 14px; align-items: center; }
+    .lic-logo { width: 50px; height: 50px; border-radius: 15px; background: var(--grad-btn, linear-gradient(135deg,#6366f1,#4f46e5));
+        display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; flex: none; }
+    .lic-head h1 { font-size: 17.5px; margin: 0 0 3px; }
+    .lic-head p { margin: 0; color: var(--ink-2, #667); font-size: 12.5px; line-height: 1.9; }
+    .lic-body { padding: 22px 28px 28px; }
+    .lic-state { display: flex; align-items: center; gap: 10px; border-radius: 13px; padding: 12px 15px; font-size: 13px; font-weight: 700;
+        border: 1px solid; margin-bottom: 16px; flex-wrap: wrap; }
+    .lic-state.ok { background: rgba(5,150,105,.08); border-color: rgba(5,150,105,.3); color: #065f46; }
+    .lic-state.warn { background: rgba(217,119,6,.08); border-color: rgba(217,119,6,.3); color: #92400e; }
+    .lic-state.err { background: rgba(225,29,72,.07); border-color: rgba(225,29,72,.3); color: #9f1239; }
+    .lic-rows { margin-bottom: 18px; } /* فاز ۱۲۴-ه — بقیه از توکن مشترک .kvr/.kvs می‌آید */
+    .lic-row { border-style: dashed; }
+    .lic-fp { display: flex; gap: 9px; align-items: center; }
+    .lic-fp code { font-family: Consolas, monospace; font-size: 13.5px; letter-spacing: .06em; direction: ltr; }
+    .lic-copy { border: 1px solid var(--line, #d8dcea); background: var(--surface-2, #fafbff); border-radius: 9px;
+        padding: 5px 11px; font-size: 11.5px; cursor: pointer; color: var(--ink-2, #556); flex: none; font-family: inherit; }
+    .lic-copy:hover { border-color: var(--accent, #6366f1); color: var(--accent-deep, #4338ca); }
+    .lic-form { border-top: 1px dashed var(--line, #e3e6f0); padding-top: 16px; margin-top: 4px; }
+    .lic-form h2 { font-size: 13.5px; margin: 0 0 8px; }
+    .lic-form p.hint { color: var(--ink-3, #889); font-size: 11.5px; line-height: 2; margin: 0 0 12px; }
+    .lic-import { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .lic-import input[type=file] { font-size: 12px; }
+    .lic-login { margin-top: 16px; font-size: 12.5px; color: var(--ink-2, #556); }
+    .lic-login a { font-weight: 700; }
+    .lic-note { margin-top: 16px; padding-top: 13px; border-top: 1px dashed var(--line, #e3e6f0); color: var(--ink-3, #889); font-size: 11.5px; line-height: 2; }
+    /* فاز ۵۳ — کارت مدیریت کلید امضا */
+    .lic-keys { border-top: 1px dashed var(--line, #e3e6f0); padding-top: 16px; margin-top: 18px; }
+    .lic-keys h2 { font-size: 13.5px; margin: 0 0 8px; display: flex; align-items: center; gap: 7px; }
+    .lic-keys .hint { color: var(--ink-3, #889); font-size: 11.5px; line-height: 2; margin: 0 0 12px; }
+    .lic-keybadge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 10.5px; font-weight: 700; }
+    .lic-keybadge.on { background: rgba(5,150,105,.1); color: #065f46; border: 1px solid rgba(5,150,105,.35); }
+    .lic-keybadge.off { background: rgba(100,116,139,.1); color: #475569; border: 1px solid rgba(100,116,139,.3); }
+    .lic-keybtns { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; margin-top: 11px; }
+    .lic-warn { margin-top: 11px; border: 1px solid rgba(217,119,6,.4); background: rgba(217,119,6,.07); color: #92400e;
+        border-radius: 11px; padding: 9px 13px; font-size: 11.5px; line-height: 1.9; }
+</style>
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("مجوز نصب")</h1>
+        <div class="page-sub">@HrT.T("وضعیت مجوز، سقف‌ها و حالت قفل") · @HrT.F("شناسهٔ دستگاه: {0}", machineId)</div>
+    </div>
+</div>
+<div class="lic-wrap">
+    <div class="lic-card">
+        <div class="lic-head">
+            <div class="lic-logo">🧾</div>
+            <div>
+                <h1>@HrT.T("مجوز نصب سامانه")</h1>
+                <p>@HrT.T("این سامانه به سخت‌افزار همین سرور قفل شده است؛ برای فعال‌سازی، فایل مجوز صادرشده از سوی تولیدکننده را وارد کنید.")</p>
+            </div>
+        </div>
+        <div class="lic-body">
+            <div class="lic-state @stateCss">
+                <span style="font-size:16px">@(stateCss == "ok" ? "✅" : stateCss == "warn" ? "⏳" : "⛔")</span>
+                <span>@HrT.T("وضعیت:") @stateLabel</span>
+                <span style="font-weight:400; opacity:.85">— @info.Message</span>
+            </div>
+
+            <div class="kvs lic-rows">
+                <div class="kvr lic-row">
+                    <span class="k">@HrT.T("امضای سرور (اثر انگشت سخت‌افزار)")</span>
+                    <span class="v lic-fp">
+                        <code id="licFp">@machineId</code>
+                        <button type="button" class="lic-copy" id="licCopyBtn">@HrT.T("کپی")</button>
+                        <a class="lic-copy" href="/License/RequestFile" download title="@HrT.T("این فایل را برای تولیدکننده بفرستید — امضای سرور داخل آن است")">@HrT.T("دانلود فایل درخواست (.hrreq)")</a>
+                    </span>
+                </div>
+                <div class="kvr lic-row"><span class="k">@HrT.T("دارندهٔ مجوز")</span><span class="v">@(info.Licensee ?? "—")</span></div>
+                <div class="kvr lic-row"><span class="k">@HrT.T("اعتبار تا")</span><span class="v">@(info.ExpiresAtUtc is null ? HrT.T("دائمی / بدون مجوز") : Platform.Web.Services.Jalali.ToPersianDigits(Platform.Web.Services.Jalali.FmtFa(info.ExpiresAtUtc.Value.ToLocalTime())))</span></div>
+                <div class="kvr lic-row"><span class="k">@HrT.T("سقف پرسنل")</span><span class="v">@(info.MaxEmployees is int m ? HrT.F("{0} نفر", Platform.Web.Services.Jalali.ToPersianDigits(m.ToString())) : HrT.T("نامحدود"))</span></div>
+                <div class="kvr lic-row"><span class="k">@HrT.T("ماژول‌های مجاز")</span><span class="v">@(info.Modules is { Length: > 0 } ms
+                    ? HrT.F("{0} ماژول ({1})", Platform.Web.Services.Jalali.ToPersianDigits(ms.Length.ToString()), string.Join("، ", ms.Select(x => Platform.Web.Modules.ModuleCatalog.Find(x)?.Title ?? x)))
+                    : HrT.T("همهٔ ماژول‌ها — بدون سقف"))</span></div>
+                <div class="kvr lic-row"><span class="k">@HrT.T("حالت اجرای قفل")</span><span class="v">@lockModeLabel@(info.LockMode is null ? "" : $" ({info.LockMode})")</span></div>
+                @if (!string.IsNullOrEmpty(info.Notes))
+                {
+                    <div class="kvr lic-row"><span class="k">@HrT.T("یادداشت مجوز")</span><span class="v">@info.Notes</span></div>
+                }
+            </div>
+
+            @if (canManage)
+            {
+                <div class="lic-form">
+                    <h2>@HrT.T("ورود فایل مجوز")</h2>
+                    <p class="hint">@HrT.T("فایل") <b>.dat</b> @HrT.T("دریافتی از تولیدکننده را انتخاب کنید (یا محتوای آن را در کادر زیر بچسبانید). پس از ثبت موفق، سامانه بلافاصله باز می‌شود.")</p>
+                    <form method="post" action="/License/Import" enctype="multipart/form-data" class="lic-import">
+                        @Html.AntiForgeryToken()
+                        <input type="file" name="file" accept=".dat,.txt,.lic" />
+                        <button type="submit" class="btn btn-primary">@HrT.T("ثبت و فعال‌سازی مجوز")</button>
+                    </form>
+                    <form method="post" action="/License/Import" style="margin-top:10px">
+                        @Html.AntiForgeryToken()
+                        <textarea name="text" rows="3" dir="ltr" placeholder="@HrT.T("یا محتوای فایل مجوز را اینجا بچسبانید…")" style="width:100%;border:1px solid var(--line,#d8dcea);border-radius:10px;padding:9px 12px;font:inherit;font-size:11.5px;font-family:Consolas,monospace;background:var(--surface,#fff);color:var(--ink,#223)"></textarea>
+                        <div style="margin-top:8px"><button type="submit" class="btn">@HrT.T("ثبت از متن")</button></div>
+                    </form>
+                </div>
+
+                @* فاز ۵۳ — مدیریت کلید امضای مجوز: ساخت جفت‌کلید + دانلود private.pem (درخواست کاربر) *@
+                <div class="lic-keys">
+                    <h2>🔑 @HrT.T("کلید امضای مجوز (RSA-2048)")</h2>
+                    <p class="hint">
+                        @HrT.T("کلید خصوصیِ امضا در یکی از این سه‌جا ساخته می‌شود:") <b>(۱)</b> @HrT.T("همین صفحه با دکمهٔ «ساخت جفت‌کلید جدید»،")
+                        <b>(۲)</b> @HrT.T("برنامهٔ LicenseStudio (دکمهٔ ساخت جفت‌کلید)،") <b>(۳)</b> @HrT.T("ابزار خط‌فرمان LicenseGen (")<code dir="ltr">keygen</code>@HrT.T(").")
+                        @HrT.T("پس از ساخت، فایل") <b>private.pem</b> @HrT.T("را از همین صفحه دانلود کنید — در LicenseStudio با «انتخاب فایل کلید»")
+                        @HrT.T("و در LicenseGen با") <code dir="ltr">--key private.pem</code> @HrT.T("برای امضای فایل مجوز استفاده می‌شود.")
+                        @HrT.T("مجوزهای امضاشده با این کلید و مجوزهای امضاشده با کلید مرجع تولیدکننده، هر دو پذیرفته می‌شوند.")
+                    </p>
+                    <div class="kvs lic-rows" style="margin-bottom:0">
+                        <div class="kvr lic-row">
+                            <span class="k">@HrT.T("کلید مرجع تولیدکننده (جاسازی‌شده)")</span>
+                            <span class="v lic-fp"><span class="lic-keybadge on">@HrT.T("همیشه فعال")</span><code>@ViewBag.EmbeddedFpr</code></span>
+                        </div>
+                        <div class="kvr lic-row">
+                            <span class="k">@HrT.T("کلید همین نصب (ساخته‌شده در صفحه)")</span>
+                            <span class="v lic-fp">
+                                @if (ViewBag.HasSigningKey)
+                                {
+                                    <span class="lic-keybadge on">@HrT.T("فعال")</span><code>@ViewBag.SigningFpr</code>
+                                }
+                                else
+                                {
+                                    <span class="lic-keybadge off">@HrT.T("ساخته نشده")</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="lic-keybtns">
+                        <form method="post" action="/License/GenerateKey" data-confirm="@HrT.T("جفت‌کلید جدید ساخته شود؟ مجوزهای امضاشده با کلید خصوصیِ قابل‌دانلود در همین صفحه، از این پس پذیرفته می‌شوند.")">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary">@HrT.T("ساخت جفت‌کلید جدید")</button>
+                        </form>
+                        @if (ViewBag.HasSigningKey)
+                        {
+                            <a class="btn" href="/License/PrivateKey" download title="@HrT.T("فایل private.pem برای استفاده در LicenseStudio یا LicenseGen")">@HrT.T("دانلود کلید خصوصی (private.pem)")</a>
+                            <form method="post" action="/License/RemoveKey" data-confirm="@HrT.T("جفت‌کلید این نصب حذف شود؟ پس از حذف، مجوزهای امضاشده با این کلید دیگر پذیرفته نمی‌شوند (مگر دوباره بسازید).")">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn" style="color:var(--err,#e11d48)">@HrT.T("حذف جفت‌کلید")</button>
+                            </form>
+                        }
+                    </div>
+                    @* فاز ۹۰ — ورود (import) کلید خصوصی ساخته‌شده در جای دیگر (درخواست کاربر:
+                       «چطور از private.pem که در جای دیگه ساختم استفاده کنم؟ امکان آپلود بذار») *@
+                    <div style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line,#e3e6f0)">
+                        <h2 style="font-size:12.5px;margin:0 0 6px">📥 @HrT.T("درج کلید خصوصی موجود (private.pem)")</h2>
+                        <p class="hint">@HrT.T("اگر private.pem را قبلاً در جای دیگری (LicenseStudio، LicenseGen یا نصب دیگر) ساخته‌اید، اینجا بارگذاری یا محتوایش را بچسبانید — کلید عمومی از دل آن استخراج و مجوزهای امضاشده با همان کلید روی این نصب پذیرفته می‌شود.")</p>
+                        <form method="post" action="/License/ImportKey">
+                            @Html.AntiForgeryToken()
+                            <textarea name="privatePem" id="licImportPem" rows="3" dir="ltr" placeholder="@HrT.T("-----BEGIN PRIVATE KEY----- …")" style="width:100%;border:1px solid var(--line,#d8dcea);border-radius:10px;padding:9px 12px;font:inherit;font-size:11px;font-family:Consolas,monospace;background:var(--surface,#fff);color:var(--ink,#223)"></textarea>
+                            <div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                                <label class="btn btn-sm lic-file" for="licImportFile">📎 @HrT.T("انتخاب فایل private.pem")</label>
+                                <input type="file" id="licImportFile" accept=".pem,.txt,.key" hidden="hidden" />
+                                <span class="lic-file-name" id="licImportName">@HrT.T("فایلی انتخاب نشده است")</span>
+                                <button type="submit" class="btn btn-primary">@HrT.T("ثبت کلید")</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="lic-warn">
+                        ⚠️ @HrT.T("هرکس فایل") <b>private.pem</b> @HrT.T("را داشته باشد می‌تواند برای این نصب مجوز بسازد — آن را فقط روی سیستمِ امنِ خودتان نگه دارید، همراه نصب مشتری منتشر نکنید و پیش از نصب مجدد سرور از آن نسخهٔ پشتیبان داشته باشید.")
+                    </div>
+                </div>
+            }
+            else if (info.Locked)
+            {
+                <div class="lic-login">
+                    @HrT.T("برای ورود مجوز باید با حساب «مدیر ارشد سیستم» وارد شوید —")
+                    <a href="/Auth/Login?returnUrl=%2FLicense">@HrT.T("ورود مدیر")</a>
+                </div>
+            }
+
+            <div class="lic-note">
+                <b>@HrT.T("سریع‌ترین راه دریافت امضا:")</b> @HrT.T("دکمهٔ «دانلود فایل درخواست» را بزنید و فایل") <b>.hrreq</b> @HrT.T("را برای تولیدکننده بفرستید — امضای همین سرور داخل آن است و در برنامهٔ تولید مجوز با «بازکردن فایل درخواست» خودکار پر می‌شود (بدون تایپ دستی). کپی نرم‌افزار روی سرور دیگر کار نمی‌کند، چون امضای هر سرور یکتاست و در امضای دیجیتال مجوز گنجانده می‌شود.")
+                <br />
+                <b>@HrT.T("خوداتکا:")</b> @HrT.T("اگر می‌خواهید بدون واسطهٔ تولیدکننده مجوز بسازید، از بخش «کلید امضای مجوز» جفت‌کلید بسازید، کلید خصوصی را دانلود کنید و با آن در LicenseStudio (یا LicenseGen) فایل مجوز را امضا و در فرم بالا وارد کنید.")
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        // دکمهٔ کپی اثر انگشت — بدون وابستگی به clipboard API (fallback انتخاب متن)
+        (function () {
+            var MSG_COPIED = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کپی شد ✓")))';
+            var MSG_COPY = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("کپی")))';
+            var MSG_FP_PROMPT = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("اثر انگشت سرور:")))';
+            var MSG_FP_PROMPT_CC = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("اثر انگشت سرور (Ctrl+C):")))';
+            var b = document.getElementById('licCopyBtn');
+            if (!b) return;
+            b.addEventListener('click', function () {
+                var t = document.getElementById('licFp').textContent.trim();
+                var done = function () { b.textContent = MSG_COPIED; setTimeout(function () { b.textContent = MSG_COPY; }, 1500); };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(t).then(done, function () { window.prompt(MSG_FP_PROMPT, t); });
+                } else {
+                    window.prompt(MSG_FP_PROMPT_CC, t);
+                }
+            });
+        })();
+        // فاز ۹۰ — خواندن فایل private.pem انتخاب‌شده و ریختن محتوایش در کادر ثبت
+        (function () {
+            var f = document.getElementById('licImportFile');
+            if (!f) return;
+            f.addEventListener('change', function () {
+                var file = this.files && this.files[0];
+                var nameEl = document.getElementById('licImportName');
+                if (nameEl) nameEl.textContent = file ? file.name : '@HrT.T("فایلی انتخاب نشده است")';
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    document.getElementById('licImportPem').value = String(reader.result || '').trim();
+                };
+                reader.readAsText(file);
+            });
+        })();
+    </script>
+}

@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = HrT.T("درخواست‌های من");
+
+}
+<div data-refresh-host>
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("✈️ ثبت درخواست مرخصی")</h2></div>
+        <div class="card-b">
+            <form method="post" action="/Self/CreateLeave" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld">
+                        <label>@HrT.T("نوع مرخصی")</label>
+                        <select name="type">
+                            <option value="استحقاقی">@HrT.T("استحقاقی")</option>
+                            <option value="استعلاجی">@HrT.T("استعلاجی")</option>
+                            <option value="ساعتی">@HrT.T("ساعتی")</option>
+                            <option value="بدون‌حقوق">@HrT.T("بدون حقوق")</option>
+                        </select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("از تاریخ (میلادی)")</label><input type="date" name="fromDate" required /></div>
+                    <div class="fld"><label>@HrT.T("تا تاریخ (میلادی)")</label><input type="date" name="toDate" required /></div>
+                    <div class="fld"><label>@HrT.T("تعداد روز")</label><input type="number" name="days" min="0.5" step="0.5" value="1" required /></div>
+                    <div class="fld fld-full"><label>@HrT.T("دلیل (اختیاری)")</label><input name="reason" maxlength="300" /></div>
+                </div>
+                <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت درخواست")</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("🚗 ثبت درخواست مأموریت")</h2></div>
+        <div class="card-b">
+            <form method="post" action="/Self/CreateMission" data-ajax data-refresh>
+                @Html.AntiForgeryToken()
+                <div class="form-grid">
+                    <div class="fld">
+                        <label>@HrT.T("نوع مأموریت")</label>
+                        <select name="type"><option value="داخلی">@HrT.T("داخلی")</option><option value="خارجی">@HrT.T("خارجی")</option></select>
+                    </div>
+                    <div class="fld"><label>@HrT.T("مقصد")</label><input name="destination" required maxlength="120" /></div>
+                    <div class="fld"><label>@HrT.T("از تاریخ")</label><input type="date" name="fromDate" required /></div>
+                    <div class="fld"><label>@HrT.T("تا تاریخ")</label><input type="date" name="toDate" required /></div>
+                    <div class="fld fld-full"><label>@HrT.T("هدف مأموریت (اختیاری)")</label><input name="purpose" maxlength="300" /></div>
+                </div>
+                <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت درخواست")</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("🔁 ثبت درخواست اصلاح تردد")</h2><span class="hint">@HrT.T("اگر ورود/خروج شما اشتباه ثبت شده، از این فرم استفاده کنید — تأیید نهایی با سرپرست است")</span></div>
+    <div class="card-b">
+        <form method="post" action="/Self/CreateCorrection" data-ajax data-refresh>
+            @Html.AntiForgeryToken()
+            <div class="form-grid">
+                <div class="fld"><label>@HrT.T("تاریخ مورد اعتراض")</label><input type="date" name="date" required /></div>
+                <div class="fld"><label>@HrT.T("ورود واقعی من")</label><input type="time" name="requestedIn" /></div>
+                <div class="fld"><label>@HrT.T("خروج واقعی من")</label><input type="time" name="requestedOut" /></div>
+                <div class="fld fld-full"><label>@HrT.T("دلیل اصلاح (الزامی)")</label><input name="reason" required maxlength="300" /></div>
+            </div>
+            <div style="margin-top:12px"><button class="btn btn-primary">@HrT.T("ثبت درخواست اصلاح")</button></div>
+        </form>
+    </div>
+</div>
+
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("مرخصی‌های من")</h2></div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("نوع")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th>@HrT.T("روز")</th><th>@HrT.T("وضعیت")</th></tr></thead>
+                <tbody>
+                    @foreach (var l in (List<LeaveRequest>)ViewBag.Leaves)
+                    {
+                        <tr>
+                            <td>@HrT.T(l.Type)</td>
+                            <td>@Jalali.FmtFa(Jalali.ParseDateKey(l.FromDate))</td>
+                            <td>@Jalali.FmtFa(Jalali.ParseDateKey(l.ToDate))</td>
+                            <td class="num">@Jalali.Num(l.Days)</td>
+                            <td><span class="badge @(l.Status == "تأیید شده" ? "badge-ok" : l.Status == "رد شده" ? "badge-err" : "badge-warn")">@HrT.T(l.Status)</span></td>
+                        </tr>
+                    }
+                    @if (((List<LeaveRequest>)ViewBag.Leaves).Count == 0)
+                    {
+                        <tr><td colspan="5"><div class="empty">@HrT.T("موردی ثبت نشده است.")</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@HrT.T("مأموریت‌های من")</h2></div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead><tr><th>@HrT.T("نوع")</th><th>@HrT.T("مقصد")</th><th>@HrT.T("از")</th><th>@HrT.T("تا")</th><th>@HrT.T("وضعیت")</th></tr></thead>
+                <tbody>
+                    @foreach (var m in (List<Mission>)ViewBag.Missions)
+                    {
+                        <tr>
+                            <td>@HrT.T(m.Type)</td>
+                            <td>@m.Destination</td>
+                            <td>@Jalali.FmtFa(Jalali.ParseDateKey(m.FromDate))</td>
+                            <td>@Jalali.FmtFa(Jalali.ParseDateKey(m.ToDate))</td>
+                            <td><span class="badge @(m.Status == "تأیید شده" ? "badge-ok" : m.Status == "رد شده" ? "badge-err" : "badge-warn")">@HrT.T(m.Status)</span></td>
+                        </tr>
+                    }
+                    @if (((List<Mission>)ViewBag.Missions).Count == 0)
+                    {
+                        <tr><td colspan="5"><div class="empty">@HrT.T("موردی ثبت نشده است.")</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-h"><h2>@HrT.T("اصلاح ترددهای من")</h2></div>
+    <div class="table-wrap">
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("تاریخ")</th><th>@HrT.T("ورود درخواستی")</th><th>@HrT.T("خروج درخواستی")</th><th>@HrT.T("دلیل")</th><th>@HrT.T("وضعیت")</th></tr></thead>
+            <tbody>
+                @foreach (var c in (List<CorrectionRequest>)ViewBag.Corrections)
+                {
+                    <tr>
+                        <td>@Jalali.FmtFa(Jalali.ParseDateKey(c.Date))</td>
+                        <td class="num">@(c.RequestedIn is null ? "—" : Jalali.FmtTime(c.RequestedIn.Value))</td>
+                        <td class="num">@(c.RequestedOut is null ? "—" : Jalali.FmtTime(c.RequestedOut.Value))</td>
+                        <td>@c.Reason</td>
+                        <td><span class="badge @(c.Status == "تأیید شده" ? "badge-ok" : c.Status == "رد شده" ? "badge-err" : "badge-warn")">@HrT.T(c.Status)</span></td>
+                    </tr>
+                }
+                @if (((List<CorrectionRequest>)ViewBag.Corrections).Count == 0)
+                {
+                    <tr><td colspan="5"><div class="empty">@HrT.T("موردی ثبت نشده است.")</div></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>

@@ -1,0 +1,35 @@
+@model Role?
+@{
+    // فاز ۷۷ — فرم مشترک ایجاد/ویرایش نقش (مودال AJAX)؛ Model = null → حالت ایجاد
+    var isEdit = Model is not null;
+    var action = isEdit ? "/Roles/Edit/" + Model!.Id : "/Roles/Create";
+}
+<form method="post" action="@action" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" name="id" value="@Model!.Id" />
+    }
+    <div class="fld" style="margin-bottom:10px">
+        <label>@T.X("نام فنی نقش (لاتین)")</label>
+        @if (isEdit)
+        {
+            <input type="text" value="@Model!.Name" disabled style="background:var(--table-header);color:var(--ink-3)" />
+            <div style="font-size:10.5px;color:var(--ink-3);margin-top:4px">@T.X("نام فنی تغییرنکردنی است — در گاردهای دسترسی استفاده می‌شود")</div>
+        }
+        else
+        {
+            <input type="text" name="name" dir="ltr" placeholder="warehouse_manager" required />
+            <div style="font-size:10.5px;color:var(--ink-3);margin-top:4px">@T.X("فقط حروف لاتین کوچک، عدد و زیرخط — پس از ایجاد تغییرنمی‌کند")</div>
+        }
+    </div>
+    <div class="fld" style="margin-bottom:10px">
+        <label>@T.X("عنوان نقش")</label>
+        <input type="text" name="title" value="@(isEdit ? Model!.Title : "")" placeholder="@T.X("مثلاً: مسئول انبار")" required />
+    </div>
+    <div class="fld" style="margin-bottom:10px">
+        <label>@T.X("توضیح (اختیاری)")</label>
+        <input type="text" name="description" value="@(isEdit ? Model!.Description : "")" placeholder="@T.X("چه کارهایی با این نقش انجام می‌شود؟")" />
+    </div>
+    <button class="btn btn-primary btn-block">@(isEdit ? T.X("ذخیره تغییرات") : T.X("ایجاد نقش"))</button>
+</form>

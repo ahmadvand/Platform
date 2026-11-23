@@ -1,0 +1,20 @@
+@{
+    var gate = (Gate)ViewBag.Gate!;
+}
+<div data-modal-title="@HrT.F("برنامه زمانی گیت — {0}", gate.Name)" hidden></div>
+<form method="post" action="/Access/SetGateSchedule" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@gate.Id" />
+    <div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+        @HrT.T("خارج از بازه‌ی برنامه، تردد از این گیت مجاز نیست. خالی‌گذاشتن روزها یعنی همه روزها.")
+    </div>
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("روزهای مجاز (شنبه=0 … جمعه=6، با کاما — خالی=همه)")</label><input name="days" value="@gate.ScheduleDays" placeholder="0,1,2,3,4" /></div>
+        <div class="fld"><label>@HrT.T("از ساعت")</label><input type="time" name="from" value="@gate.ScheduleFrom" /></div>
+        <div class="fld"><label>@HrT.T("تا ساعت")</label><input type="time" name="to" value="@gate.ScheduleTo" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره برنامه")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

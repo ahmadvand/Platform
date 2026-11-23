@@ -1,0 +1,67 @@
+@inject Platform.Web.Services.SettingsService SettingsSvc
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = HrT.T("ورود به سامانه");
+    // فاز ۷۶ — چندزبانه: همهٔ متن‌های ثابت با زبان جاری (کوکی کاربر یا زبان نصب اولیه)
+    string T(string fa) => HrT.T(fa);
+    var appSet = await SettingsSvc.GetSafeAsync();
+    var logoSrc = string.IsNullOrEmpty(appSet.LogoPath) ? null : appSet.LogoPath + "?v=" + appSet.UpdatedAt.Ticks;
+}
+<div class="login-page">
+    <div class="login-card">
+        @if (logoSrc is not null)
+        {
+            <img class="login-logo-img" src="@logoSrc" alt="@T("لوگو")" />
+        }
+        else
+        {
+            <div class="login-logo">◈</div>
+        }
+        <h1>@appSet.CompanyName</h1>
+        <div class="sub">@(string.IsNullOrWhiteSpace(appSet.Description) ? T("سامانه یکپارچه منابع انسانی") : appSet.Description)</div>
+
+        @if (ViewBag.Error is string err)
+        {
+            @* پیام خطای اعتبارسنجی ورود — ترجمه به زبان جاری کاربر (fallback امن: خود متن) *@
+            <div class="login-err">@HrT.T(err)</div>
+        }
+        @if (ViewBag.LicNotice is string licN)
+        {
+            @* فاز ۵۱ — هشدار مجوز روی ورود: سامانه فعال است؛ فقط اطلاع‌رسانی *@
+            <div class="login-err" style="background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.35);color:#92400e">
+                ⚠️ @HrT.T(licN)
+                <div style="font-weight:400;font-size:11.5px;margin-top:4px">@T("کارکرد سامانه قطع نشده — پس از ورود می‌توانید هشدار را تایید و ادامه دهید یا مجوز جدید وارد کنید.")</div>
+            </div>
+        }
+
+        @* فرم واحد ورود (تسک ۲۵) — راهبران با نام کاربری + رمز عبور، کارکنان با کد پرسنلی + کد ملی.
+           سامانه از روی شناسه مسیر ورود را تشخیص می‌دهد و امکانات هر کاربر صرفاً از دسترسی‌هایش می‌چیند. *@
+        <form method="post" action="/Auth/Login">
+            @Html.AntiForgeryToken()
+            <div class="fld" style="margin-bottom:12px">
+                <label for="identifier">@T("نام کاربری") <span class="muted">@T("یا")</span> @T("کد پرسنلی")</label>
+                <input id="identifier" name="identifier" value="@ViewBag.Identifier" required autofocus
+                       autocomplete="username" />
+            </div>
+            <div class="fld" style="margin-bottom:18px">
+                <label for="secret">@T("رمز عبور") <span class="muted">@T("یا")</span> @T("کد ملی")</label>
+                <input id="secret" name="secret" type="password" required autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">@T("ورود به سامانه")</button>
+            <div class="hint" style="margin-top:10px;text-align:center">
+                @T("راهبران با نام کاربری و رمز عبور — کارکنان با کد پرسنلی و کد ملی وارد شوند؛ پس از ورود، هر کاربر فقط امکانات دارای دسترسی خود را می‌بیند.")
+            </div>
+        </form>
+
+        @* فاز ۷۶ — سوئیچ زبان روی صفحهٔ ورود (صفحهٔ پیش از ورود، نوار بالایی ندارد) *@
+        <div style="text-align:center;margin-top:12px;font-size:12px">
+            <a href="/Ui/Lang?l=fa&r=/Auth/Login" style="@(HrT.Cur == "fa" ? "font-weight:700;color:var(--accent)" : "color:var(--ink-2)");display:inline-flex;align-items:center;gap:6px">@Html.Raw(HrFlags.Svg("fa", 13)) @T("فارسی")</a>
+            <span style="color:var(--ink-3)"> · </span>
+            <a href="/Ui/Lang?l=en&r=/Auth/Login" style="@(HrT.Cur == "en" ? "font-weight:700;color:var(--accent)" : "color:var(--ink-2)");display:inline-flex;align-items:center;gap:6px">@Html.Raw(HrFlags.Svg("en", 13)) English</a>
+        </div>
+
+        <div class="login-ver">
+            @T("نسخه") @HrT.Digits(Platform.Web.Services.BuildInfo.Version) · @T("تولیدکننده:") @Platform.Web.Services.BuildInfo.Vendor
+        </div>
+    </div>
+</div>

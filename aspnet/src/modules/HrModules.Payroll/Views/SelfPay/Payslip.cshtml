@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = HrT.T("فیش حقوقی");
+
+    var s = ViewBag.Slip as Payslip;
+}
+<div class="card" style="max-width:720px;margin-inline:auto">
+    <div class="card-h">
+        <h2>@HrT.F("فیش حقوقی — {0} {1}", Jalali.MonthName(s!.Run!.JMonth), Jalali.ToPersianDigits(s.Run.JYear))</h2>
+        <div class="btn-row">
+            <a class="btn btn-sm" href="/Self/PayslipPdf?id=@s.Id" target="_blank">@HrT.T("📄 PDF رسمی")</a>
+            <button class="btn btn-sm" onclick="window.print()">@HrT.T("چاپ فیش")</button>
+        </div>
+    </div>
+    <div class="card-b">
+        <table class="tbl" style="margin-bottom:14px">
+            <tbody>
+                <tr><td>@HrT.T("نام و نام خانوادگی")</td><td><b>@s.Employee!.FullName</b></td><td>@HrT.T("کد پرسنلی")</td><td class="num">@Jalali.ToPersianDigits(s.Employee.PersonnelCode)</td></tr>
+                <tr><td>@HrT.T("واحد سازمانی")</td><td>@(s.Employee.Department?.Name ?? "—")</td><td>@HrT.T("سمت")</td><td>@(s.Employee.Position?.Title ?? "—")</td></tr>
+            </tbody>
+        </table>
+        <table class="tbl">
+            <thead><tr><th>@HrT.T("شرح")</th><th>@HrT.F("مبلغ ({0})", Money.CurTitle())</th></tr></thead>
+            <tbody>
+                <tr><td>@HrT.T("حقوق پایه")</td><td class="num">@Money.Fmt(s.BaseSalary)</td></tr>
+                <tr><td>@HrT.F("اضافه‌کاری ({0} دقیقه)", Jalali.ToPersianDigits(s.OvertimeMin))</td><td class="num">@Money.Fmt(s.OvertimePay)</td></tr>
+                <tr><td>@HrT.T("مزایا و کمک‌هزینه")</td><td class="num">@Money.Fmt(s.Allowances)</td></tr>
+                <tr><td>@HrT.F("کسورات غیبت ({0} روز)", Jalali.ToPersianDigits(s.AbsentDays))</td><td class="num">@Money.Fmt(s.AbsentDeduct)</td></tr>
+                <tr><td>@HrT.T("بیمه سهم کارمند")</td><td class="num">@Money.Fmt(s.Insurance)</td></tr>
+                <tr><td>@HrT.T("مالیات بر درآمد")</td><td class="num">@Money.Fmt(s.Tax)</td></tr>
+                <tr>
+                    <td><b>@HrT.T("خالص پرداختی")</b></td>
+                    <td class="num"><b>@Money.Fmt(s.NetPay)</b></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="hint" style="margin-top:12px">@HrT.F("کارکرد دوره: {0} — تاریخ صدور: {1}", Jalali.MinutesToHm(s.WorkedMin), Jalali.FmtFa(s.CreatedAt))</div>
+    </div>
+</div>

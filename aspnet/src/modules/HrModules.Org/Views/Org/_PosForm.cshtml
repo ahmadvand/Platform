@@ -1,0 +1,25 @@
+@{
+    var company = (Company?)ViewBag.Company;
+    var allDepts = (List<Department>)ViewBag.AllDepts;
+}
+<div data-modal-title="@(HrT.F("پست سازمانی جدید — {0}", company?.Name ?? ""))" hidden></div>
+<form method="post" action="/Org/CreatePos" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("عنوان *")</label><input name="title" required /></div>
+        <div class="fld"><label>@HrT.T("کد * (در این شرکت)")</label><input name="code" required placeholder="P-XYZ" /></div>
+        <div class="fld"><label>@HrT.T("واحد * (همان شرکت)")</label>
+            <select name="departmentId" required>
+                @foreach (var d in allDepts)
+                {
+                    <option value="@d.Id">@d.Name</option>
+                }
+            </select>
+        </div>
+        <div class="fld"><label>@HrT.T("گروه شغلی")</label><input name="grade" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ایجاد پست")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

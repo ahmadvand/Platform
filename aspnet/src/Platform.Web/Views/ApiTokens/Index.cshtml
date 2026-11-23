@@ -1,0 +1,73 @@
+@{
+    // فاز ۱۳۵ (مورد ۱۹ ROADMAP-ADDITIONS) — مدیریت توکن‌های API عمومی
+    ViewData["Title"] = HrT.T("توکن‌های API");
+    var tokens = (List<ApiToken>)ViewBag.Tokens;
+    var companies = (List<Company>)ViewBag.Companies;
+    var newToken = (string?)ViewBag.NewToken;
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("توکن‌های API عمومی")</h2>
+        <span class="hint">@HrT.T("دسترسی سامانه‌های دیگر به GET /api/v1/* با هدر X-Api-Token")</span>
+    </div>
+    <div class="card-b">
+        @if (!string.IsNullOrEmpty(newToken))
+        {
+            <div class="alert alert-warn">
+                <strong>@HrT.T("توکن تازه (فقط یک‌بار نمایش داده می‌شود):")</strong>
+                <code>@newToken</code>
+            </div>
+        }
+        <form method="post" action="/ApiTokens/Create" class="toolbar" data-ajax data-refresh>
+            <div class="fld"><label>@HrT.T("نام مصرف‌کننده")</label><input name="name" /></div>
+            <div class="fld"><label>@HrT.T("محدود به شرکت")</label>
+                <select name="scopeCompanyId">
+                    <option value="">@HrT.T("همهٔ شرکت‌ها")</option>
+                    @foreach (var c in companies)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-dark">@HrT.T("ساخت توکن")</button>
+        </form>
+        <p class="hint">@HrT.T("مثال: curl -H \"X-Api-Token: hrk_...\" http://host/api/v1/employees — نقاط انتهایی فعلی: /api/v1/employees، /api/v1/attendance، /api/v1/requests/pending، /api/v1/ping")</p>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("نام")</th>
+                        <th>@HrT.T("توکن (پیشوند)")</th>
+                        <th>@HrT.T("محدودیت شرکت")</th>
+                        <th>@HrT.T("وضعیت")</th>
+                        <th>@HrT.T("آخرین مصرف")</th>
+                        <th>@HrT.T("تعداد فراخوان")</th>
+                        <th>@HrT.T("عملیات")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in tokens)
+                    {
+                        <tr>
+                            <td><strong>@t.Name</strong></td>
+                            <td><code>@t.Prefix…</code></td>
+                            <td>@t.ScopeCompanyId</td>
+                            <td><span class="badge @(t.Revoked ? "badge-err" : "badge-ok")">@(t.Revoked ? HrT.T("باطل‌شده") : HrT.T("فعال"))</span></td>
+                            <td class="num">@(t.LastUsedAt is null ? "—" : Jalali.FmtFaLong(t.LastUsedAt.Value))</td>
+                            <td class="num">@Jalali.Num(t.RequestCount)</td>
+                            <td>
+                                @if (!t.Revoked)
+                                {
+                                    <form method="post" action="/ApiTokens/Revoke" class="inline-form" data-ajax data-refresh>
+                                        <input type="hidden" name="id" value="@t.Id" />
+                                        <button class="btn btn-sm btn-danger">@HrT.T("ابطال")</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

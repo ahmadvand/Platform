@@ -1,0 +1,14 @@
+@* فاز ۶۱ — usingهای ویوهای ماژول حضور: انواع پلتفرم از Platform.Core، entityهای
+   اختصاصی حضور از HrModules.Attendance.Domain و DTOهای قرارداد (AttShiftInfo و…)
+   از Platform.Contracts. کانتکست‌ها از ویو تزریق نمی‌شوند — کنترلر داده را در
+   Model/ViewBag می‌گذارد (AppDbContext هاست برای این اسمبلی دیدنی نیست).
+   Layout در زمان اجرا از هاست پیدا می‌شود (_Layout) — همان پوستهٔ سراسری. *@
+@using Platform.Web
+@using Platform.Web.Domain
+@using Platform.Web.Services
+@using Platform.Web.Infrastructure
+@using HrModules.Attendance.Domain
+@using Platform.Contracts
+@using Microsoft.EntityFrameworkCore
+@inject Platform.Web.Services.ICurrentUser Me
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

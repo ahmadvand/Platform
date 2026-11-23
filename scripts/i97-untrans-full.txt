@@ -1,0 +1,992 @@
+===== hr-lang-ar.json =====
+KEY::).
+EN::).
+---
+KEY::است.
+EN::.
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::ADMS پوش
+EN::ADMS push
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-ka.json =====
+KEY::).
+EN::).
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::پژو ۲۰۶
+EN::Peugeot 206
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::⬇ اکسل
+EN::⬇ Excel
+---
+KEY::(غیرفعال‌کردن، pollerها را موقتاً متوقف می‌کند بدون توقف سرویس)
+EN::(disabling temporarily stops the pollers without stopping the service)
+---
+KEY::ADMS پوش
+EN::ADMS push
+---
+KEY::دستگاه‌های مقصد * (با Ctrl چندتایی)
+EN::Destination devices * (multi-select with Ctrl)
+---
+KEY::رمز
+EN::PIN
+---
+KEY::وضعیت هویتی هر دستگاه
+EN::Per-device biometric status
+---
+KEY::ویرایش تنظیمات
+EN::Edit settings
+---
+KEY::پین
+EN::PIN
+---
+KEY::اضافه‌کاری ({0} دقیقه)
+EN::Overtime ({0} minutes)
+---
+KEY::انتخاب زیرمجموعه‌های سطح اول
+EN::Select first-level children
+---
+KEY::انتخاب فایل private.pem
+EN::Select the private.pem file
+---
+KEY::انتخاب همهٔ زیرمجموعه‌ها
+EN::Select all children
+---
+KEY::اگر private.pem را قبلاً در جای دیگری (LicenseStudio، LicenseGen یا نصب دیگر) ساخته‌اید، اینجا بارگذاری یا محتوایش را بچسبانید — کلید عمومی از دل آن استخراج و مجوزهای امضاشده با همان کلید روی این نصب پذیرفته می‌شود.
+EN::If you created private.pem elsewhere (LicenseStudio, LicenseGen or another installation), upload it here or paste its content — the public key is extracted from it and licenses signed with the same key are accepted on this installation.
+---
+KEY::محافظ صفحه
+EN::Screen saver
+---
+KEY::محافظ صفحه (باران ماتریکس)
+EN::Screen saver (matrix rain)
+---
+KEY::وضعیت محافظ صفحه
+EN::Screen saver state
+---
+KEY::روشن — پس از بی‌حرکتی اجرا شود
+EN::On — runs after idle time
+---
+KEY::خاموش — هرگز اجرا نشود
+EN::Off — never runs
+---
+KEY::دقایق بی‌حرکتی تا اجرا (۱ تا ۱۲۰)
+EN::Idle minutes before start (1–120)
+---
+KEY::بله — بازگشت به حالت عادی فقط با ورود رمز کاربر
+EN::Yes — returning to normal requires the user's password
+---
+KEY::خیر — با اولین حرکت بدون رمز جمع شود
+EN::No — collapses on first movement without password
+---
+KEY::ذخیرهٔ تنظیمات محافظ صفحه
+EN::Save screen saver settings
+---
+KEY::نکتهٔ امنیتی: محافظ صفحه یک قفل نمایشی است — پس از بیدارسازی، نشست همان کاربر ادامه می‌یابد و رمز فقط هویت همان کاربر دوباره تأیید می‌شود؛ برای قفل کامل، کاربر را از سامانه خارج کنید.
+EN::Security note: the screen saver is a display lock — after waking up, the same session continues and the password only re-verifies that user's identity; for a full lock, sign the user out.
+---
+KEY::محافظ صفحه فعال است
+EN::Screen saver is active
+---
+KEY::برای بازگشت به سامانه، ماوس را حرکت دهید یا کلیدی بزنید
+EN::Move the mouse or press a key to return
+---
+KEY::برای بازگشت به سامانه، رمز کاربر جاری را وارد کنید
+EN::Enter the current user's password to return
+---
+KEY::تأیید و بازگشت
+EN::Confirm & return
+---
+KEY::مدت بی‌حرکتی
+EN::Idle for
+---
+KEY::رمز تأیید شد
+EN::Password verified
+---
+KEY::رمز نادرست است — دوباره تلاش کنید
+EN::Wrong password — try again
+---
+KEY::نشست یافت نشد — دوباره وارد شوید
+EN::Session not found — please sign in again
+---
+KEY::کاربر یافت نشد — دوباره وارد شوید
+EN::User not found — please sign in again
+---
+KEY::نشست منقضی شده است — در حال انتقال به صفحهٔ ورود…
+EN::Session expired — redirecting to the login page…
+---
+KEY::تلاش‌های ناموفق زیاد است — {0} ثانیه دیگر دوباره تلاش کنید
+EN::Too many failed attempts — try again in {0} seconds
+---
+KEY::جبران روز تقویم قمری
+EN::Hijri calendar day offset
+---
+KEY::تطبیق نمایش قمری با تقویم رسمی کشور
+EN::Align lunar display with the country's official calendar
+---
+KEY::۲ روز جلوتر
+EN::2 days ahead
+---
+KEY::۱ روز جلوتر
+EN::1 day ahead
+---
+KEY::بدون جبران — دقیقاً ام‌القری (عربستان)
+EN::No offset — exactly Umm al-Qura (Saudi)
+---
+KEY::۱ روز عقب‌تر — رسمی ایران/افغانستان (پیشنهادی)
+EN::1 day behind — official Iran/Afghanistan (recommended)
+---
+KEY::۲ روز عقب‌تر
+EN::2 days behind
+---
+KEY::قالب برون‌بری تردد
+EN::Traffic export template
+---
+KEY::قالب‌های ذخیره‌شده
+EN::Saved templates
+---
+KEY::هنوز قالبی ساخته نشده — از ویرایشگر کنار، قالب اول را بسازید
+EN::No template yet — build your first one with the editor on the side
+---
+KEY::برون‌بری تاریخچهٔ تردد با قالب
+EN::Export traffic history with a template
+---
+KEY::قالب *
+EN::Template *
+---
+KEY::انتخاب قالب
+EN::Select template
+---
+KEY::از تاریخ (میلادی ISO)
+EN::From date (Gregorian ISO)
+---
+KEY::تا تاریخ (میلادی ISO)
+EN::To date (Gregorian ISO)
+---
+KEY::خروجی CSV با کدگذاری UTF-8 (سازگار با Excel) طبق ستون‌ها و قالب تاریخ/زمانِ قالب انتخابی — شامل قالب لینوکسی (Linux timestamp)، شمسی، میلادی و قمری. بازه پیش‌فرض ۳۰ روز اخیر است.
+EN::CSV output in UTF-8 (Excel-friendly) using the selected template's columns and date/time formats — including Linux timestamp, Jalali, Gregorian and Hijri. Default range: last 30 days.
+---
+KEY::دریافت فایل برون‌بری
+EN::Download export file
+---
+KEY::قالب جدید
+EN::New template
+---
+KEY::ویرایش قالب: {0}
+EN::Edit template: {0}
+---
+KEY::نام قالب *
+EN::Template name *
+---
+KEY::مثلاً قالب نرم‌افزار انبار
+EN::e.g. Warehouse software template
+---
+KEY::یادداشت (اختیاری)
+EN::Note (optional)
+---
+KEY::مقصد یا توضیح قالب
+EN::Destination or description
+---
+KEY::جداکنندهٔ فایل
+EN::File delimiter
+---
+KEY::پیامک
+EN::SMS
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-ky.json =====
+KEY::wildcard
+EN::Wildcard
+---
+KEY::ایمیل
+EN::Email
+---
+KEY::).
+EN::).
+---
+KEY::API Key پیامک
+EN::SMS API Key
+---
+KEY::است.
+EN::.
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::پژو ۲۰۶
+EN::Peugeot 206
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::⬇ اکسل
+EN::⬇ Excel
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-prs.json =====
+KEY::).
+EN::).
+---
+KEY::این ماژول همان کارکرد سرویس ویندوزی
+EN::This module is the same as the Windows service functionality
+---
+KEY::این مجوز با «حالت اجرای قفل سخت» (lock) صادر شده است — تا ورود مجوز معتبر، صفحه‌های سامانه در دسترس نیستند (API و پل دستگاه‌ها برای سلامت داده‌ها باز می‌مانند). لطفاً مجوز جدید را در صفحهٔ «مجوز نصب» وارد کنید: فایل درخواست (.hrreq) را از همان صفحه دانلود و برای صدور مجوز جدید به تولیدکننده ارسال کنید.
+EN::This license was issued with 'Hard Lock' mode — until a valid license is entered, the system pages are not accessible (API and device bridges remain open for data integrity). Please enter the new license on the 'Installation License' page: download the request file (.hrreq) from that page and send it to the manufacturer to issue a new license.
+---
+KEY::این مجوز با «حالت اجرای قفل سخت» صادر شده است؛ تا ورود مجوز معتبر، صفحه‌های سامانه بسته می‌مانند.
+EN::This license was issued with 'Hard Lock' mode; until a valid license is entered, the system pages remain closed.
+---
+KEY::این پرسنل به کاربر
+EN::This staff is connected to user
+---
+KEY::این پرسنل حساب کاربری ندارد و همه کاربران فعال به پرسنل دیگر متصل‌اند — حساب جدید را از صفحه «کاربران و نقش‌ها» بسازید.
+EN::This staff member has no user account and all active users are connected to other staff members — create a new account from the 'Users and Roles' page.
+---
+KEY::این کد همان «پین» ثبت‌شده روی دستگاه‌های تردد است — با احتیاط تغییر دهید
+EN::This code is the same 'PIN' registered on the attendance devices — change with caution
+---
+KEY::با اتصال پرسنل، این فیلد خودکار از شرکت پرسنل پر می‌شود
+EN::By connecting staff, this field is automatically filled from the staff company
+---
+KEY::با اتصال، اطلاعات پرسنل (کد پرسنلی، واحد، کارکرد و فیش حقوقی) به این حساب کاربری پیوند می‌خورد و کاربر می‌تواند «پرتال من» را ببیند. پس از اتصال، ورود با کد پرسنلی برای این شخص مسدود می‌شود و باید با نام کاربری و رمز عبور وارد شود.
+EN::By connecting, staff information (staff code, department, hours worked and payslip) is linked to this user account and the user can view 'My Portal'. After connection, login with staff code is blocked for this person and they must login with username and password.
+---
+KEY::با تأیید، رکورد تردد بازنویسی می‌شود. مطمئنید؟
+EN::By confirming, the attendance record will be overwritten. Are you sure?
+---
+KEY::بارگذاری لوگو
+EN::Upload logo
+---
+KEY::بارگذاری/تعویض عکس پروفایل
+EN::Upload/replace profile photo
+---
+KEY::باز
+EN::Open
+---
+KEY::باز دائم /
+EN::Open permanent /
+---
+KEY::بازنشانی رمز
+EN::Reset Password
+---
+KEY::بازه: {0} تا {1}
+EN::Range: {0} to {1}
+---
+KEY::بازکردن راهبند از راه دور
+EN::Open Barrier Remotely
+---
+KEY::بازگشایی
+EN::Reopening
+---
+KEY::باطل:
+EN::Void:
+---
+KEY::بالاتر = برنده در تعارض کد یکسان
+EN::Higher = Winner in same code conflict
+---
+KEY::بانک جدید به‌صورت خودکار آماده و فعال می‌شود؛ داده‌های بانک فعلی دست‌نخورده می‌مانند.
+EN::New bank is automatically prepared and activated; current bank data remains untouched.
+---
+KEY::بخش: {0}
+EN::Section: {0}
+---
+KEY::بدون اتصال
+EN::No Connection
+---
+KEY::بدون انقضا
+EN::No Expiry
+---
+KEY::بدون رند (ریال)
+EN::No Round (Rial)
+---
+KEY::بدون سابقه
+EN::No History
+---
+KEY::بدون شرکت
+EN::No Company
+---
+KEY::بدون شیفت:
+EN::No Shift:
+---
+KEY::بدون محدودیت
+EN::No Limit
+---
+KEY::بدون نیاز به ری‌استارت برنامه
+EN::No need to restart the application
+---
+KEY::بدون نیاز به نصب سرویس جداگانه و بدون حساب سرویس پل.
+EN::No need to install separate service and without service account bridge.
+---
+KEY::بدون پالت — بازگشت به رنگ‌های اصلی نرم‌افزار
+EN::No Palette — Return to original software colors
+---
+KEY::بدون گیت
+EN::No Gate
+---
+KEY::برای استفاده از «پرتال من» (کارکرد، درخواست‌ها و فیش حقوقی) حساب کاربری شما باید به یک ردیف پرسنل متصل باشد.
+EN::To use 'My Portal' (work hours, requests and payslip) your user account must be linked to a personnel record.
+---
+KEY::برای افزودن این قابلیت، با تأمین‌کنندهٔ سامانه تماس بگیرید تا بستهٔ شامل این ماژول (یا مجوز جدید با فهرست ماژول‌ها) ارائه شود. نصب بستهٔ جدید داده‌های فعلی را دست‌نخورده نگه می‌دارد.
+EN::To add this feature, contact the system provider to provide the package containing this module (or new license with module list). Installing the new package keeps current data untouched.
+---
+KEY::برای امضای فایل مجوز استفاده می‌شود.
+EN::Used to sign license file.
+---
+KEY::برای این شرکت هنوز قلمی تعریف نشده است
+EN::No font defined for this company yet
+---
+KEY::برای این شرکت هنوز واحدی تعریف نشده است
+EN::No unit defined for this company yet
+---
+KEY::برای این شرکت پستی تعریف نشده است
+EN::No postal defined for this company yet
+---
+KEY::برای این شرکت/سال هنوز محاسبه‌ای انجام نشده — دکمه «محاسبه» را بزنید
+EN::No calculation done for this company/year — click 'Calculate' button
+---
+KEY::برای این شرکت/سال پارامتری ثبت نشده است
+EN::No parameter registered for this company/year
+---
+KEY::برای این ماه رکوردی ثبت نشده است.
+EN::No record registered for this month.
+---
+KEY::برای تغییر وضعیت ماژول‌ها دسترسی «settings.manage» لازم است.
+EN::Access 'settings.manage' is required to change module status.
+---
+KEY::برای مدیریت قواعد و تنظیمات اعلان دسترسی کافی ندارید (فقط مشاهده).
+EN::You don't have sufficient access to manage notification rules and settings (view only).
+---
+KEY::برای مشاهده فیش‌ها، یک لیست حقوق انتخاب کنید
+EN::To view payslips, select a payroll list
+---
+KEY::برای ورود مجوز باید با حساب «مدیر ارشد سیستم» وارد شوید —
+EN::You must login with 'Senior System Admin' account to enter license —
+---
+KEY::برای ویرایش تنظیمات دسترسی کافی ندارید (فقط مشاهده — مجوز لازم: settings.manage).
+EN::You don't have sufficient access to edit settings (view only — required permission: settings.manage).
+---
+KEY::بررسی ممکن نشد
+EN::Verification failed
+---
+KEY::بررسی‌کننده
+EN::Approver
+---
+KEY::برنامه زمانی
+EN::Schedule
+---
+KEY::برنامه زمانی گیت — {0}
+EN::Gate Schedule — {0}
+---
+KEY::برنامهٔ LicenseStudio (دکمهٔ ساخت جفت‌کلید)،
+EN::LicenseStudio program (key pair creation button),
+---
+KEY::برند
+EN::Brand
+---
+KEY::بفرستد و ورود/خروج خودکار ثبت شود.
+EN::Send and entry/exit will be recorded automatically.
+---
+KEY::بفرستند؛ موتور مجوز به‌طور
+EN::Send; license engine will
+---
+KEY::بله، اعمال کن
+EN::Yes, Apply
+---
+KEY::بله، خاموش کن
+EN::Yes, Turn Off
+---
+KEY::بله، روشن کن
+EN::Yes, Turn On
+---
+KEY::بلوک‌ها را بکشید و رها کنید یا دستی بنویسید — مثال:
+EN::Drag and drop blocks or type manually — example:
+---
+KEY::به اقلام قبلی دسترسی دارد.
+EN::Has access to previous items.
+---
+KEY::به پل وصل می‌شوند:
+EN::Connect to the bridge:
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-ps.json =====
+KEY::).
+EN::).
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-tg.json =====
+KEY::ویندوز (Integrated)
+EN::Windows (Integrated)
+---
+KEY::).
+EN::).
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::پولر:
+EN::Poller:
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::ADMS پوش
+EN::ADMS push
+---
+KEY::رمز
+EN::PIN
+---
+KEY::پیامک
+EN::SMS
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-tk.json =====
+KEY::اپراتور
+EN::Operator
+---
+KEY::پورت
+EN::Port
+---
+KEY::سریال
+EN::Serial
+---
+KEY::).
+EN::).
+---
+KEY::است.
+EN::.
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::د
+EN::D
+---
+KEY::مدل
+EN::Model
+---
+KEY::مدل ۹۷
+EN::Model 97
+---
+KEY::پرسنل: {0}
+EN::Personnel: {0}
+---
+KEY::پژو ۲۰۶
+EN::Peugeot 206
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::○ آفلاین
+EN::○ Offline
+---
+KEY::● آنلاین
+EN::● Online
+---
+KEY::♻️ آنلاین
+EN::♻️ Online
+---
+KEY::قمری (هجری قمری)
+EN::Hijri (Lunar)
+---
+KEY::نرمال
+EN::Normal
+---
+KEY::آفلاین:
+EN::Offline:
+---
+KEY::آنلاین:
+EN::Online:
+---
+KEY::سریال:
+EN::Serial:
+---
+KEY::پین
+EN::PIN
+---
+KEY::ISO میلادی — 2026-01-24
+EN::Gregorian ISO — 2026-01-24
+---
+KEY::میلادی — 2026/01/24
+EN::Gregorian — 2026/01/24
+---
+KEY::ون
+EN::Van
+---
+KEY::پیامک
+EN::SMS
+---
+KEY::آرگومان
+EN::Argument
+---
+KEY::منفی ({0})
+EN::negative ({0})
+---
+KEY::{0} مگابایت
+EN::{0} MB
+---
+KEY::{0} کیلوبایت
+EN::{0} KB
+---
+KEY::QR
+EN::QR
+---
+===== hr-lang-uz.json =====
+KEY::لوگو
+EN::Logo
+---
+KEY::اپراتور
+EN::Operator
+---
+KEY::پورت
+EN::Port
+---
+KEY::ویندوز (Integrated)
+EN::Windows (Integrated)
+---
+KEY::wildcard
+EN::Wildcard
+---
+KEY::ایمیل
+EN::Email
+---
+KEY::).
+EN::).
+---
+KEY::است.
+EN::.
+---
+KEY::اضافه‌کاری:
+EN::Overtime:
+---
+KEY::اکسل
+EN::Excel
+---
+KEY::ایمیل + پیامک
+EN::Email + SMS
+---
+KEY::حداقل ۸ کاراکتر شامل حرف بزرگ، کوچک و عدد
+EN::Minimum 8 characters including uppercase, lowercase, and number
+---
+KEY::حداقل ۸ کاراکتر شامل حرف و عدد و حروف بزرگ/کوچک — رمز جدید نباید با رمز فعلی یا ۳ رمز اخیر یکسان باشد
+EN::Minimum 8 characters including letter, number, and uppercase/lowercase — New password must not be same as current or last 3 passwords
+---
+KEY::حذف این قاعده اعلان؟
+EN::Delete this notification rule?
+---
+KEY::حذف جفت‌کلید
+EN::Delete Key Pair
+---
+KEY::حذف عکس فعلی
+EN::Delete Current Photo
+---
+KEY::حذف عکس فعلی (بازگشت به آواتار حرفی)
+EN::Delete Current Photo (Return to Letter Avatar)
+---
+KEY::حذف فیلتر
+EN::Remove Filter
+---
+KEY::حذف لوگو و بازگشت به نشان پیش‌فرض
+EN::Remove logo and revert to default icon
+---
+KEY::حذف واحد «{0}»؟ — در صورت داشتن زیرمجموعه، پست یا پرسنل، حذف رد می‌شود
+EN::Remove unit '{0}'? — If it has subunits, positions or personnel, removal will be rejected
+---
+KEY::حذف پارامتر «{0}»؟
+EN::Remove parameter '{0}'?
+---
+KEY::حذف پست «{0}»؟ — در صورت داشتن پرسنل، حذف رد می‌شود
+EN::Remove position '{0}'? — If it has personnel, removal will be rejected
+---
+KEY::حذف پیش‌نویس‌ها
+EN::Delete drafts
+---
+KEY::حذف گروه
+EN::Delete group
+---
+KEY::حذف گروه؟ همه اعضا و گیت‌های متصل به آن از گروه خارج می‌شوند
+EN::Delete group? All members and gates connected to it will be removed from the group
+---
+KEY::حساب شما به پرسنلی متصل نیست
+EN::Your account is not linked to any personnel
+---
+KEY::حساب کاربری
+EN::Account
+---
+KEY::حق مسکن
+EN::Housing allowance
+---
+KEY::حق مسکن ماهانه
+EN::Monthly housing allowance
+---
+KEY::حق نشر
+EN::Copyright
+---
+KEY::حق پارکینگ ماهانه (ریال — ۰ = رایگان)
+EN::Monthly parking fee (Rial — 0 = Free)
+---
+KEY::حق پارکینگ:
+EN::Parking fee:
+---
+KEY::حقوق
+EN::Salary
+---
+KEY::حقوق پایه (ریال)
+EN::Base salary (Rial)
+---
+KEY::حل شد
+EN::Resolved
+---
+KEY::حلقهٔ دوربین پلاک‌خوان
+EN::License plate camera ring
+---
+KEY::حلقهٔ ضربان
+EN::Heart rate ring
+---
+KEY::حل‌شده
+EN::Resolved
+---
+KEY::خارج از بازه‌ی برنامه، تردد از این گیت مجاز نیست. خالی‌گذاشتن روزها یعنی همه روزها.
+EN::Outside the scheduled time, passage through this gate is not allowed. Leaving days empty means all days.
+---
+KEY::خالص
+EN::Net
+---
+KEY::خالی = ایمیل مدیران از تنظیمات
+EN::Empty = Admin emails from settings
+---
+KEY::خالی بگذارید تا تغییر نکند
+EN::Leave empty to keep unchanged
+---
+KEY::خاموش
+EN::Off
+---
+KEY::خاموش‌کردن دوعاملی
+EN::Disable two-factor authentication
+---
+KEY::خروج اصلاحی
+EN::Corrected exit
+---
+KEY::خروج درخواستی
+EN::Requested exit
+---
+KEY::خروج زودتر
+EN::Early exit
+---
+KEY::خروج واقعی من
+EN::My actual exit
+---
+KEY::خروج:
+EN::Exit:
+---
+KEY::خروجی ➡
+EN::Output ➡
+---
+KEY::خطا در بررسی سرویس خارجی
+EN::Error checking external service
+---
+KEY::خطاهای شیت تردد:
+EN::Sheet traffic errors:
+---
+KEY::خطای آخر
+EN::Last error
+---
+KEY::خطای شبکه
+EN::Network error
+---
+KEY::خطای غیرمنتظره
+EN::Unexpected error
+---
+KEY::خنثی
+EN::Neutral
+---
+KEY::خواندن
+EN::Read
+---
+KEY::خوانده می‌شود (همان منبع سرویس خارجی)؛
+EN::Read from (same as external service source);
+---
+KEY::خوانش امروز
+EN::Today's reading
+---
+KEY::خوانش امروز دوربین‌ها
+EN::Today's camera reading
+---
+KEY::خوانش خودکار امروز
+EN::Today's automatic reading
+---
+KEY::خوانش خودکار پلاک امروز
+EN::Today's automatic plate reading
+---
+KEY::خوداتکا:
+EN::Self-service:
+---
+KEY::خودرو
+EN::Vehicle
+---
+KEY::خودرو *
+EN::Vehicle *
+---
+KEY::خودرو داخل پارکینگ
+EN::Vehicle inside parking
+---
+KEY::د
+EN::D
+---
+KEY::سنوات
+EN::Seniority
+---
+KEY::شناسه
+EN::ID
+---
+KEY::فرمول
+EN::Formula
+---
+KEY::فرمول *
+EN::Formula *
+---
+KEY::مدل
+EN::Model
+---
+KEY::پژو ۲۰۶
+EN::Peugeot 206
+---
+KEY::۱۴۰۵/۰۷/۲۸
+EN::1405/07/28
+---
+KEY::⬇ اکسل
+EN::⬇ Excel
+---
+KEY::میلادی (گرگوری)
+EN::Gregorian
+---
+KEY::قمری (هجری قمری)
+EN::Hijri (Lunar)
+---
+KEY::ذخیرهٔ نوع تقویم
+EN::Save calendar type
+---
+KEY::نحوهٔ نمایش تاریخ‌ها در لیست‌ها، داشبورد و گزارش‌ها عوض می‌شود؛ داده‌ها و کلیدهای تاریخ دست‌نخورده می‌مانند و محاسبات حضور/تعطیلات طبق قواعد خودش ادامه می‌یابد.
+EN::Only how dates are displayed in lists, dashboards and reports changes; data and date keys stay untouched and attendance/holiday calculations follow their own rules.
+---
+KEY::تقویم نمایشی به میلادی تغییر کرد و در کل سامانه اعمال شد
+EN::Display calendar switched to Gregorian and applied across the system
+---
+KEY::تقویم نمایشی به قمری تغییر کرد و در کل سامانه اعمال شد
+EN::Display calendar switched to Hijri and applied across the system
+---
+KEY::تقویم نمایشی به شمسی بازگشت و در کل سامانه اعمال شد
+EN::Display calendar switched back to Jalali and applied across the system
+---
+KEY::نوع تقویم معتبر نیست
+EN::Invalid calendar type
+---
+KEY::داده‌های هویتی دستگاه‌ها
+EN::Device biometric data
+---
+KEY::تعریف دستگاه جدید
+EN::New device
+---
+KEY::ویرایش دستگاه — {0}
+EN::Edit device — {0}
+---
+KEY::⏸ توقف دستگاه
+EN::⏸ Pause device
+---
+KEY::▶ فعال‌سازی
+EN::▶ Activate
+---
+KEY::اجرا شد
+EN::Executed
+---
+KEY::ناموفق
+EN::Failed
+---
+KEY::تحویل شد
+EN::Delivered
+---
+KEY::در صف
+EN::Queued
+---
+KEY::دریافت هویتی همه پرسنل «{0}»؟
+EN::Fetch biometrics of all personnel from «{0}»?
+---
+KEY::دستگاه‌های مقصد
+EN::Target devices
+---
+KEY::انتخاب/حذف همه پرسنل
+EN::Select/remove all personnel
+---
+KEY::نام دستگاه
+EN::Device name
+---
+KEY::⟳ تولید
+EN::⟳ Generate
+---
+KEY::آدرس IP
+EN::IP address
+---
+KEY::حالت اتصال
+EN::Connection mode
+---
+KEY::پورت پروتکل دستگاه
+EN::Device protocol port
+---
+KEY::کلید ارتباطی (CommKey)
+EN::Comm key
+---
+KEY::ثبت دستگاه
+EN::Register device
+---
+KEY::هنوز گیت‌وی تنظیمات را دریافت نکرده است
+EN::Gateway has not fetched configuration yet
+---
+KEY::همین حالا
+EN::Just now
+---
+KEY::{0} دقیقه پیش
+EN::{0} minutes ago
+---
+KEY::● متصل
+EN::● Connected
+---
+KEY::آخرین دریافت کانفیگ:
+EN::Last config fetch:
+---
+KEY::وضعیت پایش
+EN::Monitoring status
+---
+KEY::پورت پل ADMS
+EN::ADMS bridge port
+---
+KEY::تأیید شده
+EN::Approved
+---
+KEY::رد شده
+EN::Rejected
+---
+KEY::در انتظار تأیید
+EN::Pending approval
+---
+KEY::خارج شده
+EN::Checked out
+---
+KEY::موقت
+EN::Temporary
+---
+KEY::آزاد
+EN::Free
+---
+KEY::گمشده
+EN::Lost
+---
+KEY::باطل
+EN::Revoked
+---
+KEY::نرمال
+EN::Normal
+---
+KEY::رسمی
+EN::Permanent
+---
+KEY::قراردادی
+EN::Contractual
+---
+KEY::پیمانکاری
+EN::Contractor
+---
+KEY::اقماری
+EN::Seasonal
+---
+KEY::کارآموز
+EN::Intern
+---
+KEY::مثال: ترمینال اثر انگشت ورودی اصلی
+EN::e.g. Main entrance fingerprint terminal
+---
+KEY::تولید سریال جدید بر اساس برند و مدل
+EN::Generate a new serial from brand and model
+---
+KEY::(پیشنهاد خودکار)
+EN::(auto-suggested)
+---
+KEY::مثال: ورودی اصلی سایت
+EN::e.g. Site main entrance
+---
+KEY::پیش‌فرض گیت‌وی (4370)
+EN::Gateway default (4370)
+---
+KEY::پیش‌فرض گیت‌وی (0)
+EN::Gateway default (0)
+---
+KEY::توکن اتصال دستگاه جدید شود؟ (اتصال فعلی قطع و دوباره وصل می‌شود)
+EN::Rotate device connection token? (current connection drops and reconnects)
+---
+KEY::ترددهای ثبت‌شده روی دستگاه آفلاین — در انتظار دریافت دسته‌ای
+EN::Events stored on offline device — waiting for bulk fetch
+---
+KEY::کاربر «{0}» از دستگاه «{1}» حذف شود؟
+EN::Remove user «{0}» from device «{1}»?
+---
+KEY::ADMS / PUSH — دستگاه به سرور متصل می‌شود
+EN::ADMS / PUSH — device connects to the server
+---
+KEY::ADMS پوش
+EN::ADMS push
+---
+KEY::رمز
+EN::PIN
+---
+KEY::پین
+EN::PIN
+---
+KEY::تب (Tab)
+EN::Tab
+---
+KEY::سواری
+EN::Sedan
+---
+KEY::ون
+EN::Van
+---
+KEY::پاسپورت
+EN::Passport
+---
+KEY::پیامک
+EN::SMS
+---
+KEY::آرگومان
+EN::Argument
+---
+KEY::{0} مگابایت
+EN::{0} MB
+---
+KEY::{0} کیلوبایت
+EN::{0} KB
+---
+KEY::QR
+EN::QR
+---

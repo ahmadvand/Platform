@@ -1,0 +1,54 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "autumn park landscape colorful fall trees red orange yellow leaves"
+✅ Got 6 images
+{
+  "success": true,
+  "query": "autumn park landscape colorful fall trees red orange yellow leaves",
+  "count": 6,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3dbbe568e2f1.jpg",
+      "caption": "",
+      "source": "Gardener's Path",
+      "original_width": "1200px",
+      "original_height": "800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/23136f287981.jpg",
+      "caption": "",
+      "source": "Backyard Boss",
+      "original_width": "1600px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/859dcb07d073.jpeg",
+      "caption": "",
+      "source": "The Martha Stewart Blog",
+      "original_width": "1928px",
+      "original_height": "2560px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a196d7f08d66.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/72e395100145.jpg",
+      "caption": "",
+      "source": "Homes and Gardens",
+      "original_width": "1200px",
+      "original_height": "675px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b89470ef01d.jpg",
+      "caption": "",
+      "source": "Plants Express",
+      "original_width": "1800px",
+      "original_height": "1000px"
+    }
+  ]
+}

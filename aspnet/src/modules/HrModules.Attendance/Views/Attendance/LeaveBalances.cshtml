@@ -1,0 +1,66 @@
+@{
+    // فاز ۱۳۱ (مورد ۸ ROADMAP-ADDITIONS) — صورت‌وضعیت ماندهٔ مرخصی
+    ViewData["Title"] = HrT.T("ماندهٔ مرخصی");
+    var rows = (List<LeaveBalanceRow>)Model;
+    var q = (string)ViewBag.Q;
+    var totalAnnualRemain = (decimal)ViewBag.TotalAnnualRemain;
+    var totalSickRemain = (decimal)ViewBag.TotalSickRemain;
+    var driftCount = (int)ViewBag.DriftCount;
+
+    string Fmt(decimal d) => d.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+}
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("صورت‌وضعیت ماندهٔ مرخصی")</h2>
+        <form method="get" class="toolbar">
+            <div class="fld"><label>@HrT.T("جستجو")</label><input name="q" value="@q" placeholder="@HrT.T("نام یا کد پرسنلی")" /></div>
+            <button class="btn btn-dark">@HrT.T("جستجو")</button>
+        </form>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("ماندهٔ استحقاقی مجموع:") <b>@Fmt(totalAnnualRemain)</b></span>
+            <span class="chip">@HrT.T("ماندهٔ استعلاجی مجموع:") <b>@Fmt(totalSickRemain)</b></span>
+            <span class="chip">@HrT.T("پرسنل دارای رانش مانده:") <b>@Jalali.Num(driftCount)</b></span>
+        </div>
+        <p class="hint">@HrT.T("ستون «مصرف در سامانه» از درخواست‌های تأییدشده محاسبه می‌شود؛ اختلافش با «مصرف‌شده» یعنی ماندهٔ پرسنل خارج از درخواست‌های سامانه (ورود گروهی/ویرایش دستی) تغییر کرده — با ⚠️ مشخص می‌شود. از فاز ۱۳۱ تأیید هر مرخصی، مانده را خودکار کم می‌کند (استحقاقی/ساعتی از سالانه با مبنای ۸ ساعت در روز، استعلاجی از ساعتی).")</p>
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th>@HrT.T("کد پرسنلی")</th>
+                    <th>@HrT.T("نام")</th>
+                    <th>@HrT.T("دپارتمان")</th>
+                    <th>@HrT.T("حق استحقاقی")</th>
+                    <th>@HrT.T("مصرف‌شده")</th>
+                    <th>@HrT.T("مصرف در سامانه")</th>
+                    <th>@HrT.T("مانده")</th>
+                    <th>@HrT.T("حق استعلاجی")</th>
+                    <th>@HrT.T("مصرف استعلاجی")</th>
+                    <th>@HrT.T("مانده استعلاجی")</th>
+                    <th>@HrT.T("وضعیت")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in rows)
+                {
+                    var remainA = r.AnnualEnt - r.AnnualUsed;
+                    var remainS = r.SickEnt - r.SickUsed;
+                    var drift = Math.Abs(r.AnnualUsed - r.AnnualApproved) > 0.01m || Math.Abs(r.SickUsed - r.SickApproved) > 0.01m;
+                    <tr>
+                        <td>@r.Code</td>
+                        <td>@r.Name @(drift ? "⚠️" : "")</td>
+                        <td>@r.Dept</td>
+                        <td>@Fmt(r.AnnualEnt)</td>
+                        <td>@Fmt(r.AnnualUsed)</td>
+                        <td>@Fmt(r.AnnualApproved)</td>
+                        <td><b>@Fmt(remainA)</b></td>
+                        <td>@Fmt(r.SickEnt)</td>
+                        <td>@Fmt(r.SickUsed)</td>
+                        <td>@Fmt(remainS)</td>
+                        <td>@r.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

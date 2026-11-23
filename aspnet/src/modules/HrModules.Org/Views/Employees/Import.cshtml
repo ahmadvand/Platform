@@ -1,0 +1,144 @@
+@{
+    ViewBag.Title = HrT.T("ورود گروهی از اکسل");
+    var res = ViewBag.Result as ExcelImport.ImportResult<ExcelImport.PersonRow>;
+    var resAtt = ViewBag.ResultAtt as ExcelImport.ImportResult<ExcelImport.AttendanceRow>;
+    var rowsJson = ViewBag.RowsJson as string ?? "";
+    var rowsJsonAtt = ViewBag.RowsJsonAtt as string ?? "";
+    var deptCodes = (List<string>?)ViewBag.DeptCodes ?? new();
+}
+
+<div class="card">
+    <div class="card-h">
+        <h2>@HrT.T("📥 ورود گروهی پرسنل از اکسل")</h2>
+        <a class="btn btn-sm" href="/Employees/ImportTemplate">@HrT.T("⬇ دانلود قالب استاندارد")</a>
+    </div>
+    <div class="card-b">
+        <div class="chips">
+            <span class="chip">@HrT.T("📋 شیت «پرسنل»: کد پرسنلی، نام، نام خانوادگی، کد ملی، نوع استخدام، واحد، تلفن، ایمیل، حقوق، تاریخ استخدام جلالی")</span>
+            <span class="chip">@HrT.T("✔ حداکثر ۵۰۰ ردیف در هر بار")</span>
+            <span class="chip">@HrT.T("✔ اعتبارسنجی چک‌سام کد ملی و تکراری‌ها")</span>
+        </div>
+
+        @if (res is null)
+        {
+            <form method="post" asp-action="ImportPreview" enctype="multipart/form-data" style="margin-top:8px">
+                @Html.AntiForgeryToken()
+                <div class="fld" style="max-width:420px">
+                    <label>@HrT.T("فایل اکسل (xlsx) را انتخاب کنید")</label>
+                    <input type="file" name="file" accept=".xlsx" required />
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-primary">@HrT.T("🔍 بررسی و پیش‌نمایش")</button>
+                    <a class="btn" href="/Employees">@HrT.T("بازگشت")</a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <h3 style="font-size:13px;margin:6px 0 10px">@HrT.T("نتیجه بررسی فایل")</h3>
+            <div class="stat-grid">
+                <div class="stat c-ok"><div class="ic">✔</div><div><div class="v">@res.Rows.Count</div><div class="l">@HrT.T("ردیف معتبر")</div></div></div>
+                <div class="stat c-err"><div class="ic">✖</div><div><div class="v">@res.Errors.Count</div><div class="l">@HrT.T("خطا")</div></div></div>
+                <div class="stat c-warn"><div class="ic">⚠</div><div><div class="v">@res.Warnings.Count</div><div class="l">@HrT.T("هشدار")</div></div></div>
+            </div>
+
+            @if (res.Errors.Count > 0)
+            {
+                <div class="toast toast-err" style="max-height:180px;overflow:auto">
+                    <b>@HrT.T("گزارش خطا (این ردیف‌ها ثبت نمی‌شوند):")</b><br />
+                    @foreach (var e in res.Errors) { <text>@e<br /></text> }
+                </div>
+            }
+            @if (res.Warnings.Count > 0)
+            {
+                <div class="toast toast-ok" style="background:var(--warn-bg);color:var(--warn);max-height:150px;overflow:auto">
+                    <b>@HrT.T("هشدارها:")</b><br />
+                    @foreach (var w in res.Warnings) { <text>@w<br /></text> }
+                </div>
+            }
+
+            @if (res.Rows.Count > 0)
+            {
+                <div class="table-wrap" style="max-height:300px">
+                    <table class="tbl">
+                        <thead><tr><th>@HrT.T("کد پرسنلی")</th><th>@HrT.T("نام")</th><th>@HrT.T("نام خانوادگی")</th><th>@HrT.T("کد ملی")</th><th>@HrT.T("نوع استخدام")</th><th>@HrT.T("تلفن")</th><th>@HrT.T("حقوق پایه")</th><th>@HrT.T("تاریخ استخدام")</th></tr></thead>
+                        <tbody>
+                            @foreach (var r in res.Rows)
+                            {
+                                <tr>
+                                    <td>@r.PersonnelCode</td><td>@r.FirstName</td><td>@r.LastName</td>
+                                    <td class="num">@r.NationalId</td><td>@r.EmploymentType</td>
+                                    <td class="num">@r.Phone</td><td class="num">@r.BaseSalary.ToString("0")</td>
+                                    <td class="num">@r.HireDateJ</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <form method="post" asp-action="ImportCommit" style="margin-top:12px">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="rowsJson" value="@Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(rowsJson))" />
+                    <div class="fld" style="max-width:420px;margin-bottom:10px">
+                        <label>@HrT.T("ثبت در شرکت *")</label>
+                        <select name="companyId" required>
+                            @foreach (var c in ViewBag.Companies as List<Company> ?? new List<Company>())
+                            {
+                                <option value="@c.Id">@c.Name (@c.Code)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary">@HrT.F("✅ ثبت {0} پرسنل", res.Rows.Count)</button>
+                        <a class="btn" href="/Employees/Import">@HrT.T("انصراف / فایل دیگر")</a>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <a class="btn" href="/Employees/Import">@HrT.T("فایل دیگر")</a>
+            }
+        }
+
+        @if (resAtt is not null && (resAtt.Rows.Count > 0 || resAtt.Errors.Count > 0))
+        {
+            <h3 style="font-size:13px;margin:14px 0 8px">@HrT.F("تردد تاریخی — {0} ردیف معتبر", resAtt.Rows.Count)</h3>
+            @if (resAtt.Errors.Count > 0)
+            {
+                <div class="toast toast-err" style="max-height:140px;overflow:auto">
+                    <b>@HrT.T("خطاهای شیت تردد:")</b><br />
+                    @foreach (var e in resAtt.Errors) { <text>@e<br /></text> }
+                </div>
+            }
+            <div class="table-wrap" style="max-height:220px">
+                <table class="tbl">
+                    <thead><tr><th>@HrT.T("کد پرسنلی")</th><th>@HrT.T("نام")</th><th>@HrT.T("تاریخ")</th><th>@HrT.T("ورود")</th><th>@HrT.T("خروج")</th><th>@HrT.T("کارکرد (دقیقه)")</th></tr></thead>
+                    <tbody>
+                        @foreach (var r in resAtt.Rows.Take(50))
+                        {
+                            <tr>
+                                <td>@r.PersonnelCode</td><td>@r.Name</td>
+                                <td class="num">@Jalali.Fmt(r.CheckIn)</td>
+                                <td class="num">@r.CheckIn.ToString("HH:mm")</td>
+                                <td class="num">@r.CheckOut.ToString("HH:mm")</td>
+                                <td class="num">@r.WorkMinutes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" asp-action="ImportAttendanceCommit" style="margin-top:10px">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="rowsJsonAtt" value="@Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(rowsJsonAtt))" />
+                <div class="btn-row"><button class="btn btn-dark">@HrT.T("✅ ثبت تردد تاریخی")</button></div>
+            </form>
+        }
+
+        @if (deptCodes.Count > 0)
+        {
+            <div style="margin-top:12px;color:var(--ink-3);font-size:11px">
+                @HrT.T("کدهای واحد سازمانی موجود:") @string.Join(" ، ", deptCodes.Take(15)) @(deptCodes.Count > 15 ? "…" : "")
+            </div>
+        }
+    </div>
+</div>

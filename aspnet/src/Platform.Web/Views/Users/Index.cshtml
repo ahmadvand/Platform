@@ -1,0 +1,256 @@
+@{
+    ViewData["Title"] = HrT.T("کاربران و نقش‌ها");
+    var users = (List<User>)ViewBag.Users;
+    var roles = (List<Role>)ViewBag.Roles;
+    var perms = (List<Permission>)ViewBag.Perms;
+    var depts = (List<HrDeptOption>)ViewBag.Depts;
+    var scopeRows = (Dictionary<string, RoleScope>)ViewBag.RoleScopes;
+    var coNames = ((List<Company>)ViewBag.Companies).ToDictionary(c => c.Id, c => c.Name);
+    var deptNames = depts.ToDictionary(d => d.Id, d => d.Name);
+    // برچسب کوتاه دامنهٔ رکوردی هر نقش (فاز ۷۴)
+    string ScopeBadgeFa(Role r)
+    {
+        if (!scopeRows.TryGetValue(r.Id, out var row)) return HrT.T("همه داده‌ها");
+        return row.Kind switch
+        {
+            "company" => row.RefId is not null && coNames.TryGetValue(row.RefId, out var cn) ? HrT.F("شرکت: {0}", cn) : HrT.T("شرکت خودم"),
+            "dept" => row.RefId is not null && deptNames.TryGetValue(row.RefId, out var dn) ? HrT.F("واحد: {0}", dn) : HrT.T("واحد خودم"),
+            "self" => HrT.T("فقط خودم"),
+            _ => HrT.T("همه داده‌ها"),
+        };
+    }
+    var canManage = Me.Get()!.Has("users.edit") || Me.Get()!.Has("users.reset") || Me.Get()!.Has("users.delete");
+    var canEdit = Me.Get()!.Has("users.edit");
+    var canReset = Me.Get()!.Has("users.reset");
+    var canDelete = Me.Get()!.Has("users.delete");
+    var canCreate = Me.Get()!.Has("users.create");
+    var canRoles = Me.Get()!.Has("roles.view");
+    var canRoleCreate = Me.Get()!.Has("roles.create");
+    var canRoleDelete = Me.Get()!.Has("roles.delete");
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("کاربران و نقش‌ها")</h1>
+        <div class="page-sub">@HrT.F("{0} کاربر · {1} نقش دسترسی · مدیریت حساب‌ها و محدودهٔ اختیار", Jalali.Num(users.Count), Jalali.Num(roles.Count))</div>
+    </div>
+</div>
+<div class="grid two-col" style="grid-template-columns:1.5fr 1fr" data-refresh-host>
+    <div class="card">
+        <div class="card-h">
+            <h2>@(HrT.F("کاربران سامانه ({0})", Jalali.Num(users.Count)))</h2>
+            @if (canCreate)
+            {
+                <a class="btn btn-primary" href="/Users/Create" data-modal="/Users/Create" data-modal-title="@HrT.T("ایجاد کاربر جدید")">＋ @HrT.T("کاربر جدید")</a>
+            }
+        </div>
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>@HrT.T("نام کاربری")</th><th>@HrT.T("نام کامل")</th><th>@HrT.T("شرکت")</th><th>@HrT.T("نقش‌ها")</th><th>@HrT.T("پرسنل مرتبط")</th>
+                        <th>@HrT.T("وضعیت")</th><th>@HrT.T("آخرین ورود")</th>
+                        @if (canManage)
+                        {
+                            <th>@HrT.T("عملیات")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var u in users)
+                    {
+                        var locked = u.LockedUntil is not null && u.LockedUntil > DateTime.Now;
+                        <tr>
+                            <td>
+                                <div style="display:flex;gap:8px;align-items:center">
+                                    @if (!string.IsNullOrEmpty(u.PhotoPath))
+                                    {
+                                        <img src="@u.PhotoPath" alt="" style="width:30px;height:30px;border-radius:9px;object-fit:cover;border:1px solid var(--line)" />
+                                    }
+                                    else
+                                    {
+                                        <span class="avatar avatar-sm">@Jalali.ToPersianDigits(u.FullName.Trim()[..1])</span>
+                                    }
+                                    <strong>@u.Username</strong>
+                                </div>
+                            </td>
+                            <td>@u.FullName</td>
+                            <td style="font-size:11px">@(u.Company?.Name ?? HrT.T("همه شرکت‌ها"))</td>
+                            <td>
+                                @foreach (var r in u.Roles)
+                                {
+                                    if (r.Role is null) { continue; }
+                                    var sb = ScopeBadgeFa(r.Role);
+                                    <span class="badge badge-info" title="@HrT.F("دامنهٔ رکوردی: {0}", sb)">@r.Role.Title</span>
+                                    @if (sb != HrT.T("همه داده‌ها"))
+                                    {
+                                        <span class="badge badge-warn" title="@HrT.T("دامنهٔ رکوردی نقش")">@sb</span>
+                                    }
+                                }
+                                @* فاز ۷۶ — نمای دسترسی‌های مؤثر (کلید users.view — خودِ این صفحه) *@
+                                <a class="btn btn-sm" href="/Users/Perms/@u.Id" title="@HrT.T("نمای دسترسی‌های مؤثر: نقش‌ها، کلیدهای باز و منشأ هر کلید")">🛡️ @HrT.T("دسترسی‌ها")</a>
+                            </td>
+                            <td>
+@{
+    var people = (Dictionary<string, HrPersonBrief>)ViewBag.People;
+    var linkedEmp = !string.IsNullOrEmpty(u.EmployeeId) ? people.GetValueOrDefault(u.EmployeeId!) : null;
+}
+                                @if (linkedEmp is not null)
+                                {
+                                    <span class="badge badge-info">@linkedEmp.PersonnelCode — @linkedEmp.FullName</span>
+                                    @if (canManage)
+                                    {
+                                        <form method="post" action="/Users/LinkEmployee" class="inline-form" style="display:inline"
+                                              data-confirm="@HrT.F("اتصال «{0}» از پرسنل «{1}» قطع شود؟", u.Username, linkedEmp.FullName)" data-ajax data-refresh>
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="userId" value="@u.Id" />
+                                            <input type="hidden" name="employeeId" value="" />
+                                            <button class="btn btn-sm btn-err" title="@HrT.T("قطع اتصال پرسنل")">✕</button>
+                                        </form>
+                                    }
+                                }
+                                else if (canManage)
+                                {
+                                    <a class="btn btn-sm" href="/Users/LinkEmployee?userId=@u.Id"
+                                       data-modal="/Users/LinkEmployee?userId=@u.Id"
+                                       data-modal-title="@HrT.F("اتصال پرسنل — {0}", u.Username)" title="@HrT.T("اتصال این کاربر به یک پرسنل")">🔗 @HrT.T("اتصال")</a>
+                                    <a class="btn btn-sm" href="/Users/Photo/@u.Id"
+                                       data-modal="/Users/Photo/@u.Id"
+                                       data-modal-title="@HrT.F("عکس پروفایل — {0}", u.Username)" title="@HrT.T("بارگذاری/تعویض عکس پروفایل")">🖼 @HrT.T("عکس")</a>
+                                }
+                                else
+                                {
+                                    <span style="color:var(--ink-3)">—</span>
+                                }
+                            </td>
+                            <td>
+                                @if (locked)
+                                {
+                                    <span class="badge badge-err">@(HrT.F("قفل تا {0}", Jalali.FmtTime(u.LockedUntil!.Value)))</span>
+                                }
+                                else
+                                {
+                                    <span class="badge @(u.IsActive ? "badge-ok" : "badge-mute")">@(u.IsActive ? HrT.T("فعال") : HrT.T("غیرفعال"))</span>
+                                }
+                            </td>
+                            <td class="num">@(u.LastLoginAt is null ? "—" : Jalali.FmtLong(u.LastLoginAt.Value))</td>
+                            @if (canManage)
+                            {
+                                <td>
+                                    <div class="btn-row">
+                                        @if (locked && canReset)
+                                        {
+                                            <form method="post" action="/Users/Unlock" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@u.Id" />
+                                                <button class="btn btn-sm btn-ok">🔓 @HrT.T("بازگشایی")</button>
+                                            </form>
+                                        }
+                                        @if (!u.IsSuperadmin && canEdit)
+                                        {
+                                            <form method="post" action="/Users/ToggleActive" class="inline-form" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@u.Id" />
+                                                <button class="btn btn-sm @(u.IsActive ? "btn-err" : "btn-ok")">@(u.IsActive ? HrT.T("غیرفعال") : HrT.T("فعال"))</button>
+                                            </form>
+                                        }
+                                        @if (canReset)
+                                        {
+                                            <form method="post" action="/Users/RevokeSessions" class="inline-form" data-confirm="@HrT.F("همه نشست‌های «{0}» لغو شود؟", u.Username)" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@u.Id" />
+                                                <button class="btn btn-sm">@HrT.T("قطع نشست‌ها")</button>
+                                            </form>
+                                            <form method="post" action="/Users/ResetPassword" class="inline-form" style="display:flex;gap:4px" data-confirm="@HrT.F("رمز «{0}» به مقدار واردشده تغییر کند؟ (حداقل ۸ کاراکتر، حرف بزرگ/کوچک و عدد)", u.Username)" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@u.Id" />
+                                                <input name="newPassword" placeholder="@HrT.T("رمز جدید")" style="width:110px;padding:4px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:11px" />
+                                                <button class="btn btn-sm">@HrT.T("بازنشانی رمز")</button>
+                                            </form>
+                                        }
+                                        @if (!u.IsSuperadmin && canDelete)
+                                        {
+                                            <form method="post" action="/Users/Delete/@u.Id" class="inline-form" data-confirm="@HrT.F("کاربر «{0}» برای همیشه حذف شود؟ نشست‌های او هم بسته می‌شوند و این عمل بازگشت‌پذیر نیست.", u.Username)" data-ajax data-refresh>
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-sm btn-err">🗑️ @HrT.T("حذف")</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <div class="card-h">
+                <h2>@(HrT.F("نقش‌ها و دسترسی‌ها ({0} نقش)", Jalali.Num(roles.Count)))</h2>
+                @if (canRoles && canRoleCreate)
+                {
+                    <a class="btn btn-primary" href="/Users/RoleForm" data-modal="/Users/RoleForm" data-modal-title="@HrT.T("ایجاد نقش جدید")">＋ @HrT.T("نقش جدید")</a>
+                }
+            </div>
+            <div class="card-b" style="padding:8px">
+                @* فاز ۷۷ — خلاصهٔ نقش‌ها؛ مدیریت کامل (جدول صفحه‌بندی‌شده + جستجو + درخت دسترسی‌ها) در صفحهٔ جداگانه *@
+                @{
+                    var summary = roles.Take(5).ToList();
+                }
+                @foreach (var r in summary)
+                {
+                    <div style="padding:7px 10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                        <strong>@r.Title</strong> <span class="badge badge-mute">@r.Name</span>
+                        <span class="badge badge-warn" title="@HrT.T("دامنهٔ رکوردی نقش")">@ScopeBadgeFa(r)</span>
+                        <span style="color:var(--ink-3);font-size:10.5px;margin-inline-start:auto">@(HrT.F("{0} دسترسی", Jalali.Num(r.Permissions.Count)))</span>
+                    </div>
+                }
+                @if (roles.Count > summary.Count)
+                {
+                    <div style="padding:7px 10px;color:var(--ink-3);font-size:11px">@(HrT.F("… و {0} نقش دیگر", Jalali.Num(roles.Count - summary.Count)))</div>
+                }
+                @if (roles.Count == 0)
+                {
+                    <div style="padding:10px;color:var(--ink-3);font-size:11.5px">— @HrT.T("هنوز نقشی ساخته نشده است")</div>
+                }
+                @if (canRoles)
+                {
+                    <div style="padding:10px">
+                        <a class="btn btn-primary btn-block" href="/Users/Roles">👔 @HrT.T("مدیریت کامل نقش‌ها — جدول، جستجو و درخت دسترسی‌ها")</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (canEdit)
+        {
+            <div class="card">
+                <div class="card-h"><h2>@HrT.T("تغییر نقش کاربر")</h2></div>
+                <form method="post" action="/Users/SetRoles" class="card-b" data-ajax data-refresh>
+                    @Html.AntiForgeryToken()
+                    <div class="fld" style="margin-bottom:10px"><label>@HrT.T("کاربر")</label>
+                        <select name="id">
+                            @foreach (var u in users.Where(x => !x.IsSuperadmin))
+                            {
+                                <option value="@u.Id">@u.Username — @u.FullName</option>
+                            }
+                        </select>
+                    </div>
+                    <div style="border:1px solid var(--line);border-radius:9px;padding:10px;margin-bottom:10px">
+                        @foreach (var r in roles)
+                        {
+                            <label style="display:flex;gap:7px;align-items:center;padding:3px 0;font-size:12px">
+                                <input type="checkbox" name="roleIds" value="@r.Id" />
+                                @r.Title
+                            </label>
+                        }
+                    </div>
+                    <button class="btn btn-primary btn-block">@HrT.T("ذخیره نقش‌ها")</button>
+                    <p style="color:var(--ink-3);font-size:11px;margin-top:8px">@HrT.T("تغییر نقش بلافاصله اعمال می‌شود. محدودیت داده (واحد/شرکت) از فرم ویرایش خود نقش تنظیم می‌شود.")</p>
+                </form>
+            </div>
+        }
+    </div>
+</div>

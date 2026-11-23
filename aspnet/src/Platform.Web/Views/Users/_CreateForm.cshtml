@@ -1,0 +1,99 @@
+@{
+    var roles = (List<Role>)ViewBag.Roles;
+    var freeEmployees = (List<HrPersonOption>)ViewBag.FreeEmployees;
+    var companies = (List<Company>)ViewBag.Companies;
+}
+<div data-modal-title="@HrT.T("ایجاد کاربر جدید")" hidden></div>
+<form method="post" action="/Users/Create" id="userForm" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+        💡 @HrT.T("پس از ثبت، کاربر می‌تواند با نام کاربری و رمز واردشده وارد شود. اتصال به پرسنل اختیاری است — فقط پرسنلی که حساب کاربری ندارند در فهرست هستند.")
+    </div>
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("نام کاربری") *</label>
+            <input name="username" id="fUsername" required dir="ltr" autocomplete="off"
+                   placeholder="@HrT.T("مثال: j.rezaei")" maxlength="60" />
+            <div class="hint">@HrT.T("فقط حروف لاتین، عدد، نقطه، خط تیره و زیرخط — بین ۳ تا ۶۰ کاراکتر")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("نام کامل") *</label>
+            <input name="fullName" required maxlength="120" placeholder="@HrT.T("مثال: جعفر رضایی")" />
+        </div>
+        <div class="fld"><label>@HrT.T("رمز عبور") *</label>
+            <input name="password" id="fPassword" type="password" required dir="ltr"
+                   autocomplete="new-password" />
+            <div class="hint">@HrT.T("حداقل ۸ کاراکتر شامل حرف بزرگ، کوچک و عدد")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("تکرار رمز عبور") *</label>
+            <input name="password2" type="password" required dir="ltr" autocomplete="new-password" />
+        </div>
+        <div class="fld"><label>@HrT.T("اتصال به پرسنل (اختیاری)")</label>
+            @* فاز ۱۱۴ — جستجوی زندهٔ سرور به‌جای لیست کامل پرسنل بدون حساب
+               (گروه‌بندی شرکت‌ها حذف شد؛ شرکت پرسنل خودکار اعمال می‌شود) *@
+            <div class="emp-picker" data-name="employeeId" data-min="1" data-url="/Ui/EmpSearch?free=1"
+                 data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+            <div class="hint">@(HrT.F("{0} پرسنل بدون حساب کاربری — کاربر، هم‌شرکت پرسنل می‌شود", Jalali.Num(freeEmployees.Count)))</div>
+        </div>
+        <div class="fld"><label>@HrT.T("شرکت (اگر پرسنلی متصل نشود)")</label>
+            <select name="companyId">
+                <option value="">— @HrT.T("همه شرکت‌ها (مدیر ارشد)") —</option>
+                @foreach (var c in companies)
+                {
+                    <option value="@c.Id">@c.Name (@c.Code)</option>
+                }
+            </select>
+            <div class="hint">@HrT.T("با اتصال پرسنل، این فیلد خودکار از شرکت پرسنل پر می‌شود")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("وضعیت")</label>
+            <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                <input type="checkbox" name="isActive" value="true" checked /> @HrT.T("کاربر فعال باشد")
+            </label>
+        </div>
+        <div class="fld"><label>@HrT.T("عکس پروفایل (اختیاری)")</label>
+            <div style="display:flex;gap:10px;align-items:center">
+                <img id="userPhotoPrev" alt="" style="width:44px;height:44px;border-radius:12px;object-fit:cover;border:1px solid var(--line);display:none" />
+                <div style="flex:1">
+                    <input type="file" name="photoFile" accept=".png,.jpg,.jpeg,.webp"
+                           onchange="var p=document.getElementById('userPhotoPrev');if(this.files&&this.files[0]){p.src=URL.createObjectURL(this.files[0]);p.style.display='block'}" />
+                    <div class="hint">@HrT.T("در نوار بالایی و فهرست کاربران نمایش داده می‌شود")</div>
+                </div>
+            </div>
+        </div>
+        <div class="fld fld-full"><label>@HrT.T("نقش‌ها")</label>
+            <div style="border:1px solid var(--line);border-radius:9px;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px">
+                @foreach (var r in roles)
+                {
+                    <label style="display:flex;gap:7px;align-items:center;padding:3px 0;font-size:12px">
+                        <input type="checkbox" name="roleIds" value="@r.Id" />
+                        @r.Title
+                        <span style="color:var(--ink-3);font-size:10px">@r.Name</span>
+                    </label>
+                }
+            </div>
+            <div class="hint">@HrT.T("می‌توانید بعداً از صفحه کاربران نیز تغییر دهید؛ نقش‌ها در ورود بعدی کاربر اعمال می‌شوند")</div>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت کاربر")</button>
+        <button type="button" class="btn" data-close-modal hidden>@HrT.T("انصراف")</button>
+    </div>
+</form>
+<script>
+    // نشانگر زنده تطبیق رمز — کنترل نهایی و پیام خطا سمت سرور با toast انجام می‌شود
+    (function () {
+        var MSG_PW_MATCH = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("✓ رمزها یکسان‌اند")))';
+        var MSG_PW_MISMATCH = '@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(HrT.T("✗ رمزها یکسان نیستند")))';
+        var p1 = document.getElementById('fPassword');
+        var p2 = document.querySelector('input[name="password2"]');
+        if (!p1 || !p2) return;
+        var hint = document.createElement('div');
+        hint.className = 'hint';
+        p2.parentElement.appendChild(hint);
+        function check() {
+            if (!p2.value) { hint.textContent = ''; return; }
+            if (p1.value === p2.value) { hint.textContent = MSG_PW_MATCH; hint.style.color = 'var(--ok, #16a34a)'; }
+            else { hint.textContent = MSG_PW_MISMATCH; hint.style.color = 'var(--err, #dc2626)'; }
+        }
+        p1.addEventListener('input', check);
+        p2.addEventListener('input', check);
+    })();
+</script>

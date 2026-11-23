@@ -1,0 +1,110 @@
+@{
+    ViewData["Title"] = HrT.T("شیفت‌ها و نوبت‌کاری");
+    var shifts = (List<Shift>)Model;
+    var canManage = Me.Get()!.Has("shifts.create") || Me.Get()!.Has("shifts.edit") || Me.Get()!.Has("shifts.delete");
+    var activeCount = (int)ViewBag.ActiveCount;
+    var assignedCount = (int)ViewBag.AssignedCount;
+    var noShiftCount = (int)ViewBag.NoShiftCount;
+}
+@* فاز ۱۲۴-د — هدر صفحه مطابق طرح Figma (زیرنویس با دادهٔ واقعی همین صفحه) *@
+<div class="page-h">
+    <div>
+        <h1>@HrT.T("شیفت‌ها و نوبت‌کاری")</h1>
+        <div class="page-sub">@HrT.F("{0} شیفت تعریف‌شده · {1} پرسنل شیفت‌دار", Jalali.Num(shifts.Count), Jalali.Num(assignedCount))</div>
+    </div>
+</div>
+@* فاز ۱۲۴-ف — بنر وضعیت تخصیص شیفت مطابق طرح Figma (دادهٔ واقعی) *@
+@if (noShiftCount > 0)
+{
+    <div class="notice notice-warn"><span class="n-ic">🕒</span><span>@HrT.F("{0} پرسنل بدون شیفت ثبت شده است؛ تخصیص شیفت از همین صفحه انجام می‌شود و بر رویدادهای حضور اثر می‌گذارد.", Jalali.Num(noShiftCount))</span></div>
+}
+else
+{
+    <div class="notice notice-ok"><span class="n-ic">🕒</span><span>@HrT.T("تخصیص شیفت‌ها کامل است؛ هیچ پرسنلی بدون شیفت نمانده است.")</span></div>
+}
+<div class="chips">
+    <span class="chip">@HrT.T("کل شیفت‌ها:") <b>@Jalali.Num(shifts.Count)</b></span>
+    <span class="chip">@HrT.T("فعال:") <b>@Jalali.Num(activeCount)</b></span>
+    <span class="chip">@HrT.T("پرسنل شیفت‌دار:") <b>@Jalali.Num(assignedCount)</b></span>
+    <span class="chip">@HrT.T("بدون شیفت:") <b>@Jalali.Num(noShiftCount)</b></span>
+    @if (canManage)
+    {
+        <a class="btn btn-sm btn-primary" href="/Shifts/Create" data-modal="/Shifts/Create" data-modal-title="@HrT.T("تعریف شیفت جدید")" style="margin-inline-start:auto">@HrT.T("＋ تعریف شیفت جدید")</a>
+    }
+</div>
+
+<div class="callout" style="background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;line-height:1.9">
+    @HrT.T("🔁 تعریف اینجا مبنای محاسبه") <b>@HrT.T("دیرکرد، تعجیل، اضافه‌کاری و کارکرد خالص")</b> @HrT.T("در موتور حضور است.")
+    @HrT.T("شیفت شب (پایان ≤ شروع) خودکار از نیمه‌شب عبور می‌کند؛ شیفت اقماری به") <b>@HrT.T("الگوی چرخش")</b> @HrT.T("(روزکار/استراحت مثل 14/14) نیاز دارد.")
+    @HrT.T("تخصیص شیفت به پرسنل از صفحه «پرسنل» انجام می‌شود.")
+</div>
+
+<div data-refresh-host>
+    <div class="card" style="overflow:auto">
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th>@HrT.T("نام شیفت")</th>
+                    <th>@HrT.T("شرکت")</th>
+                    <th>@HrT.T("نوع")</th>
+                    <th>@HrT.T("ساعات کاری")</th>
+                    <th>@HrT.T("استراحت")</th>
+                    <th>@HrT.T("رواداری دیرکرد")</th>
+                    <th>@HrT.T("الگوی چرخش")</th>
+                    <th>@HrT.T("وضعیت")</th>
+                    <th>@HrT.T("پرسنل متصل")</th>
+                    @if (canManage)
+                    {
+                        <th>@HrT.T("عملیات")</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in shifts)
+                {
+                    var empCount = s.Employees.Count;
+                    var sample = string.Join("، ", s.Employees.Take(3).Select(e => e.FullName));
+                    <tr style="@(s.Active ? "" : "opacity:.6")">
+                        <td><b>@s.Name</b></td>
+                        <td style="font-size:11px">@(s.Company?.Name ?? HrT.T("مشترک"))</td>
+                        <td><span class="badge @(s.Type == "عادی" ? "badge-info" : s.Type == "اقماری" ? "badge-warn" : "badge-mute")">@HrT.T(s.Type)</span></td>
+                        <td dir="ltr" style="text-align:right">@s.StartTime → @s.EndTime</td>
+                        <td>@Jalali.Num(s.BreakMinutes) @HrT.T("دقیقه")</td>
+                        <td>@Jalali.Num(s.ToleranceLate) @HrT.T("دقیقه")</td>
+                        <td>@(string.IsNullOrEmpty(s.CyclePattern) ? "—" : s.CyclePattern)</td>
+                        <td><span class="badge @(s.Active ? "badge-ok" : "badge-err")">@(s.Active ? HrT.T("فعال") : HrT.T("متوقف"))</span></td>
+                        <td>
+                            @if (empCount > 0)
+                            {
+                                <span class="badge badge-info" title="@sample">@Jalali.Num(empCount) @HrT.T("نفر")</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-mute">—</span>
+                            }
+                        </td>
+                        @if (canManage)
+                        {
+                            <td>
+                                <div style="display:flex;gap:6px">
+                                    <a class="btn btn-sm" href="/Shifts/Edit/@s.Id" data-modal="/Shifts/Edit/@s.Id" data-modal-title="@HrT.F("ویرایش شیفت — {0}", s.Name)">@HrT.T("✎ ویرایش")</a>
+                                    <form method="post" action="/Shifts/Delete" class="inline-form" data-ajax data-refresh
+                                          data-confirm="@HrT.F("حذف شیفت «{0}»؟", s.Name)@(empCount > 0 ? HrT.F(" (این شیفت به {0} پرسنل متصل است و حذف انجام نخواهد شد)", Jalali.Num(empCount)) : "")"
+                                          data-danger="@(empCount > 0 ? "0" : "1")">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@s.Id" />
+                                        <button class="btn btn-sm btn-err">@HrT.T("🗑️ حذف")</button>
+                                    </form>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+                @if (!shifts.Any())
+                {
+                    <tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">@HrT.T("هنوز شیفتی تعریف نشده است")</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

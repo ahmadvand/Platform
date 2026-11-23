@@ -1,0 +1,333 @@
+@inject Platform.Web.Services.ICurrentUser Me
+@{
+    ViewData["Title"] = HrT.T("پیشخوان یکپارچه");
+    // فاز ۷۶ — چندزبانه: برچسب‌ها با زبان جاری + ارقام متناسب (fa فارسی، en لاتین)
+    string T(string fa) => HrT.T(fa);
+    var kpi = ViewBag.Kpi;
+    var recentEvents = (IEnumerable<HrAccessRecentEvent>)(ViewBag.RecentEvents ?? System.Linq.Enumerable.Empty<HrAccessRecentEvent>()); // فاز ۷۵ — تایپ قراردادی
+    var recentAlerts = (List<SecurityAlert>)ViewBag.RecentAlerts;
+    var devList = (List<Platform.Contracts.HrDeviceStripItem>)ViewBag.DevList;
+    var devOnline = (int)ViewBag.DevOnline;
+    // فاز ۱۲۵ — پیشخوان یکپارچه (طرح Figma صفحهٔ ۶): کارکرد، پارکینگ، مجوز، دستگاه‌های آفلاین
+    var workMinutes = (int)(ViewBag.WorkMinutes ?? 0);
+    var parkingToday = (int)(ViewBag.ParkingToday ?? 0);
+    var lic = ViewBag.Lic as Platform.Web.Services.LicenseSnapshot;
+    var companies = (int)(ViewBag.Companies ?? 0);
+    var offlineDevices = (List<string>)ViewBag.OfflineDevices;
+    var licOk = lic?.State == Platform.Web.Services.LicenseState.Valid;
+    var canReports = Me.Get()?.Has("reports.view") == true;
+    var canLicense = Me.Get()?.Has("license.manage") == true;
+}
+
+@* ============ هدر پیشخوان — طرح Figma صفحهٔ ۶: عنوان + زیرنویس داده‌محور + اکشن‌ها ============ *@
+<div class="page-h">
+    <div>
+        <h1>@T("پیشخوان یکپارچه")</h1>
+        <div class="page-sub">@T("نمای عملیاتی امروز: منابع انسانی، حضور و دستگاه‌ها ·") @Jalali.FmtFa(DateTime.Now) — @HrT.Num(kpi.present) @T("حاضر از") @HrT.Num(kpi.activeEmployees) @T("پرسنل فعال")
+            <span id="live-dot" class="badge badge-warn" style="cursor:default">● @T("زنده")</span>
+        </div>
+    </div>
+    <div class="page-actions">
+        @if (canReports)
+        {
+            <a class="btn btn-primary" href="/Reports">📊 @T("گزارش‌ساز روزانه")</a>
+        }
+        <a class="btn" href="/dlc/">📖 @T("راهنما")</a>
+    </div>
+</div>
+
+@* ============ بنر وضعیت امروز — داده‌محور: دستگاه قطع + درخواست معلق + هشدار باز ============ *@
+@if (offlineDevices.Count > 0 || kpi.pending > 0 || recentAlerts.Count > 0)
+{
+    var parts = new List<string>();
+    if (offlineDevices.Count > 0) parts.Add(HrT.F("{0} دستگاه قطع است ({1})", Jalali.Num(offlineDevices.Count), string.Join("، ", offlineDevices)));
+    if (kpi.pending > 0) parts.Add(HrT.F("{0} درخواست در انتظار بررسی مدیر", Jalali.Num(kpi.pending)));
+    if (recentAlerts.Count > 0) parts.Add(HrT.F("{0} هشدار امنیتی باز", Jalali.Num(recentAlerts.Count)));
+    <div class="notice notice-warn"><span class="n-ic">⚠️</span><span>@T("امروز:") @string.Join(" و ", parts) — @T("برای رسیدگی، میانبرِ هر مورد در «کارهای نیازمند رسیدگی» پایین صفحه در دسترس است.")</span></div>
+}
+else
+{
+    <div class="notice notice-ok"><span class="n-ic">✅</span><span>@T("همهٔ سامانه‌ها در وضعیت عادی است؛ دستگاه، درخواست یا هشدارِ بازِ نیازمند رسیدگی وجود ندارد.")</span></div>
+}
+
+@* ============ شاخص‌های اصلی امروز — ۴ کارت طرح (صفحهٔ ۶ فیگما) ============ *@
+<div class="ps-grid">
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic t">👥</div></div>
+        <div class="ps-v t"><span id="live-present">@HrT.Num(kpi.present)</span> @T("از") @HrT.Num(kpi.activeEmployees)</div>
+        <div class="ps-l">@T("حاضران امروز")</div>
+        <span class="ps-sub">🟢 @HrT.Num(kpi.onLeave) @T("مرخصی") · 🔴 <span id="live-absent">@HrT.Num(kpi.absent)</span> @T("غیبت")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic o">⏱️</div></div>
+        <div class="ps-v o">@HrT.Num(workMinutes / 60) @T("ساعت")</div>
+        <div class="ps-l">@T("کارکرد ثبت‌شده")</div>
+        <span class="ps-sub">⏱️ @T("مجموع کارکرد امروز بر پایهٔ رکوردهای تردد")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic b">🅿️</div></div>
+        <div class="ps-v b"><span id="live-parking">@HrT.Num(parkingToday)</span></div>
+        <div class="ps-l">@T("رویداد پارکینگ امروز")</div>
+        <span class="ps-sub"><a href="/Parking">@T("کنترل پارکینگ ←")</a></span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic r">🖥️</div></div>
+        <div class="ps-v r">@HrT.Num(devOnline)<span style="font-size:13px;color:var(--ink-2)"> / @HrT.Num(devList.Count)</span></div>
+        <div class="ps-l">@T("سلامت دستگاه‌ها")</div>
+        <span class="ps-sub"><a href="/Devices/LiveView">@T("نمای زنده حراست ←")</a></span>
+    </div>
+</div>
+
+@* ============ شاخص‌های تکمیلی — حفظ کامل ویجت‌های موجود (فاز ۴۳) ============ *@
+<div class="ps-grid">
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic o">⏰</div></div>
+        <div class="ps-v o"><span id="live-late">@HrT.Num(kpi.late)</span></div>
+        <div class="ps-l">@T("تأخیر امروز")</div>
+        <span class="ps-sub">⚑ @T("بر پایه رکوردهای تردد")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic r">🚫</div></div>
+        <div class="ps-v r"><span id="live-absent2">@HrT.Num(kpi.absent)</span></div>
+        <div class="ps-l">@T("غایب امروز")</div>
+        <span class="ps-sub">⚑ @T("نیازمند پیگیری")</span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic p">📋</div></div>
+        <div class="ps-v p"><span id="live-pending">@HrT.Num(kpi.pending)</span></div>
+        <div class="ps-l">@T("درخواست در انتظار تأیید")</div>
+        <span class="ps-sub"><a href="/Requests">@T("بررسی درخواست‌ها ←")</a></span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic r">⚠️</div></div>
+        <div class="ps-v r"><span id="live-alerts">@HrT.Num(kpi.openAlerts)</span></div>
+        <div class="ps-l">@T("هشدار امنیتی باز")</div>
+        <span class="ps-sub"><a href="/Access?tab=alerts">@T("میانبر هشدارها ←")</a></span>
+    </div>
+    <div class="ps-card">
+        <div class="ps-top"><div class="ps-ic p">🎟</div></div>
+        <div class="ps-v p">@HrT.Num(kpi.visitorsInside)</div>
+        <div class="ps-l">@T("مهمان داخل سازمان")</div>
+        <span class="ps-sub"><a href="/Visitors">@T("ارباب رجوع ←")</a></span>
+    </div>
+</div>
+
+@* ============ ردیف اصلی طرح — روند حضور + آمادگی نازارها ============ *@
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>@T("روند حضور در هفت روز اخیر")</h2><span class="hint">@T("بر پایه رکوردهای تردد")</span></div>
+        <div class="card-b"><div class="chart-box"><canvas id="weekChart"></canvas></div></div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@T("آمادگی نازارها")</h2>@if (canLicense) { <a href="/License">@T("مدیریت مجوز ←")</a> }</div>
+        <div class="card-b">
+            @if (licOk)
+            {
+                <div class="notice notice-ok" style="margin-bottom:10px"><span class="n-ic">🟢</span><span>@T("مجوز فعال است — سامانه در وضعیت بهره‌برداری عادی")</span></div>
+            }
+            else
+            {
+                <div class="notice notice-warn" style="margin-bottom:10px"><span class="n-ic">🟠</span><span>@lic?.Message — @T("از صفحهٔ «مجوز نصب» پیگیری شود")</span></div>
+            }
+            <div class="kvs">
+                <div class="kvr"><span class="k">@T("دارندهٔ مجوز")</span><span class="v">@(lic?.Licensee ?? "—")</span></div>
+                <div class="kvr"><span class="k">@T("اعتبار تا")</span><span class="v">@(lic?.ExpiresAtUtc is { } exp ? Jalali.FmtFa(exp.ToLocalTime()) : "—")</span></div>
+                <div class="kvr"><span class="k">@T("ظرفیت پرسنل")</span><span class="v">@(lic?.MaxEmployees is { } mx ? HrT.Num(mx) : T("بدون سقف"))</span></div>
+                <div class="kvr"><span class="k">@T("شرکت‌های ثبت‌شده")</span><span class="v">@HrT.Num(companies)</span></div>
+                <div class="kvr"><span class="k">@T("پوشش ماژول‌ها")</span><span class="v">@(lic?.Modules is { Length: > 0 } mods ? HrT.Num(mods.Length) + " " + T("ماژول") : T("بدون سقف"))</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ============ ردیف دوم طرح — جریان رویدادها + کارهای نیازمند رسیدگی ============ *@
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>@T("جریان رویدادهای سازمان")</h2><a href="/Access?tab=events">@T("همه →")</a></div>
+        <div class="table-wrap" style="max-height:340px">
+            <table class="tbl">
+                <thead><tr><th>@T("زمان")</th><th>@T("رویداد")</th><th>@T("محدوده")</th><th>@T("جهت")</th><th>@T("روش")</th><th>@T("نتیجه")</th></tr></thead>
+                <tbody>
+                    @foreach (var e in recentEvents)
+                    {
+                        var en2 = ""; var vname2 = "";
+                        { var ens = ViewBag.EmployeeNames as System.Collections.Generic.Dictionary<string, string>; var vns2 = ViewBag.VisitorNames as System.Collections.Generic.Dictionary<string, string>; string? vid = e.VisitorId; en2 = (!string.IsNullOrEmpty(e.EmployeeId) && ens != null && ens.TryGetValue(e.EmployeeId, out var ev)) ? ev : ""; vname2 = (vns2 != null && vid != null && vns2.TryGetValue(vid, out var vn2)) ? vn2 : ""; }
+                        var pill = e.Result == "مجاز" ? "badge-ok" : e.Result.Contains("خارج از ساعت") ? "badge-warn" : (e.Result.Contains("فاقد مجوز") || e.Result.Contains("ممنوع") || e.Result.Contains("خطا")) ? "badge-err" : "badge-mute";
+                        <tr>
+                            <td class="num">@Jalali.FmtTime(e.Timestamp)</td>
+                            <td>@(en2 != "" ? en2 : (vname2 != "" ? vname2 : "—"))</td>
+                            <td>@e.Gate</td>
+                            <td>@HrT.T(e.Direction)</td>
+                            <td>@HrT.T(e.Method)</td>
+                            <td><span class="badge @pill">@(e.Result == "مجاز" ? T("موفق") : HrT.T(e.Result))</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@T("کارهای نیازمند رسیدگی")</h2></div>
+        <div class="card-b">
+            @if (offlineDevices.Count == 0 && kpi.pending == 0 && kpi.openAlerts == 0)
+            {
+                <div class="empty">@T("مورد نیازمند رسیدگی وجود ندارد ✓")</div>
+            }
+            @foreach (var d in offlineDevices)
+            {
+                <div class="task-item ti-bad"><span>🖥️</span><span>@HrT.F("دستگاه «{0}» قطع است — بررسی اتصال شبکه لازم است", d)</span><a href="/Devices">@T("بررسی ←")</a></div>
+            }
+            @if (kpi.pending > 0)
+            {
+                <div class="task-item ti-warn"><span>📋</span><span>@HrT.F("{0} درخواست اصلاح/مرخصی در انتظار تأیید مدیر است", Jalali.Num(kpi.pending))</span><a href="/Requests">@T("بررسی ←")</a></div>
+            }
+            @if (kpi.openAlerts > 0)
+            {
+                <div class="task-item ti-info"><span>🛡️</span><span>@HrT.F("{0} هشدار امنیتی باز بررسی نشده است", Jalali.Num(kpi.openAlerts))</span><a href="/Access?tab=alerts">@T("میانبر ←")</a></div>
+            }
+        </div>
+    </div>
+</div>
+
+@* ============ نمودار منطقه‌ای + هشدارهای امنیتی باز — حفظ کامل از فازهای قبل ============ *@
+<div class="grid two-col">
+    <div class="card">
+        <div class="card-h"><h2>@T("تردد گیت‌ها بر پایه منطقه (امروز)")</h2></div>
+        <div class="card-b"><div class="chart-box"><canvas id="zoneChart"></canvas></div></div>
+    </div>
+    <div class="card">
+        <div class="card-h"><h2>@T("هشدارهای امنیتی باز")</h2><a href="/Access?tab=alerts">@T("همه →")</a></div>
+        <div class="card-b" style="max-height:340px;overflow-y:auto">
+            @if (!recentAlerts.Any())
+            {
+                <div class="empty">@T("هشدار بازی وجود ندارد ✓")</div>
+            }
+            @foreach (var a in recentAlerts)
+            {
+                <div style="border-bottom:1px solid var(--line);padding:9px 2px">
+                    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                        <strong style="font-size:12px">@HrT.T(a.Type)</strong>
+                        <span class="badge @(a.Severity == "بحرانی" ? "badge-crit" : a.Severity == "بالا" ? "badge-err" : a.Severity == "متوسط" ? "badge-warn" : "badge-mute")">@(a.Severity == "بحرانی" ? T("بحرانی") : a.Severity == "بالا" ? T("بالا") : a.Severity == "متوسط" ? T("متوسط") : a.Severity)</span>
+                    </div>
+                    <div style="color:var(--ink-2);font-size:11.5px;line-height:1.9;margin-top:3px">@a.Message</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@* ============ نوار دستگاه‌های متصل — قالب پارسان: برند + IP + محل + وضعیت + آخرین تردد ============ *@
+<div class="card">
+    <div class="card-h">
+        <h2>@T("دستگاه‌های متصل")</h2>
+        <a href="/Devices">@T("مدیریت دستگاه‌ها ←")</a>
+    </div>
+    <div class="card-b">
+        @if (devList.Count == 0)
+        {
+            <div class="empty">@T("دستگاهی ثبت نشده است")</div>
+        }
+        <div class="dev-grid">
+            @foreach (var d in devList)
+            {
+                var isOn = d.Online;
+                var lastP = d.LastPunchPerson is null ? default : (d.LastPunchPerson, d.LastPunchTime ?? "");
+                <div class="dev-card">
+                    <div class="head">
+                        <div>
+                            <h3>@d.Name</h3>
+                            <div class="meta">@HrT.T(d.Kind) · @d.Brand</div>
+                        </div>
+                        <span class="badge @(isOn ? "badge-ok" : "badge-mute")">
+                            <span class="dot @(isOn ? "dot-on" : "dot-off")"></span>@(isOn ? T("آنلاین") : T("آفلاین"))
+                        </span>
+                    </div>
+                    <div class="meta">
+                        IP: <b>@(d.Ip ?? "—")</b> · 🏢 @(d.CompanyName ?? "—")<br />
+                        📍 @(d.Location ?? "—")<br />
+                        @T("تردد امروز:") <b>@HrT.Num(d.TodayPunches)</b>
+                        @if (lastP != default)
+                        {
+                            <span>· @T("آخرین:") <b>@lastP.Item1</b> — @lastP.Item2</span>
+                        }
+                    </div>
+                    <div class="btn-row">
+                        <a class="btn btn-sm" href="/Devices">⚙️ @T("تنظیمات")</a>
+                        <a class="btn btn-sm" href="/Devices/LiveView">📡 @T("نمای زنده")</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chart.umd.js"></script>
+    <script>
+        Chart.defaults.font.family = 'Vazirmatn, Tahoma';
+        Chart.defaults.color = '#5e7181';
+
+        var week = @Html.Raw(ViewBag.Week);
+        new Chart(document.getElementById('weekChart'), {
+            type: 'bar',
+            data: {
+                labels: week.map(function (w) { return w.label; }),
+                datasets: [
+                    { label: '@T("حاضر")', data: week.map(function (w) { return w.present; }), backgroundColor: '#14b8a6', borderRadius: 8, maxBarThickness: 46 },
+                    { label: '@T("تأخیر")', data: week.map(function (w) { return w.late; }), backgroundColor: '#f59e0b', borderRadius: 8, maxBarThickness: 46 },
+                    { label: '@T("غایب")', data: week.map(function (w) { return w.absent; }), backgroundColor: '#ef4444', borderRadius: 8, maxBarThickness: 46 },
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { precision: 0 } } },
+                plugins: { legend: { position: 'bottom', rtl: @(HrT.Rtl ? "true" : "false") } }
+            }
+        });
+
+        var zones = @Html.Raw(ViewBag.ZoneDist);
+        new Chart(document.getElementById('zoneChart'), {
+            type: 'doughnut',
+            data: {
+                labels: zones.map(function (z) { return z.Zone; }),
+                datasets: [{
+                    data: zones.map(function (z) { return z.Count; }),
+                    backgroundColor: ['#14b8a6', '#3b82f6', '#8b5cf6', '#f59e0b', '#94a3b8', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '62%',
+                plugins: { legend: { position: 'bottom', rtl: @(HrT.Rtl ? "true" : "false") } }
+            }
+        });
+    </script>
+}
+
+@* ============ فاز ۱۳۵ (مورد ۱۷) — رویدادهای زندهٔ داشبورد (SSE) ============ *@
+<script>
+    (function () {
+        const fa = n => Number(n ?? 0).toLocaleString('fa-IR');
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = fa(v); };
+        const dot = document.getElementById('live-dot');
+        if (!window.EventSource) return;
+        const es = new EventSource('/live/events');
+        es.onmessage = e => {
+            try {
+                const d = JSON.parse(e.data);
+                set('live-present', d.present);
+                set('live-late', d.late);
+                set('live-absent', d.absent);
+                set('live-absent2', d.absent);
+                set('live-pending', d.pending);
+                set('live-alerts', d.openAlerts);
+                set('live-parking', d.parkingToday);
+                if (dot) { dot.className = 'badge badge-ok'; dot.textContent = '● زنده ' + (d.ts || ''); }
+            } catch (_) { /* payload ناقص — دور بعد */ }
+        };
+        es.onerror = () => {
+            if (dot) { dot.className = 'badge badge-warn'; dot.textContent = '● اتصال زنده…'; }
+            // مرورگر خودکار وصل می‌شود — نیازی به منطق اتصال مجدد نیست
+        };
+    })();
+</script>

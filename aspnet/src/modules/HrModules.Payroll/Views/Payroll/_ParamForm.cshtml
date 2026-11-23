@@ -1,0 +1,43 @@
+@{
+    var p = (PayrollParameter)Model;
+    var isEdit = ViewBag.IsEdit is true;
+    var companyId = (string)ViewBag.CompanyId;
+    var year = (int)ViewBag.Year;
+    var isBracket = p.Code == "پلکان_مالیات";
+}
+<div data-modal-title="@(isEdit ? HrT.F("ویرایش پارامتر — {0}", p.Title) : HrT.F("پارامتر جدید — سال {0}", year))" hidden></div>
+<form method="post" action="/Payroll/ParamSave" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@(isEdit ? p.Id : "")" /> @* در Create خالی — وگرنه ParamSave مسیر ویرایش می‌رود و NotFound می‌دهد *@
+    <input type="hidden" name="companyId" value="@(isEdit ? p.CompanyId : companyId)" />
+    <input type="hidden" name="jYear" value="@(isEdit ? p.JYear : year)" />
+    <div class="form-grid">
+        @* فاز ۹۳ — hint از label جدا شد تا برچسب یک‌سطر بماند و باکس «کد پارامتر» هم‌سطح بقیه بایستد *@
+        <div class="fld"><label>@HrT.T("کد پارامتر *")</label>
+            <input name="code" required minlength="2" value="@p.Code" dir="ltr" style="text-align:left" placeholder="حق_مسکن" />
+            <div class="hint">@HrT.T("(نام متغیر در فرمول‌ها)")</div>
+        </div>
+        <div class="fld"><label>@HrT.T("عنوان *")</label>
+            <input name="title" required value="@p.Title" placeholder="@(HrT.T("حق مسکن ماهانه"))" />
+        </div>
+        <div class="fld"><label>@HrT.F("مقدار عددی ({0})", Money.CurTitle())</label>
+            <input name="value" type="number" value="@(p.Value.ToString("0"))" />
+        </div>
+        <div class="fld" id="fldStr" style="@(isBracket ? "" : "display:none")"><label>@HrT.T("مقدار متنی (JSON پلکان مالیات)")</label>
+            <input name="strValue" value="@p.StrValue" dir="ltr" style="text-align:left" placeholder='[{"to":800000000,"rate":10},{"to":0,"rate":30}]' />
+            <div class="hint">@HrT.T("هر پله: سقف مبلغی پله + نرخ درصدی؛ سقف ۰ = نامحدود. فقط برای کد پلکان_مالیات.")</div>
+        </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ذخیره پارامتر")</button>
+        <button type="button" class="btn" data-close-modal data-goto="/Payroll/Params?companyId=@companyId&year=@year">@HrT.T("انصراف")</button>
+    </div>
+</form>
+<script>
+    (function () {
+        var code = document.querySelectorAll('input[name="code"]')[0], fld = document.getElementById('fldStr');
+        function sync() { fld.style.display = (code.value.trim() === 'پلکان_مالیات') ? '' : 'none'; }
+        code.addEventListener('input', sync);
+        sync();
+    })();
+</script>

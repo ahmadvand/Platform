@@ -1,0 +1,1560 @@
+/* ============================================================
+   سامانه یکپارچه منابع انسانی — سیستم طراحی (فاز ۳۳)
+   پالت رنگی: «نیلی درخشان» — نیلی/بنفش مدرن + لویندر خنثی +
+   دلالت‌های زمرد/کهربایی/سرخابی/آسمانی پرانرژی
+   اصول: کنتراست کافی (WCAG AA)، شعاع یکنواخت، سایه نرم، فواصل منظم؛
+   گرادیان فقط روی سطوح برند (لوگو، دکمه اصلی، تب فعال، ورود)
+   ============================================================ */
+
+/* ============ فونت وزیرمتن (خوداتکا) ============ */
+@font-face { font-family: Vazirmatn; src: url(../fonts/Vazirmatn-Regular.woff2) format(woff2); font-weight: 400; font-display: swap; }
+@font-face { font-family: Vazirmatn; src: url(../fonts/Vazirmatn-Medium.woff2) format(woff2); font-weight: 500; font-display: swap; }
+@font-face { font-family: Vazirmatn; src: url(../fonts/Vazirmatn-SemiBold.woff2) format(woff2); font-weight: 600; font-display: swap; }
+@font-face { font-family: Vazirmatn; src: url(../fonts/Vazirmatn-Bold.woff2) format(woff2); font-weight: 700; font-display: swap; }
+/* فاز ۹۲ — ایموجی‌های رابط (آیکن‌های منو/دکمه‌ها) همیشه با فونت ایموجی رندر شوند؛
+   بدون این، فایرفاکس/ویندوز برخی نمادها را تخته‌سفید یا مونوکروم نشان می‌داد.
+   پشتیبان‌ها: ویندوز=Segoe UI Emoji، لینوکس=Noto Color Emoji، مک=Apple Color Emoji */
+html { font-variant-emoji: emoji; }
+
+:root {
+    /* سطح‌ها و خنثی‌ها — لویندر خنثی روشن */
+    --bg: #f4f5fb;
+    --card: #ffffff;
+    --line: #e3e5f3;
+    --line-soft: #eef0fa;
+    --ink: #1d1e3a;
+    --ink-2: #565b7e;
+    --ink-3: #9498b8;
+
+    /* سایدبار — نیلی شب عمیق (گرادیان عمودی ظریف در .sidebar) */
+    --sidebar: #1b1746;
+    --sidebar-2: #2a2465;
+    --sidebar-line: rgba(165, 180, 252, .16);
+
+    /* رنگ اصلی — نیلی درخشان (قابل بازنویسی از تنظیمات ادمین — فاز ۳۱) */
+    --accent: #6366f1;
+    --accent-2: #818cf8;
+    --accent-deep: #4f46e5;
+    --accent-soft: #eef2ff;
+    --accent-border: #c7d2fe;
+    --accent-ink: #4f46e5;
+    --accent-3: #a78bfa;          /* بنفش روشن — گرادیان لوگو و نشانگر فعال */
+    --accent-4: #4338ca;          /* نیلی عمیق — انتهای گرادیان */
+    --accent-soft-text: #c7d2fe;  /* متن روشن روی سایدبار تیره */
+    --accent-rgb: 99, 102, 241;   /* مثلث RGB برای rgba(var(--accent-rgb), α) */
+
+    /* گرادیان‌های برند — از متغیرهای پالت مشتق می‌شوند (با پالت ادمین هماهنگ می‌مانند) */
+    --grad-brand: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 45%, var(--accent-4) 100%);
+    --grad-btn: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+
+    /* دلالت‌ها — پرانرژی */
+    --ok: #059669;      --ok-bg: #e7f8f1;      --ok-border: #b5ebd6;
+    --warn: #d97706;    --warn-bg: #fdf3e0;    --warn-border: #f8e3b3;
+    --err: #e11d48;     --err-bg: #ffe9ef;     --err-border: #fbc9d6;
+    --info: #0284c7;    --info-bg: #e6f4fd;    --info-border: #bde3f9;
+
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(var(--ink-rgb), .05), 0 6px 20px -6px rgba(var(--ink-rgb), .07);
+    --shadow-lift: 0 2px 4px rgba(var(--ink-rgb), .06), 0 14px 34px -10px rgba(var(--ink-rgb), .14);
+    --ring: 0 0 0 3px rgba(var(--accent-rgb), .20);
+
+    /* نقش‌های استاندارد پالت (فاز ۳۲) — همه «تخت» و بدون گرادیان؛
+       پالت فعال ادمین این‌ها را بازنویسی می‌کند (رنگ لینک‌ها، دکمه‌ها،
+       سربرگ/سطر جدول، منو، متن، پس‌زمینه، وضعیت‌ها، اسکرول‌بار و اوورلی) */
+    --link: #4f46e5;                 /* رنگ لینک‌ها */
+    --th-bg: #f2f3fc;                /* سربرگ جدول (ستون‌ها) */
+    --row-alt: transparent;          /* سطر یک‌درمیان */
+    --row-hover: #f4f5fe;            /* سطر هاور */
+    --sidebar-text: #c3c6ec;         /* متن منو */
+    --sidebar-muted: #8d90bd;        /* متن کم‌رنگ منو */
+    --sidebar-title: #eef0ff;        /* عنوان برند در منو */
+    --sidebar-rgb: 27, 23, 70;       /* مثلث RGB منو (اوورلی/سایه) */
+    --card-rgb: 255, 255, 255;       /* مثلث RGB کارت */
+    --ink-rgb: 29, 30, 58;           /* مثلث RGB متن (سایه‌ها) */
+    --ink-soft: #2e2c6b;             /* حالت hover دکمه تیره/تب فعال */
+    --btn-hover-bg: #f5f5fe;         /* پس‌زمینه hover دکمه خنثی */
+    --btn-hover-border: #ccd0ee;     /* حاشیه hover دکمه/ورودی */
+    --scroll-thumb: #c9cdec;         /* اسکرول‌بار */
+    --scroll-thumb-hover: #a7abdb;
+    --topbar-bg: rgba(255, 255, 255, .88);  /* نوار بالا */
+    --overlay: rgba(15, 12, 41, .5);         /* پرده دیالوگ/مودال */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+    background: var(--bg);   /* تخت — بدون طیف (فاز ۳۲) */
+    color: var(--ink);
+    min-height: 100vh;
+    /* رفع همپوشانی هنگام سرریز افقی: اسکرول افقی در سطح کل صفحه حذف می‌شود؛
+       جدول‌های عریض داخل .table-wrap اسکرول داخلی دارند */
+    overflow-x: clip;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: Consolas, Menlo, monospace; font-size: .92em; background: var(--line-soft); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--accent-deep); }
+::selection { background: rgba(var(--accent-rgb), .16); }
+
+/* اسکرول‌بار ظریف و هم‌رنگ */
+* { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); background-clip: content-box; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ============ چیدمان کلی ============ */
+.layout { display: flex; min-height: 100vh; }
+body > aside {
+    position: fixed; inset-block: 0; inset-inline-start: 0; width: 260px; overflow-y: auto;
+    /* همیشه بالاتر از محتوا — حتی اگر عنصری سرریز کند روی سایدبار نمی‌افتد */
+    z-index: 40;
+}
+body > main { margin-inline-start: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; min-width: 0; }
+
+/* ============ سایدبار تیره ============ */
+.sidebar {
+    background: linear-gradient(175deg, var(--sidebar) 0%, var(--sidebar-2) 100%);   /* طیف عمودی ظریف نیلی */
+    color: var(--sidebar-text);
+    display: flex; flex-direction: column;
+}
+.brand { display: flex; gap: 12px; align-items: center; padding: 20px 18px 16px; border-bottom: 1px solid var(--sidebar-line); }
+.brand-logo {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    background: var(--grad-brand);   /* طیف برند نیلی→بنفش */
+    box-shadow: 0 6px 16px -4px rgba(var(--accent-rgb), .6), inset 0 1px 0 rgba(255, 255, 255, .35);
+    display: grid; place-items: center; font-size: 20px; color: #fff;
+}
+.brand-name { font-weight: 700; color: var(--sidebar-title); font-size: 13.5px; line-height: 1.6; }
+.brand-sub { font-size: 10.5px; color: var(--sidebar-muted); }
+.nav { flex: 1; padding: 10px 12px; }
+/* فاز ۱۳۰ — گروه‌های جمع‌شو/بازشو منو: عنوان = دکمهٔ تاگل + فلش چرخان؛
+   انیمیشن با ترفند grid-template-rows (0fr/1fr) — بدون محاسبهٔ ارتفاع در JS */
+.nav-group {
+    font-size: 10.5px; color: var(--sidebar-muted); letter-spacing: .02em; font-weight: 600;
+    appearance: none; background: none; border: 0; font-family: inherit; width: 100%;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin: 14px 0 6px; padding: 4px 10px; cursor: pointer; text-align: start;
+    border-radius: 6px; transition: background .15s, color .15s;
+}
+.nav-group:hover { color: var(--sidebar-title); background: color-mix(in srgb, var(--sidebar-text) 8%, transparent); }
+.nav-group:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.nav-chev { font-size: 12px; line-height: 1; color: var(--sidebar-muted); transition: transform .2s ease; }
+.nav-sec[data-collapsed="1"] .nav-chev { transform: rotate(90deg); }
+.nav-items { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .2s ease; }
+.nav-sec[data-collapsed="1"] .nav-items { grid-template-rows: 0fr; }
+.nav-items-in { overflow: hidden; min-height: 0; }
+@media (prefers-reduced-motion: reduce) { .nav-items, .nav-chev { transition: none; } }
+.nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; margin-bottom: 2px; border-radius: 10px;
+    color: var(--sidebar-text); font-size: 13px; transition: background .15s, color .15s;
+    text-decoration: none;
+}
+.nav-item:hover { background: color-mix(in srgb, var(--sidebar-text) 12%, transparent); color: var(--sidebar-title); text-decoration: none; }
+.nav-item.active {
+    background: rgba(var(--accent-rgb), .32);
+    color: #fff; font-weight: 600;
+    box-shadow: inset 2px 0 0 var(--accent-3);
+}
+.nav-ico { width: 22px; text-align: center; font-size: 14.5px; }
+.sidebar-foot { padding: 14px; border-top: 1px solid var(--sidebar-line); }
+/* فاز ۵۲ — کلاس‌های user-chip/user-name/user-role/logout-form حذف شدند
+   (کاربر از سایدبار به دراپ‌داون نوار بالایی منتقل شد) */
+.avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: rgba(var(--accent-rgb), .22); color: var(--accent-soft-text);
+    display: grid; place-items: center; font-weight: 700; font-size: 15px;
+}
+/* ============ نوار بالا (فاز ۴۵ + بازآرایی فاز ۵۰ مطابق قالب مرجع: جستجو راست، خوشهٔ کاربر از چپ) ============ */
+.topbar {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--topbar-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 9px 18px; position: sticky; top: 0; z-index: 70; /* فاز ۵۰: بالاتر از سایدبار (۴۰) تا منوی اعلان‌ها زیر منو نرود */
+    min-height: 58px;
+}
+/* فاز ۵۳ — جمع‌کنندهٔ منو از نوار بالا حذف شد؛ دکمهٔ گرد روی لبهٔ بیرونی سایدبار می‌نشیند
+   (درخواست کاربر: «☰ نباید وجود داشته باشد؛ جمع‌کننده روی خود منو باشد»).
+   پس از جمع‌شدن منو، دکمه در همان ارتفاع کنار لبه می‌ماند تا منو دوباره باز شود.
+   RTL: سایدبار سمت راست است → inset-inline-start = فاصله از لبهٔ راست. */
+.sb-toggle {
+    position: fixed; top: 74px; inset-inline-start: 246px; z-index: 45;
+    width: 28px; height: 28px; border-radius: 50%; padding: 0;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink-2);
+    display: grid; place-items: center; cursor: pointer;
+    box-shadow: 0 3px 12px rgba(var(--ink-rgb), .16);
+    transition: inset-inline-start .22s ease, background .15s, color .15s, border-color .15s;
+}
+.sb-toggle:hover { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+.sb-toggle svg { display: block; transition: transform .22s ease; }
+/* منوی باز: پیکان به سمت راست (منو به راست جمع می‌شود) — منوی بسته: چرخش → پیکان به چپ (منو به چپ باز می‌شود) */
+body.side-collapsed .sb-toggle { inset-inline-start: 10px; }
+body.side-collapsed .sb-toggle svg { transform: rotate(180deg); }
+body.side-collapsed > aside { display: none; }
+body.side-collapsed > main { margin-inline-start: 0; }
+@media (max-width: 1024px) {
+    /* سایدبار در نمایش‌های باریک بالای محتوا می‌نشیند — دکمه کنار لبه راست می‌ماند */
+    .sb-toggle, body.side-collapsed .sb-toggle { inset-inline-start: 10px; }
+}
+
+/* فاز ۵۳ — breadcrumb نوار بالا («گروه / عنوان صفحه» در محل کادر قرمز ۳ قالب مرجع) */
+.topbar-title { font-weight: 700; font-size: 13px; color: var(--ink-3); flex: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; display: flex; align-items: center; gap: 7px; min-width: 0; }
+.topbar-title .crumb-group { color: var(--ink-3); font-weight: 600; flex: none; }
+.topbar-title .crumb-sep { color: var(--ink-3); opacity: .55; flex: none; font-size: 11px; }
+.topbar-title .crumb-page { color: var(--ink); font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+
+/* پروفایل کاربر (لبهٔ چپِ نوار — فاز ۵۰) */
+/* فاز ۵۱ — tb-profile اکنون دکمه است (بازکردن پروفایل من) — ریست استایل دکمه */
+.tb-profile {
+    display: flex; align-items: center; gap: 9px; flex: none;
+    background: none; border: 0; padding: 4px 6px; margin: -4px -6px;
+    font: inherit; color: inherit; text-align: start; cursor: pointer;
+    border-radius: 12px; transition: background .15s;
+}
+.tb-profile:hover { background: var(--line-soft, rgba(127,127,127,.12)); }
+.tb-av { width: 38px; height: 38px; border-radius: 12px; object-fit: cover; border: 1.5px solid var(--accent-border); flex: none; }
+.tb-av-txt {
+    background: var(--accent); color: #fff; border: none;
+    display: grid; place-items: center; font-weight: 800; font-size: 15px;
+}
+.tb-pname { font-size: 12.5px; font-weight: 700; line-height: 1.55; color: var(--ink); white-space: nowrap; }
+.tb-prole { font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
+
+/* ============ منوی کاربر — دراپ‌داون زیر نام/آواتار (فاز ۵۲) ============ */
+/* هم‌خانوادهٔ زنگ اعلان: نزدیک لبهٔ چپ است و به سمت راستِ دکمه باز می‌شود تا از صفحه بیرون نزند */
+.tb-user-wrap { position: relative; }
+.tb-caret { font-size: 9.5px; color: var(--ink-3); transition: transform .15s; }
+.tb-profile[aria-expanded="true"] .tb-caret { transform: rotate(180deg); }
+.tb-user-menu {
+    position: absolute; top: calc(100% + 10px); inset-inline-end: 0; width: 250px; max-width: 86vw;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(var(--ink-rgb), .18); z-index: 60; overflow: hidden;
+    padding: 6px; animation: bfade .16s ease;
+}
+.tb-user-h {
+    display: flex; gap: 10px; align-items: center;
+    padding: 10px 12px; margin: -2px -2px 6px;
+    border-bottom: 1px solid var(--line); background: var(--th-bg);
+}
+.tb-user-h .tb-av { width: 36px; height: 36px; border-radius: 11px; }
+.tb-user-name { font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.6; }
+.tb-user-role { font-size: 10.5px; color: var(--ink-3); }
+.tb-user-item {
+    display: flex; gap: 9px; align-items: center; width: 100%;
+    padding: 9px 12px; border: 0; background: none; font: inherit; font-size: 12.5px;
+    color: var(--ink); cursor: pointer; border-radius: 9px; text-align: start;
+    transition: background .12s, color .12s; text-decoration: none;
+}
+.tb-user-item:hover { background: var(--row-hover); text-decoration: none; }
+.tb-uico { width: 20px; text-align: center; font-size: 13px; flex: none; }
+.tb-user-item.danger { color: var(--err); }
+.tb-user-item.danger:hover { background: var(--err-bg); }
+.tb-user-sep { height: 1px; background: var(--line); margin: 5px 8px; }
+.tb-user-logout { margin: 0; display: block; }
+
+/* دکمه‌های آیکنی: زنگ اعلان + چرخ‌دنده */
+.tb-actions { display: flex; align-items: center; gap: 7px; flex: none; }
+.tb-ico-btn {
+    width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--card); display: grid; place-items: center; font-size: 15px;
+    cursor: pointer; position: relative; color: var(--ink); transition: all .15s; text-decoration: none;
+    font-family: inherit;
+}
+.tb-ico-btn:hover { border-color: var(--accent-border); background: var(--accent-soft); text-decoration: none; transform: translateY(-1px); }
+.tb-badge {
+    position: absolute; top: -5px; inset-inline-start: -5px; min-width: 17px; height: 17px;
+    border-radius: 9px; background: var(--err); color: #fff; font-size: 9.5px; font-weight: 800;
+    display: grid; place-items: center; padding: 0 4px; box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+}
+.tb-bell-wrap { position: relative; }
+/* فاز ۷۶ — منوی سوئیچ زبان رابط کاربری (کوچک‌تر از زنگ؛ با الگوی همان منو) */
+.tb-lang-menu {
+    position: absolute; top: calc(100% + 10px); inset-inline-end: 0; width: 190px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(var(--ink-rgb), .18); z-index: 60; overflow: hidden; padding: 5px;
+}
+.tb-lang-item {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 9px;
+    font-size: 12.5px; color: var(--ink); text-decoration: none;
+}
+.tb-lang-item:hover { background: var(--accent-soft); color: var(--accent-deep, var(--accent)); }
+.tb-lang-item.on { background: var(--accent-soft); color: var(--accent-deep, var(--accent)); font-weight: 700; }
+.tb-lang-item.on::after { content: "✓"; margin-inline-start: auto; font-size: 11px; }
+/* فاز ۵۰: زنگ در لبهٔ چپ نوار است؛ منو با inset-inline-end:0 (در RTL یعنی left:0) به سمت راستِ زنگ باز می‌شود
+   و دیگر روی سایدبار نمی‌افتد؛ z-index خودِ topbar هم بالاتر از سایدبار شده است */
+.tb-bell-menu {
+    position: absolute; top: calc(100% + 10px); inset-inline-end: 0; width: 330px; max-width: 86vw;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(var(--ink-rgb), .18); z-index: 60; overflow: hidden;
+}
+.tb-bell-h { padding: 10px 14px; font-size: 12.5px; font-weight: 700; border-bottom: 1px solid var(--line); background: var(--th-bg); }
+.tb-bell-empty { padding: 18px 14px; color: var(--ink-3); font-size: 12px; text-align: center; }
+.tb-bell-item { display: flex; gap: 9px; padding: 9px 14px; border-bottom: 1px dashed var(--line); align-items: flex-start; }
+.tb-bell-item:last-of-type { border-bottom: none; }
+/* فاز ۹۰ — آیتم‌های زنگ اعلان لینک شدند: ظاهر لینک نداشته باشند + هاور مشخص + نشانهٔ «رفتن به صفحه» */
+a.tb-bell-item { color: inherit; text-decoration: none; cursor: pointer; transition: background .12s; }
+a.tb-bell-item:hover { background: var(--row-hover, #f4f5fe); }
+a.tb-bell-item .tb-bell-m { color: var(--ink-2); }
+.tb-bell-link::after { content: "↗"; margin-inline-start: auto; color: var(--ink-3); font-size: 11px; align-self: center; }
+.tb-bell-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--info); margin-top: 6px; flex: none; }
+.tb-bell-dot.crit { background: var(--err); }
+.tb-bell-dot.high { background: var(--warn); }
+.tb-bell-t { font-size: 11px; color: var(--ink-2); font-weight: 700; }
+.tb-bell-m { font-size: 11px; color: var(--ink-3); line-height: 1.7; }
+.tb-bell-foot { display: block; text-align: center; padding: 9px; font-size: 11.5px; font-weight: 700; border-top: 1px solid var(--line); background: var(--line-soft); }
+
+/* تاریخ + ساعت زنده — فاز ۵۰: حاشیهٔ شروع خودکار، خوشهٔ چپ (پروفایل/اعلان/تاریخ) را به لبهٔ چپ می‌چسباند */
+.tb-datetime { display: flex; gap: 8px; align-items: center; color: var(--ink-2); font-size: 12px; flex: none; margin-inline-start: auto; }
+.tb-datetime strong { color: var(--ink); font-size: 12.5px; }
+.tb-wd { color: var(--ink-3); }
+.clock {
+    background: var(--accent-soft); color: var(--accent-deep);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px; padding: 2px 10px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+
+/* جستجوی سراسری — فاز ۵۰: در منتهی‌الیه راستِ نوار (اولین فرزند در RTL) */
+.tb-search-wrap { position: relative; flex: 1 1 220px; max-width: 430px; min-width: 150px; }
+.tb-search {
+    width: 100%; border: 1px solid var(--line); border-radius: 999px; padding: 8px 38px 8px 16px;
+    font: inherit; font-size: 12.5px; background: var(--card); color: var(--ink);
+}
+.tb-search:focus { outline: none; border-color: var(--accent-border); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .13); }
+.tb-search-ico { position: absolute; inset-inline-start: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: .55; pointer-events: none; }
+.tb-search-menu {
+    position: absolute; top: calc(100% + 8px); inset-inline: 0; max-height: 400px; overflow: auto;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(var(--ink-rgb), .18); z-index: 60;
+}
+.tb-s-group { padding: 9px 14px 3px; font-size: 10.5px; font-weight: 700; color: var(--ink-3); }
+.tb-s-item { display: block; padding: 7px 14px; font-size: 12px; color: var(--ink); border-top: 1px dashed var(--line-soft); }
+.tb-s-item:hover { background: var(--row-hover); text-decoration: none; }
+/* کمبوباکس (فاز ۴۶) — گزینهٔ فعال با کیبورد */
+.tb-s-item.on { background: var(--accent-soft); color: var(--accent-deep); font-weight: 700; }
+.tb-s-loading, .tb-s-empty { padding: 16px 14px; color: var(--ink-3); font-size: 12px; text-align: center; }
+
+/* بنر هشدار مجوز (فاز ۴۶) — زیر نوار بالا، فقط وقتی License:Mode != Off */
+.lic-banner {
+    display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;
+    background: linear-gradient(90deg, rgba(217, 119, 6, .16), rgba(217, 119, 6, .06));
+    color: #92400e; border-bottom: 1px solid rgba(217, 119, 6, .35);
+    padding: 7px 18px; font-size: 12px; font-weight: 600;
+}
+.lic-banner a { color: #92400e; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+
+/* آواتار کوچک فهرست‌ها (فاز ۴۵) */
+.avatar.avatar-img { object-fit: cover; }
+.avatar-sm { width: 28px; height: 28px; font-size: 12px; border-radius: 9px; flex: none; }
+
+.content { padding: 22px 24px; flex: 1; min-width: 0; }
+.foot { padding: 12px 24px; color: var(--ink-3); font-size: 11px; border-top: 1px solid var(--line); }
+
+/* ============ کارت‌ها و شبکه ============ */
+.card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 18px; min-width: 0;
+}
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line-soft); flex-wrap: wrap; }
+.card-h h2 { font-size: 14.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.card-h .hint { color: var(--ink-3); font-size: 11.5px; }
+.card-b { padding: 16px 18px; }
+
+.grid { display: grid; gap: 14px; }
+/* سرریز افقی: فرزندان گرید حق کوچک‌شدن زیر min-content را دارند تا صفحه عریض نشود */
+.grid > * { min-width: 0; }
+.kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 18px; }
+.kpi {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 16px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+    transition: transform .15s, box-shadow .15s;
+}
+.kpi::after { content: ''; position: absolute; inset-inline-start: 0; top: 0; bottom: 0; width: 3px; background: var(--line); }
+.kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.kpi .v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi .l { color: var(--ink-2); font-size: 11.5px; margin-top: 2px; }
+.kpi.ok .v { color: var(--ok); } .kpi.ok::after { background: var(--ok); }
+.kpi.warn .v { color: var(--warn); } .kpi.warn::after { background: var(--warn); }
+.kpi.err .v { color: var(--err); } .kpi.err::after { background: var(--err); }
+.kpi.info .v { color: var(--accent-ink); } .kpi.info::after { background: var(--accent-2); }
+.two-col { grid-template-columns: 1.6fr 1fr; }
+.three-col { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ============ جدول ============ */
+.table-wrap { overflow-x: auto; max-height: 70vh; overflow-y: auto; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tbl th, .tbl td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--line-soft); white-space: nowrap; vertical-align: middle; }   /* فاز ۹۳ — محتوای سلول‌ها هم‌سطح */
+.tbl th {
+    background: var(--th-bg); color: var(--ink-2); font-weight: 600; font-size: 11.5px;
+    position: sticky; top: 0; z-index: 5;
+    box-shadow: inset 0 -1px 0 var(--line);
+}
+.tbl tbody tr { transition: background .12s; }
+.tbl tbody tr:nth-child(even) { background: var(--row-alt); }   /* سطر یک‌درمیان */
+.tbl tbody tr:hover { background: var(--row-hover); }
+.tbl tbody tr:last-child td { border-bottom: none; }
+.tbl td.num, .tbl th.num { font-variant-numeric: tabular-nums; }
+
+/* ============ نشان‌ها ============ */
+.badge {
+    display: inline-block; padding: 2.5px 10px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 600; border: 1px solid transparent; line-height: 1.7;
+}
+.badge-ok { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+.badge-warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+.badge-err { background: var(--err-bg); color: var(--err); border-color: var(--err-border); }
+.badge-info { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+.badge-mute { background: var(--line-soft); color: var(--ink-2); border-color: var(--line); }
+.badge-crit { background: #2b2660; color: #fbcfe8; border-color: #453f8f; }
+
+/* ============ فرم‌ها ============ */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.fld { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.fld label { font-size: 11.5px; color: var(--ink-2); font-weight: 600; }
+.hint { color: var(--ink-3); font-size: 10.8px; }
+/* فاز ۹۳ — فونت وزیر برای «همهٔ» باکس‌های ورود اطلاعات (حتی بیرون از .fld — مثل پین دستگاه‌ها) */
+input, textarea { font-family: inherit; }
+.fld input, .fld textarea {
+    font-family: inherit; font-size: 12.5px; padding: 8px 10px;
+    border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--card); color: var(--ink);
+    min-height: 37px; transition: border-color .15s, box-shadow .15s;
+}
+.fld input:hover, .fld textarea:hover { border-color: var(--btn-hover-border); }
+.fld input:focus, .fld textarea:focus { outline: none; border-color: var(--accent-2); box-shadow: var(--ring); }
+.fld input:disabled, .fld textarea:disabled { background: var(--line-soft); color: var(--ink-3); cursor: not-allowed; }
+.fld input[type="checkbox"] { width: auto; min-height: 0; accent-color: var(--accent); }
+.fld-full { grid-column: 1 / -1; }
+/* فاز ۹۵ — ردیف‌های افقی فرم (ورودی + دکمه/ورودی کنار هم):
+   ورودی پایهٔ min-content بزرگ دارد و هم‌ردیفی‌ها (مثل «⟳ تولید») را له می‌کرد؛
+   با min-width:0 ورودی آزادانه جمع می‌شود و دکمه با flex:none هرگز له نمی‌شود */
+.fld input, .fld select, .fld textarea { min-width: 0; }
+.fld .btn, .fld .btn-sm { flex: none; }
+
+/* ============ دراپ‌داون یکپارچه (تمام selectهای برنامه) ============ */
+select {
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif; font-size: 12.5px; color: var(--ink);
+    background-color: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    min-height: 37px; padding: 6px 12px;
+    padding-inline-start: 12px; padding-inline-end: 30px;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%237b80b0' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 11px center;
+    background-size: 11px 7px;
+    cursor: pointer; box-shadow: 0 1px 2px rgba(22, 27, 46, .04);
+    transition: border-color .15s, box-shadow .15s, background-color .15s;
+}
+select:hover { border-color: var(--btn-hover-border); }
+select:focus { outline: none; border-color: var(--accent-2); box-shadow: var(--ring); }
+select:disabled { background-color: var(--line-soft); color: var(--ink-3); cursor: not-allowed; box-shadow: none; border-color: var(--line); }
+/* فاز ۸۹ — آیتم‌های دراپ‌داون هم با فونت وزیر (درخواست کاربر)؛
+   تعریف صریح به‌جای inherit تا فهرست بازِ select هم در کروم/اج وزیر بماند */
+select option, select optgroup { padding: 7px 10px; background: #fff; color: var(--ink); font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif !important; }
+/* هر منوی سفارشی/دراپ‌داون داخل اپ هم وزیر */
+.dropdown-menu, .menu, [class*="dropdown"] { font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif; }
+select option:checked { background: var(--accent-soft); color: var(--accent-deep); }
+select option:hover { background: #f1f2fb; }
+
+/* چندانتخابی‌ها (انتقال گروهی پرسنل/دستگاه‌ها) */
+select[multiple] {
+    padding: 5px; background-image: none; box-shadow: none;
+    height: auto; line-height: 1.5;
+}
+select[multiple] option {
+    padding: 6px 10px; margin: 2px 0; border-radius: 8px;
+    border: 1px solid transparent; cursor: pointer;
+}
+select[multiple] option:hover { background: #f1f2fb; border-color: var(--line); }
+select[multiple] option:checked { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent-deep); font-weight: 600; }
+select[multiple]:focus { box-shadow: var(--ring); }
+
+/* برچسب خالی/placeholder — وقتی گزینه اول disabled و selected است */
+select:has(option:first-child:checked[disabled]) { color: var(--ink-3); }
+
+/* ============ دراپ‌داون اختصاصی برنامه (فاز ۹۰ — درخواست کاربر) ============
+   فهرست باز select بومی توسط سیستم‌عامل/مرورگر رندر می‌شود و فونتش قابل تضمین
+   نیست؛ تمام selectهای تکی با JS (site.js) به این کامپوننت تبدیل می‌شوند تا
+   «فهرست باز» هم صددرصد با فونت وزیر رندر شود. select اصلی مخفی می‌ماند و
+   فرم/اسکریپت‌ها بدون تغییر کار می‌کنند. */
+select.hr-dd-src {
+    position: absolute !important; width: 1px !important; height: 1px !important;
+    min-height: 0 !important; padding: 0 !important; margin: 0 !important;
+    opacity: 0 !important; pointer-events: none !important; overflow: hidden !important;
+    clip-path: inset(50%); z-index: -1;
+}
+.hr-dd { position: relative; display: inline-block; min-width: 0; }
+.hr-dd-btn {
+    display: flex; align-items: center; gap: 6px; width: 100%; min-height: 37px;
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif; font-size: 12.5px; color: var(--ink);
+    background-color: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 6px 12px; padding-inline-end: 30px; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%237b80b0' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: left 11px center; background-size: 11px 7px;
+    box-shadow: 0 1px 2px rgba(22, 27, 46, .04); text-align: start;
+    transition: border-color .15s, box-shadow .15s, background-color .15s;
+}
+.hr-dd-btn:hover { border-color: var(--btn-hover-border); }
+.hr-dd-btn:focus-visible { outline: none; border-color: var(--accent-2); box-shadow: var(--ring); }
+.hr-dd.open .hr-dd-btn { border-color: var(--accent-2); box-shadow: var(--ring); }
+.hr-dd.dis .hr-dd-btn { background-color: var(--line-soft); color: var(--ink-3); cursor: not-allowed; box-shadow: none; border-color: var(--line); }
+.hr-dd.ph .hr-dd-lbl { color: var(--ink-3); }
+.hr-dd-lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hr-dd-ico { flex: none; display: none; } /* پیکر چرخان داخل پس‌زمینه — متنِ شبح برای حالت‌های خاص */
+.hr-dd-menu {
+    position: fixed; z-index: 9999; min-width: 160px;
+    background: #fff; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(var(--ink-rgb, 29, 30, 58), .18);
+    padding: 5px; overflow-y: auto; overscroll-behavior: contain;
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif; font-size: 12.5px;
+}
+.hr-dd-opt {
+    display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
+    cursor: pointer; color: var(--ink); line-height: 1.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+}
+.hr-dd-opt:hover { background: #f1f2fb; }
+.hr-dd-opt.on { background: var(--accent-soft); color: var(--accent-deep); font-weight: 600; }
+.hr-dd-opt.on::after { content: "✓"; margin-inline-start: auto; font-size: 11px; }
+.hr-dd-opt.dis { color: var(--ink-3); cursor: not-allowed; background: transparent; }
+.hr-dd-empty { padding: 10px; text-align: center; color: var(--ink-3); }
+
+/* ============ دکمه‌ها ============ */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    vertical-align: middle;   /* فاز ۹۳ — همهٔ دکمه‌ها در یک سطح */
+    white-space: nowrap;      /* فاز ۹۵ — متن دکمه هرگز عمودی نشکند (فشردگی ردیف‌های افقی) */
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line);
+    background: var(--card); color: var(--ink-2);
+    cursor: pointer; transition: background .15s, border-color .15s, box-shadow .15s, color .15s;
+    min-height: 37px; text-decoration: none;
+}
+.btn:hover { background: var(--btn-hover-bg); border-color: var(--btn-hover-border); color: var(--ink); text-decoration: none; }
+.btn-primary {
+    background: var(--grad-btn);   /* طیف نیلی — کنش اصلی */
+    color: #fff; border-color: var(--accent-deep);
+    box-shadow: 0 1px 2px rgba(var(--accent-rgb), .35), 0 6px 16px -6px rgba(var(--accent-rgb), .55);
+}
+.btn-primary:hover { background: var(--accent-deep); color: #fff; filter: saturate(1.1); }
+.btn-dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn-dark:hover { background: var(--ink-soft); color: #fff; }
+.btn-ok { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+.btn-ok:hover { background: #d7f3e8; color: #047857; border-color: #a7e6cd; }
+.btn-err { background: var(--err-bg); color: var(--err); border-color: var(--err-border); }
+.btn-err:hover { background: #ffdce6; color: #be123c; border-color: #f8aebe; }
+.btn-ghost { background: transparent; color: var(--sidebar-text); border-color: var(--sidebar-line); }
+.btn-ghost:hover { background: rgba(255, 255, 255, .08); color: var(--sidebar-title); border-color: var(--sidebar-muted); }
+.btn-sm { padding: 4px 10px; min-height: 29px; font-size: 11px; border-radius: 8px; }
+.btn-block { width: 100%; }
+.inline-form { display: inline-flex; align-items: center; vertical-align: middle; gap: 4px; }   /* فاز ۹۳ — فرم درون‌خطی = جعبهٔ flex؛ دکمهٔ داخلش دقیقاً هم‌سطح دکمه‌های بی‌فرم (رفع پلهٔ ۸px) */
+/* فاز ۸۳ — فاصلهٔ عمودی استاندارد ردیف دکمه‌ها از بلوک بالایی (قبلاً چسبیده بود؛
+   برخی صفحات مجبور بودند margin-top را inline بدهند)
+   فاز ۸۴ — به درخواست کاربر فاصله بیشتر شد (۱۴ ← ۱۶px) */
+.btn-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+/* دکمهٔ ذخیرهٔ تنها (بدون .btn-row) بعد از فیلدهای فرم — مثلاً «ذخیره اطلاعات شرکت» */
+form > .btn, fieldset > .btn { margin-top: 16px; }
+.inline-form > .btn { margin-top: 0; }   /* فاز ۹۳ — حاشیهٔ فرم‌فوتری روی دکمه‌های ردیف اکشن اعمال نشود (ریشهٔ پلهٔ ۸px) */
+.toolbar .btn { margin-top: 0; }   /* دکمه‌های داخل نوار ابزار افقی، فاصلهٔ عمودی نمی‌خواهند */
+.btn:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible {
+    outline: none; box-shadow: var(--ring);
+}
+
+/* ============ تب‌ها ============ */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.tabs a {
+    padding: 7px 16px; border-radius: 999px; background: var(--card);
+    border: 1px solid var(--line); color: var(--ink-2); font-size: 12.5px; font-weight: 600;
+    transition: all .15s; text-decoration: none;
+}
+.tabs a:hover { border-color: var(--accent-border); color: var(--accent-ink); text-decoration: none; }
+.tabs a.on {
+    background: var(--grad-btn); color: #fff; border-color: var(--accent-deep);
+    box-shadow: 0 4px 12px -4px rgba(var(--accent-rgb), .55);
+}
+.tabs a.on:hover { background: var(--accent-deep); color: #fff; }
+
+/* ============ فاز ۹۱ — فرم واحد تنظیمات: پنل زبانه‌ها + سرتیتر بخش‌ها ============ */
+@keyframes setFadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.set-pane { animation: setFadeIn .18s ease; }
+.set-pane[hidden] { display: none; }
+.set-sec { font-size: 13px; font-weight: 700; color: var(--ink); margin: 4px 0 12px; padding-bottom: 8px;
+    border-bottom: 1px dashed var(--line); display: flex; align-items: center; gap: 7px; }
+.set-pane .set-sec:not(:first-child) { margin-top: 22px; }
+
+/* ============ ابزارها ============ */
+.toolbar { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+.toolbar .fld { min-width: 160px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; } /* فاز ۹۵ — دکمه/چیپ هم‌سطح فرم فیلتر، کشیده به ارتفاع ردیف نشود */
+.chip { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 14px; font-size: 12px; color: var(--ink-2); box-shadow: var(--shadow); }
+.chip b { color: var(--ink); }
+.chip-active { background: rgba(var(--accent-rgb), .10); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+
+/* ============ درخت سازمانی ============ */
+.tree { list-style: none; }
+.tree ul { list-style: none; padding-inline-start: 22px; border-inline-start: 2px solid var(--line); margin-inline-start: 10px; }
+.tree-node { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 9px; margin: 2px 0; }
+.tree-node:hover { background: var(--row-hover); }
+.tree-node .code { color: var(--ink-3); font-size: 11px; }
+.tree-node .cnt { color: var(--ink-3); font-size: 11px; margin-inline-start: auto; }
+
+/* ============ کارت دستگاه ============ */
+.dev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+.dev-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); transition: box-shadow .15s, transform .15s; }
+.dev-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-1px); }
+.dev-card .head { display: flex; justify-content: space-between; align-items: start; gap: 8px; margin-bottom: 8px; }
+.dev-card h3 { font-size: 13.5px; font-weight: 700; }
+.dev-card .meta { color: var(--ink-2); font-size: 11.5px; line-height: 2; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-inline-end: 5px; }
+.dot-on { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-bg); }
+.dot-off { background: var(--ink-3); }
+
+/* ============ تقویم ============ */
+.cal { width: 100%; border-collapse: collapse; }
+.cal th { padding: 8px; font-size: 11.5px; color: var(--ink-2); border: 1px solid var(--line); background: var(--th-bg); }
+.cal td { border: 1px solid var(--line); text-align: center; padding: 10px 4px; font-size: 13px; height: 48px; vertical-align: middle; }
+.cal td.off { background: var(--th-bg); }
+.cal td.today { outline: 2px solid var(--accent-2); outline-offset: -2px; border-radius: 6px; }
+.cal td.holiday { background: var(--err-bg); }
+.cal .h-title { display: block; font-size: 9.5px; color: var(--err); margin-top: 3px; }
+
+/* ============ نمودار ============ */
+.chart-box { position: relative; height: 260px; }
+
+/* ============ پیام‌ها ============ */
+.toast { border-radius: var(--radius-sm); padding: 10px 16px; margin-bottom: 14px; font-size: 12.5px; font-weight: 600; box-shadow: var(--shadow-lift); border: 1px solid transparent; }
+.toast-ok { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+.toast-err { background: var(--err-bg); color: var(--err); border-color: var(--err-border); }
+.toast-info { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+.btn-busy { opacity: .55; pointer-events: none; }
+.toast[data-toast], .toast { cursor: default; }
+
+/* فاز ۸۳ — حباب اعتبارسنجی فرم‌ها: جایگزین حباب پیش‌فرض مرورگر؛ هم‌رنگ پوسته و
+   به زبان رابط کاربر (متنش از site.js — رویداد invalid + گیت submit) */
+.hr-val-bubble {
+    position: fixed; z-index: 300; display: none;
+    max-width: 300px; padding: 7px 12px;
+    background: var(--err-bg, #ffe9ef); color: var(--err, #e11d48);
+    border: 1px solid var(--err-border, #fbc9d6);
+    border-radius: 10px; box-shadow: var(--shadow-lift);
+    font-size: 12px; font-weight: 600; line-height: 1.8;
+    pointer-events: none;
+}
+.hr-val-bubble.on { display: block; }
+.empty { text-align: center; color: var(--ink-3); padding: 34px 10px; font-size: 12.5px; }
+
+/* ============ ورود ============ */
+.login-page {
+    min-height: 100vh; display: grid; place-items: center;
+    /* محیط نیلی با هاله‌های نور هم‌خانواده پالت */
+    background:
+        radial-gradient(640px 400px at 88% -8%, rgba(var(--accent-rgb), .38), transparent 65%),
+        radial-gradient(560px 380px at 4% 108%, rgba(var(--accent-rgb), .22), transparent 60%),
+        linear-gradient(175deg, var(--sidebar) 0%, var(--sidebar-2) 100%);
+    padding: 20px;
+}
+.login-card {
+    width: 100%; max-width: 400px; background: var(--card);
+    border-radius: 18px; padding: 34px 30px;
+    box-shadow: 0 24px 70px rgba(var(--sidebar-rgb), .55), 0 0 0 1px rgba(255, 255, 255, .06) inset;
+}
+.login-logo {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 14px;
+    background: var(--grad-brand);   /* طیف برند */
+    box-shadow: 0 10px 24px -6px rgba(var(--accent-rgb), .65), inset 0 1px 0 rgba(255, 255, 255, .35);
+    display: grid; place-items: center; color: #fff; font-size: 26px;
+}
+.login-card h1 { font-size: 16px; text-align: center; margin-bottom: 4px; }
+.login-card .sub { text-align: center; color: var(--ink-2); font-size: 12px; margin-bottom: 22px; }
+.login-err { background: var(--err-bg); color: var(--err); border: 1px solid var(--err-border); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12px; margin-bottom: 14px; }
+.login-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 14px; color: var(--ink-3); font-size: 11px; }
+.login-divider::before, .login-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.demo-creds { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 14px; }
+.demo-creds .t { font-size: 11px; color: var(--ink-3); margin-bottom: 8px; }
+.demo-creds .row { display: flex; gap: 6px; flex-wrap: wrap; }
+.demo-creds button {
+    font-family: inherit; font-size: 10.5px; padding: 5px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--th-bg); cursor: pointer; color: var(--ink-2);
+    transition: all .15s;
+}
+.demo-creds button:hover { border-color: var(--accent-border); background: var(--accent-soft); color: var(--accent-deep); }
+
+/* ============ واکنش‌گرا ============ */
+@media (max-width: 1024px) {
+    body > aside { position: static; width: 100%; z-index: 40; }
+    body > main { margin-inline-start: 0; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    html { font-size: 13px; }
+    .content { padding: 14px; }
+    .topbar { padding: 8px 12px; gap: 9px; flex-wrap: wrap; }
+    .topbar-title, .tb-pinfo, .tb-wd { display: none; }
+    .tb-datetime { flex: 1 1 100%; order: 5; justify-content: flex-end; }
+}
+
+/* ============ پنل داده‌های هویتی — تب‌بندی و آمار ============ */
+.btabbar { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 2px solid var(--line); margin-bottom: 16px; }
+.btab {
+    border: 1px solid transparent; border-bottom: none; background: transparent;
+    border-radius: 10px 10px 0 0; padding: 10px 18px; cursor: pointer; font: inherit;
+    font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    display: flex; gap: 7px; align-items: center; margin-bottom: -2px;
+    transition: color .15s, background .15s;
+}
+.btab .cnt { background: var(--line); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; color: var(--ink-2); }
+.btab:hover { color: var(--ink); background: rgba(var(--accent-rgb), .08); }
+.btab.on { background: var(--card); color: var(--accent-ink); border-color: var(--line); border-bottom: 2px solid var(--card); }
+.btab.on .cnt { background: var(--accent-soft); color: var(--accent-deep); }
+.bpanel { display: none; }
+.bpanel.on { display: block; animation: bfade .18s ease; }
+@keyframes bfade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 13px 15px; display: flex; gap: 11px; align-items: center; box-shadow: var(--shadow); min-width: 0; }
+.stat .ic {
+    font-size: 18px; width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft); border: 1px solid var(--accent-border);
+}
+.stat .v { font-size: 17px; font-weight: 800; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.stat .l { font-size: 10.8px; color: var(--ink-2); }
+.stat.c-ok .ic { background: var(--ok-bg); border-color: var(--ok-border); }
+.stat.c-warn .ic { background: var(--warn-bg); border-color: var(--warn-border); }
+.stat.c-err .ic { background: var(--err-bg); border-color: var(--err-border); }
+
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+.ov-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ov-card .head { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.ov-card h3 { font-size: 13px; font-weight: 700; }
+.ov-card .sub { color: var(--ink-2); font-size: 11px; margin-top: 2px; }
+.ov-num { display: flex; align-items: baseline; gap: 6px; }
+.ov-num b { font-size: 21px; font-variant-numeric: tabular-nums; }
+.ov-num span { font-size: 11px; color: var(--ink-2); }
+.ov-bios { display: flex; gap: 5px; flex-wrap: wrap; }
+.ov-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--line); }
+.ov-foot .when { font-size: 10.5px; color: var(--ink-3); }
+
+/* ============ پرتال خودخدمتی پرسنل (فاز ۱۴) ============ */
+.ess-shell { display: flex; flex-direction: column; min-height: 100vh; }
+.ess-top {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    background: var(--sidebar);   /* تخت */
+    color: var(--sidebar-text); padding: 12px 22px; position: sticky; top: 0; z-index: 30;
+    border-bottom: 3px solid var(--accent);
+}
+.ess-brand { display: flex; align-items: center; gap: 10px; }
+.ess-logo {
+    width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center;
+    background: var(--accent);   /* تخت */
+    color: #fff; font-size: 17px; flex: none;
+    box-shadow: 0 4px 12px -2px rgba(var(--accent-rgb), .55);
+}
+.ess-name { color: var(--sidebar-title); font-weight: 700; font-size: 13.5px; }
+.ess-sub { font-size: 10px; color: var(--sidebar-muted); }
+.ess-nav { display: flex; gap: 4px; flex-wrap: wrap; margin-inline-start: 8px; }
+.ess-nav a {
+    color: var(--sidebar-text); font-size: 12.5px; padding: 7px 14px; border-radius: 9px;
+    text-decoration: none; transition: background .15s, color .15s;
+}
+.ess-nav a:hover { background: color-mix(in srgb, var(--sidebar-text) 12%, transparent); color: var(--sidebar-title); text-decoration: none; }
+.ess-nav a.on { background: rgba(var(--accent-rgb), .28); color: var(--accent-soft-text); font-weight: 600; }
+.ess-user { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+.ess-emp { color: var(--sidebar-title); font-size: 12px; font-weight: 600; }
+.ess-code { color: var(--sidebar-muted); font-size: 10px; }
+.ess-main { flex: 1; padding: 20px 22px; min-width: 0; }
+.ess-foot { padding: 10px 22px; color: var(--ink-3); font-size: 10.5px; border-top: 1px solid var(--line); }
+@media (max-width: 760px) {
+    .ess-user { margin-inline-start: 0; width: 100%; justify-content: space-between; }
+    .ess-main { padding: 14px; }
+}
+
+/* ============ دیالوگ‌های سفارشی (جای alert/confirm مرورگر) ============ */
+.dlg-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .18s ease, visibility .18s ease;
+}
+.dlg-overlay.on { opacity: 1; visibility: visible; }
+.dlg {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px -12px rgba(var(--sidebar-rgb), .35);
+    max-width: 430px; width: 100%;
+    padding: 24px 24px 20px;
+    text-align: center;
+    transform: translateY(14px) scale(.96);
+    transition: transform .2s cubic-bezier(.2, .9, .3, 1.2);
+}
+/* فاز ۹۵ — پایان انیمیشن با transform:none تا والدِ مختصاتیِ منوی fixed دراپ‌داون نشود
+   (transform غیر none باقی بماند، position:fixed داخل مودال به مودال لنگر می‌خورد و منو جای اشتباه باز می‌شود) */
+.dlg-overlay.on .dlg { transform: none; }
+.dlg-ico {
+    width: 54px; height: 54px; margin: 0 auto 12px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 25px; line-height: 1;
+}
+.dlg-ico.info { background: var(--accent-soft); border: 1px solid var(--accent-border); }
+.dlg-ico.danger { background: var(--err-bg); border: 1px solid var(--err-border); }
+.dlg-title { margin: 0 0 8px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.dlg-msg {
+    font-size: 13px; color: var(--ink-2); line-height: 2;
+    white-space: pre-line;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+.dlg-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.dlg-actions .btn { min-width: 120px; justify-content: center; }
+
+/* ============ مودال فرم‌ها — پاپ‌آپ AJAX با همان زبان بصری دیالوگ‌ها ============ */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 90;
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 4vh 16px;
+    overflow-y: auto;
+    opacity: 0; visibility: hidden;
+    transition: opacity .2s, visibility .2s;
+}
+.modal-overlay.on { opacity: 1; visibility: visible; }
+.modal {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    width: min(760px, 100%);
+    box-shadow: 0 24px 64px rgba(var(--sidebar-rgb), .35);
+    transform: translateY(-10px) scale(.98);
+    transition: transform .2s;
+    margin: auto;
+    /* فاز ۵۱ — پاپ‌آپ قابل تغییر اندازه توسط کاربر (دستهٔ resize گوشهٔ پایین) */
+    resize: both;
+    overflow: hidden;
+    min-width: 320px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+/* فاز ۹۵ — مثل دیالوگ: پایان باز شدن با transform:none (انتقال به identity نرم است) */
+.modal-overlay.on .modal { transform: none; }
+.modal-h {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--line);
+    flex: none; /* فاز ۵۱ — هدر در مودال تغییر اندازه ثابت بماند */
+    cursor: default;
+}
+.modal-h h3 { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink); }
+.modal-x {
+    border: 0; background: transparent; cursor: pointer;
+    color: var(--ink-3); font-size: 14px;
+    padding: 4px 9px; border-radius: 8px;
+}
+.modal-x:hover { background: var(--line-soft); color: var(--ink); }
+/* فاز ۵۱ — بدنه مودال با تغییر اندازه هماهنگ است (flex + بدون سقف ثابت) */
+.modal-b { padding: 16px 18px; max-height: 76vh; overflow-y: auto; flex: 1 1 auto; min-height: 0; }
+.modal[style*="height"] .modal-b { max-height: none; }
+.modal-loading { padding: 34px 10px; text-align: center; color: var(--ink-3); font-size: 13px; }
+
+/* ============ ناوبری AJAX (pjax) — نوار پیشرفت ظریف بالای صفحه ============ */
+body.pjax-loading::after {
+    content: "";
+    position: fixed;
+    top: 0; right: 0;
+    width: 100%; height: 3px;
+    z-index: 90;
+    background: var(--accent);   /* تخت */
+    animation: pjaxbar 1s ease-in-out infinite;
+    opacity: .85;
+}
+@keyframes pjaxbar {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-30%); }
+}
+
+/* ============ نقشه سایت گرافیکی (فاز ۳۰) ============ */
+.smap {
+    position: relative;
+    height: 520px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    background:
+        linear-gradient(rgba(var(--accent-rgb), .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), .05) 1px, transparent 1px),
+        var(--bg);
+    background-size: 40px 40px, 40px 40px, auto, auto;
+    overflow: hidden;
+    touch-action: none;
+}
+.smap-gate {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: var(--card);
+    border: 1.6px solid var(--zc, #6366f1);
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    user-select: none;
+    cursor: grab;
+    z-index: 2;
+    transition: box-shadow .15s;
+}
+.smap-gate:hover { box-shadow: var(--shadow-lift); }
+.smap-gate.dragging { cursor: grabbing; box-shadow: 0 10px 26px -8px rgba(var(--accent-rgb), .45); z-index: 5; }
+.smap-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--ok, #059669); flex: none;
+}
+.smap-dot-bad { background: var(--err, #e11d48); }
+.smap-dot-mute { background: var(--ink-3, #9498b8); }
+.smap-flag {
+    font-size: 10px; line-height: 1;
+    border-radius: 6px; padding: 2px 4px; flex: none;
+}
+.smap-flag-dev { display: inline-flex; align-items: center; padding: 2px 4px; background: var(--line-soft); border-radius: 6px; }
+.smap-flag-dev .dot { width: 7px; height: 7px; }
+.smap-hint {
+    position: absolute; top: 8px; right: 12px;
+    font-size: 11px; color: var(--ink-3);
+    background: var(--card); border: 1px dashed var(--line);
+    border-radius: 8px; padding: 4px 10px; pointer-events: none;
+}
+.smap-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.smap-legend-swatch { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+
+/* ============ فاز ۳۱ — برندینگ داینامیک + پالت ادمین ============ */
+/* لوگوی بارگذاری‌شده در سایدبار و صفحه ورود */
+.brand-logo-img {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    object-fit: contain; background: var(--card); padding: 3px;
+    box-shadow: 0 4px 12px -4px rgba(var(--accent-rgb), .4);
+}
+.login-logo-img {
+    width: 58px; height: 58px; border-radius: 14px;
+    object-fit: contain; background: var(--card); padding: 5px; margin: 0 auto 12px;
+    box-shadow: 0 6px 18px -6px rgba(var(--accent-rgb), .5);
+    display: block;
+}
+/* نشان نسخه در پانوشت سایدبار */
+.ver-chip {
+    text-align: center; font-size: 10.5px; color: rgba(238, 247, 247, .45);
+    margin-bottom: 10px; letter-spacing: .3px;
+}
+/* خط نسخه/تولیدکننده در صفحه ورود */
+.login-ver { margin-top: 14px; text-align: center; font-size: 11px; color: var(--ink-3); }
+/* پالت‌های آماده */
+.palette-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.palette-preset {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px;
+    background: var(--card); cursor: pointer; font-size: 12px; color: var(--ink-2);
+    font-family: inherit; transition: border-color .15s, box-shadow .15s;
+}
+.palette-preset:hover { border-color: var(--accent); box-shadow: var(--ring); }
+.palette-preset .dot { width: 14px; height: 14px; border-radius: 50%; flex: none; border: 1px solid rgba(0,0,0,.08); }
+.palette-preset:disabled { opacity: .55; cursor: not-allowed; }
+/* جدول کلید-مقدار کارت درباره */
+.tbl.kv td:first-child { color: var(--ink-2); width: 130px; background: var(--line-soft); }
+
+/* ============ فاز ۳۲ — کتابخانه پالت‌های استاندارد ============ */
+.pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 12px; }
+.pal-card {
+    border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    background: var(--card); padding: 12px 13px; display: flex; flex-direction: column; gap: 9px;
+    transition: border-color .15s, box-shadow .15s; overflow: hidden;
+}
+.pal-card:hover { border-color: var(--accent-border); box-shadow: var(--shadow); }
+.pal-card.on { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .14); }
+.pal-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.pal-name { font-weight: 700; font-size: 12.5px; color: var(--ink); }
+.pal-tag {
+    font-size: 9.5px; font-weight: 700; border-radius: 999px; padding: 1.5px 8px;
+    background: var(--accent-soft); color: var(--accent-ink); border: 1px solid var(--accent-border);
+}
+.pal-tag.builtin { background: var(--line-soft); color: var(--ink-2); border-color: var(--line); }
+.pal-swatches { display: flex; flex-wrap: wrap; gap: 4px; }
+.pal-sw { width: 20px; height: 20px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, .08); flex: none; }
+.pal-acts { display: flex; gap: 5px; flex-wrap: wrap; }
+.pal-mini {
+    border: 1px solid var(--line); border-radius: 9px; overflow: hidden;
+    display: flex; height: 44px; font-size: 10px;
+}
+.pal-mini .m-side { width: 30%; padding: 5px 6px; color: var(--sidebar-text); }
+.pal-mini .m-main { flex: 1; padding: 5px 7px; }
+.pal-mini .m-link { color: var(--link); font-weight: 700; }
+.pal-mini .m-btn {
+    display: inline-block; background: var(--accent); color: #fff;
+    border-radius: 5px; padding: 1px 7px; font-weight: 700; font-size: 9px;
+}
+/* فیلد رنگ — انتخاب‌گر + کد */
+.color-pair { display: flex; gap: 8px; align-items: center; }
+.color-pair input[type="color"] {
+    width: 46px; height: 34px; padding: 2px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--card); cursor: pointer; flex: none;
+}
+.color-pair code { font-size: 11.5px; color: var(--ink-2); direction: ltr; }
+
+/* ============================================================
+   نمای زنده پارکینگ (فاز ۴۲) — دیوار دوربین‌ها + تیکر خوانش‌ها
+   ============================================================ */
+.live-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 16px;
+    align-items: start;
+}
+@media (max-width: 1100px) { .live-grid { grid-template-columns: 1fr; } }
+.live-side { display: flex; flex-direction: column; gap: 16px; }
+.live-side .card { margin: 0; }
+.live-side .ticker { max-height: 420px; }
+
+.cam-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+}
+.cam-tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(29, 30, 58, .06);
+}
+.cam-head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; margin-bottom: 8px;
+}
+.cam-head strong { font-size: 12.5px; }
+
+/* قاب تصویر دوربین — شبیه‌ساز جریان زنده با خط اسکن */
+.cam-feed {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 9px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, .16), transparent 55%),
+        radial-gradient(ellipse at 75% 80%, rgba(129, 140, 248, .10), transparent 50%),
+        linear-gradient(160deg, #171a33 0%, #232858 55%, #151831 100%);
+    border: 1px solid rgba(99, 102, 241, .25);
+}
+.cam-feed.on {
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, .28), transparent 55%),
+        radial-gradient(ellipse at 75% 80%, rgba(129, 140, 248, .18), transparent 50%),
+        linear-gradient(160deg, #1c2042 0%, #2a2f68 55%, #191d3d 100%);
+}
+.cam-feed::before {  /* شبکه ظریف روی تصویر */
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(165, 180, 252, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(165, 180, 252, .05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+}
+.cam-scan {
+    position: absolute; inset-inline: 0; height: 2px; top: 12%;
+    background: linear-gradient(90deg, transparent, rgba(165, 180, 252, .8), transparent);
+    box-shadow: 0 0 12px 2px rgba(99, 102, 241, .45);
+    animation: camscan 3.4s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes camscan { 0%, 100% { top: 10%; } 50% { top: 88%; } }
+
+.cam-osd {
+    position: absolute; top: 7px; inset-inline: 8px;
+    display: flex; align-items: center; gap: 6px;
+    color: #c7d2fe; font-size: 10px; direction: ltr;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+    z-index: 2;
+}
+.rec-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #f43f5e; flex: none;
+    animation: recblink 1.6s ease-in-out infinite;
+}
+@keyframes recblink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+.cam-off {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #94a3b8; font-size: 12px; font-weight: 600;
+    background: rgba(10, 12, 28, .55);
+    letter-spacing: .5px;
+    z-index: 3;
+}
+
+/* خوانش پلاک روی تصویر دوربین */
+.cam-read {
+    position: absolute; bottom: 8px; inset-inline: 8px;
+    display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+    z-index: 2;
+}
+.cam-readmeta { color: #c7d2fe; font-size: 10px; text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+
+/* پلاک ایرانی واقعی (فاز ۴۵) — سریال چپ، کادر ایران/کد استان راست مثل پلاک فلزی؛
+   هر جزء ایزوله است و الگوریتم bidi مرورگر نمی‌تواند ترتیب را به‌هم بزند (رفع باگ نمایش پلاک) */
+.plate-real {
+    display: inline-flex; align-items: stretch; direction: ltr;
+    background: #ffffff; color: #101322;
+    border: 1.5px solid #23264a; border-radius: 5px;
+    font-weight: 800; font-size: 12.5px; line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .22);
+    overflow: hidden; vertical-align: middle; max-width: 100%;
+}
+.plate-real.mini { font-size: 10.5px; box-shadow: 0 1px 3px rgba(0, 0, 0, .14); }
+.pr-main {
+    display: inline-flex; align-items: center; gap: 2.5px;
+    padding: 4px 7px; letter-spacing: .5px; font-variant-numeric: tabular-nums;
+}
+.pr-main .pr-l { color: #16247e; }
+.plate-real.mini .pr-main { padding: 3px 5px; gap: 2px; }
+.pr-region {
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+    border-inline-start: 1.5px solid #23264a; background: #f4f5ff;
+    padding: 2px 6px; gap: 1.5px; min-width: 30px;
+}
+.pr-iran { font-size: .72em; font-weight: 700; letter-spacing: 1px; }
+.pr-code { font-size: .86em; font-weight: 800; font-variant-numeric: tabular-nums; }
+.plate-real.hot { animation: platehot 2.4s ease-out; }
+@keyframes platehot {
+    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, .75), 0 2px 8px rgba(0, 0, 0, .3); }
+    70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0), 0 2px 8px rgba(0, 0, 0, .3); }
+    100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0), 0 2px 8px rgba(0, 0, 0, .3); }
+}
+.cam-feed.pulse { animation: feedpulse .9s ease-out; }
+@keyframes feedpulse {
+    0% { border-color: rgba(165, 180, 252, .95); box-shadow: 0 0 0 3px rgba(99, 102, 241, .35); }
+    100% { border-color: rgba(99, 102, 241, .25); box-shadow: none; }
+}
+
+.cam-foot {
+    display: flex; flex-wrap: wrap; gap: 4px 10px;
+    color: var(--ink-2); font-size: 10.5px; margin-top: 8px;
+    align-items: center;
+}
+
+/* تیکر خوانش‌های زنده */
+.ticker {
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: 480px; overflow-y: auto;
+    padding: 10px 12px;
+}
+.tick-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 8px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--card);
+}
+.tick-row.ok { border-inline-start: 3px solid var(--ok); }
+.tick-row.err { border-inline-start: 3px solid var(--err); background: var(--err-bg); }
+.tick-row.flash { animation: tickflash 1.6s ease-out; }
+@keyframes tickflash {
+    0% { background: rgba(99, 102, 241, .22); transform: translateY(-3px); }
+    100% { background: var(--card); transform: none; }
+}
+.tick-row.err.flash { animation-name: tickflasherr; }
+@keyframes tickflasherr {
+    0% { background: rgba(225, 29, 72, .30); transform: translateY(-3px); }
+    100% { background: var(--err-bg); transform: none; }
+}
+.tick-body { flex: 1; min-width: 0; }
+.tick-l1 { display: flex; align-items: center; gap: 6px; font-size: 11.5px; }
+.tick-l2 { color: var(--ink-2); font-size: 10px; margin-top: 2px; }
+.tick-time { color: var(--ink-3); font-size: 10px; flex: none; }
+.dir-badge {
+    font-size: 9px; font-weight: 700;
+    padding: 1px 6px; border-radius: 6px; flex: none;
+}
+.dir-badge.in { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+.dir-badge.out { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+
+/* ============================================================
+   فاز ۴۳ — نمای زنده حراست + قالب داشبورد «پارسان»
+   همه کلاس‌های این بخش «اضافه‌ی صرف» هستند — کلاس‌های فازهای قبل دست‌نخورده‌اند
+   ============================================================ */
+
+/* ---------- قاب تصویری دستگاه روی دیوار زنده ---------- */
+.dev-vis {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 9px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(20, 184, 166, .14), transparent 55%),
+        radial-gradient(ellipse at 75% 80%, rgba(59, 130, 246, .10), transparent 50%),
+        linear-gradient(160deg, #14212e 0%, #1d3245 55%, #131f2c 100%);
+    border: 1px solid rgba(148, 163, 184, .28);
+}
+.dev-vis.on {
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(20, 184, 166, .26), transparent 55%),
+        radial-gradient(ellipse at 75% 80%, rgba(59, 130, 246, .16), transparent 50%),
+        linear-gradient(160deg, #18293a 0%, #24405a 55%, #152433 100%);
+    border-color: rgba(20, 184, 166, .35);
+}
+.dev-vis::before {   /* شبکه ظریف روی قاب */
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(203, 213, 225, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(203, 213, 225, .05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+}
+.dev-scan {
+    position: absolute; inset-inline: 0; height: 2px; top: 12%;
+    background: linear-gradient(90deg, transparent, rgba(94, 234, 212, .75), transparent);
+    box-shadow: 0 0 12px 2px rgba(20, 184, 166, .4);
+    animation: camscan 4.2s ease-in-out infinite;
+    pointer-events: none;
+}
+/* آواتار بزرگ آخرین فرد اسکن‌شده — مرکز قاب */
+.dev-lastav {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -58%);
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255, 255, 255, .10);
+    border: 1.5px solid rgba(203, 213, 225, .35);
+    color: #e2e8f0; font-weight: 800; font-size: 22px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+    z-index: 2;
+}
+.dev-lastname {
+    color: #e2e8f0; font-weight: 700; font-size: 12.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .7);
+}
+.dev-vis.pulse { animation: devpulse .9s ease-out; }
+@keyframes devpulse {
+    0% { border-color: rgba(94, 234, 212, .95); box-shadow: 0 0 0 3px rgba(20, 184, 166, .35); }
+    100% { border-color: rgba(148, 163, 184, .28); box-shadow: none; }
+}
+
+/* ---------- نشان‌های جهت اضافه: اسکن میانی و ناشناس ---------- */
+.dir-badge.mid { background: var(--line-soft); color: var(--ink-2); border: 1px solid var(--line); }
+.dir-badge.bad { background: var(--err-bg); color: var(--err); border: 1px solid var(--err-border); }
+
+/* ---------- آواتار کوچک سطر تیکر ---------- */
+.tick-av {
+    width: 27px; height: 27px; border-radius: 50%; flex: none;
+    display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent-ink);
+    font-weight: 700; font-size: 12px;
+}
+.tick-av-bad { background: var(--err-bg); color: var(--err); }
+
+/* ---------- استک نوتیفیکیشن تردد (پنل حراست) ---------- */
+.noty-stack {
+    position: fixed; bottom: 18px; inset-inline-end: 20px; z-index: 85;
+    display: flex; flex-direction: column; gap: 10px;
+    width: 355px; max-width: calc(100vw - 40px);
+    pointer-events: none;
+}
+.noty {
+    pointer-events: auto;
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--ok);
+    border-radius: 12px;
+    padding: 10px 12px;
+    box-shadow: 0 12px 32px -8px rgba(var(--sidebar-rgb), .38);
+    animation: notyin .32s cubic-bezier(.2, .9, .3, 1.08);
+}
+.noty-out { border-inline-start-color: var(--info); }
+.noty-bad { border-inline-start-color: var(--err); }
+.noty-hide { opacity: 0; transform: translateY(10px); transition: opacity .3s, transform .3s; }
+@keyframes notyin {
+    from { opacity: 0; transform: translateY(-12px) scale(.97); }
+    to { opacity: 1; transform: none; }
+}
+.noty-av {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    display: grid; place-items: center;
+    background: var(--ok-bg); color: var(--ok);
+    font-weight: 800; font-size: 16px;
+}
+.noty-av-bad { background: var(--err-bg); color: var(--err); }
+.noty-b { flex: 1; min-width: 0; }
+.noty-l1 { display: flex; align-items: center; gap: 6px; font-size: 12.5px; flex-wrap: wrap; }
+.noty-l2 { color: var(--ink-2); font-size: 10.5px; margin-top: 2px; }
+.noty-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.noty-time { color: var(--ink-3); font-size: 10px; font-variant-numeric: tabular-nums; }
+.noty-x {
+    border: 0; background: transparent; cursor: pointer;
+    color: var(--ink-3); font-size: 11px; padding: 2px 6px; border-radius: 6px;
+}
+.noty-x:hover { background: var(--line-soft); color: var(--ink); }
+
+/* ---------- قالب داشبورد «پارسان» — کارت‌های آمار پاستلی با آیکون‌چیپ ---------- */
+.ps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.ps-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 15px; box-shadow: var(--shadow); min-width: 0;
+    transition: transform .15s, box-shadow .15s;
+}
+.ps-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.ps-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ps-ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 18px; flex: none; }
+.ps-v { font-size: 23px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 9px; line-height: 1.3; }
+.ps-l { color: var(--ink-2); font-size: 11.5px; margin-top: 1px; }
+.ps-sub { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; margin-top: 9px; color: var(--ink-3); }
+.ps-ic.t { background: #e7f8f5; color: #0d9488; } .ps-v.t { color: #0d9488; }
+.ps-ic.b { background: #e8f1fe; color: #2563eb; } .ps-v.b { color: #2563eb; }
+.ps-ic.p { background: #f1edfd; color: #7c3aed; } .ps-v.p { color: #7c3aed; }
+.ps-ic.o { background: #fdf3e0; color: #d97706; } .ps-v.o { color: #d97706; }
+.ps-ic.r { background: #ffe9ef; color: #e11d48; } .ps-v.r { color: #e11d48; }
+.ps-ic.g { background: #e7f8f1; color: #059669; } .ps-v.g { color: #059669; }
+
+/* ============================================================
+   فاز ۴۴ — سازندهٔ بصری فرمول (Drag & Drop) — فرمول‌ساز اقلام حقوق
+   کاملاً additive — هیچ کلاس فازهای قبلی دست نخورده است
+   ============================================================ */
+.fb { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--bg); padding: 10px; margin-bottom: 8px; }
+.fb-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.fb-cap { font-size: 12px; font-weight: 700; color: var(--accent-ink); }
+.fb-tbtn { font-size: 11px; padding: 3px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); cursor: pointer; color: var(--ink-2); font-family: inherit; }
+.fb-tbtn:hover { border-color: var(--accent); color: var(--accent-ink); }
+.fb-body { display: flex; gap: 10px; align-items: stretch; }
+.fb-pal { width: 300px; flex: 0 0 300px; border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 8px; background: var(--card); }
+.fb-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.fb-tab { font-size: 11px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); cursor: pointer; color: var(--ink-2); font-family: inherit; }
+.fb-tab.on { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent-ink); font-weight: 700; }
+.fb-search { width: 100%; font-size: 11px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 6px; background: var(--card); }
+.fb-chips { display: flex; flex-wrap: wrap; gap: 5px; max-height: 200px; overflow: auto; align-content: flex-start; }
+.fb-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+.fb-canvas {
+    flex: 1; min-height: 64px; border: 1.5px dashed var(--accent-border); border-radius: var(--radius-sm);
+    background: var(--card); padding: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+    align-items: center; align-content: flex-start; direction: ltr;
+}
+.fb-canvas.fb-over { border-color: var(--accent); background: var(--accent-soft); }
+.fb-empty { color: var(--ink-3); font-size: 12px; direction: rtl; }
+.fb-chip {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 8px;
+    font-size: 12px; border: 1px solid var(--line); background: var(--card);
+    cursor: grab; direction: ltr; font-family: var(--mono, monospace); line-height: 1.7; user-select: none;
+}
+.fb-chip:active { cursor: grabbing; }
+.fb-var { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent-ink); }
+.fb-op { font-weight: 700; }
+.fb-num { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok); font-weight: 700; }
+.fb-str { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn); }
+.fb-paren { font-weight: 800; }
+.fb-call { background: var(--info-bg); border-color: var(--info-border); padding: 3px 6px; }
+.fb-call > b { color: var(--info); font-weight: 800; }
+.fb-args { display: inline-flex; align-items: center; gap: 2px; direction: ltr; }
+.fb-slot {
+    display: inline-flex; flex-wrap: wrap; gap: 3px; align-items: center; min-width: 40px; min-height: 24px;
+    border: 1px dashed var(--info-border); border-radius: 6px; padding: 1px 3px;
+    background: rgba(255, 255, 255, .65); direction: ltr;
+}
+.fb-slot.fb-over { border-color: var(--accent); background: var(--accent-soft); }
+.fb-ph { color: var(--ink-3); font-size: 10.5px; direction: rtl; }
+.fb-comma { color: var(--ink-3); font-weight: 800; }
+.fb-addarg { font-size: 10px; line-height: 1; padding: 4px 5px; border-radius: 6px; border: 1px dashed var(--info-border); background: #fff; color: var(--info); cursor: pointer; font-family: inherit; }
+.fb-addarg:hover { background: var(--info-bg); }
+.fb-x { font-style: normal; cursor: pointer; color: var(--ink-3); font-size: 10.5px; padding: 0 1px; margin-inline-start: 5px; border-radius: 4px; flex: none; }
+.fb-x:hover { color: var(--err); background: var(--err-bg); }
+.fb-chip.fb-dragging { opacity: .45; }
+.fb-caret { width: 2px; height: 22px; background: var(--accent); border-radius: 2px; display: inline-block; flex: none; }
+.fb-call.fb-incomplete { border-color: var(--warn); box-shadow: 0 0 0 2px var(--warn-bg); }
+.fb-edit { width: 78px; font-size: 12px; direction: ltr; border: 1px solid var(--accent-border); border-radius: 5px; padding: 1px 4px; font-family: var(--mono, monospace); }
+.fb-edit-bad { border-color: var(--err); background: var(--err-bg); }
+.fb-out { font-size: 11px; color: var(--ink-2); background: var(--card); border: 1px solid var(--line-soft); border-radius: 8px; padding: 6px 8px; direction: ltr; text-align: left; overflow: auto; max-height: 52px; white-space: pre-wrap; word-break: break-all; }
+.fb-out code { font-family: var(--mono, monospace); font-size: 11px; }
+.fb-status { font-size: 11px; min-height: 15px; }
+.fb-status.ok { color: var(--ok); } .fb-status.warn { color: var(--warn); } .fb-status.err { color: var(--err); }
+.fb-hint { font-size: 10.5px; color: var(--ink-3); line-height: 1.9; }
+.fb-lit { display: flex; gap: 6px; align-items: center; }
+.fb-lit input { flex: 1; font-size: 12px; direction: ltr; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+
+/* فاز ۴۷ — کارت‌های «نمونه‌ها» (قالب‌های آمادهٔ فرمول) در پالت سازندهٔ بصری — additive */
+.fb-tplcard { display: block; width: 100%; text-align: right; cursor: pointer; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--card); position: relative; margin-bottom: 7px; line-height: 1.7; transition: border-color .15s, box-shadow .15s; }
+.fb-tplcard:hover { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft, rgba(20,184,166,.14)); }
+.fb-tplcard b { display: block; font-size: 12px; color: var(--ink); }
+.fb-tplcard code { display: block; font-family: var(--mono, monospace); font-size: 10.5px; direction: ltr; text-align: left; color: var(--ink-2); background: transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fb-tplcard small { display: block; font-size: 10px; color: var(--ink-3); }
+.fb-tpltag { position: absolute; top: 7px; left: 8px; font-style: normal; font-size: 9px; padding: 1px 7px; border-radius: 99px; }
+.fb-tpltag-pos { background: var(--ok-bg); color: var(--ok); }
+.fb-tpltag-neg { background: var(--err-bg); color: var(--err); }
+.fb-tpltag-sum { background: var(--info-bg, #e0f2fe); color: var(--info, #0369a1); }
+@media (max-width: 900px) { .fb-body { flex-direction: column; } .fb-pal { width: auto; flex: none; } }
+
+/* فاز ۸۶ — فرمول‌ساز: خط «💬 به فارسی» + پنجرهٔ «؟ راهنما» + دکمهٔ «↩️ برگشت» — additive */
+.fb-fa { margin-top: 6px; padding: 7px 10px; border: 1px dashed var(--line); border-radius: 10px; background: var(--card); color: var(--ink-2); font-size: 11.5px; line-height: 1.9; }
+.fb-fa.ok { color: var(--ink); border-color: var(--ok-border); background: var(--ok-bg); }
+.fb-fa.bad { color: var(--err); border-color: var(--err-border); background: var(--err-bg); }
+.fb-help-overlay { position: fixed; inset: 0; background: var(--overlay, rgba(15,15,35,.46)); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.fb-help-card { background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 18px 60px rgba(0,0,0,.25); max-width: 540px; width: 100%; padding: 18px 20px; max-height: 86vh; overflow: auto; }
+.fb-help-h { font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.fb-help-close { border: 0; background: transparent; color: var(--ink-3); cursor: pointer; font-size: 14px; }
+.fb-help-steps { margin: 0; padding-inline-start: 20px; display: grid; gap: 8px; font-size: 12.5px; line-height: 2; color: var(--ink-2); }
+.fb-help-steps b { color: var(--ink); }
+.fb-help-foot { margin-top: 12px; text-align: center; }
+
+/* ============ فاز ۸۹ — پیکر تاریخ تقویمی (شمسی/قمری) ============ */
+.hr-date-text { cursor: pointer; background: var(--card); }
+.hr-dp { position: absolute; z-index: 9999; background: var(--card, #fff); border: 1px solid var(--line, #e3e8f0);
+    border-radius: 12px; box-shadow: 0 14px 40px rgba(23, 32, 90, .18); padding: 10px; width: 252px;
+    font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif; direction: rtl; }
+html[dir="ltr"] .hr-dp { direction: ltr; }
+.hr-dp-h { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+.hr-dp-h b { font-size: 12.5px; color: var(--ink, #223); }
+.hr-dp-nav { border: 1px solid var(--line, #e3e8f0); background: var(--card, #fff); border-radius: 8px;
+    width: 26px; height: 26px; cursor: pointer; color: var(--ink-2, #667); font-size: 14px; line-height: 1; }
+.hr-dp-nav:hover { border-color: var(--accent, #6366f1); color: var(--accent, #6366f1); }
+.hr-dp-g { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.hr-dp-w { font-size: 10px; color: var(--ink-3, #99a); text-align: center; padding: 2px 0; font-weight: 600; }
+.hr-dp-d { border: 0; background: transparent; border-radius: 8px; height: 28px; cursor: pointer;
+    font-family: inherit; font-size: 12px; color: var(--ink, #223); }
+.hr-dp-d:hover { background: rgba(var(--accent-rgb, 99, 102, 241), .12); }
+.hr-dp-d.today { box-shadow: inset 0 0 0 1px var(--accent, #6366f1); }
+.hr-dp-d.sel { background: var(--accent, #6366f1); color: #fff; font-weight: 700; }
+
+/* ============================================================================
+   فاز ۹۶ (درخواست کاربر) — محافظ صفحهٔ باران ماتریکس + فرم بیدارسازی با رمز
+   پیکربندی: تنظیمات سامانه (وضعیت / دقایق بی‌حرکتی / الزام رمز) — js/hr-screensaver.js
+   ============================================================================ */
+body.hr-ss-lock { overflow: hidden !important; }
+.hr-ss { position: fixed; inset: 0; z-index: 2147483000; background: #03070a; color: #e7fff0;
+    display: flex; align-items: center; justify-content: center; user-select: none; }
+.hr-ss-cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: .85; }
+/* فاز ۱۰۵ — iframe سندباکس‌شدهٔ بستهٔ محافظ صفحه: تمام‌صفحه زیرِ گوشهٔ تاریخ/ساعت (z2) و پنل رمز (z3)؛
+   کد بسته در مبدأ کدر (sandbox بدون allow-same-origin) اجرا می‌شود و به صفحهٔ والد دسترسی ندارد.
+   pointer-events:none الزامی است: وگرنه iframe تمام‌صفحه همهٔ رخدادهای ماوس/کلید را می‌بلعد و
+   والد هیچ‌وقت «حرکت» را نمی‌بیند — یعنی پنل رمز هرگز باز نمی‌شود (بسته فقط بصری است) */
+.hr-ss-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 1;
+    background: #03070a; pointer-events: none; }
+/* فاز ۱۰۱ — تاریخ/ساعت ریزِ گوشهٔ پایین-چپ (فیزیکی؛ در RTL هم چپ می‌ماند) — ساعت بزرگ و «مدت بی‌حرکتی» حذف شدند */
+.hr-ss-corner { position: absolute; left: 16px; bottom: 13px; z-index: 2; text-align: left;
+    line-height: 1.7; text-shadow: 0 0 10px rgba(34,197,94,.45); font-variant-numeric: tabular-nums;
+    max-width: 46vw; pointer-events: none; }
+.hr-ss-time { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; color: #86efac; }
+.hr-ss-date { font-size: 11.5px; color: rgba(134,239,172,.78); font-family: inherit; }
+/* فاز ۱۰۳ — نام شرکت + نام سامانه، بالای ساعت/تاریخ در همان گوشه؛ تک‌خطی با سه‌نقطه در متن‌های بلند */
+.hr-ss-brand { font-size: 11px; letter-spacing: .4px; color: rgba(226,255,239,.6);
+    margin-bottom: 4px; max-width: 44vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* فاز ۱۰۱ — پنل رمز: تنها فرزندِ جریانِ .hr-ss است و flex والد آن را دقیقاً وسط صفحه می‌کند */
+.hr-ss-pw { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 26px 30px; min-width: min(360px, 86vw); border-radius: 18px;
+    background: rgba(3,18,11,.84); border: 1px solid rgba(34,197,94,.35);
+    box-shadow: 0 24px 70px rgba(0,0,0,.65), 0 0 44px rgba(34,197,94,.14); }
+.hr-ss-pw[hidden] { display: none; }
+.hr-ss-pw-title { font-size: 13.5px; color: #a7f3d0; text-align: center; line-height: 1.9; }
+.hr-ss-pw input { width: min(320px, 70vw); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(34,197,94,.4);
+    background: rgba(3,20,12,.75); color: #d1fae5; font-family: inherit; font-size: 14px; outline: none; text-align: center; }
+.hr-ss-pw input:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
+.hr-ss-btn { padding: 9px 22px; border-radius: 12px; border: 1px solid rgba(34,197,94,.55); cursor: pointer;
+    background: rgba(34,197,94,.14); color: #bbf7d0; font-family: inherit; font-size: 13px; font-weight: 700; }
+.hr-ss-btn:hover { background: rgba(34,197,94,.24); }
+.hr-ss-btn:disabled { opacity: .6; cursor: default; }
+.hr-ss-msg { font-size: 12px; color: #fecaca; }
+.hr-ss-pw.shake { animation: hr-ss-shake .35s; }
+@keyframes hr-ss-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-9px); }
+    50% { transform: translateX(8px); } 75% { transform: translateX(-5px); } }
+
+/* ==================================================================
+   فاز ۱۱۴ — انتخابگر جستجومحور پرسنل (emp-picker.js — فاز ۱۰۴)
+   سبک و هم‌خانواده با فرم‌های سامانه؛ کارا در RTL و LTR
+   ================================================================== */
+.emp-picker { position: relative; }
+.emp-picker .ep-row { display: flex; gap: 8px; align-items: center; }
+.emp-picker .ep-input { flex: 1; min-width: 0; }
+.emp-picker .ep-count { white-space: nowrap; font-size: 11px; color: var(--ink-3, #8891a7); }
+.emp-picker .ep-list { position: absolute; z-index: 60; top: calc(100% + 4px); inset-inline-start: 0;
+    width: min(420px, 92vw); max-height: 260px; overflow: auto; display: none;
+    background: var(--surface, #fff); border: 1px solid var(--line, #e3e7f0); border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .14); }
+.emp-picker .ep-item { display: block; width: 100%; text-align: start; padding: 7px 10px; border: 0;
+    background: transparent; cursor: pointer; font: inherit; color: inherit; border-bottom: 1px solid var(--line, #f0f2f8); }
+.emp-picker .ep-item:last-child { border-bottom: 0; }
+.emp-picker .ep-item:hover { background: var(--hover, #f4f6fd); }
+.emp-picker .ep-item.ep-sel { background: var(--sel, #eef2ff); }
+.emp-picker .ep-item .ep-main { display: block; font-size: 12.5px; font-weight: 600; }
+.emp-picker .ep-item .ep-sub { display: block; font-size: 10.5px; color: var(--ink-3, #8891a7); margin-top: 2px; }
+.emp-picker .ep-empty { padding: 14px 10px; text-align: center; color: var(--ink-3, #8891a7); font-size: 12px; }
+.emp-picker .ep-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.emp-picker .ep-chips:empty { display: none; }
+.emp-picker .ep-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px;
+    background: var(--sel, #eef2ff); border: 1px solid var(--line, #dfe4f7); font-size: 11.5px; }
+.emp-picker .ep-chip-all { background: var(--chip-all, #ecfdf5); border-color: #bbf7d0; font-weight: 700; }
+.emp-picker .ep-x { border: 0; background: transparent; cursor: pointer; font-size: 11px; color: var(--ink-3, #8891a7);
+    padding: 0 2px; line-height: 1; }
+.emp-picker .ep-x:hover { color: #ef4444; }
+.emp-picker .ep-allbtn.ep-on { outline: 2px solid #22c55e; outline-offset: 1px; }
+
+/* ============ فاز ۱۲۴ — هدر صفحه و بنرهای اعلان (توکن‌های مشترک همهٔ صفحات) ============ */
+.page-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 14px; }
+.page-h h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -.2px; color: var(--ink); }
+.page-sub { margin-top: 4px; font-size: 12px; color: var(--ink-3); line-height: 1.9; }
+.page-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.notice { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: var(--radius); font-size: 12.5px; line-height: 2; margin: 0 0 14px; border: 1px solid; }
+.notice .n-ic { font-size: 15px; line-height: 1.7; flex: none; }
+.notice-ok { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; }
+.notice-warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.notice-bad { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.notice .n-act { margin-inline-start: auto; align-self: center; white-space: nowrap; }
+
+/* ============ فاز ۱۲۴-ه — توکن ردیف کلید-مقدار پنل‌های جزئیات (الگوی lic-row تعمیم‌یافته) ============ */
+.kvs { display: grid; gap: 8px; }
+.kvr { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 8px 12px; border: 1px solid var(--line-soft); border-radius: 10px; font-size: 12.5px; line-height: 1.9; }
+.kvr .k { color: var(--ink-3); flex: none; }
+.kvr .v { color: var(--ink); font-weight: 600; text-align: end; word-break: break-word; }
+
+/* ============ فاز ۱۲۵ — پیشخوان یکپارچه (طرح Figma صفحهٔ ۶) ============ */
+/* دکمه‌های اکشن هدر صفحه — درون .page-h (flex space-between) */
+.page-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+/* ردیف‌های «کارهای نیازمند رسیدگی» — سه‌رنگ مطابق طرح (قرمز/زرد/آبی) */
+.task-item {
+    display: flex; align-items: center; gap: 10px;
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 8px;
+    font-size: 12.5px; line-height: 1.9;
+}
+.task-item:last-child { margin-bottom: 0; }
+.task-item.ti-bad  { background: var(--danger-soft, #fef2f2); color: #b91c1c; }
+.task-item.ti-warn { background: var(--warn-soft, #fffbeb);  color: #92400e; }
+.task-item.ti-info { background: var(--info-soft, #eff6ff);  color: #1d4ed8; }
+.task-item a { margin-inline-start: auto; flex: none; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.task-item a:hover { text-decoration: underline; }
+/* کارت «سرو محلی منتخب» پایین سایدبار — طرح صفحهٔ ۶ فیگما */
+.sb-host {
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid var(--sidebar-line);
+    border-radius: 12px; padding: 12px 14px;
+    font-size: 11.5px;
+}
+.sb-host-t { display: flex; align-items: center; gap: 7px; font-weight: 700; color: var(--sidebar-title); font-size: 12px; }
+.sb-host-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex: none;
+    background: var(--ok, #10b981);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .18);
+}
+.sb-host-ip { color: var(--sidebar-text); margin-top: 7px; }
+.sb-host-ip b { direction: ltr; unicode-bidi: embed; }
+.sb-host-sy { color: var(--sidebar-muted); margin-top: 3px; }
+
+/* ============ فاز ۱۲۶ — پرتال من (طرح Figma صفحهٔ ۳) ============ */
+.card-foot { border-top: 1px solid var(--line-soft); padding: 10px 18px; color: var(--ink-2); font-size: 11.5px; line-height: 2; }
+.muted { color: var(--ink-3); font-size: 11.5px; }

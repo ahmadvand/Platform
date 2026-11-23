@@ -1,0 +1,34 @@
+{
+  "spring": {
+    "title": "Spring has come!",
+    "artist": "skyseeker",
+    "license": "CC BY 2.0",
+    "page": "https://www.flickr.com/photos/40422902@N00/3297578544",
+    "file": "/home/z/my-project/scripts/ss-season-assets/spring.jpg",
+    "bytes": 40916
+  },
+  "summer": {
+    "title": "Dailyshoot 2013 ~ Local Culture 2~ Cider! #Hereford",
+    "artist": "Leshaines123",
+    "license": "BY 2.0",
+    "page": "https://www.flickr.com/photos/46018453@N06/5680637536",
+    "file": "/home/z/my-project/scripts/ss-season-assets/summer.jpg",
+    "bytes": 123877
+  },
+  "autumn": {
+    "title": "Orange leaves in fog, Waterloo County Park, Oregon",
+    "artist": "Bonnie Moreland (free images)",
+    "license": "PDM 1.0",
+    "page": "https://www.flickr.com/photos/66741228@N05/52510748764",
+    "file": "/home/z/my-project/scripts/ss-season-assets/autumn.jpg",
+    "bytes": 65445
+  },
+  "winter": {
+    "title": "snowy forest",
+    "artist": "blacklord",
+    "license": "BY 2.0",
+    "page": "https://www.flickr.com/photos/95412963@N00/2128541921",
+    "file": "/home/z/my-project/scripts/ss-season-assets/winter.jpg",
+    "bytes": 97033
+  }
+}

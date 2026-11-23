@@ -1,0 +1,25 @@
+@{
+    // فاز ۱۲۱ — انتخاب صاحب خودرو با جستجوی زندهٔ سرور (emp-picker) — مقیاس ده‌ها هزار نفر
+    // (زیرنویس نتیجهٔ جستجو شرکت و واحد را نشان می‌دهد — تعیین‌کنندهٔ شرکت خودرو)
+}
+<div data-modal-title="@HrT.T("خودروی جدید")" hidden></div>
+<form method="post" action="/Parking/CreateVehicle" data-ajax data-refresh>
+    @Html.AntiForgeryToken()
+    <div class="form-grid">
+        <div class="fld"><label>@HrT.T("صاحب خودرو * (تعیین‌کننده شرکت)")</label>
+            <div class="emp-picker" data-name="employeeId" data-min="1"
+                 data-ph="@HrT.T("جستجوی نام یا کد پرسنلی…")" data-empty="@HrT.T("موردی یافت نشد")"></div>
+        </div>
+        <div class="fld"><label>@HrT.T("شماره پلاک *")</label><input name="plateNo" required placeholder="@HrT.T("12ع471 ایران 36")" /></div>
+        <div class="fld"><label>@HrT.T("نوع")</label>
+            <select name="type"><option value="سواری">@HrT.T("سواری")</option><option value="وانت">@HrT.T("وانت")</option><option value="ون">@HrT.T("ون")</option><option value="موتورسیکلت">@HrT.T("موتورسیکلت")</option></select>
+        </div>
+        <div class="fld"><label>@HrT.T("برند")</label><input name="brand" placeholder="@HrT.T("پژو ۲۰۶")" /></div>
+        <div class="fld"><label>@HrT.T("رنگ")</label><input name="color" placeholder="@HrT.T("سفید")" /></div>
+        <div class="fld fld-full"><label>@HrT.T("توضیح مدل (اختیاری)")</label><input name="model" placeholder="@HrT.T("مدل ۹۷")" /></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary">@HrT.T("ثبت خودرو")</button>
+        <button type="button" class="btn" data-close-modal>@HrT.T("انصراف")</button>
+    </div>
+</form>

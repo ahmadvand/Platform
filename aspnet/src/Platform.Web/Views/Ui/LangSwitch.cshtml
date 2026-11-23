@@ -1,0 +1,42 @@
+@model (string Code, string Title, string ReturnUrl)
+@{
+    Layout = null;   // فاز ۹۳ — صفحهٔ مستقل گذر زبان (بدون پوستهٔ اپ)
+}
+@* فاز ۹۳ — صفحهٔ گذر تغییر زبان: پرچم بزرگ زبان انتخابی + بازگشت خودکار.
+    نکته: HrT.Set در کنترلر قبل از رندر فراخوانی شده — متن‌ها به زبان «جدید» ترجمه می‌شوند. *@
+<!doctype html>
+<html lang="@HrT.Cur" dir="@(HrT.Rtl ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@HrT.T("در حال تغییر زبان…") — @Model.Title</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; }
+        body {
+            font-family: Vazirmatn, Tahoma, "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 55%, #e0e7ff 100%);
+            display: flex; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .sw { text-align: center; padding: 34px 44px; background: #fff; border: 1px solid #e2e8f0;
+              border-radius: 20px; box-shadow: 0 24px 60px -18px rgba(30,41,59,.25); }
+        .sw-flag { display: flex; justify-content: center; margin-bottom: 14px; }
+        .sw-flag svg { border-radius: 6px; box-shadow: 0 6px 20px -6px rgba(15,23,42,.35), 0 0 0 1px rgba(15,23,42,.08); }
+        .sw h1 { font-size: 17px; margin: 0 0 6px; color: #1e293b; }
+        .sw p { font-size: 12.5px; margin: 0 0 18px; color: #64748b; }
+        .sw-spin { width: 26px; height: 26px; margin: 0 auto; border-radius: 50%;
+                   border: 3px solid #e2e8f0; border-top-color: #4f46e5; animation: swspin .8s linear infinite; }
+        @@keyframes swspin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="sw">
+        <div class="sw-flag">@Html.Raw(HrFlags.Svg(Model.Code, 72))</div>
+        <h1>@Model.Title</h1>
+        <p>@HrT.T("زبان رابط کاربری تغییر کرد — در حال بازگشت…")</p>
+        <div class="sw-spin"></div>
+    </div>
+    <script>setTimeout(function () { location.replace(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ReturnUrl))); }, 900);</script>
+    <noscript><meta http-equiv="refresh" content="1;url=@Model.ReturnUrl" /></noscript>
+</body>
+</html>

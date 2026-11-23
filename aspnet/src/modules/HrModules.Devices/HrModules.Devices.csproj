@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!--
+    ============================================================
+    HrModules.Devices (فاز ۶۹) — ماژول تجهیزات و گیت‌وی، پروژهٔ جدا
+    ============
+    تا فاز ۶۸ این ماژول «پایهٔ توکار» بود و کدش در خود هاست (Platform.Web)
+    زندگی می‌کرد؛ از این فاز پلاگین حذف‌شدنی است: کنترلرها (Devices/
+    Biometrics/Gateway + پل‌های API دستگاه‌ها: authapi/gatewayconfig/
+    deviceswebhook) و همهٔ ویوها در همین اسمبلی کامپایل می‌شوند و مانیفست
+    خودتوصیف (DevicesUiModule) جای آن را به هاست اعلام می‌کند.
+    (خودِ حلقه‌های دروازهٔ درون‌اپی ماژول مستقل HrModules.DeviceGateway است.)
+
+    حذف ماژول (DLL کنار اپ نباشد):
+      • مسیرها/منو/مانیفست غایب — گیت مسیرها صفحهٔ دوستانه می‌دهد
+      • پل‌های دستگاه (webhook/authapi/config) ۴۰۴ می‌شوند — قرارداد پل
+    (جدول‌های دستگاه چون ستون فقرات دادهٔ پلتفرم‌اند در لایهٔ پایه می‌مانند.)
+
+    متعهد به: Platform.Core (پلتفرم مشترک) + قراردادها + هاست (یک‌طرفه)
+    ============================================================
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NeutralLanguage>fa</NeutralLanguage>
+    <!-- پشتیبانی صریح Razor برای MVC — بدون این، ویوها در اسمبلی کامپایل نمی‌شوند -->
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Platform.Core\Platform.Core.csproj" />
+    <ProjectReference Include="..\..\Platform.Contracts\Platform.Contracts.csproj" />
+    <!-- فاز ۶۹ — MvcBase/سرویس‌های هاست (DeviceOps/BioSync/GatewayConfig/...) —
+         جهت وابستگی یک‌طرفه: هاست هرگز به ماژول ارجاع ندارد -->
+    <ProjectReference Include="..\..\Platform.Web\Platform.Web.csproj" />
+  </ItemGroup>
+
+</Project>

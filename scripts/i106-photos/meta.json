@@ -1,0 +1,38 @@
+{
+ "spring": {
+  "title": "File:Cherry blossom close up, Ravenscourt Park - geograph.org.uk - 8007734.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "David Hawgood",
+  "page": "https://commons.wikimedia.org/wiki/File:Cherry_blossom_close_up,_Ravenscourt_Park_-_geograph.org.uk_-_8007734.jpg",
+  "jpg_bytes": 16011,
+  "b64_chars": 21348,
+  "quality": 28
+ },
+ "summer": {
+  "title": "File:Schenna (IT), Apfelplantage, Apfelernte -- 2026 -- 4095.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Dietmar Rabich",
+  "page": "https://commons.wikimedia.org/wiki/File:Schenna_(IT),_Apfelplantage,_Apfelernte_--_2026_--_4095.jpg",
+  "jpg_bytes": 17052,
+  "b64_chars": 22736,
+  "quality": 24
+ },
+ "autumn": {
+  "title": "File:Aerial View of Autumn Forest Colors.jpg",
+  "license": "CC BY-SA 2.5",
+  "artist": "Wing-Chi Poon",
+  "page": "https://commons.wikimedia.org/wiki/File:Aerial_View_of_Autumn_Forest_Colors.jpg",
+  "jpg_bytes": 17088,
+  "b64_chars": 22784,
+  "quality": 24
+ },
+ "winter": {
+  "title": "File:Beech forest Mátra in winter.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Susulyka",
+  "page": "https://commons.wikimedia.org/wiki/File:Beech_forest_Mátra_in_winter.jpg",
+  "jpg_bytes": 18577,
+  "b64_chars": 24772,
+  "quality": 24
+ }
+}

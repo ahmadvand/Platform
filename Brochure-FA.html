@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بروشور سامانه یکپارچه منابع انسانی — نسخه ۲.۷</title>
+<style>
+  @font-face{font-family:"Vazirmatn"; src:url("public/fonts/Vazirmatn-Regular.woff2") format("woff2"); font-weight:400;}
+  @font-face{font-family:"Vazirmatn"; src:url("public/fonts/Vazirmatn-Medium.woff2") format("woff2"); font-weight:500;}
+  @font-face{font-family:"Vazirmatn"; src:url("public/fonts/Vazirmatn-SemiBold.woff2") format("woff2"); font-weight:600;}
+  @font-face{font-family:"Vazirmatn"; src:url("public/fonts/Vazirmatn-Bold.woff2") format("woff2"); font-weight:700 800;}
+  :root{
+    --primary:#1e3a5f; --accent:#0d9488; --gold:#b45309;
+    --bg:#f6f8fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Vazirmatn",Tahoma,sans-serif; background:var(--bg); color:var(--text); line-height:1.9;}
+  .page{max-width:900px; margin:0 auto; background:var(--card);}
+
+  /* Cover */
+  .cover{background:linear-gradient(135deg,#1e3a5f 0%,#0d9488 100%); color:#fff; padding:60px 40px; text-align:center;}
+  .cover .badge{display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35);
+    border-radius:999px; padding:6px 20px; font-size:14px; margin-bottom:22px;}
+  .cover h1{font-size:34px; font-weight:800; margin-bottom:12px;}
+  .cover p.tag{font-size:18px; opacity:.92; max-width:640px; margin:0 auto 26px;}
+  .cover .chips{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .cover .chip{background:rgba(255,255,255,.12); border-radius:10px; padding:6px 14px; font-size:13.5px;}
+
+  section{padding:42px 40px; border-bottom:1px solid #e5e7eb;}
+  section h2{color:var(--primary); font-size:23px; font-weight:800; margin-bottom:6px;}
+  section .sub{color:var(--muted); font-size:14.5px; margin-bottom:24px;}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px;}
+  .card{border:1px solid #e5e7eb; border-radius:14px; padding:20px; background:#fff; transition:box-shadow .2s;}
+  .card:hover{box-shadow:0 6px 20px rgba(30,58,95,.10);}
+  .card .ico{font-size:26px; margin-bottom:8px; display:block;}
+  .card h3{font-size:16.5px; color:var(--primary); margin-bottom:6px;}
+  .card p{font-size:13.8px; color:#374151;}
+
+  ul.feat{list-style:none;}
+  ul.feat li{padding:9px 34px 9px 0; position:relative; border-bottom:1px dashed #e5e7eb; font-size:14.5px;}
+  ul.feat li::before{content:"✓"; position:absolute; right:6px; top:9px; color:var(--accent); font-weight:900;}
+  ul.feat li b{color:var(--primary);}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; text-align:center;}
+  .stat{background:linear-gradient(180deg,#f0fdfa,#fff); border:1px solid #ccfbf1; border-radius:14px; padding:18px 10px;}
+  .stat .n{font-size:26px; font-weight:800; color:var(--accent);}
+  .stat .l{font-size:13px; color:var(--muted);}
+
+  .tiers{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px;}
+  .tier{border:2px solid #e5e7eb; border-radius:16px; padding:24px; text-align:center;}
+  .tier.best{border-color:var(--accent); background:#f0fdfa;}
+  .tier h3{font-size:18px; color:var(--primary);}
+  .tier .t-badge{display:inline-block; font-size:12px; background:var(--accent); color:#fff; border-radius:999px; padding:3px 12px; margin-bottom:10px;}
+  .tier ul{list-style:none; text-align:right; margin-top:14px;}
+  .tier ul li{font-size:13.5px; padding:5px 22px 5px 0; position:relative;}
+  .tier ul li::before{content:"•"; color:var(--accent); position:absolute; right:6px; font-weight:900;}
+
+  footer{background:var(--primary); color:#fff; padding:34px 40px; text-align:center;}
+  footer h3{margin-bottom:8px; font-size:19px;}
+  footer p{font-size:13.5px; opacity:.85;}
+  .cta{display:inline-block; margin-top:16px; background:var(--gold); color:#fff; text-decoration:none;
+    padding:10px 34px; border-radius:999px; font-weight:700; font-size:15px;}
+
+  @media print{ body{background:#fff;} .page{max-width:none;} section{page-break-inside:avoid;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="badge">نسخه ۲.۷ · رابط کاملاً فارسی و راست‌به‌چپ</div>
+    <h1>سامانه یکپارچه منابع انسانی، حضور و غیاب و حراست</h1>
+    <p class="tag">از ثبت تردد بیومتریک تا حقوق و دستمزد؛ همه ابزارهای مدیریت کارکنان در یک نرم‌افزار امن، ماژولار و بومی‌سازی‌شده برای سازمان‌های ایرانی.</p>
+    <div class="chips">
+      <span class="chip">تقویم شمسی (جلالی)</span>
+      <span class="chip">ارقام و متون فارسی</span>
+      <span class="chip">قابل نصب روی سرور خودتان</span>
+      <span class="chip">SQLite یا SQL Server</span>
+      <span class="chip">ویندوز و لینوکس</span>
+    </div>
+  </div>
+
+  <!-- WHY -->
+  <section>
+    <h2>چرا این سامانه؟</h2>
+    <p class="sub">یک پلتفرم، به‌جای ده ابزار پراکنده</p>
+    <ul class="feat">
+      <li><b>یکپارچگی کامل:</b> پرسنل، تردد، شیفت، مرخصی، حراست، پارکینگ، ارباب‌رجوع و حقوق در یک پایگاه داده واحد — بدون دوباره‌کاری و بدون مغایرت.</li>
+      <li><b>بومی‌سازی واقعی:</b> رابط کاربری فارسی و راست‌به‌چپ با فونت وزیرمتن، تاریخ‌های شمسی، تقویم تعطیلات رسمی ایران، و محاسبات ریال با ارقام فارسی.</li>
+      <li><b>مالکیت کامل داده‌ها:</b> سامانه روی سرور یا سیستم داخلی سازمان شما اجرا می‌شود؛ هیچ داده‌ای به سرور خارجی ارسال نمی‌شود.</li>
+      <li><b>فقط آنچه لازم دارید:</b> معماری ماژولار — هر بخش را می‌توان فعال/غیرفعال یا حذف کرد و هزینه فقط بابت ماژول‌های موردنیاز پرداخت می‌شود.</li>
+      <li><b>به‌روزرسانی درون‌برنامه‌ای:</b> ارتقای نسخه از داخل پنل، همراه با پشتیبان‌گیری خودکار و امکان بازگشت به نسخه قبل.</li>
+    </ul>
+  </section>
+
+  <!-- MODULES -->
+  <section>
+    <h2>ماژول‌ها و امکانات</h2>
+    <p class="sub">هسته همیشه فعال + ماژول‌های انتخابی بر اساس نیاز سازمان</p>
+    <div class="grid">
+      <div class="card"><span class="ico">👥</span><h3>منابع انسانی و سازمان</h3>
+        <p> پرونده پرسنلی، چارت سازمانی، واحدها و سمت‌ها، واردات گروهی پرسنل از اکسل، مدیریت تعطیلات رسمی و شیفت‌های کاری.</p></div>
+      <div class="card"><span class="ico">🕐</span><h3>حضور و غیاب</h3>
+        <p> دریافت خودکار تردد از دستگاه‌های حضوری، محاسبه دقیق کارکرد (تعویض، مرخصی، تأخیر و غیبت)، درخواست‌ها و تأییدهای زنجیره‌ای، گزارش‌های روزانه و تاریخی.</p></div>
+      <div class="card"><span class="ico">🛡️</span><h3>کنترل تردد و حراست</h3>
+        <p> تعریف مناطق و گیت‌ها، سطح‌بندی دسترسی کارت‌ها و احراز هویت، رویدادهای مجوزدار، و حسابرسی کامل تردد ورود و خروج.</p></div>
+      <div class="card"><span class="ico">💳</span><h3>حقوق و دستمزد</h3>
+        <p> فرمول‌ساز حقوق، اقلام و پارامترهای قابل تنظیم، محاسبه و نهایی‌سازی لیست ماهانه، عیدی و سنوات، و خروجی چاپی/PDF.</p></div>
+      <div class="card"><span class="ico">🚗</span><h3>پارکینگ و پلاک‌خوان</h3>
+        <p> اتصال به دوربین‌های پلاک‌خوان (ANPR)، مدیریت پارکینگ خودروهای پرسنل و مهمان، ثبت وقایع ورود و خروج خودرو.</p></div>
+      <div class="card"><span class="ico">🧳</span><h3>ارباب‌رجوع و پیمانکاران</h3>
+        <p> ثبت بازدیدکنندگان، صدور مجوز موقت ورود، پرونده پیمانکاران و گزارش مراجعات.</p></div>
+      <div class="card"><span class="ico">📟</span><h3>دستگاه‌های بیومتریک</h3>
+        <p> پشتیبانی از دستگاه‌های اثرانگشت، چهره و کارت (پروتکل ZKTeco/ADMS و ...)، نمای زنده تردد لحظه‌ای و مدیریت سلامت دستگاه‌ها.</p></div>
+      <div class="card"><span class="ico">🏠</span><h3>پرتال خودخدمت کارکنان (ESS)</h3>
+        <p> مشاهده کارکرد و فیش حقوقی، ثبت درخواست مرخصی و مأموریت توسط خود کارکنان، و تأیید الکترونیکی توسط مدیران.</p></div>
+      <div class="card"><span class="ico">📊</span><h3>داشبورد و گزارش‌ها</h3>
+        <p> داشبورد مدیریتی با نمودارهای لحظه‌ای، گزارش‌های سفارشی، خروجی اکسل و PDF راست‌چین آماده چاپ و بایگانی.</p></div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section>
+    <h2>امنیت و دسترسی‌ها</h2>
+    <p class="sub">امنیت، پیش‌فرض هر لایهٔ سامانه است — نه افزونه</p>
+    <div class="grid">
+      <div class="card"><span class="ico">🔐</span><h3>احراز هویت استاندارد</h3>
+        <p> JWT با توکن تمدید چرخشی، رمزنگاری رمز عبور با PBKDF2-SHA256 (۱۰۰ هزار تکرار)، سیاست رمز قوی و انقضای دوره‌ای.</p></div>
+      <div class="card"><span class="ico">🧩</span><h3>سطوح دسترسی دقیق (RBAC)</h3>
+        <p> نقش‌ها با ارث‌بری، مجوزها در سطح «ماژول.ناحیه.عملیات» و دامنهٔ داده (همه شرکت / واحد / فقط خود) برای هر نقش.</p></div>
+      <div class="card"><span class="ico">📝</span><h3>حسابرسی سراسری</h3>
+        <p> ثبت تمام ورود‌ها، عملیات مدیریتی و تغییرات داده در دفتر حسابرسی غیرقابل‌حذف — آماده برای بازنگری و پاسخ به بازرسان.</p></div>
+      <div class="card"><span class="ico">🚨</span><h3>محافظت در برابر حملات</h3>
+        <p> محدودیت سرعت درخواست (Rate Limiting)، قفل خودکار حساب پس از تلاش‌های ناموفق، هدرهای امنیتی و CSP، و محافظت در برابر مسیرهای خطرناک.</p></div>
+      <div class="card"><span class="ico">🗝️</span><h3>مجوز نرم‌افزار (لایسنس)</h3>
+        <p> فعال‌سازی مبتنی بر امضای دیجیتال RSA-2048 مخصوص هر سازمان؛ امکان تحویل فقط بخشی از ماژول‌ها طبق قرارداد.</p></div>
+      <div class="card"><span class="ico">☁️</span><h3>استقرار منعطف</h3>
+        <p> روی سرور ویندوز (IIS) یا لینوکس، SQLite برای سازمان‌های کوچک و SQL Server برای سازمان‌های بزرگ — با ابزار مهاجرت داده.</p></div>
+    </div>
+  </section>
+
+  <!-- TECH STATS -->
+  <section>
+    <h2>تکنولوژی مطمئن و آینده‌نگر</h2>
+    <p class="sub">ساخته‌شده روی فناوری‌های پشتیبانی‌شده مایکروسافت</p>
+    <div class="stats">
+      <div class="stat"><div class="n">.NET 8</div><div class="l">فریم‌ورک LTS با پشتیبانی بلندمدت</div></div>
+      <div class="stat"><div class="n">EF Core</div><div class="l">اسکیمای خودترمیم — ارتقای بی‌درد</div></div>
+      <div class="stat"><div class="n">RTL</div><div class="l">رابط فارسی با فونت وزیرمتن</div></div>
+      <div class="stat"><div class="n">۱۰۰٪</div><div class="l">آفلاین‌پذیر؛ بدون وابستگی به سرویس خارجی</div></div>
+      <div class="stat"><div class="n">ZIP</div><div class="l">بسته به‌روزرسانی با بازگشت خودکار</div></div>
+    </div>
+  </section>
+
+  <!-- TIERS -->
+  <section>
+    <h2>پکیج‌های پیشنهادی</h2>
+    <p class="sub">هر پکیج قابل شخصی‌سازی است؛ افزودن ماژول بعداً بدون تغییر ساختار ممکن است</p>
+    <div class="tiers">
+      <div class="tier">
+        <h3>پکیج پایه</h3>
+        <ul>
+          <li>منابع انسانی و چارت سازمانی</li>
+          <li>حضور و غیاب + اتصال دستگاه‌ها</li>
+          <li>داشبورد و گزارش‌های پایه</li>
+          <li>مناسب کسب‌وکارها و کارخانجات کوچک</li>
+        </ul>
+      </div>
+      <div class="tier best">
+        <span class="t-badge">پرطرفدار</span>
+        <h3>پکیج حرفه‌ای</h3>
+        <ul>
+          <li>تمام امکانات پکیج پایه</li>
+          <li>حقوق و دستمزد با فرمول‌ساز</li>
+          <li>کنترل تردد و حراست</li>
+          <li>پرتال خودخدمت کارکنان (ESS)</li>
+          <li>مناسب سازمان‌های متوسط</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h3>پکیج سازمانی</h3>
+        <ul>
+          <li>تمام امکانات پکیج حرفه‌ای</li>
+          <li>پارکینگ و پلاک‌خوان (ANPR)</li>
+          <li>ارباب‌رجوع و پیمانکاران</li>
+          <li>SQL Server چندشرکتی + پشتیبانی ویژه</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>همین امروز دموی زنده درخواست کنید</h3>
+    <p>امکان نصب آزمایشی روی سرور شما، آموزش رایگان کاربران کلیدی و پشتیبانی فنی فعال.</p>
+    <a class="cta" href="#">درخواست دمو و استعلام قیمت</a>
+    <p style="margin-top:18px;">📞 ۰۲۱-XXXXXXXX &nbsp;|&nbsp; ✉️ sales@yourcompany.ir &nbsp;|&nbsp; 🌐 www.yourcompany.ir</p>
+  </footer>
+
+</div>
+</body>
+</html>
